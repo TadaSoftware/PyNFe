@@ -1,0 +1,496 @@
+﻿4300034	Aceguá
+4300059	Água Santa
+4300109	Agudo
+4300208	Ajuricaba
+4300307	Alecrim
+4300406	Alegrete
+4300455	Alegria
+4300471	Almirante Tamandaré do Sul
+4300505	Alpestre
+4300554	Alto Alegre
+4300570	Alto Feliz
+4300604	Alvorada
+4300638	Amaral Ferrador
+4300646	Ametista do Sul
+4300661	André da Rocha
+4300703	Anta Gorda
+4300802	Antônio Prado
+4300851	Arambaré
+4300877	Araricá
+4300901	Aratiba
+4301008	Arroio do Meio
+4301057	Arroio do Sal
+4301073	Arroio do Padre
+4301107	Arroio dos Ratos
+4301206	Arroio do Tigre
+4301305	Arroio Grande
+4301404	Arvorezinha
+4301503	Augusto Pestana
+4301552	Áurea
+4301602	Bagé
+4301636	Balneário Pinhal
+4301651	Barão
+4301701	Barão de Cotegipe
+4301750	Barão do Triunfo
+4301800	Barracão
+4301859	Barra do Guarita
+4301875	Barra do Quaraí
+4301909	Barra do Ribeiro
+4301925	Barra do Rio Azul
+4301958	Barra Funda
+4302006	Barros Cassal
+4302055	Benjamin Constant do Sul
+4302105	Bento Gonçalves
+4302154	Boa Vista das Missões
+4302204	Boa Vista do Buricá
+4302220	Boa Vista do Cadeado
+4302238	Boa Vista do Incra
+4302253	Boa Vista do Sul
+4302303	Bom Jesus
+4302352	Bom Princípio
+4302378	Bom Progresso
+4302402	Bom Retiro do Sul
+4302451	Boqueirão do Leão
+4302501	Bossoroca
+4302584	Bozano
+4302600	Braga
+4302659	Brochier
+4302709	Butiá
+4302808	Caçapava do Sul
+4302907	Cacequi
+4303004	Cachoeira do Sul
+4303103	Cachoeirinha
+4303202	Cacique Doble
+4303301	Caibaté
+4303400	Caiçara
+4303509	Camaquã
+4303558	Camargo
+4303608	Cambará do Sul
+4303673	Campestre da Serra
+4303707	Campina das Missões
+4303806	Campinas do Sul
+4303905	Campo Bom
+4304002	Campo Novo
+4304101	Campos Borges
+4304200	Candelária
+4304309	Cândido Godói
+4304358	Candiota
+4304408	Canela
+4304507	Canguçu
+4304606	Canoas
+4304614	Canudos do Vale
+4304622	Capão Bonito do Sul
+4304630	Capão da Canoa
+4304655	Capão do Cipó
+4304663	Capão do Leão
+4304671	Capivari do Sul
+4304689	Capela de Santana
+4304697	Capitão
+4304705	Carazinho
+4304713	Caraá
+4304804	Carlos Barbosa
+4304853	Carlos Gomes
+4304903	Casca
+4304952	Caseiros
+4305009	Catuípe
+4305108	Caxias do Sul
+4305116	Centenário
+4305124	Cerrito
+4305132	Cerro Branco
+4305157	Cerro Grande
+4305173	Cerro Grande do Sul
+4305207	Cerro Largo
+4305306	Chapada
+4305355	Charqueadas
+4305371	Charrua
+4305405	Chiapetta
+4305439	Chuí
+4305447	Chuvisca
+4305454	Cidreira
+4305504	Ciríaco
+4305587	Colinas
+4305603	Colorado
+4305702	Condor
+4305801	Constantina
+4305835	Coqueiro Baixo
+4305850	Coqueiros do Sul
+4305871	Coronel Barros
+4305900	Coronel Bicaco
+4305934	Coronel Pilar
+4305959	Cotiporã
+4305975	Coxilha
+4306007	Crissiumal
+4306056	Cristal
+4306072	Cristal do Sul
+4306106	Cruz Alta
+4306130	Cruzaltense
+4306205	Cruzeiro do Sul
+4306304	David Canabarro
+4306320	Derrubadas
+4306353	Dezesseis de Novembro
+4306379	Dilermando de Aguiar
+4306403	Dois Irmãos
+4306429	Dois Irmãos das Missões
+4306452	Dois Lajeados
+4306502	Dom Feliciano
+4306551	Dom Pedro de Alcântara
+4306601	Dom Pedrito
+4306700	Dona Francisca
+4306734	Doutor Maurício Cardoso
+4306759	Doutor Ricardo
+4306767	Eldorado do Sul
+4306809	Encantado
+4306908	Encruzilhada do Sul
+4306924	Engenho Velho
+4306932	Entre-Ijuís
+4306957	Entre Rios do Sul
+4306973	Erebango
+4307005	Erechim
+4307054	Ernestina
+4307104	Herval
+4307203	Erval Grande
+4307302	Erval Seco
+4307401	Esmeralda
+4307450	Esperança do Sul
+4307500	Espumoso
+4307559	Estação
+4307609	Estância Velha
+4307708	Esteio
+4307807	Estrela
+4307815	Estrela Velha
+4307831	Eugênio de Castro
+4307864	Fagundes Varela
+4307906	Farroupilha
+4308003	Faxinal do Soturno
+4308052	Faxinalzinho
+4308078	Fazenda Vilanova
+4308102	Feliz
+4308201	Flores da Cunha
+4308250	Floriano Peixoto
+4308300	Fontoura Xavier
+4308409	Formigueiro
+4308433	Forquetinha
+4308458	Fortaleza dos Valos
+4308508	Frederico Westphalen
+4308607	Garibaldi
+4308656	Garruchos
+4308706	Gaurama
+4308805	General Câmara
+4308854	Gentil
+4308904	Getúlio Vargas
+4309001	Giruá
+4309050	Glorinha
+4309100	Gramado
+4309126	Gramado dos Loureiros
+4309159	Gramado Xavier
+4309209	Gravataí
+4309258	Guabiju
+4309308	Guaíba
+4309407	Guaporé
+4309506	Guarani das Missões
+4309555	Harmonia
+4309571	Herveiras
+4309605	Horizontina
+4309654	Hulha Negra
+4309704	Humaitá
+4309753	Ibarama
+4309803	Ibiaçá
+4309902	Ibiraiaras
+4309951	Ibirapuitã
+4310009	Ibirubá
+4310108	Igrejinha
+4310207	Ijuí
+4310306	Ilópolis
+4310330	Imbé
+4310363	Imigrante
+4310405	Independência
+4310413	Inhacorá
+4310439	Ipê
+4310462	Ipiranga do Sul
+4310504	Iraí
+4310538	Itaara
+4310553	Itacurubi
+4310579	Itapuca
+4310603	Itaqui
+4310652	Itati
+4310702	Itatiba do Sul
+4310751	Ivorá
+4310801	Ivoti
+4310850	Jaboticaba
+4310876	Jacuizinho
+4310900	Jacutinga
+4311007	Jaguarão
+4311106	Jaguari
+4311122	Jaquirana
+4311130	Jari
+4311155	Jóia
+4311205	Júlio de Castilhos
+4311239	Lagoa Bonita do Sul
+4311254	Lagoão
+4311270	Lagoa dos Três Cantos
+4311304	Lagoa Vermelha
+4311403	Lajeado
+4311429	Lajeado do Bugre
+4311502	Lavras do Sul
+4311601	Liberato Salzano
+4311627	Lindolfo Collor
+4311643	Linha Nova
+4311700	Machadinho
+4311718	Maçambara
+4311734	Mampituba
+4311759	Manoel Viana
+4311775	Maquiné
+4311791	Maratá
+4311809	Marau
+4311908	Marcelino Ramos
+4311981	Mariana Pimentel
+4312005	Mariano Moro
+4312054	Marques de Souza
+4312104	Mata
+4312138	Mato Castelhano
+4312153	Mato Leitão
+4312179	Mato Queimado
+4312203	Maximiliano de Almeida
+4312252	Minas do Leão
+4312302	Miraguaí
+4312351	Montauri
+4312377	Monte Alegre dos Campos
+4312385	Monte Belo do Sul
+4312401	Montenegro
+4312427	Mormaço
+4312443	Morrinhos do Sul
+4312450	Morro Redondo
+4312476	Morro Reuter
+4312500	Mostardas
+4312609	Muçum
+4312617	Muitos Capões
+4312625	Muliterno
+4312658	Não-Me-Toque
+4312674	Nicolau Vergueiro
+4312708	Nonoai
+4312757	Nova Alvorada
+4312807	Nova Araçá
+4312906	Nova Bassano
+4312955	Nova Boa Vista
+4313003	Nova Bréscia
+4313011	Nova Candelária
+4313037	Nova Esperança do Sul
+4313060	Nova Hartz
+4313086	Nova Pádua
+4313102	Nova Palma
+4313201	Nova Petrópolis
+4313300	Nova Prata
+4313334	Nova Ramada
+4313359	Nova Roma do Sul
+4313375	Nova Santa Rita
+4313391	Novo Cabrais
+4313409	Novo Hamburgo
+4313425	Novo Machado
+4313441	Novo Tiradentes
+4313466	Novo Xingu
+4313490	Novo Barreiro
+4313508	Osório
+4313607	Paim Filho
+4313656	Palmares do Sul
+4313706	Palmeira das Missões
+4313805	Palmitinho
+4313904	Panambi
+4313953	Pantano Grande
+4314001	Paraí
+4314027	Paraíso do Sul
+4314035	Pareci Novo
+4314050	Parobé
+4314068	Passa Sete
+4314076	Passo do Sobrado
+4314100	Passo Fundo
+4314134	Paulo Bento
+4314159	Paverama
+4314175	Pedras Altas
+4314209	Pedro Osório
+4314308	Pejuçara
+4314407	Pelotas
+4314423	Picada Café
+4314456	Pinhal
+4314464	Pinhal da Serra
+4314472	Pinhal Grande
+4314498	Pinheirinho do Vale
+4314506	Pinheiro Machado
+4314555	Pirapó
+4314605	Piratini
+4314704	Planalto
+4314753	Poço das Antas
+4314779	Pontão
+4314787	Ponte Preta
+4314803	Portão
+4314902	Porto Alegre
+4315008	Porto Lucena
+4315057	Porto Mauá
+4315073	Porto Vera Cruz
+4315107	Porto Xavier
+4315131	Pouso Novo
+4315149	Presidente Lucena
+4315156	Progresso
+4315172	Protásio Alves
+4315206	Putinga
+4315305	Quaraí
+4315313	Quatro Irmãos
+4315321	Quevedos
+4315354	Quinze de Novembro
+4315404	Redentora
+4315453	Relvado
+4315503	Restinga Seca
+4315552	Rio dos Índios
+4315602	Rio Grande
+4315701	Rio Pardo
+4315750	Riozinho
+4315800	Roca Sales
+4315909	Rodeio Bonito
+4315958	Rolador
+4316006	Rolante
+4316105	Ronda Alta
+4316204	Rondinha
+4316303	Roque Gonzales
+4316402	Rosário do Sul
+4316428	Sagrada Família
+4316436	Saldanha Marinho
+4316451	Salto do Jacuí
+4316477	Salvador das Missões
+4316501	Salvador do Sul
+4316600	Sananduva
+4316709	Santa Bárbara do Sul
+4316733	Santa Cecília do Sul
+4316758	Santa Clara do Sul
+4316808	Santa Cruz do Sul
+4316907	Santa Maria
+4316956	Santa Maria do Herval
+4316972	Santa Margarida do Sul
+4317004	Santana da Boa Vista
+4317103	Santana do Livramento
+4317202	Santa Rosa
+4317251	Santa Tereza
+4317301	Santa Vitória do Palmar
+4317400	Santiago
+4317509	Santo Ângelo
+4317558	Santo Antônio do Palma
+4317608	Santo Antônio da Patrulha
+4317707	Santo Antônio das Missões
+4317756	Santo Antônio do Planalto
+4317806	Santo Augusto
+4317905	Santo Cristo
+4317954	Santo Expedito do Sul
+4318002	São Borja
+4318051	São Domingos do Sul
+4318101	São Francisco de Assis
+4318200	São Francisco de Paula
+4318309	São Gabriel
+4318408	São Jerônimo
+4318424	São João da Urtiga
+4318432	São João do Polêsine
+4318440	São Jorge
+4318457	São José das Missões
+4318465	São José do Herval
+4318481	São José do Hortêncio
+4318499	São José do Inhacorá
+4318507	São José do Norte
+4318606	São José do Ouro
+4318614	São José do Sul
+4318622	São José dos Ausentes
+4318705	São Leopoldo
+4318804	São Lourenço do Sul
+4318903	São Luiz Gonzaga
+4319000	São Marcos
+4319109	São Martinho
+4319125	São Martinho da Serra
+4319158	São Miguel das Missões
+4319208	São Nicolau
+4319307	São Paulo das Missões
+4319356	São Pedro da Serra
+4319364	São Pedro das Missões
+4319372	São Pedro do Butiá
+4319406	São Pedro do Sul
+4319505	São Sebastião do Caí
+4319604	São Sepé
+4319703	São Valentim
+4319711	São Valentim do Sul
+4319737	São Valério do Sul
+4319752	São Vendelino
+4319802	São Vicente do Sul
+4319901	Sapiranga
+4320008	Sapucaia do Sul
+4320107	Sarandi
+4320206	Seberi
+4320230	Sede Nova
+4320263	Segredo
+4320305	Selbach
+4320321	Senador Salgado Filho
+4320354	Sentinela do Sul
+4320404	Serafina Corrêa
+4320453	Sério
+4320503	Sertão
+4320552	Sertão Santana
+4320578	Sete de Setembro
+4320602	Severiano de Almeida
+4320651	Silveira Martins
+4320677	Sinimbu
+4320701	Sobradinho
+4320800	Soledade
+4320859	Tabaí
+4320909	Tapejara
+4321006	Tapera
+4321105	Tapes
+4321204	Taquara
+4321303	Taquari
+4321329	Taquaruçu do Sul
+4321352	Tavares
+4321402	Tenente Portela
+4321436	Terra de Areia
+4321451	Teutônia
+4321469	Tio Hugo
+4321477	Tiradentes do Sul
+4321493	Toropi
+4321501	Torres
+4321600	Tramandaí
+4321626	Travesseiro
+4321634	Três Arroios
+4321667	Três Cachoeiras
+4321709	Três Coroas
+4321808	Três de Maio
+4321832	Três Forquilhas
+4321857	Três Palmeiras
+4321907	Três Passos
+4321956	Trindade do Sul
+4322004	Triunfo
+4322103	Tucunduva
+4322152	Tunas
+4322186	Tupanci do Sul
+4322202	Tupanciretã
+4322251	Tupandi
+4322301	Tuparendi
+4322327	Turuçu
+4322343	Ubiretama
+4322350	União da Serra
+4322376	Unistalda
+4322400	Uruguaiana
+4322509	Vacaria
+4322525	Vale Verde
+4322533	Vale do Sol
+4322541	Vale Real
+4322558	Vanini
+4322608	Venâncio Aires
+4322707	Vera Cruz
+4322806	Veranópolis
+4322855	Vespasiano Correa
+4322905	Viadutos
+4323002	Viamão
+4323101	Vicente Dutra
+4323200	Victor Graeff
+4323309	Vila Flores
+4323358	Vila Lângaro
+4323408	Vila Maria
+4323457	Vila Nova do Sul
+4323507	Vista Alegre
+4323606	Vista Alegre do Prata
+4323705	Vista Gaúcha
+4323754	Vitória das Missões
+4323770	Westfalia
+4323804	Xangri-lá

@@ -1,0 +1,62 @@
+﻿1300029	Alvarães
+1300060	Amaturá
+1300086	Anamã
+1300102	Anori
+1300144	Apuí
+1300201	Atalaia do Norte
+1300300	Autazes
+1300409	Barcelos
+1300508	Barreirinha
+1300607	Benjamin Constant
+1300631	Beruri
+1300680	Boa Vista do Ramos
+1300706	Boca do Acre
+1300805	Borba
+1300839	Caapiranga
+1300904	Canutama
+1301001	Carauari
+1301100	Careiro
+1301159	Careiro da Várzea
+1301209	Coari
+1301308	Codajás
+1301407	Eirunepé
+1301506	Envira
+1301605	Fonte Boa
+1301654	Guajará
+1301704	Humaitá
+1301803	Ipixuna
+1301852	Iranduba
+1301902	Itacoatiara
+1301951	Itamarati
+1302009	Itapiranga
+1302108	Japurá
+1302207	Juruá
+1302306	Jutaí
+1302405	Lábrea
+1302504	Manacapuru
+1302553	Manaquiri
+1302603	Manaus
+1302702	Manicoré
+1302801	Maraã
+1302900	Maués
+1303007	Nhamundá
+1303106	Nova Olinda do Norte
+1303205	Novo Airão
+1303304	Novo Aripuanã
+1303403	Parintins
+1303502	Pauini
+1303536	Presidente Figueiredo
+1303569	Rio Preto da Eva
+1303601	Santa Isabel do Rio Negro
+1303700	Santo Antônio do Içá
+1303809	São Gabriel da Cachoeira
+1303908	São Paulo de Olivença
+1303957	São Sebastião do Uatumã
+1304005	Silves
+1304062	Tabatinga
+1304104	Tapauá
+1304203	Tefé
+1304237	Tonantins
+1304260	Uarini
+1304302	Urucará
+1304401	Urucurituba

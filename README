@@ -1,0 +1,75 @@
+Visão Geral
+-----------
+
+Biblioteca de interface com o webservice de Nota Fiscal Eletronica,
+da SEFAZ, oficializada pelo Ministerio da Fazendo do Governo do
+Brasil.
+
+A NF-e visa substituir as notas fiscais séries 1 e 1A
+
+Dependências
+------------
+
+- Geraldo Reports (http://geraldo.sourceforge.net/)
+  - para a geração da DANFE
+- SUDS (https://fedorahosted.org/suds/)
+  - para consumir o webservice SOAP/WSDL
+- libxml2
+  - ?
+- openssl
+  - ?
+- MS CAPICOM
+  - evitar seu uso, usar somente se obrigatório
+- XmlSEC
+  - assinatura e validação do XML
+
+Referências
+-----------
+
+- Site oficial da Nota Fiscal eletrônica
+  - http://www.nfe.fazenda.gov.br/portal/
+
+- Noções gerais da NF-e
+  - http://pt.wikipedia.org/wiki/Nota_fiscal_eletrônica
+
+- Componente para Delphi ACBrNFe
+  - http://acbr.sourceforge.net/drupal/?q=node/36
+  - http://devmedia.com.br/articles/viewcomp.asp?comp=12237
+
+- Exemplos de arquivos XML
+  - http://nf-eletronica.com/blog/?p=77
+
+- Exemplos de consumação do WebService
+  - http://nf-eletronica.com/blog/?p=75
+
+- Tutorial e outras documentações
+  - http://www.icert.com.br/gestor/tutoriais/conteudo/15,0_Nota-Fiscal-Eletronica-NF-e.html
+
+- Manual oficial de integração
+  - http://www.nfe.fazenda.gov.br/portal/integracao.aspx
+
+- Schemas para validação dos arquivos
+  - http://www.nfe.fazenda.gov.br/portal/schemas.aspx
+
+- Criação de certificados X.509 com OpenVPN
+  - http://www.guiadohardware.net/tutoriais/openvpn_2/pagina2.html
+  - verificar se pode ser usado para testes sem ter um certificado oficial
+
+- Assinador - disseminação da assinatura digital
+ - http://www.nfe.fazenda.gov.br/portal/assinador.aspx
+
+- Planilha com CNAEs obrigadas a emitir NF-e
+ - http://portalnfe.fazenda.mg.gov.br/downloads/CNAEs_Obrigadas_NFe_061009.xls
+
+- Visualizador Documento Fiscal Eletrônico (NF-e e CT-e)
+ - http://www.nfe.fazenda.gov.br/portal/visualizador.aspx
+
+- Texto sobre Python + SOAP + SSL + NF-e
+ - http://victorpoluceno.blogspot.com/2008/03/python-ssl-certificado-digital.html
+
+- Tutorial de lxml
+ - http://codespeak.net/lxml/tutorial.html
+
+- Validao de XML via XSD no lxml
+ - http://codespeak.net/lxml/validation.html#xmlschema
+

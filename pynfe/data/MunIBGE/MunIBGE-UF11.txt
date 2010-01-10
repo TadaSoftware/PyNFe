@@ -1,0 +1,52 @@
+﻿1100015	Alta Floresta D'Oeste
+1100023	Ariquemes
+1100031	Cabixi
+1100049	Cacoal
+1100056	Cerejeiras
+1100064	Colorado do Oeste
+1100072	Corumbiara
+1100080	Costa Marques
+1100098	Espigão D'Oeste
+1100106	Guajará-Mirim
+1100114	Jaru
+1100122	Ji-Paraná
+1100130	Machadinho D'Oeste
+1100148	Nova Brasilândia D'Oeste
+1100155	Ouro Preto do Oeste
+1100189	Pimenta Bueno
+1100205	Porto Velho
+1100254	Presidente Médici
+1100262	Rio Crespo
+1100288	Rolim de Moura
+1100296	Santa Luzia D'Oeste
+1100304	Vilhena
+1100320	São Miguel do Guaporé
+1100338	Nova Mamoré
+1100346	Alvorada D'Oeste
+1100379	Alto Alegre dos Parecis
+1100403	Alto Paraíso
+1100452	Buritis
+1100502	Novo Horizonte do Oeste
+1100601	Cacaulândia
+1100700	Campo Novo de Rondônia
+1100809	Candeias do Jamari
+1100908	Castanheiras
+1100924	Chupinguaia
+1100940	Cujubim
+1101005	Governador Jorge Teixeira
+1101104	Itapuã do Oeste
+1101203	Ministro Andreazza
+1101302	Mirante da Serra
+1101401	Monte Negro
+1101435	Nova União
+1101450	Parecis
+1101468	Pimenteiras do Oeste
+1101476	Primavera de Rondônia
+1101484	São Felipe D'Oeste
+1101492	São Francisco do Guaporé
+1101500	Seringueiras
+1101559	Teixeirópolis
+1101609	Theobroma
+1101708	Urupá
+1101757	Vale do Anari
+1101807	Vale do Paraíso

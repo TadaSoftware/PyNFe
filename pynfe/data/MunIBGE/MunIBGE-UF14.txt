@@ -1,0 +1,15 @@
+﻿1400027	Amajari
+1400050	Alto Alegre
+1400100	Boa Vista
+1400159	Bonfim
+1400175	Cantá
+1400209	Caracaraí
+1400233	Caroebe
+1400282	Iracema
+1400308	Mucajaí
+1400407	Normandia
+1400456	Pacaraima
+1400472	Rorainópolis
+1400506	São João da Baliza
+1400605	São Luiz
+1400704	Uiramutã

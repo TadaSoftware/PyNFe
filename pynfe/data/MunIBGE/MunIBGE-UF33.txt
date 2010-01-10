@@ -1,0 +1,92 @@
+﻿3300100	Angra dos Reis
+3300159	Aperibé
+3300209	Araruama
+3300225	Areal
+3300233	Armação dos Búzios
+3300258	Arraial do Cabo
+3300308	Barra do Piraí
+3300407	Barra Mansa
+3300456	Belford Roxo
+3300506	Bom Jardim
+3300605	Bom Jesus do Itabapoana
+3300704	Cabo Frio
+3300803	Cachoeiras de Macacu
+3300902	Cambuci
+3300936	Carapebus
+3300951	Comendador Levy Gasparian
+3301009	Campos dos Goytacazes
+3301108	Cantagalo
+3301157	Cardoso Moreira
+3301207	Carmo
+3301306	Casimiro de Abreu
+3301405	Conceição de Macabu
+3301504	Cordeiro
+3301603	Duas Barras
+3301702	Duque de Caxias
+3301801	Engenheiro Paulo de Frontin
+3301850	Guapimirim
+3301876	Iguaba Grande
+3301900	Itaboraí
+3302007	Itaguaí
+3302056	Italva
+3302106	Itaocara
+3302205	Itaperuna
+3302254	Itatiaia
+3302270	Japeri
+3302304	Laje do Muriaé
+3302403	Macaé
+3302452	Macuco
+3302502	Magé
+3302601	Mangaratiba
+3302700	Maricá
+3302809	Mendes
+3302858	Mesquita
+3302908	Miguel Pereira
+3303005	Miracema
+3303104	Natividade
+3303203	Nilópolis
+3303302	Niterói
+3303401	Nova Friburgo
+3303500	Nova Iguaçu
+3303609	Paracambi
+3303708	Paraíba do Sul
+3303807	Parati
+3303856	Paty do Alferes
+3303906	Petrópolis
+3303955	Pinheiral
+3304003	Piraí
+3304102	Porciúncula
+3304110	Porto Real
+3304128	Quatis
+3304144	Queimados
+3304151	Quissamã
+3304201	Resende
+3304300	Rio Bonito
+3304409	Rio Claro
+3304508	Rio das Flores
+3304524	Rio das Ostras
+3304557	Rio de Janeiro
+3304607	Santa Maria Madalena
+3304706	Santo Antônio de Pádua
+3304755	São Francisco de Itabapoana
+3304805	São Fidélis
+3304904	São Gonçalo
+3305000	São João da Barra
+3305109	São João de Meriti
+3305133	São José de Ubá
+3305158	São José do Vale do Rio Preto
+3305208	São Pedro da Aldeia
+3305307	São Sebastião do Alto
+3305406	Sapucaia
+3305505	Saquarema
+3305554	Seropédica
+3305604	Silva Jardim
+3305703	Sumidouro
+3305752	Tanguá
+3305802	Teresópolis
+3305901	Trajano de Morais
+3306008	Três Rios
+3306107	Valença
+3306156	Varre-Sai
+3306206	Vassouras
+3306305	Volta Redonda

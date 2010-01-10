@@ -1,0 +1,16 @@
+﻿1600055	Serra do Navio
+1600105	Amapá
+1600154	Pedra Branca do Amapari
+1600204	Calçoene
+1600212	Cutias
+1600238	Ferreira Gomes
+1600253	Itaubal
+1600279	Laranjal do Jari
+1600303	Macapá
+1600402	Mazagão
+1600501	Oiapoque
+1600535	Porto Grande
+1600550	Pracuúba
+1600600	Santana
+1600709	Tartarugalzinho
+1600808	Vitória do Jari

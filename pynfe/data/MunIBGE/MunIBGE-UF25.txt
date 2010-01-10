@@ -1,0 +1,223 @@
+﻿2500106	Água Branca
+2500205	Aguiar
+2500304	Alagoa Grande
+2500403	Alagoa Nova
+2500502	Alagoinha
+2500536	Alcantil
+2500577	Algodão de Jandaíra
+2500601	Alhandra
+2500700	São João do Rio do Peixe
+2500734	Amparo
+2500775	Aparecida
+2500809	Araçagi
+2500908	Arara
+2501005	Araruna
+2501104	Areia
+2501153	Areia de Baraúnas
+2501203	Areial
+2501302	Aroeiras
+2501351	Assunção
+2501401	Baía da Traição
+2501500	Bananeiras
+2501534	Baraúna
+2501575	Barra de Santana
+2501609	Barra de Santa Rosa
+2501708	Barra de São Miguel
+2501807	Bayeux
+2501906	Belém
+2502003	Belém do Brejo do Cruz
+2502052	Bernardino Batista
+2502102	Boa Ventura
+2502151	Boa Vista
+2502201	Bom Jesus
+2502300	Bom Sucesso
+2502409	Bonito de Santa Fé
+2502508	Boqueirão
+2502607	Igaracy
+2502706	Borborema
+2502805	Brejo do Cruz
+2502904	Brejo dos Santos
+2503001	Caaporã
+2503100	Cabaceiras
+2503209	Cabedelo
+2503308	Cachoeira dos Índios
+2503407	Cacimba de Areia
+2503506	Cacimba de Dentro
+2503555	Cacimbas
+2503605	Caiçara
+2503704	Cajazeiras
+2503753	Cajazeirinhas
+2503803	Caldas Brandão
+2503902	Camalaú
+2504009	Campina Grande
+2504033	Capim
+2504074	Caraúbas
+2504108	Carrapateira
+2504157	Casserengue
+2504207	Catingueira
+2504306	Catolé do Rocha
+2504355	Caturité
+2504405	Conceição
+2504504	Condado
+2504603	Conde
+2504702	Congo
+2504801	Coremas
+2504850	Coxixola
+2504900	Cruz do Espírito Santo
+2505006	Cubati
+2505105	Cuité
+2505204	Cuitegi
+2505238	Cuité de Mamanguape
+2505279	Curral de Cima
+2505303	Curral Velho
+2505352	Damião
+2505402	Desterro
+2505501	Vista Serrana
+2505600	Diamante
+2505709	Dona Inês
+2505808	Duas Estradas
+2505907	Emas
+2506004	Esperança
+2506103	Fagundes
+2506202	Frei Martinho
+2506251	Gado Bravo
+2506301	Guarabira
+2506400	Gurinhém
+2506509	Gurjão
+2506608	Ibiara
+2506707	Imaculada
+2506806	Ingá
+2506905	Itabaiana
+2507002	Itaporanga
+2507101	Itapororoca
+2507200	Itatuba
+2507309	Jacaraú
+2507408	Jericó
+2507507	João Pessoa
+2507606	Juarez Távora
+2507705	Juazeirinho
+2507804	Junco do Seridó
+2507903	Juripiranga
+2508000	Juru
+2508109	Lagoa
+2508208	Lagoa de Dentro
+2508307	Lagoa Seca
+2508406	Lastro
+2508505	Livramento
+2508554	Logradouro
+2508604	Lucena
+2508703	Mãe d'Água
+2508802	Malta
+2508901	Mamanguape
+2509008	Manaíra
+2509057	Marcação
+2509107	Mari
+2509156	Marizópolis
+2509206	Massaranduba
+2509305	Mataraca
+2509339	Matinhas
+2509370	Mato Grosso
+2509396	Maturéia
+2509404	Mogeiro
+2509503	Montadas
+2509602	Monte Horebe
+2509701	Monteiro
+2509800	Mulungu
+2509909	Natuba
+2510006	Nazarezinho
+2510105	Nova Floresta
+2510204	Nova Olinda
+2510303	Nova Palmeira
+2510402	Olho d'Água
+2510501	Olivedos
+2510600	Ouro Velho
+2510659	Parari
+2510709	Passagem
+2510808	Patos
+2510907	Paulista
+2511004	Pedra Branca
+2511103	Pedra Lavrada
+2511202	Pedras de Fogo
+2511301	Piancó
+2511400	Picuí
+2511509	Pilar
+2511608	Pilões
+2511707	Pilõezinhos
+2511806	Pirpirituba
+2511905	Pitimbu
+2512002	Pocinhos
+2512036	Poço Dantas
+2512077	Poço de José de Moura
+2512101	Pombal
+2512200	Prata
+2512309	Princesa Isabel
+2512408	Puxinanã
+2512507	Queimadas
+2512606	Quixabá
+2512705	Remígio
+2512721	Pedro Régis
+2512747	Riachão
+2512754	Riachão do Bacamarte
+2512762	Riachão do Poço
+2512788	Riacho de Santo Antônio
+2512804	Riacho dos Cavalos
+2512903	Rio Tinto
+2513000	Salgadinho
+2513109	Salgado de São Félix
+2513158	Santa Cecília
+2513208	Santa Cruz
+2513307	Santa Helena
+2513356	Santa Inês
+2513406	Santa Luzia
+2513505	Santana de Mangueira
+2513604	Santana dos Garrotes
+2513653	Santarém
+2513703	Santa Rita
+2513802	Santa Teresinha
+2513851	Santo André
+2513901	São Bento
+2513927	São Bentinho
+2513943	São Domingos do Cariri
+2513968	São Domingos de Pombal
+2513984	São Francisco
+2514008	São João do Cariri
+2514107	São João do Tigre
+2514206	São José da Lagoa Tapada
+2514305	São José de Caiana
+2514404	São José de Espinharas
+2514453	São José dos Ramos
+2514503	São José de Piranhas
+2514552	São José de Princesa
+2514602	São José do Bonfim
+2514651	São José do Brejo do Cruz
+2514701	São José do Sabugi
+2514800	São José dos Cordeiros
+2514909	São Mamede
+2515005	São Miguel de Taipu
+2515104	São Sebastião de Lagoa de Roça
+2515203	São Sebastião do Umbuzeiro
+2515302	Sapé
+2515401	Seridó
+2515500	Serra Branca
+2515609	Serra da Raiz
+2515708	Serra Grande
+2515807	Serra Redonda
+2515906	Serraria
+2515930	Sertãozinho
+2515971	Sobrado
+2516003	Solânea
+2516102	Soledade
+2516151	Sossêgo
+2516201	Sousa
+2516300	Sumé
+2516409	Campo de Santana
+2516508	Taperoá
+2516607	Tavares
+2516706	Teixeira
+2516755	Tenório
+2516805	Triunfo
+2516904	Uiraúna
+2517001	Umbuzeiro
+2517100	Várzea
+2517209	Vieirópolis
+2517407	Zabelê

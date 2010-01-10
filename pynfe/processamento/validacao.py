@@ -1,0 +1,3 @@
+class Validacao(object):
+    pass
+

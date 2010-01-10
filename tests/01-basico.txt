@@ -1,0 +1,189 @@
+TESTES BASICOS
+==============
+
+    >>> import sets
+
+A biblioteca deve fornecer uma colecao de utilitarios para consumir
+o webservice da NF-e.
+
+Componentes
+-----------
+
+A separacao entre os componentes da biblioteca deve seguir o seguinte
+modelo:
+
+  ---------------------------------------------------------------------
+  |                         MODELO DE ENTIDADES                       |
+  ---------------------------------------------------------------------
+  |                                                                   |
+  |                          ------------                             |
+  |                          | Entidade |                             |
+  |                          ------------                             |
+  |                               A                                   |
+  |                               |                                   |
+  |           ----especializacao--------------------------            |
+  |           |            |            |                |            |
+  |     ------------  -----------  -----------  ------------------    |
+  |     | Emitente |  | Produto |  | Cliente |  | Transportadora |    |
+  |     ------------  -----------  -----------  ------------------    |
+  |          *|           *|           *|               *|            |
+  |           ------------------------------associacao----            |
+  |                    |                                              |
+  |                    V*                                             |
+  |             ---------------        ----------------               |
+  |             | Nota Fiscal |------<>| Lote de NF-e |               |
+  |             --------------- 1    * ----------------               |
+  |                                                                   |
+  ---------------------------------------------------------------------
+
+
+  ---------------------------------------------------------------------
+  |                          PROCESSAMENTO                            |
+  ---------------------------------------------------------------------
+  |                                                                   |
+  | ----------------     --------------     ------------------------  |
+  | | InterfaceXML |     | Assinatura |     | Comunicacao          |  |
+  | ----------------     --------------     ------------------------  |
+  | | exportar()   |     | assinar()  |     | transmitir()         |  |
+  | | importar()   |     --------------     | cancelar()           |  |
+  | ----------------                        | situacao_nfe()       |  |
+  |                       -------------     | status_servico()     |  |
+  |   --------------      | Validacao |     | consultar_cadastro() |  |
+  |   | DANFE      |      -------------     ------------------------  |
+  |   --------------      | validar() |                               |
+  |   | imprimir() |      -------------                               |
+  |   --------------                                                  |
+  |                                                                   |
+  ---------------------------------------------------------------------
+
+Os pacotes da biblioteca sao:
+
+- utils (contem todas as funcionalidades utilitarias dentro da 
+  biblioteca, incluindo flags e funcoes genericas)
+
+    >>> from pynfe import utils
+    >>> sets.Set([attr for attr in dir(utils) if not attr.startswith('__')]) == sets.Set(['flags'])
+    True
+
+- entidades (contem todas as entidades da biblioteca)
+
+    >>> from pynfe import entidades
+    >>> sets.Set([attr for attr in dir(entidades) if not attr.startswith('__')]) == sets.Set([
+    ...     'Cliente', 'Emitente', 'LoteNotaFiscal', 'NotaFiscal', 'Produto',
+    ...     'Transportadora', 'base', 'cliente', 'emitente', 'lotes', 'notafiscal',
+    ...     'produto', 'transportadora'])
+    True
+
+- processamento (contem todas as funcionalidades de processamento da
+  biblioteca
+
+    >>> from pynfe import processamento
+    >>> sets.Set([attr for attr in dir(processamento) if not attr.startswith('__')]) == sets.Set([
+    ...     'Assinatura', 'Comunicacao', 'DANFE', 'InterfaceXML', 'Validacao',
+    ...     'assinatura', 'comunicacao', 'danfe', 'interfaces', 'validacao'])
+    True
+
+Ha ainda uma pasta dentro da pasta 'pynfe', chamada 'data', que deve
+armazenar listas longas de municipios, CNAEs, situacoes tributarias,
+XSD's, etc.
+
+    >>> import os
+    >>> DATA = os.path.join(os.curdir, 'pynfe', 'data')
+    >>> DATA
+    './pynfe/data'
+
+    >>> os.path.isdir(DATA)
+    True
+
+Geracao e importacao de XML
+---------------------------
+
+As objetos Python devem ser traduzidos para arquivos XML e o caminho
+inverso, de introspecao, tambem deve ser feito, atraves de uma fabrica.
+
+    >>> from pynfe.processamento.interfaces import Interface
+
+    >>> bool(Interface.exportar)
+    True
+
+    >>> bool(Interface.importar)
+    True
+
+A classe basica de Interface eh abstrata, ou seja, nao pode ser
+instanciada diretamente.
+
+    >>> lista_de_nfs = []
+
+    >>> try:
+    ...     Interface(lista_de_nfs)
+    ... except Exception, e:
+    ...     print e.message
+    Esta classe nao pode ser instanciada diretamente!
+
+Classe de interface especifica para XML, usando lxml
+
+    >>> from pynfe.processamento.interfaces import InterfaceXML
+
+Esse procedimento sera feito por padrao atraves da lxml, devido ao seu
+desempenho, mas pode ser extendido para outros formatos, dependendo do
+objetivo pretendido.
+
+    >>> try:
+    ...   from lxml import etree
+    ... except ImportError:
+    ...   try:
+    ...     # Python 2.5
+    ...     import xml.etree.cElementTree as etree
+    ...   except ImportError:
+    ...     try:
+    ...       # Python 2.5
+    ...       import xml.etree.ElementTree as etree
+    ...     except ImportError:
+    ...       try:
+    ...         # normal cElementTree install
+    ...         import cElementTree as etree
+    ...       except ImportError:
+    ...         try:
+    ...           # normal ElementTree install
+    ...           import elementtree.ElementTree as etree
+    ...         except ImportError:
+    ...           print("A importacao do lxml falhou")
+
+Consumacao de WebService
+------------------------
+
+O webservice a ser consumido esta no padrao SOAP, que no Python sera
+interpretado pela biblioteca SUDS.
+
+    >>> import suds
+
+Para executar estes testes é preciso instalar a soaplib, para servir
+WSDL via SOAP, num servidor falso (mock).
+
+    >>> import soaplib
+
+Certificados Digitais
+---------------------
+
+A biblioteca deve suportar certificados digitais X.509 v.3 do tipo
+A1. O tipo A3 é certificado por hardware e provavelmente bem mais
+complexo de colocar em prática.
+
+eCNPJ A1
+
+A3 depende de configurar seu numero de serie. No Windows
+usa-se a DLL CAPICOM. Ao que tudo indica, o OpenSSL nao suporta esse
+tipo.
+
+A transmissao utiliza SSL3.
+
+No Windows o arquivo é usado como .pfx (pkcs12)
+
+No Linux o arquivo deve ser convertido para .pem
+
+Impressao do DANFE
+------------------
+
+Alem disso, deve gerar PDFs da DANFE, utilizando a engine Geraldo
+Reports.
+

@@ -1,0 +1,75 @@
+PROCESSAMENTO
+=============
+
+Validar NF-e
+------------
+
+- Efetuar validacoes dos XSD no(s) XML(s) gerado(s)
+
+Assinar NF-e
+------------
+
+- Na hora de assinar, selecionar um Certificado Digital
+
+Gerar arquivos XML
+------------------
+
+- Gera os arquivos XML a partir dos dados das instancias da NF-e
+- Quando gerados me lote, apenas o primeiro arquivo deve ter o cabecalho
+  padrao do XML 1.0
+ - <?xml version="1.0" encoding="UTF-8"?>
+- Namespace
+ - <NFe xmlns=”http://www.portalfiscal.inf.br/nfe” >
+ - A declaração do namespace da assinatura digital deverá ser realizada na
+   própria tag <Signature>, conforme exemplo abaixo.
+ - Cada documento XML deverá ter o seu namespace individual em seu elemento raiz.
+ 
+
+Transmitir NF-e (ou lote de NF-e`s)
+-----------------------------------
+
+- Enviar arquivos
+- Validar mensagens de retorno
+- Confirmar transmissao efetuada com sucesso
+- Notas Fiscais em processamento
+- Faixas de numeracao a serem inutilizadas
+- Utilizar SSL 3.0
+- O certificado eh exigido na transmissao
+
+A troca de mensagens entre os Web Services do ambiente do Sistema de Recepção da NFe
+e o aplicativo da empresa será realizada no padrão SOAP versão 1.2, com troca de
+mensagens XML no padrão Style/Enconding: Document/Literal.
+
+Os serviços da NF-e serão implementados da seguinte forma:
+
+Recepção de NF-e                        Assincrona
+Cancelamento de NF-e                    Sincrona
+Inutilização de Numeração de NF-e       Sincrona
+Consulta da situação atual da NF-e      Sincrona
+Consulta do status do serviço           Sincrona
+Consulta cadastro                       Sincrona
+
+Imprimir NF-e
+-------------
+
+- Geracao baseada no Geraldo Reports
+- Gerar codigo de barras (padrao CODE-128C)
+- Opcao de formulario pre-impresso (Sim/Nao)
+- Chave de acesso
+
+Cancelar NF-e
+-------------
+
+Cancela uma NF-e mesmo depois de autorizada
+
+Outras funcoes
+--------------
+
+- Consultar Situacao na SEFAZ
+ - Consulta a situacao de uma NF-e que esteja com status 'Em Processamento'
+ - Justificativa (texto de 15 a 255 caracteres)
+- Carregar de XML
+ - Fabrica para instanciar classes Python a partir de arquivo(s) XML
+- Consulta de status do servico
+- Consulta de cadastro
+

@@ -1,0 +1,22 @@
+﻿1200013	Acrelândia
+1200054	Assis Brasil
+1200104	Brasiléia
+1200138	Bujari
+1200179	Capixaba
+1200203	Cruzeiro do Sul
+1200252	Epitaciolândia
+1200302	Feijó
+1200328	Jordão
+1200336	Mâncio Lima
+1200344	Manoel Urbano
+1200351	Marechal Thaumaturgo
+1200385	Plácido de Castro
+1200393	Porto Walter
+1200401	Rio Branco
+1200427	Rodrigues Alves
+1200435	Santa Rosa do Purus
+1200450	Senador Guiomard
+1200500	Sena Madureira
+1200609	Tarauacá
+1200708	Xapuri
+1200807	Porto Acre

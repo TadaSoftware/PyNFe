@@ -1,0 +1,78 @@
+﻿5000203	Água Clara
+5000252	Alcinópolis
+5000609	Amambaí
+5000708	Anastácio
+5000807	Anaurilândia
+5000856	Angélica
+5000906	Antônio João
+5001003	Aparecida do Taboado
+5001102	Aquidauana
+5001243	Aral Moreira
+5001508	Bandeirantes
+5001904	Bataguassu
+5002001	Batayporã
+5002100	Bela Vista
+5002159	Bodoquena
+5002209	Bonito
+5002308	Brasilândia
+5002407	Caarapó
+5002605	Camapuã
+5002704	Campo Grande
+5002803	Caracol
+5002902	Cassilândia
+5002951	Chapadão do Sul
+5003108	Corguinho
+5003157	Coronel Sapucaia
+5003207	Corumbá
+5003256	Costa Rica
+5003306	Coxim
+5003454	Deodápolis
+5003488	Dois Irmãos do Buriti
+5003504	Douradina
+5003702	Dourados
+5003751	Eldorado
+5003801	Fátima do Sul
+5003900	Figueirão
+5004007	Glória de Dourados
+5004106	Guia Lopes da Laguna
+5004304	Iguatemi
+5004403	Inocência
+5004502	Itaporã
+5004601	Itaquiraí
+5004700	Ivinhema
+5004809	Japorã
+5004908	Jaraguari
+5005004	Jardim
+5005103	Jateí
+5005152	Juti
+5005202	Ladário
+5005251	Laguna Carapã
+5005400	Maracaju
+5005608	Miranda
+5005681	Mundo Novo
+5005707	Naviraí
+5005806	Nioaque
+5006002	Nova Alvorada do Sul
+5006200	Nova Andradina
+5006259	Novo Horizonte do Sul
+5006309	Paranaíba
+5006358	Paranhos
+5006408	Pedro Gomes
+5006606	Ponta Porã
+5006903	Porto Murtinho
+5007109	Ribas do Rio Pardo
+5007208	Rio Brilhante
+5007307	Rio Negro
+5007406	Rio Verde de Mato Grosso
+5007505	Rochedo
+5007554	Santa Rita do Pardo
+5007695	São Gabriel do Oeste
+5007703	Sete Quedas
+5007802	Selvíria
+5007901	Sidrolândia
+5007935	Sonora
+5007950	Tacuru
+5007976	Taquarussu
+5008008	Terenos
+5008305	Três Lagoas
+5008404	Vicentina

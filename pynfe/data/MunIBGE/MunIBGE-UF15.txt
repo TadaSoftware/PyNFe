@@ -1,0 +1,143 @@
+﻿1500107	Abaetetuba
+1500131	Abel Figueiredo
+1500206	Acará
+1500305	Afuá
+1500347	Água Azul do Norte
+1500404	Alenquer
+1500503	Almeirim
+1500602	Altamira
+1500701	Anajás
+1500800	Ananindeua
+1500859	Anapu
+1500909	Augusto Corrêa
+1500958	Aurora do Pará
+1501006	Aveiro
+1501105	Bagre
+1501204	Baião
+1501253	Bannach
+1501303	Barcarena
+1501402	Belém
+1501451	Belterra
+1501501	Benevides
+1501576	Bom Jesus do Tocantins
+1501600	Bonito
+1501709	Bragança
+1501725	Brasil Novo
+1501758	Brejo Grande do Araguaia
+1501782	Breu Branco
+1501808	Breves
+1501907	Bujaru
+1501956	Cachoeira do Piriá
+1502004	Cachoeira do Arari
+1502103	Cametá
+1502152	Canaã dos Carajás
+1502202	Capanema
+1502301	Capitão Poço
+1502400	Castanhal
+1502509	Chaves
+1502608	Colares
+1502707	Conceição do Araguaia
+1502756	Concórdia do Pará
+1502764	Cumaru do Norte
+1502772	Curionópolis
+1502806	Curralinho
+1502855	Curuá
+1502905	Curuçá
+1502939	Dom Eliseu
+1502954	Eldorado dos Carajás
+1503002	Faro
+1503044	Floresta do Araguaia
+1503077	Garrafão do Norte
+1503093	Goianésia do Pará
+1503101	Gurupá
+1503200	Igarapé-Açu
+1503309	Igarapé-Miri
+1503408	Inhangapi
+1503457	Ipixuna do Pará
+1503507	Irituia
+1503606	Itaituba
+1503705	Itupiranga
+1503754	Jacareacanga
+1503804	Jacundá
+1503903	Juruti
+1504000	Limoeiro do Ajuru
+1504059	Mãe do Rio
+1504109	Magalhães Barata
+1504208	Marabá
+1504307	Maracanã
+1504406	Marapanim
+1504422	Marituba
+1504455	Medicilândia
+1504505	Melgaço
+1504604	Mocajuba
+1504703	Moju
+1504802	Monte Alegre
+1504901	Muaná
+1504950	Nova Esperança do Piriá
+1504976	Nova Ipixuna
+1505007	Nova Timboteua
+1505031	Novo Progresso
+1505064	Novo Repartimento
+1505106	Óbidos
+1505205	Oeiras do Pará
+1505304	Oriximiná
+1505403	Ourém
+1505437	Ourilândia do Norte
+1505486	Pacajá
+1505494	Palestina do Pará
+1505502	Paragominas
+1505536	Parauapebas
+1505551	Pau D'Arco
+1505601	Peixe-Boi
+1505635	Piçarra
+1505650	Placas
+1505700	Ponta de Pedras
+1505809	Portel
+1505908	Porto de Moz
+1506005	Prainha
+1506104	Primavera
+1506112	Quatipuru
+1506138	Redenção
+1506161	Rio Maria
+1506187	Rondon do Pará
+1506195	Rurópolis
+1506203	Salinópolis
+1506302	Salvaterra
+1506351	Santa Bárbara do Pará
+1506401	Santa Cruz do Arari
+1506500	Santa Isabel do Pará
+1506559	Santa Luzia do Pará
+1506583	Santa Maria das Barreiras
+1506609	Santa Maria do Pará
+1506708	Santana do Araguaia
+1506807	Santarém
+1506906	Santarém Novo
+1507003	Santo Antônio do Tauá
+1507102	São Caetano de Odivelas
+1507151	São Domingos do Araguaia
+1507201	São Domingos do Capim
+1507300	São Félix do Xingu
+1507409	São Francisco do Pará
+1507458	São Geraldo do Araguaia
+1507466	São João da Ponta
+1507474	São João de Pirabas
+1507508	São João do Araguaia
+1507607	São Miguel do Guamá
+1507706	São Sebastião da Boa Vista
+1507755	Sapucaia
+1507805	Senador José Porfírio
+1507904	Soure
+1507953	Tailândia
+1507961	Terra Alta
+1507979	Terra Santa
+1508001	Tomé-Açu
+1508035	Tracuateua
+1508050	Trairão
+1508084	Tucumã
+1508100	Tucuruí
+1508126	Ulianópolis
+1508159	Uruará
+1508209	Vigia
+1508308	Viseu
+1508357	Vitória do Xingu
+1508407	Xinguara

@@ -1,0 +1,141 @@
+﻿5100102	Acorizal
+5100201	Água Boa
+5100250	Alta Floresta
+5100300	Alto Araguaia
+5100359	Alto Boa Vista
+5100409	Alto Garças
+5100508	Alto Paraguai
+5100607	Alto Taquari
+5100805	Apiacás
+5101001	Araguaiana
+5101209	Araguainha
+5101258	Araputanga
+5101308	Arenápolis
+5101407	Aripuanã
+5101605	Barão de Melgaço
+5101704	Barra do Bugres
+5101803	Barra do Garças
+5101852	Bom Jesus do Araguaia
+5101902	Brasnorte
+5102504	Cáceres
+5102603	Campinápolis
+5102637	Campo Novo do Parecis
+5102678	Campo Verde
+5102686	Campos de Júlio
+5102694	Canabrava do Norte
+5102702	Canarana
+5102793	Carlinda
+5102850	Castanheira
+5103007	Chapada dos Guimarães
+5103056	Cláudia
+5103106	Cocalinho
+5103205	Colíder
+5103254	Colniza
+5103304	Comodoro
+5103353	Confresa
+5103361	Conquista D'Oeste
+5103379	Cotriguaçu
+5103403	Cuiabá
+5103437	Curvelândia
+5103452	Denise
+5103502	Diamantino
+5103601	Dom Aquino
+5103700	Feliz Natal
+5103809	Figueirópolis D'Oeste
+5103858	Gaúcha do Norte
+5103908	General Carneiro
+5103957	Glória D'Oeste
+5104104	Guarantã do Norte
+5104203	Guiratinga
+5104500	Indiavaí
+5104526	Ipiranga do Norte
+5104542	Itanhangá
+5104559	Itaúba
+5104609	Itiquira
+5104807	Jaciara
+5104906	Jangada
+5105002	Jauru
+5105101	Juara
+5105150	Juína
+5105176	Juruena
+5105200	Juscimeira
+5105234	Lambari D'Oeste
+5105259	Lucas do Rio Verde
+5105309	Luciára
+5105507	Vila Bela da Santíssima Trindade
+5105580	Marcelândia
+5105606	Matupá
+5105622	Mirassol d'Oeste
+5105903	Nobres
+5106000	Nortelândia
+5106109	Nossa Senhora do Livramento
+5106158	Nova Bandeirantes
+5106174	Nova Nazaré
+5106182	Nova Lacerda
+5106190	Nova Santa Helena
+5106208	Nova Brasilândia
+5106216	Nova Canaã do Norte
+5106224	Nova Mutum
+5106232	Nova Olímpia
+5106240	Nova Ubiratã
+5106257	Nova Xavantina
+5106265	Novo Mundo
+5106273	Novo Horizonte do Norte
+5106281	Novo São Joaquim
+5106299	Paranaíta
+5106307	Paranatinga
+5106315	Novo Santo Antônio
+5106372	Pedra Preta
+5106422	Peixoto de Azevedo
+5106455	Planalto da Serra
+5106505	Poconé
+5106653	Pontal do Araguaia
+5106703	Ponte Branca
+5106752	Pontes e Lacerda
+5106778	Porto Alegre do Norte
+5106802	Porto dos Gaúchos
+5106828	Porto Esperidião
+5106851	Porto Estrela
+5107008	Poxoréo
+5107040	Primavera do Leste
+5107065	Querência
+5107107	São José dos Quatro Marcos
+5107156	Reserva do Cabaçal
+5107180	Ribeirão Cascalheira
+5107198	Ribeirãozinho
+5107206	Rio Branco
+5107248	Santa Carmem
+5107263	Santo Afonso
+5107297	São José do Povo
+5107305	São José do Rio Claro
+5107354	São José do Xingu
+5107404	São Pedro da Cipa
+5107578	Rondolândia
+5107602	Rondonópolis
+5107701	Rosário Oeste
+5107743	Santa Cruz do Xingu
+5107750	Salto do Céu
+5107768	Santa Rita do Trivelato
+5107776	Santa Terezinha
+5107792	Santo Antônio do Leste
+5107800	Santo Antônio do Leverger
+5107859	São Félix do Araguaia
+5107875	Sapezal
+5107883	Serra Nova Dourada
+5107909	Sinop
+5107925	Sorriso
+5107941	Tabaporã
+5107958	Tangará da Serra
+5108006	Tapurah
+5108055	Terra Nova do Norte
+5108105	Tesouro
+5108204	Torixoréu
+5108303	União do Sul
+5108352	Vale de São Domingos
+5108402	Várzea Grande
+5108501	Vera
+5108600	Vila Rica
+5108808	Nova Guarita
+5108857	Nova Marilândia
+5108907	Nova Maringá
+5108956	Nova Monte Verde

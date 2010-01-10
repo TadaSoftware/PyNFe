@@ -1,0 +1,217 @@
+﻿2100055	Açailândia
+2100105	Afonso Cunha
+2100154	Água Doce do Maranhão
+2100204	Alcântara
+2100303	Aldeias Altas
+2100402	Altamira do Maranhão
+2100436	Alto Alegre do Maranhão
+2100477	Alto Alegre do Pindaré
+2100501	Alto Parnaíba
+2100550	Amapá do Maranhão
+2100600	Amarante do Maranhão
+2100709	Anajatuba
+2100808	Anapurus
+2100832	Apicum-Açu
+2100873	Araguanã
+2100907	Araioses
+2100956	Arame
+2101004	Arari
+2101103	Axixá
+2101202	Bacabal
+2101251	Bacabeira
+2101301	Bacuri
+2101350	Bacurituba
+2101400	Balsas
+2101509	Barão de Grajaú
+2101608	Barra do Corda
+2101707	Barreirinhas
+2101731	Belágua
+2101772	Bela Vista do Maranhão
+2101806	Benedito Leite
+2101905	Bequimão
+2101939	Bernardo do Mearim
+2101970	Boa Vista do Gurupi
+2102002	Bom Jardim
+2102036	Bom Jesus das Selvas
+2102077	Bom Lugar
+2102101	Brejo
+2102150	Brejo de Areia
+2102200	Buriti
+2102309	Buriti Bravo
+2102325	Buriticupu
+2102358	Buritirana
+2102374	Cachoeira Grande
+2102408	Cajapió
+2102507	Cajari
+2102556	Campestre do Maranhão
+2102606	Cândido Mendes
+2102705	Cantanhede
+2102754	Capinzal do Norte
+2102804	Carolina
+2102903	Carutapera
+2103000	Caxias
+2103109	Cedral
+2103125	Central do Maranhão
+2103158	Centro do Guilherme
+2103174	Centro Novo do Maranhão
+2103208	Chapadinha
+2103257	Cidelândia
+2103307	Codó
+2103406	Coelho Neto
+2103505	Colinas
+2103554	Conceição do Lago-Açu
+2103604	Coroatá
+2103703	Cururupu
+2103752	Davinópolis
+2103802	Dom Pedro
+2103901	Duque Bacelar
+2104008	Esperantinópolis
+2104057	Estreito
+2104073	Feira Nova do Maranhão
+2104081	Fernando Falcão
+2104099	Formosa da Serra Negra
+2104107	Fortaleza dos Nogueiras
+2104206	Fortuna
+2104305	Godofredo Viana
+2104404	Gonçalves Dias
+2104503	Governador Archer
+2104552	Governador Edison Lobão
+2104602	Governador Eugênio Barros
+2104628	Governador Luiz Rocha
+2104651	Governador Newton Bello
+2104677	Governador Nunes Freire
+2104701	Graça Aranha
+2104800	Grajaú
+2104909	Guimarães
+2105005	Humberto de Campos
+2105104	Icatu
+2105153	Igarapé do Meio
+2105203	Igarapé Grande
+2105302	Imperatriz
+2105351	Itaipava do Grajaú
+2105401	Itapecuru Mirim
+2105427	Itinga do Maranhão
+2105450	Jatobá
+2105476	Jenipapo dos Vieiras
+2105500	João Lisboa
+2105609	Joselândia
+2105658	Junco do Maranhão
+2105708	Lago da Pedra
+2105807	Lago do Junco
+2105906	Lago Verde
+2105922	Lagoa do Mato
+2105948	Lago dos Rodrigues
+2105963	Lagoa Grande do Maranhão
+2105989	Lajeado Novo
+2106003	Lima Campos
+2106102	Loreto
+2106201	Luís Domingues
+2106300	Magalhães de Almeida
+2106326	Maracaçumé
+2106359	Marajá do Sena
+2106375	Maranhãozinho
+2106409	Mata Roma
+2106508	Matinha
+2106607	Matões
+2106631	Matões do Norte
+2106672	Milagres do Maranhão
+2106706	Mirador
+2106755	Miranda do Norte
+2106805	Mirinzal
+2106904	Monção
+2107001	Montes Altos
+2107100	Morros
+2107209	Nina Rodrigues
+2107258	Nova Colinas
+2107308	Nova Iorque
+2107357	Nova Olinda do Maranhão
+2107407	Olho d'Água das Cunhãs
+2107456	Olinda Nova do Maranhão
+2107506	Paço do Lumiar
+2107605	Palmeirândia
+2107704	Paraibano
+2107803	Parnarama
+2107902	Passagem Franca
+2108009	Pastos Bons
+2108058	Paulino Neves
+2108108	Paulo Ramos
+2108207	Pedreiras
+2108256	Pedro do Rosário
+2108306	Penalva
+2108405	Peri Mirim
+2108454	Peritoró
+2108504	Pindaré-Mirim
+2108603	Pinheiro
+2108702	Pio XII
+2108801	Pirapemas
+2108900	Poção de Pedras
+2109007	Porto Franco
+2109056	Porto Rico do Maranhão
+2109106	Presidente Dutra
+2109205	Presidente Juscelino
+2109239	Presidente Médici
+2109270	Presidente Sarney
+2109304	Presidente Vargas
+2109403	Primeira Cruz
+2109452	Raposa
+2109502	Riachão
+2109551	Ribamar Fiquene
+2109601	Rosário
+2109700	Sambaíba
+2109759	Santa Filomena do Maranhão
+2109809	Santa Helena
+2109908	Santa Inês
+2110005	Santa Luzia
+2110039	Santa Luzia do Paruá
+2110104	Santa Quitéria do Maranhão
+2110203	Santa Rita
+2110237	Santana do Maranhão
+2110278	Santo Amaro do Maranhão
+2110302	Santo Antônio dos Lopes
+2110401	São Benedito do Rio Preto
+2110500	São Bento
+2110609	São Bernardo
+2110658	São Domingos do Azeitão
+2110708	São Domingos do Maranhão
+2110807	São Félix de Balsas
+2110856	São Francisco do Brejão
+2110906	São Francisco do Maranhão
+2111003	São João Batista
+2111029	São João do Carú
+2111052	São João do Paraíso
+2111078	São João do Soter
+2111102	São João dos Patos
+2111201	São José de Ribamar
+2111250	São José dos Basílios
+2111300	São Luís
+2111409	São Luís Gonzaga do Maranhão
+2111508	São Mateus do Maranhão
+2111532	São Pedro da Água Branca
+2111573	São Pedro dos Crentes
+2111607	São Raimundo das Mangabeiras
+2111631	São Raimundo do Doca Bezerra
+2111672	São Roberto
+2111706	São Vicente Ferrer
+2111722	Satubinha
+2111748	Senador Alexandre Costa
+2111763	Senador La Rocque
+2111789	Serrano do Maranhão
+2111805	Sítio Novo
+2111904	Sucupira do Norte
+2111953	Sucupira do Riachão
+2112001	Tasso Fragoso
+2112100	Timbiras
+2112209	Timon
+2112233	Trizidela do Vale
+2112274	Tufilândia
+2112308	Tuntum
+2112407	Turiaçu
+2112456	Turilândia
+2112506	Tutóia
+2112605	Urbano Santos
+2112704	Vargem Grande
+2112803	Viana
+2112852	Vila Nova dos Martírios
+2112902	Vitória do Mearim
+2113009	Vitorino Freire
+2114007	Zé Doca

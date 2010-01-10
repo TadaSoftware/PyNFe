@@ -1,0 +1,78 @@
+﻿3200102	Afonso Cláudio
+3200136	Águia Branca
+3200169	Água Doce do Norte
+3200201	Alegre
+3200300	Alfredo Chaves
+3200359	Alto Rio Novo
+3200409	Anchieta
+3200508	Apiacá
+3200607	Aracruz
+3200706	Atilio Vivacqua
+3200805	Baixo Guandu
+3200904	Barra de São Francisco
+3201001	Boa Esperança
+3201100	Bom Jesus do Norte
+3201159	Brejetuba
+3201209	Cachoeiro de Itapemirim
+3201308	Cariacica
+3201407	Castelo
+3201506	Colatina
+3201605	Conceição da Barra
+3201704	Conceição do Castelo
+3201803	Divino de São Lourenço
+3201902	Domingos Martins
+3202009	Dores do Rio Preto
+3202108	Ecoporanga
+3202207	Fundão
+3202256	Governador Lindenberg
+3202306	Guaçuí
+3202405	Guarapari
+3202454	Ibatiba
+3202504	Ibiraçu
+3202553	Ibitirama
+3202603	Iconha
+3202652	Irupi
+3202702	Itaguaçu
+3202801	Itapemirim
+3202900	Itarana
+3203007	Iúna
+3203056	Jaguaré
+3203106	Jerônimo Monteiro
+3203130	João Neiva
+3203163	Laranja da Terra
+3203205	Linhares
+3203304	Mantenópolis
+3203320	Marataízes
+3203346	Marechal Floriano
+3203353	Marilândia
+3203403	Mimoso do Sul
+3203502	Montanha
+3203601	Mucurici
+3203700	Muniz Freire
+3203809	Muqui
+3203908	Nova Venécia
+3204005	Pancas
+3204054	Pedro Canário
+3204104	Pinheiros
+3204203	Piúma
+3204252	Ponto Belo
+3204302	Presidente Kennedy
+3204351	Rio Bananal
+3204401	Rio Novo do Sul
+3204500	Santa Leopoldina
+3204559	Santa Maria de Jetibá
+3204609	Santa Teresa
+3204658	São Domingos do Norte
+3204708	São Gabriel da Palha
+3204807	São José do Calçado
+3204906	São Mateus
+3204955	São Roque do Canaã
+3205002	Serra
+3205010	Sooretama
+3205036	Vargem Alta
+3205069	Venda Nova do Imigrante
+3205101	Viana
+3205150	Vila Pavão
+3205176	Vila Valério
+3205200	Vila Velha
+3205309	Vitória

@@ -1,0 +1,139 @@
+﻿1700251	Abreulândia
+1700301	Aguiarnópolis
+1700350	Aliança do Tocantins
+1700400	Almas
+1700707	Alvorada
+1701002	Ananás
+1701051	Angico
+1701101	Aparecida do Rio Negro
+1701309	Aragominas
+1701903	Araguacema
+1702000	Araguaçu
+1702109	Araguaína
+1702158	Araguanã
+1702208	Araguatins
+1702307	Arapoema
+1702406	Arraias
+1702554	Augustinópolis
+1702703	Aurora do Tocantins
+1702901	Axixá do Tocantins
+1703008	Babaçulândia
+1703057	Bandeirantes do Tocantins
+1703073	Barra do Ouro
+1703107	Barrolândia
+1703206	Bernardo Sayão
+1703305	Bom Jesus do Tocantins
+1703602	Brasilândia do Tocantins
+1703701	Brejinho de Nazaré
+1703800	Buriti do Tocantins
+1703826	Cachoeirinha
+1703842	Campos Lindos
+1703867	Cariri do Tocantins
+1703883	Carmolândia
+1703891	Carrasco Bonito
+1703909	Caseara
+1704105	Centenário
+1704600	Chapada de Areia
+1705102	Chapada da Natividade
+1705508	Colinas do Tocantins
+1705557	Combinado
+1705607	Conceição do Tocantins
+1706001	Couto de Magalhães
+1706100	Cristalândia
+1706258	Crixás do Tocantins
+1706506	Darcinópolis
+1707009	Dianópolis
+1707108	Divinópolis do Tocantins
+1707207	Dois Irmãos do Tocantins
+1707306	Dueré
+1707405	Esperantina
+1707553	Fátima
+1707652	Figueirópolis
+1707702	Filadélfia
+1708205	Formoso do Araguaia
+1708254	Fortaleza do Tabocão
+1708304	Goianorte
+1709005	Goiatins
+1709302	Guaraí
+1709500	Gurupi
+1709807	Ipueiras
+1710508	Itacajá
+1710706	Itaguatins
+1710904	Itapiratins
+1711100	Itaporã do Tocantins
+1711506	Jaú do Tocantins
+1711803	Juarina
+1711902	Lagoa da Confusão
+1711951	Lagoa do Tocantins
+1712009	Lajeado
+1712157	Lavandeira
+1712405	Lizarda
+1712454	Luzinópolis
+1712504	Marianópolis do Tocantins
+1712702	Mateiros
+1712801	Maurilândia do Tocantins
+1713205	Miracema do Tocantins
+1713304	Miranorte
+1713601	Monte do Carmo
+1713700	Monte Santo do Tocantins
+1713809	Palmeiras do Tocantins
+1713957	Muricilândia
+1714203	Natividade
+1714302	Nazaré
+1714880	Nova Olinda
+1715002	Nova Rosalândia
+1715101	Novo Acordo
+1715150	Novo Alegre
+1715259	Novo Jardim
+1715507	Oliveira de Fátima
+1715705	Palmeirante
+1715754	Palmeirópolis
+1716109	Paraíso do Tocantins
+1716208	Paranã
+1716307	Pau D'Arco
+1716505	Pedro Afonso
+1716604	Peixe
+1716653	Pequizeiro
+1716703	Colméia
+1717008	Pindorama do Tocantins
+1717206	Piraquê
+1717503	Pium
+1717800	Ponte Alta do Bom Jesus
+1717909	Ponte Alta do Tocantins
+1718006	Porto Alegre do Tocantins
+1718204	Porto Nacional
+1718303	Praia Norte
+1718402	Presidente Kennedy
+1718451	Pugmil
+1718501	Recursolândia
+1718550	Riachinho
+1718659	Rio da Conceição
+1718709	Rio dos Bois
+1718758	Rio Sono
+1718808	Sampaio
+1718840	Sandolândia
+1718865	Santa Fé do Araguaia
+1718881	Santa Maria do Tocantins
+1718899	Santa Rita do Tocantins
+1718907	Santa Rosa do Tocantins
+1719004	Santa Tereza do Tocantins
+1720002	Santa Terezinha do Tocantins
+1720101	São Bento do Tocantins
+1720150	São Félix do Tocantins
+1720200	São Miguel do Tocantins
+1720259	São Salvador do Tocantins
+1720309	São Sebastião do Tocantins
+1720499	São Valério da Natividade
+1720655	Silvanópolis
+1720804	Sítio Novo do Tocantins
+1720853	Sucupira
+1720903	Taguatinga
+1720937	Taipas do Tocantins
+1720978	Talismã
+1721000	Palmas
+1721109	Tocantínia
+1721208	Tocantinópolis
+1721257	Tupirama
+1721307	Tupiratins
+1722081	Wanderlândia
+1722107	Xambioá

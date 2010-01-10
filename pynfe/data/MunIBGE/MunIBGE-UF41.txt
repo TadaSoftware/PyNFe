@@ -1,0 +1,399 @@
+﻿4100103	Abatiá
+4100202	Adrianópolis
+4100301	Agudos do Sul
+4100400	Almirante Tamandaré
+4100459	Altamira do Paraná
+4100509	Altônia
+4100608	Alto Paraná
+4100707	Alto Piquiri
+4100806	Alvorada do Sul
+4100905	Amaporã
+4101002	Ampére
+4101051	Anahy
+4101101	Andirá
+4101150	Ângulo
+4101200	Antonina
+4101309	Antônio Olinto
+4101408	Apucarana
+4101507	Arapongas
+4101606	Arapoti
+4101655	Arapuã
+4101705	Araruna
+4101804	Araucária
+4101853	Ariranha do Ivaí
+4101903	Assaí
+4102000	Assis Chateaubriand
+4102109	Astorga
+4102208	Atalaia
+4102307	Balsa Nova
+4102406	Bandeirantes
+4102505	Barbosa Ferraz
+4102604	Barracão
+4102703	Barra do Jacaré
+4102752	Bela Vista da Caroba
+4102802	Bela Vista do Paraíso
+4102901	Bituruna
+4103008	Boa Esperança
+4103024	Boa Esperança do Iguaçu
+4103040	Boa Ventura de São Roque
+4103057	Boa Vista da Aparecida
+4103107	Bocaiúva do Sul
+4103156	Bom Jesus do Sul
+4103206	Bom Sucesso
+4103222	Bom Sucesso do Sul
+4103305	Borrazópolis
+4103354	Braganey
+4103370	Brasilândia do Sul
+4103404	Cafeara
+4103453	Cafelândia
+4103479	Cafezal do Sul
+4103503	Califórnia
+4103602	Cambará
+4103701	Cambé
+4103800	Cambira
+4103909	Campina da Lagoa
+4103958	Campina do Simão
+4104006	Campina Grande do Sul
+4104055	Campo Bonito
+4104105	Campo do Tenente
+4104204	Campo Largo
+4104253	Campo Magro
+4104303	Campo Mourão
+4104402	Cândido de Abreu
+4104428	Candói
+4104451	Cantagalo
+4104501	Capanema
+4104600	Capitão Leônidas Marques
+4104659	Carambeí
+4104709	Carlópolis
+4104808	Cascavel
+4104907	Castro
+4105003	Catanduvas
+4105102	Centenário do Sul
+4105201	Cerro Azul
+4105300	Céu Azul
+4105409	Chopinzinho
+4105508	Cianorte
+4105607	Cidade Gaúcha
+4105706	Clevelândia
+4105805	Colombo
+4105904	Colorado
+4106001	Congonhinhas
+4106100	Conselheiro Mairinck
+4106209	Contenda
+4106308	Corbélia
+4106407	Cornélio Procópio
+4106456	Coronel Domingos Soares
+4106506	Coronel Vivida
+4106555	Corumbataí do Sul
+4106571	Cruzeiro do Iguaçu
+4106605	Cruzeiro do Oeste
+4106704	Cruzeiro do Sul
+4106803	Cruz Machado
+4106852	Cruzmaltina
+4106902	Curitiba
+4107009	Curiúva
+4107108	Diamante do Norte
+4107124	Diamante do Sul
+4107157	Diamante D'Oeste
+4107207	Dois Vizinhos
+4107256	Douradina
+4107306	Doutor Camargo
+4107405	Enéas Marques
+4107504	Engenheiro Beltrão
+4107520	Esperança Nova
+4107538	Entre Rios do Oeste
+4107546	Espigão Alto do Iguaçu
+4107553	Farol
+4107603	Faxinal
+4107652	Fazenda Rio Grande
+4107702	Fênix
+4107736	Fernandes Pinheiro
+4107751	Figueira
+4107801	Floraí
+4107850	Flor da Serra do Sul
+4107900	Floresta
+4108007	Florestópolis
+4108106	Flórida
+4108205	Formosa do Oeste
+4108304	Foz do Iguaçu
+4108320	Francisco Alves
+4108403	Francisco Beltrão
+4108452	Foz do Jordão
+4108502	General Carneiro
+4108551	Godoy Moreira
+4108601	Goioerê
+4108650	Goioxim
+4108700	Grandes Rios
+4108809	Guaíra
+4108908	Guairaçá
+4108957	Guamiranga
+4109005	Guapirama
+4109104	Guaporema
+4109203	Guaraci
+4109302	Guaraniaçu
+4109401	Guarapuava
+4109500	Guaraqueçaba
+4109609	Guaratuba
+4109658	Honório Serpa
+4109708	Ibaiti
+4109757	Ibema
+4109807	Ibiporã
+4109906	Icaraíma
+4110003	Iguaraçu
+4110052	Iguatu
+4110078	Imbaú
+4110102	Imbituva
+4110201	Inácio Martins
+4110300	Inajá
+4110409	Indianópolis
+4110508	Ipiranga
+4110607	Iporã
+4110656	Iracema do Oeste
+4110706	Irati
+4110805	Iretama
+4110904	Itaguajé
+4110953	Itaipulândia
+4111001	Itambaracá
+4111100	Itambé
+4111209	Itapejara d'Oeste
+4111258	Itaperuçu
+4111308	Itaúna do Sul
+4111407	Ivaí
+4111506	Ivaiporã
+4111555	Ivaté
+4111605	Ivatuba
+4111704	Jaboti
+4111803	Jacarezinho
+4111902	Jaguapitã
+4112009	Jaguariaíva
+4112108	Jandaia do Sul
+4112207	Janiópolis
+4112306	Japira
+4112405	Japurá
+4112504	Jardim Alegre
+4112603	Jardim Olinda
+4112702	Jataizinho
+4112751	Jesuítas
+4112801	Joaquim Távora
+4112900	Jundiaí do Sul
+4112959	Juranda
+4113007	Jussara
+4113106	Kaloré
+4113205	Lapa
+4113254	Laranjal
+4113304	Laranjeiras do Sul
+4113403	Leópolis
+4113429	Lidianópolis
+4113452	Lindoeste
+4113502	Loanda
+4113601	Lobato
+4113700	Londrina
+4113734	Luiziana
+4113759	Lunardelli
+4113809	Lupionópolis
+4113908	Mallet
+4114005	Mamborê
+4114104	Mandaguaçu
+4114203	Mandaguari
+4114302	Mandirituba
+4114351	Manfrinópolis
+4114401	Mangueirinha
+4114500	Manoel Ribas
+4114609	Marechal Cândido Rondon
+4114708	Maria Helena
+4114807	Marialva
+4114906	Marilândia do Sul
+4115002	Marilena
+4115101	Mariluz
+4115200	Maringá
+4115309	Mariópolis
+4115358	Maripá
+4115408	Marmeleiro
+4115457	Marquinho
+4115507	Marumbi
+4115606	Matelândia
+4115705	Matinhos
+4115739	Mato Rico
+4115754	Mauá da Serra
+4115804	Medianeira
+4115853	Mercedes
+4115903	Mirador
+4116000	Miraselva
+4116059	Missal
+4116109	Moreira Sales
+4116208	Morretes
+4116307	Munhoz de Melo
+4116406	Nossa Senhora das Graças
+4116505	Nova Aliança do Ivaí
+4116604	Nova América da Colina
+4116703	Nova Aurora
+4116802	Nova Cantu
+4116901	Nova Esperança
+4116950	Nova Esperança do Sudoeste
+4117008	Nova Fátima
+4117057	Nova Laranjeiras
+4117107	Nova Londrina
+4117206	Nova Olímpia
+4117214	Nova Santa Bárbara
+4117222	Nova Santa Rosa
+4117255	Nova Prata do Iguaçu
+4117271	Nova Tebas
+4117297	Novo Itacolomi
+4117305	Ortigueira
+4117404	Ourizona
+4117453	Ouro Verde do Oeste
+4117503	Paiçandu
+4117602	Palmas
+4117701	Palmeira
+4117800	Palmital
+4117909	Palotina
+4118006	Paraíso do Norte
+4118105	Paranacity
+4118204	Paranaguá
+4118303	Paranapoema
+4118402	Paranavaí
+4118451	Pato Bragado
+4118501	Pato Branco
+4118600	Paula Freitas
+4118709	Paulo Frontin
+4118808	Peabiru
+4118857	Perobal
+4118907	Pérola
+4119004	Pérola d'Oeste
+4119103	Piên
+4119152	Pinhais
+4119202	Pinhalão
+4119251	Pinhal de São Bento
+4119301	Pinhão
+4119400	Piraí do Sul
+4119509	Piraquara
+4119608	Pitanga
+4119657	Pitangueiras
+4119707	Planaltina do Paraná
+4119806	Planalto
+4119905	Ponta Grossa
+4119954	Pontal do Paraná
+4120002	Porecatu
+4120101	Porto Amazonas
+4120150	Porto Barreiro
+4120200	Porto Rico
+4120309	Porto Vitória
+4120333	Prado Ferreira
+4120358	Pranchita
+4120408	Presidente Castelo Branco
+4120507	Primeiro de Maio
+4120606	Prudentópolis
+4120655	Quarto Centenário
+4120705	Quatiguá
+4120804	Quatro Barras
+4120853	Quatro Pontes
+4120903	Quedas do Iguaçu
+4121000	Querência do Norte
+4121109	Quinta do Sol
+4121208	Quitandinha
+4121257	Ramilândia
+4121307	Rancho Alegre
+4121356	Rancho Alegre D'Oeste
+4121406	Realeza
+4121505	Rebouças
+4121604	Renascença
+4121703	Reserva
+4121752	Reserva do Iguaçu
+4121802	Ribeirão Claro
+4121901	Ribeirão do Pinhal
+4122008	Rio Azul
+4122107	Rio Bom
+4122156	Rio Bonito do Iguaçu
+4122172	Rio Branco do Ivaí
+4122206	Rio Branco do Sul
+4122305	Rio Negro
+4122404	Rolândia
+4122503	Roncador
+4122602	Rondon
+4122651	Rosário do Ivaí
+4122701	Sabáudia
+4122800	Salgado Filho
+4122909	Salto do Itararé
+4123006	Salto do Lontra
+4123105	Santa Amélia
+4123204	Santa Cecília do Pavão
+4123303	Santa Cruz de Monte Castelo
+4123402	Santa Fé
+4123501	Santa Helena
+4123600	Santa Inês
+4123709	Santa Isabel do Ivaí
+4123808	Santa Izabel do Oeste
+4123824	Santa Lúcia
+4123857	Santa Maria do Oeste
+4123907	Santa Mariana
+4123956	Santa Mônica
+4124004	Santana do Itararé
+4124020	Santa Tereza do Oeste
+4124053	Santa Terezinha de Itaipu
+4124103	Santo Antônio da Platina
+4124202	Santo Antônio do Caiuá
+4124301	Santo Antônio do Paraíso
+4124400	Santo Antônio do Sudoeste
+4124509	Santo Inácio
+4124608	São Carlos do Ivaí
+4124707	São Jerônimo da Serra
+4124806	São João
+4124905	São João do Caiuá
+4125001	São João do Ivaí
+4125100	São João do Triunfo
+4125209	São Jorge d'Oeste
+4125308	São Jorge do Ivaí
+4125357	São Jorge do Patrocínio
+4125407	São José da Boa Vista
+4125456	São José das Palmeiras
+4125506	São José dos Pinhais
+4125555	São Manoel do Paraná
+4125605	São Mateus do Sul
+4125704	São Miguel do Iguaçu
+4125753	São Pedro do Iguaçu
+4125803	São Pedro do Ivaí
+4125902	São Pedro do Paraná
+4126009	São Sebastião da Amoreira
+4126108	São Tomé
+4126207	Sapopema
+4126256	Sarandi
+4126272	Saudade do Iguaçu
+4126306	Sengés
+4126355	Serranópolis do Iguaçu
+4126405	Sertaneja
+4126504	Sertanópolis
+4126603	Siqueira Campos
+4126652	Sulina
+4126678	Tamarana
+4126702	Tamboara
+4126801	Tapejara
+4126900	Tapira
+4127007	Teixeira Soares
+4127106	Telêmaco Borba
+4127205	Terra Boa
+4127304	Terra Rica
+4127403	Terra Roxa
+4127502	Tibagi
+4127601	Tijucas do Sul
+4127700	Toledo
+4127809	Tomazina
+4127858	Três Barras do Paraná
+4127882	Tunas do Paraná
+4127908	Tuneiras do Oeste
+4127957	Tupãssi
+4127965	Turvo
+4128005	Ubiratã
+4128104	Umuarama
+4128203	União da Vitória
+4128302	Uniflor
+4128401	Uraí
+4128500	Wenceslau Braz
+4128534	Ventania
+4128559	Vera Cruz do Oeste
+4128609	Verê
+4128625	Alto Paraíso
+4128633	Doutor Ulysses
+4128658	Virmond
+4128708	Vitorino
+4128807	Xambrê

@@ -1,0 +1,373 @@
+MODELO
+======
+
+Modelo das entidades e como elas se relacionam.
+
+Nenhum dos campos deve permitir acentos e/ou cedilhas.
+
+Emitente
+--------
+
+Campos:
+- Dados do Emitente
+ - Nome/Razao Social (obrigatorio)
+ - Nome Fantasia
+ - CNPJ (obrigatorio)
+ - Inscricao Estadual (obrigatorio)
+ - CNAE Fiscal
+ - Inscricao Municipal
+ - Inscricao Estadual (Subst. Tributario)
+- Endereco
+ - Logradouro (obrigatorio)
+ - Numero (obrigatorio)
+ - Complemento
+ - Bairro (obrigatorio)
+ - CEP
+ - Pais (aceita somente Brasil)
+ - UF (obrigatorio)
+ - Municipio (obrigatorio)
+ - Telefone
+ - Logotipo
+
+Produto
+-------
+
+ST = Substituicao Tributaria
+
+- Dados do Produto
+ - Descricao (obrigatorio)
+ - Codigo (obrigatorio) - nao pode ser alterado quando em edicao
+ - EAN
+ - EAN Unid. Tributavel
+ - EX TIPI
+ - Genero
+ - NCM
+ - Unid. Com.
+ - Valor Unitario Com.
+ - Unid. Trib.
+ - Qtd. Trib.
+ - Valor Unitario Trib.
+- Impostos
+ - ICMS (lista 1 para * / ManyToManyField)
+  - Tipo de Tributacao (seleciona de lista)
+   - ICMS 00 - Tributada integralmente
+   - ICMS 10 - Tributada com cobranca do ICMS por substituicao tributaria
+   - ICMS 20 - Com reducao da base de calculo
+   - ICMS 30 - Isenta ou nao tributada e com cobranca do ICMS por substituicao tributaria
+   - ICMS 40 - Isenta
+   - ICMS 41 - Nao tributada
+   - ICMS 50 - Suspensao
+   - ICMS 51 - Diferimento
+   - outros ... (levantar)
+  - Origem (seleciona de lista)
+   - Nacional
+   - Estrangeira - Importacao Direta
+   - Estrangeira - Adquirida no Mercado Interno
+  - Modalidade de determinacao da Base de Calculo (seleciona de lista)
+   - Margem Valor Agregado
+   - Pauta (valor)
+   - Preco Tabelado Max. (valor)
+   - Valor da Operacao
+  - Aliquota ICMS
+  - Percentual de reducao da Base de Calculo
+  - Modalidade de determinacao da Base de Calculo do ICMS ST (seleciona de lista)
+   - Margem Valor Agregado
+   - Pauta (valor)
+   - Preco Tabelado Max. (valor)
+   - Valor da Operacao
+  - Aliquota ICSM ST
+  - Percentual de reducao do ICMS ST
+  - Percentual da margem de Valor Adicionado ICMS ST
+ - IPI
+  - Classe de Enquadramento (cigarros e bebidas)
+  - Codigo de Enquadramento Legal
+  - CNPJ do Produtor
+
+Cliente
+-------
+
+- Dados do Cliente
+ - Nome/Razão Social (obrigatorio)
+ - Tipo de Documento (obrigatorio) - default CNPJ
+  - CNPJ
+  - CPF
+ - Numero do Documento (obrigatorio)
+ - Inscricao Estadual
+ - Inscricao SUFRAMA
+ - Isento do ICMS (Sim/Nao)
+- Endereco
+ - Logradouro (obrigatorio)
+ - Numero (obrigatorio)
+ - Complemento
+ - Bairro (obrigatorio)
+ - CEP
+ - Pais (seleciona de lista)
+ - UF (obrigatorio)
+ - Municipio (obrigatorio)
+ - Telefone
+
+Transportadora
+--------------
+
+- Dados da Transportadora
+ - Nome/Razão Social (obrigatorio)
+ - Tipo de Documento (obrigatorio) - default CNPJ
+  - CNPJ
+  - CPF
+ - Numero do Documento (obrigatorio)
+ - Inscricao Estadual
+- Endereco
+ - Logradouro (obrigatorio)
+ - UF (obrigatorio)
+ - Municipio (obrigatorio)
+
+Nota Fiscal
+-----------
+
+Digitacao/Lancamento de NF
+
+- Dados da NF-e
+ - Status (controle de estados da NF)
+  - Em Digitacao
+  - Validada
+  - Assinada
+  - Em processamento (apos ser enviada)
+  - Autorizada
+  - Rejeitada
+  - Cancelada
+ - NF-e
+  - Modelo (formato: NN)
+  - Serie (obrigatorio - formato: NNN)
+  - Numero NF (obrigatorio)
+  - Data da Emissao (obrigatorio)
+  - Natureza da Operacao (obrigatorio)
+  - Tipo do Documento (obrigatorio - seleciona de lista)
+  - Tipo impressao DANFE (obrigatorio - seleciona de lista)
+  - Data de saida/entrada
+  - Forma de pagamento  (obrigatorio - seleciona de lista)
+  - Digest value da NF-e (somente leitura)
+  - Valor total da nota (somente leitura)
+  - Valor ICMS da nota (somente leitura)
+  - Valor ICMS ST da nota (somente leitura)
+  - Protocolo (somente leitura)
+  - Data (somente leitura)
+ - Notas Fiscais Referenciadas
+  - ???
+- Emitente
+- Destinatario/Remetente
+ - Identificacao (seleciona de Clientes)
+ - Endereco (ver se pode copiar do Cliente)
+  - Logradouro (obrigatorio)
+  - Numero (obrigatorio)
+  - Complemento
+  - Bairro (obrigatorio)
+  - CEP
+  - Pais (seleciona de lista)
+  - UF (obrigatorio)
+  - Municipio (obrigatorio)
+  - Telefone
+ - Local Retirada/Entrega
+  - Local de retirada diferente do emitente (Sim/Nao)
+  - Local de entrega diferente do destinatario (Sim/Nao)
+- Produtos e ServicosS (lista 1 para * / ManyToManyField)
+ - Dados
+  - Codigo (obrigatorio)
+  - Descricao (obrigatorio)
+  - EAN
+  - NCM
+  - EX TIPI
+  - CFOP (obrigatorio)
+  - Genero
+  - Unidade Comercial (obrigatorio)
+  - Quantidade Comercial (obrigatorio)
+  - Valor Unitario Comercial (obrigatorio)
+  - Unidade Tributavel (obrigatorio)
+  - Quantidade Tributavel (obrigatorio)
+  - Valor Unitario Tributavel (obrigatorio)
+  - EAN Tributavel
+  - Tot. Frete
+  - Tot. Seguro
+  - Desconto
+  - Valor tot bruto (obrigatorio)
+  - Produto especifico (seleciona de lista)
+   - Veiculo
+   - Medicamento
+   - Armamento
+   - Combustivel
+ - Tributos
+  - ICMS
+   - Situacao tributaria (obrigatorio - seleciona de lista)
+    - ICMS 00 - Tributada integralmente
+    - ICMS 10 - Tributada com cobranca do ICMS por substituicao tributaria
+    - ICMS 20 - Com reducao da base de calculo
+    - ICMS 30 - Isenta ou nao tributada e com cobranca do ICMS por substituicao tributaria
+    - ICMS 40 - Isenta
+    - ICMS 41 - Nao tributada
+    - ICMS 50 - Suspensao
+    - ICMS 51 - Diferimento
+    - outros ... (levantar)
+   - Origem (obrigatorio - seleciona de lista)
+    - Nacional
+    - Estrangeira - Importacao Direta
+    - Estrangeira - Adquirida no Mercado Interno
+   - ICMS
+    - Modalidade de determinacao da BC ICMS (seleciona de lista)
+     - Margem Valor Agregado
+     - Pauta (valor)
+     - Preco Tabelado Max. (valor)
+     - Valor da Operacao
+    - Percentual reducao da BC ICMS
+    - Valor da base de calculo ICMS
+    - Aliquota ICMS
+    - Valor do ICMS
+   - ICMS ST
+    - Modalidade de determinacao da BC ICMS ST (seleciona de lista)
+     - Margem Valor Agregado
+     - Pauta (valor)
+     - Preco Tabelado Max. (valor)
+     - Valor da Operacao
+    - Percentual reducao da BC ICMS ST
+    - Valor da base de calculo ICMS ST
+    - Aliquota ICMS ST
+    - Valor do ICMS ST
+  - IPI
+   - ???
+  - PIS
+   - PIS
+    - Situacao tributaria (obrigatorio - seleciona de lista)
+     - PIS 01 - Operacao Tributavel - Base de Calculo = Valor da Operacao Aliquota...
+     - PIS 02 - Operacao Tributavel - Base de Calculo = Valor da Operacao (Aliquota...
+     - PIS 03 - Operacao Tributavel - Base de Calculo = Quantidade Vendida x Aliquota...
+     - PIS 04 - Operacao Tributavel - Tributacao Monofasica - (Aliquota Zero)
+     - PIS 06 - Operacao Tributavel - Aliquota Zero
+     - PIS 07 - Operacao Isenta da Contribuicao
+     - PIS 08 - Operacao sem Indidencia da Contribuicao
+     - PIS 09 - Operacao com Suspensao da Contribuicao
+     - outros ... (levantar)
+    - Tipo de calculo (seleciona de lista)
+    - Valor da base de calculo
+    - Aliquota (percentual)
+    - Aliquota (em reais)
+    - Quantidade vendida
+    - Valor do PIS
+   - PIS ST
+    - Situacao tributaria (obrigatorio - seleciona de lista)
+     - ???
+    - Tipo de calculo (seleciona de lista)
+    - Valor da base de calculo
+    - Aliquota (percentual)
+    - Aliquota (em reais)
+    - Quantidade vendida
+    - Valor do PIS ST
+  - COFINS
+   - COFINS
+    - Situacao tributaria (obrigatorio - seleciona de lista)
+     - COFINS 01 - Operacao Tributavel - Base de Calculo = Valor da Operacao Aliquota...
+     - COFINS 02 - Operacao Tributavel - Base de Calculo = Valor da Operacao (Aliquota...
+     - COFINS 03 - Operacao Tributavel - Base de Calculo = Quantidade Vendida x Aliquota...
+     - COFINS 04 - Operacao Tributavel - Tributacao Monofasica - (Aliquota Zero)
+     - COFINS 06 - Operacao Tributavel - Aliquota Zero
+     - COFINS 07 - Operacao Isenta da Contribuicao
+     - COFINS 08 - Operacao sem Indidencia da Contribuicao
+     - COFINS 09 - Operacao com Suspensao da Contribuicao
+     - outros ... (levantar)
+    - Tipo de calculo (seleciona de lista)
+    - Valor da base de calculo
+    - Aliquota (percentual)
+    - Aliquota (em reais)
+    - Quantidade vendida
+    - Valor do COFINS
+   - COFINS ST
+    - Situacao tributaria (obrigatorio - seleciona de lista)
+     - ???
+    - Tipo de calculo (seleciona de lista)
+    - Valor da base de calculo
+    - Aliquota (percentual)
+    - Aliquota (em reais)
+    - Quantidade vendida
+    - Valor do COFINS ST
+  - ISSQN
+   - ???
+  - Imposto de Importacao
+   - ???
+ - Informacoes Adicionais
+  - Texto livre de informacoes adicionais
+ - Declaracao de Importacao
+  - ???
+ - Veiculo Novo
+  - ???
+ - Medicamento
+  - ???
+ - Armamento
+  - ???
+ - Combustivel
+  - ???
+- Totais
+ - ICMS
+  - Base de calculo (somente leitura)
+  - Total do ICMS (somente leitura)
+  - Base de calculo do ICMS ST (somente leitura)
+  - Total do ICMS ST (somente leitura)
+  - Total dos produtos e servicos (somente leitura)
+  - Total do frete (somente leitura)
+  - Total do seguro (somente leitura)
+  - Total do desconto (somente leitura)
+  - Total do II (somente leitura)
+  - Total do IPI (somente leitura)
+  - PIS (somente leitura)
+  - CONFINS (somente leitura)
+  - Outras despesas acessorias
+  - Total da nota
+ - ISSQN
+  - ???
+ - Retencao de Tributos
+  - ???
+- Transporte
+ - Modalidade do Frete (obrigatorio - seleciona de lista)
+  - 0 - Por conta do emitente
+  - 1 - Por conta do destinatario
+ - Transportador (seleciona de Transportadoras)
+ - Retencao do ICMS
+  - Base de calculo
+  - Aliquota
+  - Valor do servico
+  - UF
+  - Municipio
+  - CFOP
+  - ICMS retido
+ - Veiculo
+  - Placa
+  - RNTC
+  - UF
+ - Reboque
+  - Placa
+  - RNTC
+  - UF
+ - Volumes (lista 1 para * / ManyToManyField)
+  - Quantidade
+  - Especie
+  - Marca
+  - Numeracao
+  - Peso Liquido (kg)
+  - Peso Bruto (kg)
+  - Lacres (lista 1 para * / ManyToManyField)
+   - Numero de lacres
+- Cobranca
+ - ???
+- Informacoes Adicionais
+ - ???
+- Exportacao e Compras
+ - ???
+- Certificado Digital
+ - ???
+
+Certificado Digital
+-------------------
+
+- Caminho do arquivo
+ - Windows
+  - Arquivo .pfx
+ - Linux
+  - Arquivo .pem
+- Senha
+

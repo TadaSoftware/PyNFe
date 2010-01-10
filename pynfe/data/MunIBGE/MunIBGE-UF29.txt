@@ -1,0 +1,417 @@
+﻿2900108	Abaíra
+2900207	Abaré
+2900306	Acajutiba
+2900355	Adustina
+2900405	Água Fria
+2900504	Érico Cardoso
+2900603	Aiquara
+2900702	Alagoinhas
+2900801	Alcobaça
+2900900	Almadina
+2901007	Amargosa
+2901106	Amélia Rodrigues
+2901155	América Dourada
+2901205	Anagé
+2901304	Andaraí
+2901353	Andorinha
+2901403	Angical
+2901502	Anguera
+2901601	Antas
+2901700	Antônio Cardoso
+2901809	Antônio Gonçalves
+2901908	Aporá
+2901957	Apuarema
+2902005	Aracatu
+2902054	Araças
+2902104	Araci
+2902203	Aramari
+2902252	Arataca
+2902302	Aratuípe
+2902401	Aurelino Leal
+2902500	Baianópolis
+2902609	Baixa Grande
+2902658	Banzaê
+2902708	Barra
+2902807	Barra da Estiva
+2902906	Barra do Choça
+2903003	Barra do Mendes
+2903102	Barra do Rocha
+2903201	Barreiras
+2903235	Barro Alto
+2903276	Barrocas
+2903300	Barro Preto
+2903409	Belmonte
+2903508	Belo Campo
+2903607	Biritinga
+2903706	Boa Nova
+2903805	Boa Vista do Tupim
+2903904	Bom Jesus da Lapa
+2903953	Bom Jesus da Serra
+2904001	Boninal
+2904050	Bonito
+2904100	Boquira
+2904209	Botuporã
+2904308	Brejões
+2904407	Brejolândia
+2904506	Brotas de Macaúbas
+2904605	Brumado
+2904704	Buerarema
+2904753	Buritirama
+2904803	Caatiba
+2904852	Cabaceiras do Paraguaçu
+2904902	Cachoeira
+2905008	Caculé
+2905107	Caém
+2905156	Caetanos
+2905206	Caetité
+2905305	Cafarnaum
+2905404	Cairu
+2905503	Caldeirão Grande
+2905602	Camacan
+2905701	Camaçari
+2905800	Camamu
+2905909	Campo Alegre de Lourdes
+2906006	Campo Formoso
+2906105	Canápolis
+2906204	Canarana
+2906303	Canavieiras
+2906402	Candeal
+2906501	Candeias
+2906600	Candiba
+2906709	Cândido Sales
+2906808	Cansanção
+2906824	Canudos
+2906857	Capela do Alto Alegre
+2906873	Capim Grosso
+2906899	Caraíbas
+2906907	Caravelas
+2907004	Cardeal da Silva
+2907103	Carinhanha
+2907202	Casa Nova
+2907301	Castro Alves
+2907400	Catolândia
+2907509	Catu
+2907558	Caturama
+2907608	Central
+2907707	Chorrochó
+2907806	Cícero Dantas
+2907905	Cipó
+2908002	Coaraci
+2908101	Cocos
+2908200	Conceição da Feira
+2908309	Conceição do Almeida
+2908408	Conceição do Coité
+2908507	Conceição do Jacuípe
+2908606	Conde
+2908705	Condeúba
+2908804	Contendas do Sincorá
+2908903	Coração de Maria
+2909000	Cordeiros
+2909109	Coribe
+2909208	Coronel João Sá
+2909307	Correntina
+2909406	Cotegipe
+2909505	Cravolândia
+2909604	Crisópolis
+2909703	Cristópolis
+2909802	Cruz das Almas
+2909901	Curaçá
+2910008	Dário Meira
+2910057	Dias d'Ávila
+2910107	Dom Basílio
+2910206	Dom Macedo Costa
+2910305	Elísio Medrado
+2910404	Encruzilhada
+2910503	Entre Rios
+2910602	Esplanada
+2910701	Euclides da Cunha
+2910727	Eunápolis
+2910750	Fátima
+2910776	Feira da Mata
+2910800	Feira de Santana
+2910859	Filadélfia
+2910909	Firmino Alves
+2911006	Floresta Azul
+2911105	Formosa do Rio Preto
+2911204	Gandu
+2911253	Gavião
+2911303	Gentio do Ouro
+2911402	Glória
+2911501	Gongogi
+2911600	Governador Mangabeira
+2911659	Guajeru
+2911709	Guanambi
+2911808	Guaratinga
+2911857	Heliópolis
+2911907	Iaçu
+2912004	Ibiassucê
+2912103	Ibicaraí
+2912202	Ibicoara
+2912301	Ibicuí
+2912400	Ibipeba
+2912509	Ibipitanga
+2912608	Ibiquera
+2912707	Ibirapitanga
+2912806	Ibirapuã
+2912905	Ibirataia
+2913002	Ibitiara
+2913101	Ibititá
+2913200	Ibotirama
+2913309	Ichu
+2913408	Igaporã
+2913457	Igrapiúna
+2913507	Iguaí
+2913606	Ilhéus
+2913705	Inhambupe
+2913804	Ipecaetá
+2913903	Ipiaú
+2914000	Ipirá
+2914109	Ipupiara
+2914208	Irajuba
+2914307	Iramaia
+2914406	Iraquara
+2914505	Irará
+2914604	Irecê
+2914653	Itabela
+2914703	Itaberaba
+2914802	Itabuna
+2914901	Itacaré
+2915007	Itaeté
+2915106	Itagi
+2915205	Itagibá
+2915304	Itagimirim
+2915353	Itaguaçu da Bahia
+2915403	Itaju do Colônia
+2915502	Itajuípe
+2915601	Itamaraju
+2915700	Itamari
+2915809	Itambé
+2915908	Itanagra
+2916005	Itanhém
+2916104	Itaparica
+2916203	Itapé
+2916302	Itapebi
+2916401	Itapetinga
+2916500	Itapicuru
+2916609	Itapitanga
+2916708	Itaquara
+2916807	Itarantim
+2916856	Itatim
+2916906	Itiruçu
+2917003	Itiúba
+2917102	Itororó
+2917201	Ituaçu
+2917300	Ituberá
+2917334	Iuiú
+2917359	Jaborandi
+2917409	Jacaraci
+2917508	Jacobina
+2917607	Jaguaquara
+2917706	Jaguarari
+2917805	Jaguaripe
+2917904	Jandaíra
+2918001	Jequié
+2918100	Jeremoabo
+2918209	Jiquiriçá
+2918308	Jitaúna
+2918357	João Dourado
+2918407	Juazeiro
+2918456	Jucuruçu
+2918506	Jussara
+2918555	Jussari
+2918605	Jussiape
+2918704	Lafaiete Coutinho
+2918753	Lagoa Real
+2918803	Laje
+2918902	Lajedão
+2919009	Lajedinho
+2919058	Lajedo do Tabocal
+2919108	Lamarão
+2919157	Lapão
+2919207	Lauro de Freitas
+2919306	Lençóis
+2919405	Licínio de Almeida
+2919504	Livramento de Nossa Senhora
+2919553	Luís Eduardo Magalhães
+2919603	Macajuba
+2919702	Macarani
+2919801	Macaúbas
+2919900	Macururé
+2919926	Madre de Deus
+2919959	Maetinga
+2920007	Maiquinique
+2920106	Mairi
+2920205	Malhada
+2920304	Malhada de Pedras
+2920403	Manoel Vitorino
+2920452	Mansidão
+2920502	Maracás
+2920601	Maragogipe
+2920700	Maraú
+2920809	Marcionílio Souza
+2920908	Mascote
+2921005	Mata de São João
+2921054	Matina
+2921104	Medeiros Neto
+2921203	Miguel Calmon
+2921302	Milagres
+2921401	Mirangaba
+2921450	Mirante
+2921500	Monte Santo
+2921609	Morpará
+2921708	Morro do Chapéu
+2921807	Mortugaba
+2921906	Mucugê
+2922003	Mucuri
+2922052	Mulungu do Morro
+2922102	Mundo Novo
+2922201	Muniz Ferreira
+2922250	Muquém de São Francisco
+2922300	Muritiba
+2922409	Mutuípe
+2922508	Nazaré
+2922607	Nilo Peçanha
+2922656	Nordestina
+2922706	Nova Canaã
+2922730	Nova Fátima
+2922755	Nova Ibiá
+2922805	Nova Itarana
+2922854	Nova Redenção
+2922904	Nova Soure
+2923001	Nova Viçosa
+2923035	Novo Horizonte
+2923050	Novo Triunfo
+2923100	Olindina
+2923209	Oliveira dos Brejinhos
+2923308	Ouriçangas
+2923357	Ourolândia
+2923407	Palmas de Monte Alto
+2923506	Palmeiras
+2923605	Paramirim
+2923704	Paratinga
+2923803	Paripiranga
+2923902	Pau Brasil
+2924009	Paulo Afonso
+2924058	Pé de Serra
+2924108	Pedrão
+2924207	Pedro Alexandre
+2924306	Piatã
+2924405	Pilão Arcado
+2924504	Pindaí
+2924603	Pindobaçu
+2924652	Pintadas
+2924678	Piraí do Norte
+2924702	Piripá
+2924801	Piritiba
+2924900	Planaltino
+2925006	Planalto
+2925105	Poções
+2925204	Pojuca
+2925253	Ponto Novo
+2925303	Porto Seguro
+2925402	Potiraguá
+2925501	Prado
+2925600	Presidente Dutra
+2925709	Presidente Jânio Quadros
+2925758	Presidente Tancredo Neves
+2925808	Queimadas
+2925907	Quijingue
+2925931	Quixabeira
+2925956	Rafael Jambeiro
+2926004	Remanso
+2926103	Retirolândia
+2926202	Riachão das Neves
+2926301	Riachão do Jacuípe
+2926400	Riacho de Santana
+2926509	Ribeira do Amparo
+2926608	Ribeira do Pombal
+2926657	Ribeirão do Largo
+2926707	Rio de Contas
+2926806	Rio do Antônio
+2926905	Rio do Pires
+2927002	Rio Real
+2927101	Rodelas
+2927200	Ruy Barbosa
+2927309	Salinas da Margarida
+2927408	Salvador
+2927507	Santa Bárbara
+2927606	Santa Brígida
+2927705	Santa Cruz Cabrália
+2927804	Santa Cruz da Vitória
+2927903	Santa Inês
+2928000	Santaluz
+2928059	Santa Luzia
+2928109	Santa Maria da Vitória
+2928208	Santana
+2928307	Santanópolis
+2928406	Santa Rita de Cássia
+2928505	Santa Teresinha
+2928604	Santo Amaro
+2928703	Santo Antônio de Jesus
+2928802	Santo Estêvão
+2928901	São Desidério
+2928950	São Domingos
+2929008	São Félix
+2929057	São Félix do Coribe
+2929107	São Felipe
+2929206	São Francisco do Conde
+2929255	São Gabriel
+2929305	São Gonçalo dos Campos
+2929354	São José da Vitória
+2929370	São José do Jacuípe
+2929404	São Miguel das Matas
+2929503	São Sebastião do Passé
+2929602	Sapeaçu
+2929701	Sátiro Dias
+2929750	Saubara
+2929800	Saúde
+2929909	Seabra
+2930006	Sebastião Laranjeiras
+2930105	Senhor do Bonfim
+2930154	Serra do Ramalho
+2930204	Sento Sé
+2930303	Serra Dourada
+2930402	Serra Preta
+2930501	Serrinha
+2930600	Serrolândia
+2930709	Simões Filho
+2930758	Sítio do Mato
+2930766	Sítio do Quinto
+2930774	Sobradinho
+2930808	Souto Soares
+2930907	Tabocas do Brejo Velho
+2931004	Tanhaçu
+2931053	Tanque Novo
+2931103	Tanquinho
+2931202	Taperoá
+2931301	Tapiramutá
+2931350	Teixeira de Freitas
+2931400	Teodoro Sampaio
+2931509	Teofilândia
+2931608	Teolândia
+2931707	Terra Nova
+2931806	Tremedal
+2931905	Tucano
+2932002	Uauá
+2932101	Ubaíra
+2932200	Ubaitaba
+2932309	Ubatã
+2932408	Uibaí
+2932457	Umburanas
+2932507	Una
+2932606	Urandi
+2932705	Uruçuca
+2932804	Utinga
+2932903	Valença
+2933000	Valente
+2933059	Várzea da Roça
+2933109	Várzea do Poço
+2933158	Várzea Nova
+2933174	Varzedo
+2933208	Vera Cruz
+2933257	Vereda
+2933307	Vitória da Conquista
+2933406	Wagner
+2933455	Wanderley
+2933505	Wenceslau Guimarães
+2933604	Xique-Xique

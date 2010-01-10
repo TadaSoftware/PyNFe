@@ -1,0 +1,3 @@
+class Comunicacao(object):
+    pass
+

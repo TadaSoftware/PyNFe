@@ -1,0 +1,3 @@
+class Assinatura(object):
+    pass
+
