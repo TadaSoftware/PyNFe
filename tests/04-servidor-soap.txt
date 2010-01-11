@@ -1,0 +1,13 @@
+SERVIDOR SOAP FALSO PARA TESTES
+===============================
+
+Este teste vai verificar um servidor, executado atraves do comando
+'run_fake_soap_server.py', para enviar requisicoes SOAP e esperar as
+responstas em formato WSDL, de forma a simular o servidor da SEFAZ.
+
+    >>> from suds.client import Client
+    >>> url = 'http://localhost:8080/ServidorNFEFalso?wsdl'
+    >>> #client = Client(url)
+    >>> #print client
+    >>> #print client.service.ping('mario', 5)
+

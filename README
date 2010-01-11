@@ -14,8 +14,9 @@ Dependências
   - para a geração da DANFE
 - SUDS (https://fedorahosted.org/suds/)
   - para consumir o webservice SOAP/WSDL
-- libxml2
-  - ?
+- lxml
+  - biblioteca de leitura e gravação de arquivos XML, de alta
+    performance e fácil de implementar.
 - openssl
   - ?
 - MS CAPICOM
@@ -72,4 +73,10 @@ Referências
 
 - Validao de XML via XSD no lxml
  - http://codespeak.net/lxml/validation.html#xmlschema
+
+- Geracao de codigos de barra Code128 no Python
+ - http://barcode128.blogspot.com/2007/03/code128py.html
+
+- Descricao do Code128 na Wikipedia
+ - http://en.wikipedia.org/wiki/Code_128
 
