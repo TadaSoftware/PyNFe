@@ -5,15 +5,45 @@ Modelo das entidades e como elas se relacionam.
 
 Nenhum dos campos deve permitir acentos e/ou cedilhas.
 
+    >>> from pynfe.entidades import Transportadora
+
 - Dados da Transportadora
  - Nome/Razão Social (obrigatorio)
+
+    >>> hasattr(Transportadora, 'razao_social')
+    True
+
  - Tipo de Documento (obrigatorio) - default CNPJ
   - CNPJ
   - CPF
+
+    >>> hasattr(Transportadora, 'tipo_documento')
+    True
+
  - Numero do Documento (obrigatorio)
+
+    >>> hasattr(Transportadora, 'numero_documento')
+    True
+
  - Inscricao Estadual
+
+    >>> hasattr(Transportadora, 'inscricao_estadual')
+    True
+
 - Endereco
  - Logradouro (obrigatorio)
+
+    >>> hasattr(Transportadora, 'endereco_logradouro')
+    True
+
  - UF (obrigatorio)
+
+    >>> hasattr(Transportadora, 'endereco_uf')
+    True
+
  - Municipio (obrigatorio)
+
+    >>> hasattr(Transportadora, 'endereco_municipio')
+    True
+
 

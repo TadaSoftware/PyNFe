@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 from base import Entidade
-
-TIPOS_DOCUMENTO = (
-    'CNPJ',
-    'CPF',
-)
+from pynfe.utils.flags import TIPOS_DOCUMENTO
 
 class Cliente(Entidade):
     # Dados do Cliente

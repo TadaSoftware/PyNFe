@@ -5,10 +5,12 @@ Modelo das entidades e como elas se relacionam.
 
 Nenhum dos campos deve permitir acentos e/ou cedilhas.
 
-Nota Fiscal
------------
-
-Digitacao/Lancamento de NF
+    >>> from pynfe.entidades import NotaFiscal
+    >>> from pynfe.entidades.notafiscal import NotaFiscalReferenciada,\
+    ...     NotaFiscalProduto, NotaFiscalDeclaracaoImportacao,\
+    ...     NotaFiscalDeclaracaoImportacaoAdicao, NotaFiscalTransporteVolume,\
+    ...     NotaFiscalTransporteVolumeLacre, NotaFiscalCobrancaDuplicata,\
+    ...     NotaFiscalObservacaoContribuinte, NotaFiscalProcessoReferenciado
 
 - Dados da NF-e
  - Status (controle de estados da NF)
