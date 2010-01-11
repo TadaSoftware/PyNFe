@@ -8,6 +8,8 @@ Nenhum dos campos deve permitir acentos e/ou cedilhas.
 Emitente
 --------
 
+    >>> from pynfe.entidades import Emitente
+
 Campos:
 - Dados do Emitente
  - Nome/Razao Social (obrigatorio)
@@ -58,7 +60,9 @@ ST = Substituicao Tributaria
    - ICMS 41 - Nao tributada
    - ICMS 50 - Suspensao
    - ICMS 51 - Diferimento
-   - outros ... (levantar)
+   - ICMS 60 - Cobrado anteriormente por substituicao tributaria
+   - ICMS 70 - Com reducao da base de calculo e cobranca do ICMS por substituicao tributaria
+   - ICMS 90 - Outras
   - Origem (seleciona de lista)
    - Nacional
    - Estrangeira - Importacao Direta
@@ -151,8 +155,17 @@ Digitacao/Lancamento de NF
   - Valor ICMS ST da nota (somente leitura)
   - Protocolo (somente leitura)
   - Data (somente leitura)
- - Notas Fiscais Referenciadas
-  - ???
+ - Notas Fiscais Referenciadas (lista 1 para * / ManyToManyField)
+  - Tipo (seleciona de lista)
+   - Nota Fiscal eletronica
+    - Chave de Acesso
+   - Nota Fiscal
+    - UF
+    - Mes e ano de emissao
+    - CNPJ
+    - Serie (XXX)
+    - Numero
+    - Modelo
 - Emitente
 - Destinatario/Remetente
  - Identificacao (seleciona de Clientes)
@@ -169,7 +182,7 @@ Digitacao/Lancamento de NF
  - Local Retirada/Entrega
   - Local de retirada diferente do emitente (Sim/Nao)
   - Local de entrega diferente do destinatario (Sim/Nao)
-- Produtos e ServicosS (lista 1 para * / ManyToManyField)
+- Produtos e Servicos (lista 1 para * / ManyToManyField)
  - Dados
   - Codigo (obrigatorio)
   - Descricao (obrigatorio)
@@ -205,7 +218,9 @@ Digitacao/Lancamento de NF
     - ICMS 41 - Nao tributada
     - ICMS 50 - Suspensao
     - ICMS 51 - Diferimento
-    - outros ... (levantar)
+    - ICMS 60 - Cobrado anteriormente por substituicao tributaria
+    - ICMS 70 - Com reducao da base de calculo e cobranca do ICMS por substituicao tributaria
+    - ICMS 90 - Outras
    - Origem (obrigatorio - seleciona de lista)
     - Nacional
     - Estrangeira - Importacao Direta
@@ -231,7 +246,40 @@ Digitacao/Lancamento de NF
     - Aliquota ICMS ST
     - Valor do ICMS ST
   - IPI
-   - ???
+   - Situacao tributaria (seleciona de lista)
+    - IPI 00 - Entrada com recuperacao de credito
+    - IPI 01 - Entrada tributada com aliquota zero
+    - IPI 02 - Entrada isenta
+    - IPI 03 - Entrada nao-tributada
+    - IPI 04 - Entrada imune
+    - IPI 05 - Entrada com suspensao
+    - IPI 49 - Outras entradas
+    - IPI 50 - Saida tributada
+    - IPI 51 - Saida tributada com aliquota zero
+    - IPI 52 - Saida isenta
+    - IPI 53 - Saida nao-tributada
+    - IPI 54 - Saida imune
+    - IPI 55 - Saida com suspensao
+    - IPI 99 - Outas saidas
+   - Classe de enquadramento
+    - A informacao para classe de enquadramento do IPI para Cigarros e Bebidas,
+      quando aplicavel, deve ser informada utilizando a codificacao prevista nos
+      Atos Normativos editados pela Receita Federal
+   - Codigo do enquadramento
+   - CNPJ do Produtor
+   - Codigo do selo de controle
+    - A informacao do codigo de selo, quando aplicavel, deve ser informada
+      utilizando a codificacao prevista nos Atos Normativos editados pela Receita
+      Federal
+   - Quantidade do selo de controle
+   - Tipo de calculo (seleciona de lista)
+    - Percentual
+     - Valor da base de calculo
+     - Aliquota
+    - Em valor
+     - Quantidade total unidade padrao
+     - Valor por unidade
+   - Valor do IPI
   - PIS
    - PIS
     - Situacao tributaria (obrigatorio - seleciona de lista)
@@ -243,7 +291,7 @@ Digitacao/Lancamento de NF
      - PIS 07 - Operacao Isenta da Contribuicao
      - PIS 08 - Operacao sem Indidencia da Contribuicao
      - PIS 09 - Operacao com Suspensao da Contribuicao
-     - outros ... (levantar)
+     - PIS 99 - Outras operacoes
     - Tipo de calculo (seleciona de lista)
     - Valor da base de calculo
     - Aliquota (percentual)
@@ -251,13 +299,13 @@ Digitacao/Lancamento de NF
     - Quantidade vendida
     - Valor do PIS
    - PIS ST
-    - Situacao tributaria (obrigatorio - seleciona de lista)
-     - ???
     - Tipo de calculo (seleciona de lista)
-    - Valor da base de calculo
-    - Aliquota (percentual)
-    - Aliquota (em reais)
-    - Quantidade vendida
+     - Percentual
+      - Valor da base de calculo
+      - Aliquota (percentual)
+     - Em valor
+      - Aliquota (em reais)
+      - Quantidade vendida
     - Valor do PIS ST
   - COFINS
    - COFINS
@@ -270,30 +318,51 @@ Digitacao/Lancamento de NF
      - COFINS 07 - Operacao Isenta da Contribuicao
      - COFINS 08 - Operacao sem Indidencia da Contribuicao
      - COFINS 09 - Operacao com Suspensao da Contribuicao
-     - outros ... (levantar)
+     - COFINS 99 - Outras operacoes
     - Tipo de calculo (seleciona de lista)
-    - Valor da base de calculo
-    - Aliquota (percentual)
-    - Aliquota (em reais)
-    - Quantidade vendida
+     - Percentual
+      - Valor da base de calculo
+      - Aliquota (percentual)
+     - Em Valor
+      - Aliquota (em reais)
+      - Quantidade vendida
     - Valor do COFINS
    - COFINS ST
-    - Situacao tributaria (obrigatorio - seleciona de lista)
-     - ???
     - Tipo de calculo (seleciona de lista)
-    - Valor da base de calculo
-    - Aliquota (percentual)
-    - Aliquota (em reais)
-    - Quantidade vendida
+     - Percentual
+      - Valor da base de calculo
+      - Aliquota (percentual)
+     - Em Valor
+      - Aliquota (em reais)
+      - Quantidade vendida
     - Valor do COFINS ST
   - ISSQN
-   - ???
+   - Valor da base de calculo
+   - Aliquota
+   - Lista de servico (seleciona de lista)
+    - Aceita somente valores maiores que 100, disponiveis no arquivo data/ISSQN/Lista-Servicos.txt
+   - UF
+   - Municipio de ocorrencia
+   - Valor do ISSQN
   - Imposto de Importacao
-   - ???
+   - Valor base de calculo
+   - Valor despesas aduaneiras
+   - Valor do IOF
+   - Valor imposto de importacao
  - Informacoes Adicionais
   - Texto livre de informacoes adicionais
- - Declaracao de Importacao
-  - ???
+ - Declaracao de Importacao (lista 1 para * / ManyToManyField)
+  - Numero DI/DSI/DA
+  - Data de registro
+  - Codigo exportador
+  - Desembaraco aduaneiro
+   - UF
+   - Local
+   - Data
+  - Adicoes (lista 1 para * / ManyToManyField)
+   - Numero
+   - Desconto
+   - Codigo fabricante
  - Veiculo Novo
   - ???
  - Medicamento
@@ -319,9 +388,19 @@ Digitacao/Lancamento de NF
   - Outras despesas acessorias
   - Total da nota
  - ISSQN
-  - ???
+  - Base de calculo do ISS
+  - Total do ISS
+  - PIS sobre servicos
+  - COFINS sobre servicos
+  - Total dos servicos sob nao-incidencia ou nao tributados pelo ICMS
  - Retencao de Tributos
-  - ???
+  - Valor retido de PIS
+  - Valor retido de COFINS
+  - Valor retido de CSLL
+  - Base de calculo do IRRF
+  - Valor retido do IRRF
+  - BC da ret. da Prev. Social
+  - Retencao da Prev. Social
 - Transporte
  - Modalidade do Frete (obrigatorio - seleciona de lista)
   - 0 - Por conta do emitente
@@ -353,11 +432,38 @@ Digitacao/Lancamento de NF
   - Lacres (lista 1 para * / ManyToManyField)
    - Numero de lacres
 - Cobranca
- - ???
+ - Fatura
+  - Numero
+  - Valor original
+  - Valor do desconto
+  - Valor liquido
+ - Duplicatas (lista 1 para * / ManyToManyField)
+  - Numero
+  - Data de vencimento
+  - Valor
 - Informacoes Adicionais
- - ???
+ - Informacoes Adicionais
+  - Informacoes adicionais de interesse do fisco
+  - Informacoes complementares de interesse do contribuinte
+ - Observacoes do Contribuinte (lista 1 para * / ManyToManyField)
+  - Nome do campo
+  - Observacao
+ - Processo Referenciado (lista 1 para * / ManyToManyField)
+  - Identificador do processo
+  - Origem (seleciona de lista)
+   - SEFAZ
+   - Justica federal
+   - Justica estadual
+   - Secex/RFB
+   - Outros
 - Exportacao e Compras
- - ???
+ - Exportacao
+  - UF de embarque
+  - Local do embarque
+ - Compra
+  - Informacao da nota de empenho de compras publicas
+  - Informacao do pedido
+  - Informacao do contrato
 - Certificado Digital
  - ???
 
