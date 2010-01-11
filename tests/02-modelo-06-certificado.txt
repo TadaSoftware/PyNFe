@@ -1,0 +1,14 @@
+MODELO - CERTIFICADO DIGITAL
+============================
+
+Modelo das entidades e como elas se relacionam.
+
+Nenhum dos campos deve permitir acentos e/ou cedilhas.
+
+- Caminho do arquivo
+ - Windows
+  - Arquivo .pfx
+ - Linux
+  - Arquivo .pem
+- Senha
+

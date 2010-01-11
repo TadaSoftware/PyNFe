@@ -1,0 +1,27 @@
+MODELO - CLIENTE
+================
+
+Modelo das entidades e como elas se relacionam.
+
+Nenhum dos campos deve permitir acentos e/ou cedilhas.
+
+- Dados do Cliente
+ - Nome/Razão Social (obrigatorio)
+ - Tipo de Documento (obrigatorio) - default CNPJ
+  - CNPJ
+  - CPF
+ - Numero do Documento (obrigatorio)
+ - Inscricao Estadual
+ - Inscricao SUFRAMA
+ - Isento do ICMS (Sim/Nao)
+- Endereco
+ - Logradouro (obrigatorio)
+ - Numero (obrigatorio)
+ - Complemento
+ - Bairro (obrigatorio)
+ - CEP
+ - Pais (seleciona de lista)
+ - UF (obrigatorio)
+ - Municipio (obrigatorio)
+ - Telefone
+

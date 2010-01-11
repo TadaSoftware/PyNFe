@@ -1,0 +1,60 @@
+MODELO - PRODUTO
+================
+
+Modelo das entidades e como elas se relacionam.
+
+Nenhum dos campos deve permitir acentos e/ou cedilhas.
+
+ST = Substituicao Tributaria
+
+- Dados do Produto
+ - Descricao (obrigatorio)
+ - Codigo (obrigatorio) - nao pode ser alterado quando em edicao
+ - EAN
+ - EAN Unid. Tributavel
+ - EX TIPI
+ - Genero
+ - NCM
+ - Unid. Com.
+ - Valor Unitario Com.
+ - Unid. Trib.
+ - Qtd. Trib.
+ - Valor Unitario Trib.
+- Impostos
+ - ICMS (lista 1 para * / ManyToManyField)
+  - Tipo de Tributacao (seleciona de lista)
+   - ICMS 00 - Tributada integralmente
+   - ICMS 10 - Tributada com cobranca do ICMS por substituicao tributaria
+   - ICMS 20 - Com reducao da base de calculo
+   - ICMS 30 - Isenta ou nao tributada e com cobranca do ICMS por substituicao tributaria
+   - ICMS 40 - Isenta
+   - ICMS 41 - Nao tributada
+   - ICMS 50 - Suspensao
+   - ICMS 51 - Diferimento
+   - ICMS 60 - Cobrado anteriormente por substituicao tributaria
+   - ICMS 70 - Com reducao da base de calculo e cobranca do ICMS por substituicao tributaria
+   - ICMS 90 - Outras
+  - Origem (seleciona de lista)
+   - Nacional
+   - Estrangeira - Importacao Direta
+   - Estrangeira - Adquirida no Mercado Interno
+  - Modalidade de determinacao da Base de Calculo (seleciona de lista)
+   - Margem Valor Agregado
+   - Pauta (valor)
+   - Preco Tabelado Max. (valor)
+   - Valor da Operacao
+  - Aliquota ICMS
+  - Percentual de reducao da Base de Calculo
+  - Modalidade de determinacao da Base de Calculo do ICMS ST (seleciona de lista)
+   - Margem Valor Agregado
+   - Pauta (valor)
+   - Preco Tabelado Max. (valor)
+   - Valor da Operacao
+  - Aliquota ICSM ST
+  - Percentual de reducao do ICMS ST
+  - Percentual da margem de Valor Adicionado ICMS ST
+ - IPI
+  - Classe de Enquadramento (cigarros e bebidas)
+  - Codigo de Enquadramento Legal
+  - CNPJ do Produtor
+
