@@ -5,23 +5,84 @@ Modelo das entidades e como elas se relacionam.
 
 Nenhum dos campos deve permitir acentos e/ou cedilhas.
 
+    >>> from pynfe.entidades import Cliente
+
 - Dados do Cliente
  - Nome/Razão Social (obrigatorio)
+
+    >>> hasattr(Cliente, 'razao_social')
+    True
+
  - Tipo de Documento (obrigatorio) - default CNPJ
   - CNPJ
   - CPF
+
+    >>> hasattr(Cliente, 'tipo_documento')
+    True
+
  - Numero do Documento (obrigatorio)
+
+    >>> hasattr(Cliente, 'numero_documento')
+    True
+
  - Inscricao Estadual
+
+    >>> hasattr(Cliente, 'inscricao_estadual')
+    True
+
  - Inscricao SUFRAMA
+
+    >>> hasattr(Cliente, 'inscricao_suframa')
+    True
+
  - Isento do ICMS (Sim/Nao)
+
+    >>> hasattr(Cliente, 'isento_icms')
+    True
+
 - Endereco
  - Logradouro (obrigatorio)
+
+    >>> hasattr(Cliente, 'endereco_logradouro')
+    True
+
  - Numero (obrigatorio)
+
+    >>> hasattr(Cliente, 'endereco_numero')
+    True
+
  - Complemento
+
+    >>> hasattr(Cliente, 'endereco_complemento')
+    True
+
  - Bairro (obrigatorio)
+
+    >>> hasattr(Cliente, 'endereco_bairro')
+    True
+
  - CEP
+
+    >>> hasattr(Cliente, 'endereco_cep')
+    True
+
  - Pais (seleciona de lista)
+
+    >>> hasattr(Cliente, 'endereco_pais')
+    True
+
  - UF (obrigatorio)
+
+    >>> hasattr(Cliente, 'endereco_uf')
+    True
+
  - Municipio (obrigatorio)
+
+    >>> hasattr(Cliente, 'endereco_municipio')
+    True
+
  - Telefone
+
+    >>> hasattr(Cliente, 'endereco_telefone')
+    True
 

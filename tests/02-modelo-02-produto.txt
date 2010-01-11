@@ -7,21 +7,76 @@ Nenhum dos campos deve permitir acentos e/ou cedilhas.
 
 ST = Substituicao Tributaria
 
+    >>> from pynfe.entidades import Produto
+    >>> from pynfe.entidades.produto import ProdutoICMS
+
 - Dados do Produto
  - Descricao (obrigatorio)
+
+    >>> hasattr(Produto, 'descricao')
+    True
+
  - Codigo (obrigatorio) - nao pode ser alterado quando em edicao
+
+    >>> hasattr(Produto, 'codigo')
+    True
+
  - EAN
+
+    >>> hasattr(Produto, 'ean')
+    True
+
  - EAN Unid. Tributavel
+
+    >>> hasattr(Produto, 'ean_unidade_tributavel')
+    True
+
  - EX TIPI
+
+    >>> hasattr(Produto, 'ex_tipi')
+    True
+
  - Genero
+
+    >>> hasattr(Produto, 'genero')
+    True
+
  - NCM
+
+    >>> hasattr(Produto, 'ncm')
+    True
+
  - Unid. Com.
+
+    >>> hasattr(Produto, 'unidade_comercial')
+    True
+
  - Valor Unitario Com.
+
+    >>> hasattr(Produto, 'valor_unitario_comercial')
+    True
+
  - Unid. Trib.
+
+    >>> hasattr(Produto, 'unidade_tributavel')
+    True
+
  - Qtd. Trib.
+
+    >>> hasattr(Produto, 'quantidade_tributavel')
+    True
+
  - Valor Unitario Trib.
+
+    >>> hasattr(Produto, 'valor_unitario_tributavel')
+    True
+
 - Impostos
  - ICMS (lista 1 para * / ManyToManyField)
+
+    >>> hasattr(Produto, 'icms')
+    True
+
   - Tipo de Tributacao (seleciona de lista)
    - ICMS 00 - Tributada integralmente
    - ICMS 10 - Tributada com cobranca do ICMS por substituicao tributaria
@@ -34,27 +89,74 @@ ST = Substituicao Tributaria
    - ICMS 60 - Cobrado anteriormente por substituicao tributaria
    - ICMS 70 - Com reducao da base de calculo e cobranca do ICMS por substituicao tributaria
    - ICMS 90 - Outras
+
+    >>> hasattr(ProdutoICMS, 'tipo_tributacao')
+    True
+
   - Origem (seleciona de lista)
    - Nacional
    - Estrangeira - Importacao Direta
    - Estrangeira - Adquirida no Mercado Interno
+
+    >>> hasattr(ProdutoICMS, 'origem')
+    True
+
   - Modalidade de determinacao da Base de Calculo (seleciona de lista)
    - Margem Valor Agregado
    - Pauta (valor)
    - Preco Tabelado Max. (valor)
    - Valor da Operacao
+
+    >>> hasattr(ProdutoICMS, 'modalidade')
+    True
+
   - Aliquota ICMS
+
+    >>> hasattr(ProdutoICMS, 'aliquota')
+    True
+
   - Percentual de reducao da Base de Calculo
+
+    >>> hasattr(ProdutoICMS, 'percentual_reducao')
+    True
+
   - Modalidade de determinacao da Base de Calculo do ICMS ST (seleciona de lista)
    - Margem Valor Agregado
    - Pauta (valor)
    - Preco Tabelado Max. (valor)
    - Valor da Operacao
-  - Aliquota ICSM ST
+
+    >>> hasattr(ProdutoICMS, 'st_modalidade')
+    True
+
+  - Aliquota ICMS ST
+
+    >>> hasattr(ProdutoICMS, 'st_aliquota')
+    True
+
   - Percentual de reducao do ICMS ST
+
+    >>> hasattr(ProdutoICMS, 'st_percentual_reducao')
+    True
+
   - Percentual da margem de Valor Adicionado ICMS ST
+
+    >>> hasattr(ProdutoICMS, 'st_percentual_margem_valor_adicionado')
+    True
+
  - IPI
   - Classe de Enquadramento (cigarros e bebidas)
+
+    >>> hasattr(Produto, 'ipi_classe_enquadramento')
+    True
+
   - Codigo de Enquadramento Legal
+
+    >>> hasattr(Produto, 'ipi_codigo_enquadramento_legal')
+    True
+
   - CNPJ do Produtor
+
+    >>> hasattr(Produto, 'ipi_cnpj_produtor')
+    True
 
