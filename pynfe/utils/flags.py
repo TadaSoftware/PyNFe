@@ -32,3 +32,13 @@ ICMS_MODALIDADES = (
     'Valor da Operacao',
 )
 
+NF_STATUS = (
+    'Em Digitacao',
+    'Validada',
+    'Assinada',
+    'Em processamento',
+    'Autorizada',
+    'Rejeitada',
+    'Cancelada',
+)
+

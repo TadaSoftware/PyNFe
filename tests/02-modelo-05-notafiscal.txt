@@ -21,74 +21,341 @@ Nenhum dos campos deve permitir acentos e/ou cedilhas.
   - Autorizada
   - Rejeitada
   - Cancelada
- - NF-e
+
+    >>> hasattr(NotaFiscal, 'status')
+    True
+
+ - Nota Fisca eletronica
   - Modelo (formato: NN)
+
+    >>> hasattr(NotaFiscal, 'modelo')
+    True
+
   - Serie (obrigatorio - formato: NNN)
+
+    >>> hasattr(NotaFiscal, 'serie')
+    True
+
   - Numero NF (obrigatorio)
+
+    >>> hasattr(NotaFiscal, 'numero_nf')
+    True
+
   - Data da Emissao (obrigatorio)
+
+    >>> hasattr(NotaFiscal, 'data_emissao')
+    True
+
   - Natureza da Operacao (obrigatorio)
+
+    >>> hasattr(NotaFiscal, 'natureza_operacao')
+    True
+
   - Tipo do Documento (obrigatorio - seleciona de lista)
+   - 0 - Entrada
+   - 1 - Saida
+
+    >>> hasattr(NotaFiscal, 'tipo_documento')
+    True
+
   - Tipo impressao DANFE (obrigatorio - seleciona de lista)
+   - Retrato
+   - Paisagem
+
+    >>> hasattr(NotaFiscal, 'tipo_impressao_danfe')
+    True
+
   - Data de saida/entrada
+
+    >>> hasattr(NotaFiscal, 'data_saida_entrada')
+    True
+
   - Forma de pagamento  (obrigatorio - seleciona de lista)
+   - 0 - Pagamento a vista
+   - 1 - Pagamento a prazo
+   - 2 - Outros
+
+    >>> hasattr(NotaFiscal, 'forma_pagamento')
+    True
+
+  - Forma de emissao (obrigatorio - seleciona de lista)
+   - Normal
+   - Contingencia
+   - Contingencia com SCAN
+   - Contingencia via DPEC
+   - Contingencia FS-DA
+
+    >>> hasattr(NotaFiscal, 'forma_emissao')
+    True
+
+  - Finalidade de emissao (obrigatorio - seleciona de lista)
+   - 1 - NF-e normal
+   - 2 - NF-e complementar
+   - 3 - NF-e de ajuste
+
+    >>> hasattr(NotaFiscal, 'finalidade_emissao')
+    True
+
+  - UF
+
+    >>> hasattr(NotaFiscal, 'uf')
+    True
+
+  - Municipio de ocorrencia
+
+    >>> hasattr(NotaFiscal, 'municipio')
+    True
+
   - Digest value da NF-e (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'digest_value')
+    True
+
   - Valor total da nota (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'valor_total_nota')
+    True
+
   - Valor ICMS da nota (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'valor_icms_nota')
+    True
+
   - Valor ICMS ST da nota (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'valor_icms_st_nota')
+    True
+
   - Protocolo (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'protocolo')
+    True
+
   - Data (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'data')
+    True
+
  - Notas Fiscais Referenciadas (lista 1 para * / ManyToManyField)
+
+    >>> hasattr(NotaFiscal, 'notas_fiscais_referenciadas')
+    True
+
   - Tipo (seleciona de lista)
+
+    >>> hasattr(NotaFiscalReferenciada, 'tipo')
+    True
+
    - Nota Fiscal eletronica
     - Chave de Acesso
+
+    >>> hasattr(NotaFiscalReferenciada, 'chave_acesso')
+    True
+
    - Nota Fiscal
     - UF
+
+    >>> hasattr(NotaFiscalReferenciada, 'uf')
+    True
+
     - Mes e ano de emissao
+
+    >>> hasattr(NotaFiscalReferenciada, 'mes_ano_emissao')
+    True
+
     - CNPJ
+
+    >>> hasattr(NotaFiscalReferenciada, 'cnpj')
+    True
+
     - Serie (XXX)
+
+    >>> hasattr(NotaFiscalReferenciada, 'serie')
+    True
+
     - Numero
+
+    >>> hasattr(NotaFiscalReferenciada, 'numero')
+    True
+
     - Modelo
-- Emitente
+
+    >>> hasattr(NotaFiscalReferenciada, 'modelo')
+    True
+
+- Emitente (CNPJ ???)
+
+    >>> hasattr(NotaFiscal, 'emitente')
+    True
+
 - Destinatario/Remetente
  - Identificacao (seleciona de Clientes)
+
+    >>> hasattr(NotaFiscal, 'destinatario_remetente')
+    True
+
  - Endereco (ver se pode copiar do Cliente)
   - Logradouro (obrigatorio)
+
+    >>> hasattr(NotaFiscal, 'destinatario_endereco_logradouro')
+    True
+
   - Numero (obrigatorio)
+
+    >>> hasattr(NotaFiscal, 'destinatario_endereco_numero')
+    True
+
   - Complemento
+
+    >>> hasattr(NotaFiscal, 'destinatario_endereco_complemento')
+    True
+
   - Bairro (obrigatorio)
+
+    >>> hasattr(NotaFiscal, 'destinatario_endereco_bairro')
+    True
+
   - CEP
+
+    >>> hasattr(NotaFiscal, 'destinatario_endereco_cep')
+    True
+
   - Pais (seleciona de lista)
+
+    >>> hasattr(NotaFiscal, 'destinatario_endereco_pais')
+    True
+
   - UF (obrigatorio)
+
+    >>> hasattr(NotaFiscal, 'destinatario_endereco_uf')
+    True
+
   - Municipio (obrigatorio)
+
+    >>> hasattr(NotaFiscal, 'destinatario_endereco_municipio')
+    True
+
   - Telefone
+
+    >>> hasattr(NotaFiscal, 'destinatario_endereco_telefone')
+    True
+
  - Local Retirada/Entrega
   - Local de retirada diferente do emitente (Sim/Nao)
+
+    >>> hasattr(NotaFiscal, 'local_retirada_diferente_emitente')
+    True
+
   - Local de entrega diferente do destinatario (Sim/Nao)
+
+    >>> hasattr(NotaFiscal, 'local_entrega_diferente_destinatario')
+    True
+
 - Produtos e Servicos (lista 1 para * / ManyToManyField)
+
+    >>> hasattr(NotaFiscal, 'produtos_servicos')
+    True
+
  - Dados
   - Codigo (obrigatorio)
+
+    >>> hasattr(NotaFiscalProduto, 'codigo')
+    True
+
   - Descricao (obrigatorio)
+
+    >>> hasattr(NotaFiscalProduto, 'descricao')
+    True
+
   - EAN
+
+    >>> hasattr(NotaFiscalProduto, 'ean')
+    True
+
   - NCM
+
+    >>> hasattr(NotaFiscalProduto, 'ncm')
+    True
+
   - EX TIPI
+
+    >>> hasattr(NotaFiscalProduto, 'ex_tipi')
+    True
+
   - CFOP (obrigatorio)
+
+    >>> hasattr(NotaFiscalProduto, 'cfop')
+    True
+
   - Genero
+
+    >>> hasattr(NotaFiscalProduto, 'genero')
+    True
+
   - Unidade Comercial (obrigatorio)
+
+    >>> hasattr(NotaFiscalProduto, 'unidade_comercial')
+    True
+
   - Quantidade Comercial (obrigatorio)
+
+    >>> hasattr(NotaFiscalProduto, 'quantidade_comercial')
+    True
+
   - Valor Unitario Comercial (obrigatorio)
+
+    >>> hasattr(NotaFiscalProduto, 'valor_unitario_comercial')
+    True
+
   - Unidade Tributavel (obrigatorio)
+
+    >>> hasattr(NotaFiscalProduto, 'unidade_tributavel')
+    True
+
   - Quantidade Tributavel (obrigatorio)
+
+    >>> hasattr(NotaFiscalProduto, 'quantidade_tributavel')
+    True
+
   - Valor Unitario Tributavel (obrigatorio)
+
+    >>> hasattr(NotaFiscalProduto, 'valor_unitario_tributavel')
+    True
+
   - EAN Tributavel
-  - Tot. Frete
-  - Tot. Seguro
+
+    >>> hasattr(NotaFiscalProduto, 'ean_tributavel')
+    True
+
+  - Total Frete
+
+    >>> hasattr(NotaFiscalProduto, 'total_frete')
+    True
+
+  - Total Seguro
+
+    >>> hasattr(NotaFiscalProduto, 'total_seguro')
+    True
+
   - Desconto
+
+    >>> hasattr(NotaFiscalProduto, 'desconto')
+    True
+
   - Valor tot bruto (obrigatorio)
+
+    >>> hasattr(NotaFiscalProduto, 'valor_total_bruto')
+    True
+
   - Produto especifico (seleciona de lista)
    - Veiculo
    - Medicamento
    - Armamento
    - Combustivel
+
+    >>> hasattr(NotaFiscalProduto, 'produto_especifico')
+    True
+
  - Tributos
   - ICMS
    - Situacao tributaria (obrigatorio - seleciona de lista)
