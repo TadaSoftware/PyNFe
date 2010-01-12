@@ -134,4 +134,18 @@ COFINS_TIPOS_TRIBUTACAO = (
 
 COFINS_TIPOS_CALCULO = IPI_TIPOS_CALCULO
 
+MODALIDADES_FRETE = (
+    (0, '0 - Por conta do emitente'),
+    (1, '1 - Por conta do destinatario'),
+)
+
+ORIGENS_PROCESSO = (
+    'SEFAZ',
+    'Justica federal',
+    'Justica estadual',
+    'Secex/RFB',
+    'Outros',
+)
+
+
 

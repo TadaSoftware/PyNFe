@@ -4,7 +4,7 @@ from pynfe.utils.flags import NF_STATUS, NF_TIPOS_DOCUMENTO, NF_TIPOS_IMPRESSAO_
         NF_REFERENCIADA_TIPOS, NF_PRODUTOS_ESPECIFICOS, ICMS_TIPOS_TRIBUTACAO,\
         ICMS_ORIGENS, ICMS_MODALIDADES, IPI_TIPOS_TRIBUTACAO, IPI_TIPOS_CALCULO,\
         PIS_TIPOS_TRIBUTACAO, PIS_TIPOS_CALCULO, COFINS_TIPOS_TRIBUTACAO,\
-        COFINS_TIPOS_CALCULO
+        COFINS_TIPOS_CALCULO, MODALIDADES_FRETE, ORIGENS_PROCESSO
 
 from decimal import Decimal
 
@@ -115,11 +115,182 @@ class NotaFiscal(Entidade):
     local_entrega_diferente_destinatario = False
 
     # - Produtos e Servicos (lista 1 para * / ManyToManyField)
-    produtos_servicos = None
+    produtos_e_servicos = None
+
+    # Totais
+    # - ICMS
+    #  - Base de calculo (somente leitura)
+    totais_icms_base_calculo = Decimal()
+
+    #  - Total do ICMS (somente leitura)
+    totais_icms_total = Decimal()
+
+    #  - Base de calculo do ICMS ST (somente leitura)
+    totais_icms_st_base_calculo = Decimal()
+
+    #  - Total do ICMS ST (somente leitura)
+    totais_icms_st_total = Decimal()
+
+    #  - Total dos produtos e servicos (somente leitura)
+    totais_icms_total_produtos_e_servicos = Decimal()
+
+    #  - Total do frete (somente leitura)
+    totais_icms_total_frete = Decimal()
+
+    #  - Total do seguro (somente leitura)
+    totais_icms_total_seguro = Decimal()
+
+    #  - Total do desconto (somente leitura)
+    totais_icms_total_desconto = Decimal()
+
+    #  - Total do II (somente leitura)
+    totais_icms_total_ii = Decimal()
+
+    #  - Total do IPI (somente leitura)
+    totais_icms_total_ipi = Decimal()
+
+    #  - PIS (somente leitura)
+    totais_icms_pis = Decimal()
+
+    #  - COFINS (somente leitura)
+    totais_icms_cofins = Decimal()
+
+    #  - Outras despesas acessorias
+    totais_icms_outras_despesas_acessorias = Decimal()
+
+    #  - Total da nota
+    totais_icms_total_nota = Decimal()
+
+    # - ISSQN
+    #  - Base de calculo do ISS
+    totais_issqn_base_calculo_iss = Decimal()
+
+    #  - Total do ISS
+    totais_issqn_total_iss = Decimal()
+
+    #  - PIS sobre servicos
+    totais_issqn_pis = Decimal()
+
+    #  - COFINS sobre servicos
+    totais_issqn_cofins = Decimal()
+
+    #  - Total dos servicos sob nao-incidencia ou nao tributados pelo ICMS
+    totais_issqn_total = Decimal()
+
+    # - Retencao de Tributos
+    #  - Valor retido de PIS
+    totais_retencao_valor_retido_pis = Decimal()
+
+    #  - Valor retido de COFINS
+    totais_retencao_valor_retido_cofins = Decimal()
+
+    #  - Valor retido de CSLL
+    totais_retencao_valor_retido_csll = Decimal()
+
+    #  - Base de calculo do IRRF
+    totais_retencao_base_calculo_irrf = Decimal()
+
+    #  - Valor retido do IRRF
+    totais_retencao_valor_retido_irrf = Decimal()
+
+    #  - BC da ret. da Prev. Social
+    totais_retencao_bc_retencao_previdencia_social = Decimal()
+
+    #  - Retencao da Prev. Social
+    totais_retencao_retencao_previdencia_social = Decimal()
+
+    # Transporte
+    # - Modalidade do Frete (obrigatorio - seleciona de lista) - MODALIDADES_FRETE
+    #  - 0 - Por conta do emitente
+    #  - 1 - Por conta do destinatario
+    transporte_modalidade_frete = int()
+
+    # - Transportador (seleciona de Transportadoras)
+    transporte_transportadora = None
+
+    # - Retencao do ICMS
+    #  - Base de calculo
+    transporte_retencao_icms_base_calculo = Decimal()
+
+    #  - Aliquota
+    transporte_retencao_icms_aliquota = Decimal()
+
+    #  - Valor do servico
+    transporte_retencao_icms_valor_servico = Decimal()
+
+    #  - UF
+    transporte_retencao_icms_uf = str()
+
+    #  - Municipio
+    transporte_retencao_icms_municipio = Decimal()
+
+    #  - CFOP
+    transporte_retencao_icms_cfop = str()
+
+    #  - ICMS retido
+    transporte_retencao_icms_retido = Decimal()
+
+    # - Veiculo
+    #  - Placa
+    transporte_veiculo_placa = str()
+
+    #  - RNTC
+    transporte_veiculo_rntc = str()
+
+    #  - UF
+    transporte_veiculo_uf = str()
+
+    # - Reboque
+    #  - Placa
+    transporte_reboque_placa = str()
+
+    #  - RNTC
+    transporte_reboque_rntc = str()
+
+    #  - UF
+    transporte_reboque_uf = str()
+
+    # - Volumes (lista 1 para * / ManyToManyField)
+    transporte_volumes = None
+
+    # Cobranca
+    # - Fatura
+    #  - Numero
+    fatura_numero = str()
+
+    #  - Valor original
+    fatura_valor_original = Decimal()
+
+    #  - Valor do desconto
+    fatura_valor_desconto = Decimal()
+
+    #  - Valor liquido
+    fatura_valor_liquido = Decimal()
+
+    # - Duplicatas (lista 1 para * / ManyToManyField)
+    duplicatas = None
+
+    # Informacoes Adicionais
+    # - Informacoes Adicionais
+    #  - Informacoes adicionais de interesse do fisco
+    informacoes_adicionais_interesse_fisco = str()
+
+    #  - Informacoes complementares de interesse do contribuinte
+    informacoes_complementares_interesse_contribuinte = str()
+
+    # - Observacoes do Contribuinte (lista 1 para * / ManyToManyField)
+    observacoes_contribuinte = None
+
+    # - Processo Referenciado (lista 1 para * / ManyToManyField)
+    processos_referenciados = None
 
     def __init__(self, *args, **kwargs):
         self.notas_fiscais_referenciadas = []
-        self.produtos_servicos = []
+        self.produtos_e_servicos = []
+        self.transporte_volumes = []
+        self.duplicatas = []
+        self.observacoes_contribuinte = []
+        self.processos_referenciados = []
 
         super(NotaFiscal, self).__init__(*args, **kwargs)
 
@@ -129,7 +300,23 @@ class NotaFiscal(Entidade):
 
     def adicionar_produto_servico(self, **kwargs):
         u"""Adiciona uma instancia de Produto"""
-        self.produtos_servicos.append(NotaFiscalProduto(**kwargs))
+        self.produtos_e_servicos.append(NotaFiscalProduto(**kwargs))
+
+    def adicionar_transporte_volume(self, **kwargs):
+        u"""Adiciona uma instancia de Volume de Transporte"""
+        self.transporte_volumes.append(NotaFiscalTransporteVolume(**kwargs))
+
+    def adicionar_duplicata(self, **kwargs):
+        u"""Adiciona uma instancia de Duplicata"""
+        self.duplicatas.append(NotaFiscalCobrancaDuplicata(**kwargs))
+
+    def adicionar_observacao_contribuinte(self, **kwargs):
+        u"""Adiciona uma instancia de Observacao do Contribuinte"""
+        self.observacoes_contribuinte.append(NotaFiscalObservacaoContribuinte(**kwargs))
+
+    def adicionar_processo_referenciado(self, **kwargs):
+        u"""Adiciona uma instancia de Processo Referenciado"""
+        self.processos_referenciados.append(NotaFiscalProcessoReferenciado(**kwargs))
 
 
 class NotaFiscalReferenciada(Entidade):
@@ -450,7 +637,7 @@ class NotaFiscalDeclaracaoImportacao(Entidade):
     numero_di_dsi_da = str()
 
     #  - Data de registro
-    data_registro = str()
+    data_registro = None
 
     #  - Codigo exportador
     codigo_exportador = str()
@@ -488,17 +675,66 @@ class NotaFiscalDeclaracaoImportacaoAdicao(Entidade):
     codigo_fabricante = str()
 
 class NotaFiscalTransporteVolume(Entidade):
-    pass
+    #  - Quantidade
+    quantidade = Decimal()
+
+    #  - Especie
+    especie = str()
+
+    #  - Marca
+    marca = str()
+
+    #  - Numeracao
+    numeracao = str()
+
+    #  - Peso Liquido (kg)
+    peso_liquido = Decimal()
+
+    #  - Peso Bruto (kg)
+    peso_bruto = Decimal()
+
+    #  - Lacres (lista 1 para * / ManyToManyField)
+    lacres = None
+
+    def __init__(self, *args, **kwargs):
+        self.lacres = []
+
+        super(NotaFiscalTransporteVolume, self).__init__(*args, **kwargs)
+
+    def adicionar_lacre(self, **kwargs):
+        u"""Adiciona uma instancia de Lacre de Volume de Transporte"""
+        self.lacres.append(NotaFiscalTransporteVolumeLacre(**kwargs))
 
 class NotaFiscalTransporteVolumeLacre(Entidade):
-    pass
+    #   - Numero de lacres
+    numero_lacres = str()
 
 class NotaFiscalCobrancaDuplicata(Entidade):
-    pass
+    #  - Numero
+    numero = str()
+
+    #  - Data de vencimento
+    data_vencimento = None
+
+    #  - Valor
+    valor = Decimal()
 
 class NotaFiscalObservacaoContribuinte(Entidade):
-    pass
+    #  - Nome do campo
+    nome_campo = str()
+
+    #  - Observacao
+    observacao = str()
 
 class NotaFiscalProcessoReferenciado(Entidade):
-    pass
+    #  - Identificador do processo
+    identificador_processo = str()
+
+    #  - Origem (seleciona de lista) - ORIGENS_PROCESSO
+    #   - SEFAZ
+    #   - Justica federal
+    #   - Justica estadual
+    #   - Secex/RFB
+    #   - Outros
+    origem = str()
 

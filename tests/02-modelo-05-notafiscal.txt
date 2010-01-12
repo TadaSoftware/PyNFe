@@ -253,7 +253,7 @@ Nenhum dos campos deve permitir acentos e/ou cedilhas.
 
 - Produtos e Servicos (lista 1 para * / ManyToManyField)
 
-    >>> hasattr(NotaFiscal, 'produtos_servicos')
+    >>> hasattr(NotaFiscal, 'produtos_e_servicos')
     True
 
  - Dados
@@ -813,88 +813,352 @@ Nenhum dos campos deve permitir acentos e/ou cedilhas.
 - Totais
  - ICMS
   - Base de calculo (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'totais_icms_base_calculo')
+    True
+
   - Total do ICMS (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'totais_icms_total')
+    True
+
   - Base de calculo do ICMS ST (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'totais_icms_st_base_calculo')
+    True
+
   - Total do ICMS ST (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'totais_icms_st_total')
+    True
+
   - Total dos produtos e servicos (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'totais_icms_total_produtos_e_servicos')
+    True
+
   - Total do frete (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'totais_icms_total_frete')
+    True
+
   - Total do seguro (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'totais_icms_total_seguro')
+    True
+
   - Total do desconto (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'totais_icms_total_desconto')
+    True
+
   - Total do II (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'totais_icms_total_ii')
+    True
+
   - Total do IPI (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'totais_icms_total_ipi')
+    True
+
   - PIS (somente leitura)
-  - CONFINS (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'totais_icms_pis')
+    True
+
+  - COFINS (somente leitura)
+
+    >>> hasattr(NotaFiscal, 'totais_icms_cofins')
+    True
+
   - Outras despesas acessorias
+
+    >>> hasattr(NotaFiscal, 'totais_icms_outras_despesas_acessorias')
+    True
+
   - Total da nota
+
+    >>> hasattr(NotaFiscal, 'totais_icms_total_nota')
+    True
+
  - ISSQN
   - Base de calculo do ISS
+
+    >>> hasattr(NotaFiscal, 'totais_issqn_base_calculo_iss')
+    True
+
   - Total do ISS
+
+    >>> hasattr(NotaFiscal, 'totais_issqn_total_iss')
+    True
+
   - PIS sobre servicos
+
+    >>> hasattr(NotaFiscal, 'totais_issqn_pis')
+    True
+
   - COFINS sobre servicos
+
+    >>> hasattr(NotaFiscal, 'totais_issqn_cofins')
+    True
+
   - Total dos servicos sob nao-incidencia ou nao tributados pelo ICMS
+
+    >>> hasattr(NotaFiscal, 'totais_issqn_total')
+    True
+
  - Retencao de Tributos
   - Valor retido de PIS
+
+    >>> hasattr(NotaFiscal, 'totais_retencao_valor_retido_pis')
+    True
+
   - Valor retido de COFINS
+
+    >>> hasattr(NotaFiscal, 'totais_retencao_valor_retido_cofins')
+    True
+
   - Valor retido de CSLL
+
+    >>> hasattr(NotaFiscal, 'totais_retencao_valor_retido_csll')
+    True
+
   - Base de calculo do IRRF
+
+    >>> hasattr(NotaFiscal, 'totais_retencao_base_calculo_irrf')
+    True
+
   - Valor retido do IRRF
+
+    >>> hasattr(NotaFiscal, 'totais_retencao_valor_retido_irrf')
+    True
+
   - BC da ret. da Prev. Social
+
+    >>> hasattr(NotaFiscal, 'totais_retencao_bc_retencao_previdencia_social')
+    True
+
   - Retencao da Prev. Social
+
+    >>> hasattr(NotaFiscal, 'totais_retencao_retencao_previdencia_social')
+    True
+
 - Transporte
  - Modalidade do Frete (obrigatorio - seleciona de lista)
   - 0 - Por conta do emitente
   - 1 - Por conta do destinatario
+
+    >>> hasattr(NotaFiscal, 'transporte_modalidade_frete')
+    True
+
  - Transportador (seleciona de Transportadoras)
+
+    >>> hasattr(NotaFiscal, 'transporte_transportadora')
+    True
+
  - Retencao do ICMS
   - Base de calculo
+
+    >>> hasattr(NotaFiscal, 'transporte_retencao_icms_base_calculo')
+    True
+
   - Aliquota
+
+    >>> hasattr(NotaFiscal, 'transporte_retencao_icms_aliquota')
+    True
+
   - Valor do servico
+
+    >>> hasattr(NotaFiscal, 'transporte_retencao_icms_valor_servico')
+    True
+
   - UF
+
+    >>> hasattr(NotaFiscal, 'transporte_retencao_icms_uf')
+    True
+
   - Municipio
+
+    >>> hasattr(NotaFiscal, 'transporte_retencao_icms_municipio')
+    True
+
   - CFOP
+
+    >>> hasattr(NotaFiscal, 'transporte_retencao_icms_cfop')
+    True
+
   - ICMS retido
+
+    >>> hasattr(NotaFiscal, 'transporte_retencao_icms_retido')
+    True
+
  - Veiculo
   - Placa
+
+    >>> hasattr(NotaFiscal, 'transporte_veiculo_placa')
+    True
+
   - RNTC
+
+    >>> hasattr(NotaFiscal, 'transporte_veiculo_rntc')
+    True
+
   - UF
+
+    >>> hasattr(NotaFiscal, 'transporte_veiculo_uf')
+    True
+
  - Reboque
   - Placa
+
+    >>> hasattr(NotaFiscal, 'transporte_reboque_placa')
+    True
+
   - RNTC
+
+    >>> hasattr(NotaFiscal, 'transporte_reboque_rntc')
+    True
+
   - UF
+
+    >>> hasattr(NotaFiscal, 'transporte_reboque_uf')
+    True
+
  - Volumes (lista 1 para * / ManyToManyField)
+
+    >>> hasattr(NotaFiscal, 'transporte_volumes')
+    True
+
   - Quantidade
+
+    >>> hasattr(NotaFiscalTransporteVolume, 'quantidade')
+    True
+
   - Especie
+
+    >>> hasattr(NotaFiscalTransporteVolume, 'especie')
+    True
+
   - Marca
+
+    >>> hasattr(NotaFiscalTransporteVolume, 'marca')
+    True
+
   - Numeracao
+
+    >>> hasattr(NotaFiscalTransporteVolume, 'numeracao')
+    True
+
   - Peso Liquido (kg)
+
+    >>> hasattr(NotaFiscalTransporteVolume, 'peso_liquido')
+    True
+
   - Peso Bruto (kg)
+
+    >>> hasattr(NotaFiscalTransporteVolume, 'peso_bruto')
+    True
+
   - Lacres (lista 1 para * / ManyToManyField)
+
+    >>> hasattr(NotaFiscalTransporteVolume, 'lacres')
+    True
+
    - Numero de lacres
+
+    >>> hasattr(NotaFiscalTransporteVolumeLacre, 'numero_lacres')
+    True
+
 - Cobranca
  - Fatura
   - Numero
+
+    >>> hasattr(NotaFiscal, 'fatura_numero')
+    True
+
   - Valor original
+
+    >>> hasattr(NotaFiscal, 'fatura_valor_original')
+    True
+
   - Valor do desconto
+
+    >>> hasattr(NotaFiscal, 'fatura_valor_desconto')
+    True
+
   - Valor liquido
+
+    >>> hasattr(NotaFiscal, 'fatura_valor_liquido')
+    True
+
  - Duplicatas (lista 1 para * / ManyToManyField)
+
+    >>> hasattr(NotaFiscal, 'duplicatas')
+    True
+
   - Numero
+
+    >>> hasattr(NotaFiscalCobrancaDuplicata, 'numero')
+    True
+
   - Data de vencimento
+
+    >>> hasattr(NotaFiscalCobrancaDuplicata, 'data_vencimento')
+    True
+
   - Valor
+
+    >>> hasattr(NotaFiscalCobrancaDuplicata, 'valor')
+    True
+
 - Informacoes Adicionais
  - Informacoes Adicionais
   - Informacoes adicionais de interesse do fisco
+
+    >>> hasattr(NotaFiscal, 'informacoes_adicionais_interesse_fisco')
+    True
+
   - Informacoes complementares de interesse do contribuinte
+
+    >>> hasattr(NotaFiscal, 'informacoes_complementares_interesse_contribuinte')
+    True
+
  - Observacoes do Contribuinte (lista 1 para * / ManyToManyField)
+
+    >>> hasattr(NotaFiscal, 'observacoes_contribuinte')
+    True
+
   - Nome do campo
+
+    >>> hasattr(NotaFiscalObservacaoContribuinte, 'nome_campo')
+    True
+
   - Observacao
+
+    >>> hasattr(NotaFiscalObservacaoContribuinte, 'observacao')
+    True
+
  - Processo Referenciado (lista 1 para * / ManyToManyField)
+
+    >>> hasattr(NotaFiscal, 'processos_referenciados')
+    True
+
   - Identificador do processo
+
+    >>> hasattr(NotaFiscalProcessoReferenciado, 'identificador_processo')
+    True
+
   - Origem (seleciona de lista)
    - SEFAZ
    - Justica federal
    - Justica estadual
    - Secex/RFB
    - Outros
+
+    >>> hasattr(NotaFiscalProcessoReferenciado, 'origem')
+    True
+
 - Exportacao e Compras
  - Exportacao
   - UF de embarque
