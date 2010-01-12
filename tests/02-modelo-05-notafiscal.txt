@@ -370,30 +370,78 @@ Nenhum dos campos deve permitir acentos e/ou cedilhas.
     - ICMS 60 - Cobrado anteriormente por substituicao tributaria
     - ICMS 70 - Com reducao da base de calculo e cobranca do ICMS por substituicao tributaria
     - ICMS 90 - Outras
+
+    >>> hasattr(NotaFiscalProduto, 'icms_situacao_tributaria')
+    True
+
    - Origem (obrigatorio - seleciona de lista)
     - Nacional
     - Estrangeira - Importacao Direta
     - Estrangeira - Adquirida no Mercado Interno
+
+    >>> hasattr(NotaFiscalProduto, 'icms_origem')
+    True
+
    - ICMS
     - Modalidade de determinacao da BC ICMS (seleciona de lista)
      - Margem Valor Agregado
      - Pauta (valor)
      - Preco Tabelado Max. (valor)
      - Valor da Operacao
+
+    >>> hasattr(NotaFiscalProduto, 'icms_modalidade_determinacao_bc')
+    True
+
     - Percentual reducao da BC ICMS
+
+    >>> hasattr(NotaFiscalProduto, 'icms_percentual_reducao_bc')
+    True
+
     - Valor da base de calculo ICMS
+
+    >>> hasattr(NotaFiscalProduto, 'icms_valor_base_calculo')
+    True
+
     - Aliquota ICMS
+
+    >>> hasattr(NotaFiscalProduto, 'icms_aliquota')
+    True
+
     - Valor do ICMS
+
+    >>> hasattr(NotaFiscalProduto, 'icms_valor')
+    True
+
    - ICMS ST
     - Modalidade de determinacao da BC ICMS ST (seleciona de lista)
      - Margem Valor Agregado
      - Pauta (valor)
      - Preco Tabelado Max. (valor)
      - Valor da Operacao
+
+    >>> hasattr(NotaFiscalProduto, 'icms_st_modalidade_determinacao_bc')
+    True
+
     - Percentual reducao da BC ICMS ST
+
+    >>> hasattr(NotaFiscalProduto, 'icms_st_percentual_reducao_bc')
+    True
+
     - Valor da base de calculo ICMS ST
+
+    >>> hasattr(NotaFiscalProduto, 'icms_st_valor_base_calculo')
+    True
+
     - Aliquota ICMS ST
+
+    >>> hasattr(NotaFiscalProduto, 'icms_st_aliquota')
+    True
+
     - Valor do ICMS ST
+
+    >>> hasattr(NotaFiscalProduto, 'icms_st_valor')
+    True
+
   - IPI
    - Situacao tributaria (seleciona de lista)
     - IPI 00 - Entrada com recuperacao de credito
@@ -410,25 +458,73 @@ Nenhum dos campos deve permitir acentos e/ou cedilhas.
     - IPI 54 - Saida imune
     - IPI 55 - Saida com suspensao
     - IPI 99 - Outas saidas
+
+    >>> hasattr(NotaFiscalProduto, 'ipi_situacao_tributaria')
+    True
+
    - Classe de enquadramento
     - A informacao para classe de enquadramento do IPI para Cigarros e Bebidas,
       quando aplicavel, deve ser informada utilizando a codificacao prevista nos
       Atos Normativos editados pela Receita Federal
+
+    >>> hasattr(NotaFiscalProduto, 'ipi_classe_enquadramento')
+    True
+
    - Codigo do enquadramento
+
+    >>> hasattr(NotaFiscalProduto, 'ipi_codigo_enquadramento')
+    True
+
    - CNPJ do Produtor
+
+    >>> hasattr(NotaFiscalProduto, 'ipi_cnpj_produtor')
+    True
+
    - Codigo do selo de controle
     - A informacao do codigo de selo, quando aplicavel, deve ser informada
       utilizando a codificacao prevista nos Atos Normativos editados pela Receita
       Federal
+
+    >>> hasattr(NotaFiscalProduto, 'ipi_codigo_selo_controle')
+    True
+
    - Quantidade do selo de controle
+
+    >>> hasattr(NotaFiscalProduto, 'ipi_quantidade_selo_controle')
+    True
+
    - Tipo de calculo (seleciona de lista)
+
+    >>> hasattr(NotaFiscalProduto, 'ipi_tipo_calculo')
+    True
+
     - Percentual
      - Valor da base de calculo
+
+    >>> hasattr(NotaFiscalProduto, 'ipi_valor_base_calculo')
+    True
+
      - Aliquota
+
+    >>> hasattr(NotaFiscalProduto, 'ipi_aliquota')
+    True
+
     - Em valor
      - Quantidade total unidade padrao
+
+    >>> hasattr(NotaFiscalProduto, 'ipi_quantidade_total_unidade_padrao')
+    True
+
      - Valor por unidade
+
+    >>> hasattr(NotaFiscalProduto, 'ipi_valor_unidade')
+    True
+
    - Valor do IPI
+
+    >>> hasattr(NotaFiscalProduto, 'ipi_valor_ipi')
+    True
+
   - PIS
    - PIS
     - Situacao tributaria (obrigatorio - seleciona de lista)
@@ -441,21 +537,75 @@ Nenhum dos campos deve permitir acentos e/ou cedilhas.
      - PIS 08 - Operacao sem Indidencia da Contribuicao
      - PIS 09 - Operacao com Suspensao da Contribuicao
      - PIS 99 - Outras operacoes
+
+    >>> hasattr(NotaFiscalProduto, 'pis_situacao_tributaria')
+    True
+
     - Tipo de calculo (seleciona de lista)
-    - Valor da base de calculo
-    - Aliquota (percentual)
-    - Aliquota (em reais)
-    - Quantidade vendida
-    - Valor do PIS
-   - PIS ST
-    - Tipo de calculo (seleciona de lista)
+
+    >>> hasattr(NotaFiscalProduto, 'pis_tipo_calculo')
+    True
+
      - Percentual
       - Valor da base de calculo
+
+    >>> hasattr(NotaFiscalProduto, 'pis_valor_base_calculo')
+    True
+
       - Aliquota (percentual)
+
+    >>> hasattr(NotaFiscalProduto, 'pis_aliquota_percentual')
+    True
+
      - Em valor
       - Aliquota (em reais)
+
+    >>> hasattr(NotaFiscalProduto, 'pis_aliquota_reais')
+    True
+
       - Quantidade vendida
+
+    >>> hasattr(NotaFiscalProduto, 'pis_quantidade_vendida')
+    True
+
+    - Valor do PIS
+
+    >>> hasattr(NotaFiscalProduto, 'pis_valor')
+    True
+
+   - PIS ST
+    - Tipo de calculo (seleciona de lista)
+
+    >>> hasattr(NotaFiscalProduto, 'pis_st_tipo_calculo')
+    True
+
+     - Percentual
+      - Valor da base de calculo
+
+    >>> hasattr(NotaFiscalProduto, 'pis_st_valor_base_calculo')
+    True
+
+      - Aliquota (percentual)
+
+    >>> hasattr(NotaFiscalProduto, 'pis_st_aliquota_percentual')
+    True
+
+     - Em valor
+      - Aliquota (em reais)
+
+    >>> hasattr(NotaFiscalProduto, 'pis_st_aliquota_reais')
+    True
+
+      - Quantidade vendida
+
+    >>> hasattr(NotaFiscalProduto, 'pis_st_quantidade_vendida')
+    True
+
     - Valor do PIS ST
+
+    >>> hasattr(NotaFiscalProduto, 'pis_st_valor')
+    True
+
   - COFINS
    - COFINS
     - Situacao tributaria (obrigatorio - seleciona de lista)
@@ -468,50 +618,190 @@ Nenhum dos campos deve permitir acentos e/ou cedilhas.
      - COFINS 08 - Operacao sem Indidencia da Contribuicao
      - COFINS 09 - Operacao com Suspensao da Contribuicao
      - COFINS 99 - Outras operacoes
+
+    >>> hasattr(NotaFiscalProduto, 'cofins_situacao_tributaria')
+    True
+
     - Tipo de calculo (seleciona de lista)
+
+    >>> hasattr(NotaFiscalProduto, 'cofins_tipo_calculo')
+    True
+
      - Percentual
       - Valor da base de calculo
+
+    >>> hasattr(NotaFiscalProduto, 'cofins_valor_base_calculo')
+    True
+
       - Aliquota (percentual)
+
+    >>> hasattr(NotaFiscalProduto, 'cofins_aliquota_percentual')
+    True
+
      - Em Valor
       - Aliquota (em reais)
+
+    >>> hasattr(NotaFiscalProduto, 'cofins_aliquota_reais')
+    True
+
       - Quantidade vendida
+
+    >>> hasattr(NotaFiscalProduto, 'cofins_quantidade_vendida')
+    True
+
     - Valor do COFINS
+
+    >>> hasattr(NotaFiscalProduto, 'cofins_valor')
+    True
+
    - COFINS ST
     - Tipo de calculo (seleciona de lista)
+
+    >>> hasattr(NotaFiscalProduto, 'cofins_st_tipo_calculo')
+    True
+
      - Percentual
       - Valor da base de calculo
+
+    >>> hasattr(NotaFiscalProduto, 'cofins_st_valor_base_calculo')
+    True
+
       - Aliquota (percentual)
+
+    >>> hasattr(NotaFiscalProduto, 'cofins_st_aliquota_percentual')
+    True
+
      - Em Valor
       - Aliquota (em reais)
+
+    >>> hasattr(NotaFiscalProduto, 'cofins_st_aliquota_reais')
+    True
+
       - Quantidade vendida
+
+    >>> hasattr(NotaFiscalProduto, 'cofins_st_quantidade_vendida')
+    True
+
     - Valor do COFINS ST
+
+    >>> hasattr(NotaFiscalProduto, 'cofins_st_valor')
+    True
+
   - ISSQN
    - Valor da base de calculo
+
+    >>> hasattr(NotaFiscalProduto, 'issqn_valor_base_calculo')
+    True
+
    - Aliquota
+
+    >>> hasattr(NotaFiscalProduto, 'issqn_aliquota')
+    True
+
    - Lista de servico (seleciona de lista)
     - Aceita somente valores maiores que 100, disponiveis no arquivo data/ISSQN/Lista-Servicos.txt
+
+    >>> hasattr(NotaFiscalProduto, 'issqn_lista_servico')
+    True
+
    - UF
+
+    >>> hasattr(NotaFiscalProduto, 'issqn_uf')
+    True
+
    - Municipio de ocorrencia
+
+    >>> hasattr(NotaFiscalProduto, 'issqn_municipio')
+    True
+
    - Valor do ISSQN
+
+    >>> hasattr(NotaFiscalProduto, 'issqn_valor')
+    True
+
   - Imposto de Importacao
    - Valor base de calculo
+
+    >>> hasattr(NotaFiscalProduto, 'imposto_importacao_valor_base_calculo')
+    True
+
    - Valor despesas aduaneiras
+
+    >>> hasattr(NotaFiscalProduto, 'imposto_importacao_valor_despesas_aduaneiras')
+    True
+
    - Valor do IOF
+
+    >>> hasattr(NotaFiscalProduto, 'imposto_importacao_valor_iof')
+    True
+
    - Valor imposto de importacao
+
+    >>> hasattr(NotaFiscalProduto, 'imposto_importacao_valor')
+    True
+
  - Informacoes Adicionais
   - Texto livre de informacoes adicionais
+
+    >>> hasattr(NotaFiscalProduto, 'informacoes_adicionais')
+    True
+
  - Declaracao de Importacao (lista 1 para * / ManyToManyField)
+
+    >>> hasattr(NotaFiscalProduto, 'declaracoes_importacao')
+    True
+
   - Numero DI/DSI/DA
+
+    >>> hasattr(NotaFiscalDeclaracaoImportacao, 'numero_di_dsi_da')
+    True
+
   - Data de registro
+
+    >>> hasattr(NotaFiscalDeclaracaoImportacao, 'data_registro')
+    True
+
   - Codigo exportador
+
+    >>> hasattr(NotaFiscalDeclaracaoImportacao, 'codigo_exportador')
+    True
+
   - Desembaraco aduaneiro
    - UF
+
+    >>> hasattr(NotaFiscalDeclaracaoImportacao, 'desembaraco_aduaneiro_uf')
+    True
+
    - Local
+
+    >>> hasattr(NotaFiscalDeclaracaoImportacao, 'desembaraco_aduaneiro_local')
+    True
+
    - Data
+
+    >>> hasattr(NotaFiscalDeclaracaoImportacao, 'desembaraco_aduaneiro_data')
+    True
+
   - Adicoes (lista 1 para * / ManyToManyField)
+
+    >>> hasattr(NotaFiscalDeclaracaoImportacao, 'adicoes')
+    True
+
    - Numero
+
+    >>> hasattr(NotaFiscalDeclaracaoImportacaoAdicao, 'numero')
+    True
+
    - Desconto
+
+    >>> hasattr(NotaFiscalDeclaracaoImportacaoAdicao, 'desconto')
+    True
+
    - Codigo fabricante
+
+    >>> hasattr(NotaFiscalDeclaracaoImportacaoAdicao, 'codigo_fabricante')
+    True
+
  - Veiculo Novo
   - ???
  - Medicamento

@@ -1,49 +1,12 @@
 from base import Entidade
-from pynfe.utils.flags import NF_STATUS
+from pynfe.utils.flags import NF_STATUS, NF_TIPOS_DOCUMENTO, NF_TIPOS_IMPRESSAO_DANFE,\
+        NF_FORMAS_PAGAMENTO, NF_FORMAS_EMISSAO, NF_FINALIDADES_EMISSAO,\
+        NF_REFERENCIADA_TIPOS, NF_PRODUTOS_ESPECIFICOS, ICMS_TIPOS_TRIBUTACAO,\
+        ICMS_ORIGENS, ICMS_MODALIDADES, IPI_TIPOS_TRIBUTACAO, IPI_TIPOS_CALCULO,\
+        PIS_TIPOS_TRIBUTACAO, PIS_TIPOS_CALCULO, COFINS_TIPOS_TRIBUTACAO,\
+        COFINS_TIPOS_CALCULO
 
 from decimal import Decimal
-
-NF_TIPOS_DOCUMENTO = (
-    (0, 'Entrada'),
-    (1, 'Saida'),
-)
-
-NF_TIPOS_IMPRESSAO_DANFE = (
-    'Retrato',
-    'Paisagem',
-)
-
-NF_FORMAS_PAGAMENTO = (
-    (0, 'Pagamento a vista'),
-    (1, 'Pagamento a prazo'),
-    (2, 'Outros'),
-)
-
-NF_FORMAS_EMISSAO = (
-    'Normal',
-    'Contingencia',
-    'Contingencia com SCAN',
-    'Contingencia via DPEC',
-    'Contingencia FS-DA',
-)
-
-NF_FINALIDADES_EMISSAO = (
-    (1, 'NF-e normal'),
-    (2, 'NF-e complementar'),
-    (3, 'NF-e de ajuste'),
-)
-
-NF_REFERENCIADA_TIPOS = (
-    'Nota Fiscal eletronica',
-    'Nota Fiscal',
-)
-
-NF_PRODUTOS_ESPECIFICOS = (
-    'Veiculo',
-    'Medicamento',
-    'Armamento',
-    'Combustivel',
-)
 
 class NotaFiscal(Entidade):
     status = NF_STATUS[0]
@@ -256,11 +219,273 @@ class NotaFiscalProduto(Entidade):
     #  - Produto especifico (seleciona de lista) - NF_PRODUTOS_ESPECIFICOS
     produto_especifico = str()
 
+    # - Tributos
+    #  - ICMS
+    #   - Situacao tributaria (obrigatorio - seleciona de lista) - ICMS_TIPOS_TRIBUTACAO
+    icms_situacao_tributaria = str()
+
+    #   - Origem (obrigatorio - seleciona de lista) - ICMS_ORIGENS
+    icms_origem = str()
+
+    #   - ICMS
+    #    - Modalidade de determinacao da BC ICMS (seleciona de lista) - ICMS_MODALIDADES
+    icms_modalidade_determinacao_bc = str()
+
+    #    - Percentual reducao da BC ICMS
+    icms_percentual_reducao_bc = Decimal()
+
+    #    - Valor da base de calculo ICMS
+    icms_valor_base_calculo = Decimal()
+
+    #    - Aliquota ICMS
+    icms_aliquota = Decimal()
+
+    #    - Valor do ICMS
+    icms_valor = Decimal()
+
+    #   - ICMS ST
+    #    - Modalidade de determinacao da BC ICMS ST (seleciona de lista) - ICMS_MODALIDADES
+    icms_st_modalidade_determinacao_bc = str()
+
+    #    - Percentual reducao da BC ICMS ST
+    icms_st_percentual_reducao_bc = Decimal()
+
+    #    - Valor da base de calculo ICMS ST
+    icms_st_valor_base_calculo = Decimal()
+
+    #    - Aliquota ICMS ST
+    icms_st_aliquota = Decimal()
+
+    #    - Valor do ICMS ST
+    icms_st_valor = Decimal()
+
+    #  - IPI
+    #   - Situacao tributaria (seleciona de lista) - IPI_TIPOS_TRIBUTACAO
+    ipi_situacao_tributaria = str()
+
+    #   - Classe de enquadramento
+    #    - A informacao para classe de enquadramento do IPI para Cigarros e Bebidas,
+    #      quando aplicavel, deve ser informada utilizando a codificacao prevista nos
+    #      Atos Normativos editados pela Receita Federal
+    ipi_classe_enquadramento = str()
+
+    #   - Codigo do enquadramento
+    ipi_codigo_enquadramento = str()
+
+    #   - CNPJ do Produtor
+    ipi_cnpj_produtor = str()
+
+    #   - Codigo do selo de controle
+    #    - A informacao do codigo de selo, quando aplicavel, deve ser informada
+    #      utilizando a codificacao prevista nos Atos Normativos editados pela Receita
+    #      Federal
+    ipi_codigo_selo_controle = str()
+
+    #   - Quantidade do selo de controle
+    ipi_quantidade_selo_controle = Decimal()
+
+    #   - Tipo de calculo (seleciona de lista) - IPI_TIPOS_CALCULO
+    ipi_tipo_calculo = str()
+
+    #    - Percentual
+    #     - Valor da base de calculo
+    ipi_valor_base_calculo = Decimal()
+
+    #     - Aliquota
+    ipi_aliquota = Decimal()
+
+    #    - Em valor
+    #     - Quantidade total unidade padrao
+    ipi_quantidade_total_unidade_padrao = Decimal()
+
+    #     - Valor por unidade
+    ipi_valor_unidade = Decimal()
+
+    #   - Valor do IPI
+    ipi_valor_ipi = Decimal()
+
+    #  - PIS
+    #   - PIS
+    #    - Situacao tributaria (obrigatorio - seleciona de lista) - PIS_TIPOS_TRIBUTACAO
+    pis_situacao_tributaria = str()
+
+    #    - Tipo de calculo (seleciona de lista) - PIS_TIPOS_CALCULO
+    pis_tipo_calculo = str()
+
+    #     - Percentual
+    #      - Valor da base de calculo
+    pis_valor_base_calculo = Decimal()
+
+    #      - Aliquota (percentual)
+    pis_aliquota_percentual = Decimal()
+
+    #     - Em valor
+    #      - Aliquota (em reais)
+    pis_aliquota_reais = Decimal()
+
+    #      - Quantidade vendida
+    pis_quantidade_vendida = Decimal()
+
+    #    - Valor do PIS
+    pis_valor = Decimal()
+
+    #   - PIS ST
+    #    - Tipo de calculo (seleciona de lista) - PIS_TIPOS_CALCULO
+    pis_st_tipo_calculo = str()
+
+    #     - Percentual
+    #      - Valor da base de calculo
+    pis_st_valor_base_calculo = Decimal()
+
+    #      - Aliquota (percentual)
+    pis_st_aliquota_percentual = Decimal()
+
+    #     - Em valor
+    #      - Aliquota (em reais)
+    pis_st_aliquota_reais = Decimal()
+
+    #      - Quantidade vendida
+    pis_st_quantidade_vendida = Decimal()
+
+    #    - Valor do PIS ST
+    pis_st_valor = Decimal()
+
+    #  - COFINS
+    #   - COFINS
+    #    - Situacao tributaria (obrigatorio - seleciona de lista) - COFINS_TIPOS_TRIBUTACAO
+    cofins_situacao_tributaria = str()
+
+    #    - Tipo de calculo (seleciona de lista) - COFINS_TIPOS_CALCULO
+    cofins_tipo_calculo = str()
+
+    #     - Percentual
+    #      - Valor da base de calculo
+    cofins_valor_base_calculo = Decimal()
+
+    #      - Aliquota (percentual)
+    cofins_aliquota_percentual = Decimal()
+
+    #     - Em Valor
+    #      - Aliquota (em reais)
+    cofins_aliquota_reais = Decimal()
+
+    #      - Quantidade vendida
+    cofins_quantidade_vendida = Decimal()
+
+    #    - Valor do COFINS
+    cofins_valor = Decimal()
+
+    #   - COFINS ST
+    #    - Tipo de calculo (seleciona de lista) - COFINS_TIPOS_CALCULO
+    cofins_st_tipo_calculo = str()
+
+    #     - Percentual
+    #      - Valor da base de calculo
+    cofins_st_valor_base_calculo = Decimal()
+
+    #      - Aliquota (percentual)
+    cofins_st_aliquota_percentual = Decimal()
+
+    #     - Em Valor
+    #      - Aliquota (em reais)
+    cofins_st_aliquota_reais = Decimal()
+
+    #      - Quantidade vendida
+    cofins_st_quantidade_vendida = Decimal()
+
+    #    - Valor do COFINS ST
+    cofins_st_valor = Decimal()
+
+    #  - ISSQN
+    #   - Valor da base de calculo
+    issqn_valor_base_calculo = Decimal()
+
+    #   - Aliquota
+    issqn_aliquota = Decimal()
+
+    #   - Lista de servico (seleciona de lista)
+    #    - Aceita somente valores maiores que 100, disponiveis no arquivo data/ISSQN/Lista-Servicos.txt
+    issqn_lista_servico = str()
+
+    #   - UF
+    issqn_uf = str()
+
+    #   - Municipio de ocorrencia
+    issqn_municipio = str()
+
+    #   - Valor do ISSQN
+    issqn_valor = Decimal()
+
+    #  - Imposto de Importacao
+    #   - Valor base de calculo
+    imposto_importacao_valor_base_calculo = Decimal()
+
+    #   - Valor despesas aduaneiras
+    imposto_importacao_valor_despesas_aduaneiras = Decimal()
+
+    #   - Valor do IOF
+    imposto_importacao_valor_iof = Decimal()
+
+    #   - Valor imposto de importacao
+    imposto_importacao_valor = Decimal()
+
+    # - Informacoes Adicionais
+    #  - Texto livre de informacoes adicionais
+    informacoes_adicionais = str()
+
+    # - Declaracao de Importacao (lista 1 para * / ManyToManyField)
+    declaracoes_importacao = None
+
+    def __init__(self, *args, **kwargs):
+        self.declaracoes_importacao = []
+
+        super(NotaFiscalProduto, self).__init__(*args, **kwargs)
+
+    def adicionar_declaracao_importacao(self, **kwargs):
+        u"""Adiciona uma instancia de Declaracao de Importacao"""
+        self.declaracoes_importacao.append(NotaFiscalDeclaracaoImportacao(**kwargs))
+
 class NotaFiscalDeclaracaoImportacao(Entidade):
-    pass
+    #  - Numero DI/DSI/DA
+    numero_di_dsi_da = str()
+
+    #  - Data de registro
+    data_registro = str()
+
+    #  - Codigo exportador
+    codigo_exportador = str()
+
+    #  - Desembaraco aduaneiro
+    #   - UF
+    desembaraco_aduaneiro_uf = str()
+
+    #   - Local
+    desembaraco_aduaneiro_local = str()
+
+    #   - Data
+    desembaraco_aduaneiro_data = str()
+
+    #  - Adicoes (lista 1 para * / ManyToManyField)
+    adicoes = None
+
+    def __init__(self, *args, **kwargs):
+        self.declaracoes_importacao = []
+
+        super(NotaFiscalDeclaracaoImportacao, self).__init__(*args, **kwargs)
+
+    def adicionar_adicao(self, **kwargs):
+        u"""Adiciona uma instancia de Adicao de Declaracao de Importacao"""
+        self.adicoes.append(NotaFiscalDeclaracaoImportacaoAdicao(**kwargs))
 
 class NotaFiscalDeclaracaoImportacaoAdicao(Entidade):
-    pass
+    #   - Numero
+    numero = str()
+
+    #   - Desconto
+    desconto = str()
+
+    #   - Codigo fabricante
+    codigo_fabricante = str()
 
 class NotaFiscalTransporteVolume(Entidade):
     pass
