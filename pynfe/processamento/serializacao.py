@@ -95,7 +95,7 @@ class SerializacaoXML(Serializacao):
         raise Exception('Metodo nao implementado')
 
     def _obter_emitente_de_notas_fiscais(self, notas_fiscais):
-        emitentes = set([nf.emitente for nf in notas_fiscais if nf.emitente])
+        lista = set([nf.emitente for nf in notas_fiscais if nf.emitente])
 
         if len(lista) == 0:
             raise NenhumObjetoEncontrado('Nenhum objeto foi encontrado!')
@@ -104,7 +104,7 @@ class SerializacaoXML(Serializacao):
 
         return lista[0]
 
-    def _serializar_emitente(self, objetos):
+    def _serializar_emitente(self, emitente):
         return ''
 
     def _serializar_clientes(self, objetos):

@@ -1,6 +1,16 @@
 PROCESSAMENTO - SERIALIZACAO PARA XML
 =====================================
 
+Populando fonte de dados
+------------------------
+
+    >>> from pynfe.entidades import FonteDados
+    >>> fonte_dados = FonteDados()
+
+Inicia uma NF e demais dependentes
+
+
+
 Gerar arquivos XML
 ------------------
 
