@@ -45,7 +45,7 @@ class NotaFiscal(Entidade):
     # - Finalidade de emissao (obrigatorio - seleciona de lista) - NF_FINALIDADES_EMISSAO
     finalidade_emissao = int()
 
-    # - UF
+    # - UF - converter para codigos em CODIGOS_ESTADOS
     uf = str()
 
     # - Municipio de ocorrencia

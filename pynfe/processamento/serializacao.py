@@ -28,6 +28,7 @@ except ImportError:
 from pynfe.entidades import Emitente, Cliente, Produto, Transportadora, NotaFiscal
 from pynfe.excecoes import NenhumObjetoEncontrado, MuitosObjetosEncontrados
 from pynfe.utils import so_numeros, obter_municipio_por_codigo, obter_pais_por_codigo
+from pynfe.utils.flags import CODIGOS_ESTADOS
 
 class Serializacao(object):
     """Classe abstrata responsavel por fornecer as funcionalidades basicas para
@@ -103,7 +104,7 @@ class SerializacaoXML(Serializacao):
 
         return lista[0]
 
-    def _serializar_emitente(self, emitente, tag_raiz='emit'):
+    def _serializar_emitente(self, emitente, tag_raiz='emit', retorna_string=True):
         raiz = etree.Element(tag_raiz)
 
         # Dados do emitente
@@ -128,9 +129,12 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(endereco, 'xPais').text = obter_pais_por_codigo(emitente.endereco_pais)
         etree.SubElement(endereco, 'fone').text = emitente.endereco_telefone
 
-        return etree.tostring(raiz, pretty_print=True)
+        if retorna_string:
+            return etree.tostring(raiz, pretty_print=True)
+        else:
+            return raiz
 
-    def _serializar_cliente(self, cliente, tag_raiz='dest'):
+    def _serializar_cliente(self, cliente, tag_raiz='dest', retorna_string=True):
         raiz = etree.Element(tag_raiz)
 
         # Dados do cliente
@@ -154,9 +158,12 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(endereco, 'xPais').text = obter_pais_por_codigo(cliente.endereco_pais)
         etree.SubElement(endereco, 'fone').text = cliente.endereco_telefone
 
-        return etree.tostring(raiz, pretty_print=True)
+        if retorna_string:
+            return etree.tostring(raiz, pretty_print=True)
+        else:
+            return raiz
 
-    def _serializar_transportadora(self, transportadora, tag_raiz='transporta'):
+    def _serializar_transportadora(self, transportadora, tag_raiz='transporta', retorna_string=True):
         raiz = etree.Element(tag_raiz)
 
         # Dados da transportadora
@@ -172,13 +179,37 @@ class SerializacaoXML(Serializacao):
                 )
         etree.SubElement(raiz, 'UF').text = transportadora.endereco_uf
 
-        return etree.tostring(raiz, pretty_print=True)
+        if retorna_string:
+            return etree.tostring(raiz, pretty_print=True)
+        else:
+            return raiz
 
-    def _serializar_produto(self, produto, tag_raiz='prod'):
-        # TODO
+    def _serializar_produto(self, produto, tag_raiz='prod', retorna_string=True):
+        # Provavelmente nao vai ser feito desta forma, e sim como serializacao do produto
+        # na NF (NotaFiscalProduto)
         return ''
 
-    def _serializar_notas_fiscal(self, notas_fiscal, tag_raiz='infNFe'):
-        # TODO
-        return ''
+    def _serializar_notas_fiscal(self, nota_fiscal, tag_raiz='infNFe', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+
+        # Dados da Nota Fiscal
+        ide = etree.SubElement(raiz, 'ide')
+        etree.SubElement(ide, 'cUF').text = CODIGOS_ESTADOS[nota_fiscal.uf]
+        etree.SubElement(ide, 'natOp').text = nota_fiscal.natureza_operacao
+        etree.SubElement(ide, 'mod').text = str(nota_fiscal.modelo)
+        etree.SubElement(ide, 'serie').text = nota_fiscal.serie
+        etree.SubElement(ide, 'nNF').text = nota_fiscal.numero_nf
+        etree.SubElement(ide, 'dEmi').text = nota_fiscal.data_emissao.strftime('%Y-%m-%d')
+        etree.SubElement(ide, 'dSaiEnt').text = nota_fiscal.data_saida_entrada.strftime('%Y-%m-%d')
+
+        # Emitente
+        raiz.append(self._serializar_emitente(nota_fiscal.emitente, retorna_string=False))
+
+        # Destinatário
+        raiz.append(self._serializar_cliente(nota_fiscal.cliente, retorna_string=False))
+
+        if retorna_string:
+            return etree.tostring(raiz, pretty_print=True)
+        else:
+            return raiz
 

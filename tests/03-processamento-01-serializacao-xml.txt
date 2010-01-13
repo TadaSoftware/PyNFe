@@ -61,11 +61,14 @@ Instancia a NF
     >>> nota_fiscal = NotaFiscal(
     ...     emitente=emitente,
     ...     transporte_transportadora=transportadora,
+    ...     cliente=cliente,
+    ...     uf='GO',
     ...     modelo=55,
     ...     serie='1',
     ...     numero_nf='1',
     ...     data_emissao=datetime.date.today(),
-    ...     natureza_operacao='Venda no Varejo',
+    ...     data_saida_entrada=datetime.date.today(),
+    ...     natureza_operacao='Venda a vista',
     ... )
 
     >>> _fonte_dados.contar_objetos()
@@ -139,6 +142,231 @@ Serializando por partes
     <BLANKLINE>
 
 - Gera os arquivos XML a partir dos dados das instancias da NF-e
+
+    >>> print serializador._serializar_notas_fiscal(nota_fiscal)
+    <infNFe Id="NFe35080599999090910270550010000000015180051273" versao="1.10">
+      <ide>
+        <cUF>52</cUF>
+        <cNF>518005127</cNF>
+        <natOp>Venda a vista</natOp>
+        <indPag>0</indPag>
+        <mod>55</mod>
+        <serie>1</serie>
+        <nNF>1</nNF>
+        <dEmi>2010-01-13</dEmi>
+        <dSaiEnt>2010-01-13</dSaiEnt>
+        <tpNF>0</tpNF>
+        <cMunFG>3550308</cMunFG>
+        <tpImp>1</tpImp>
+        <tpEmis>1</tpEmis>
+        <cDV>3</cDV>
+        <tpAmb>2</tpAmb>
+        <finNFe>1</finNFe>
+        <procEmi>0</procEmi>
+        <verProc>NF-eletronica.com</verProc>
+      </ide>
+      <emit>
+        <CNPJ>12345678000190</CNPJ>
+        <xNome>Tarsila Calcados Ltda.</xNome>
+        <xFant>Tarsila Calcados Ltda.</xFant>
+        <IE>123456789012</IE>
+        <enderEmit>
+          <xLgr>Rua 10</xLgr>
+          <nro>15</nro>
+          <xCpl>qd 17, lt 10</xCpl>
+          <xBairro>Setor Oeste</xBairro>
+          <cMun>5208806</cMun>
+          <xMun>Goianira</xMun>
+          <UF>GO</UF>
+          <CEP>75370000</CEP>
+          <cPais>1058</cPais>
+          <xPais>Brasil</xPais>
+          <fone>6242421212</fone>
+        </enderEmit>
+      </emit>
+      <dest>
+        <CPF>12345678901</CPF>
+        <xNome>Jose Felipe da Silva</xNome>
+        <IE>9876543210</IE>
+        <enderDest>
+          <xLgr>AV DAS ROSAS</xLgr>
+          <nro>1777</nro>
+          <xCpl>10 ANDAR</xCpl>
+          <xBairro>PARQUE FONTES</xBairro>
+          <cMun>3304557</cMun>
+          <xMun>Rio de Janeiro</xMun>
+          <UF>RJ</UF>
+          <CEP>23950000</CEP>
+          <cPais>1058</cPais>
+          <xPais>Brasil</xPais>
+          <fone>2132011234</fone>
+        </enderDest>
+      </dest>
+      <retirada>
+        <CNPJ>99171171000194</CNPJ>
+        <xLgr>AV PAULISTA</xLgr>
+        <nro>12345</nro>
+        <xCpl>TERREO</xCpl>
+        <xBairro>CERQUEIRA CESAR</xBairro>
+        <cMun>3550308</cMun>
+        <xMun>SAO PAULO</xMun>
+        <UF>SP</UF>
+      </retirada>
+      <entrega>
+        <CNPJ>99299299000194</CNPJ>
+        <xLgr>AV FARIA LIMA</xLgr>
+        <nro>1500</nro>
+        <xCpl>15 ANDAR</xCpl>
+        <xBairro>PINHEIROS</xBairro>
+        <cMun>3550308</cMun>
+        <xMun>SAO PAULO</xMun>
+        <UF>SP</UF>
+      </entrega>
+      <det nItem="1">
+        <prod>
+          <cProd>00001</cProd>
+          <cEAN />
+          <xProd>Agua Mineral</xProd>
+          <CFOP>5101</CFOP>
+          <uCom>dz</uCom>
+          <qCom>1000000.0000</qCom>
+          <vUnCom>1</vUnCom>
+          <vProd>10000000.00</vProd>
+          <cEANTrib />
+          <uTrib>und</uTrib>
+          <qTrib>12000000.0000</qTrib>
+          <vUnTrib>1</vUnTrib>
+        </prod>
+        <imposto>
+          <ICMS>
+            <ICMS00>
+              <orig>0</orig>
+              <CST>00</CST>
+              <modBC>0</modBC>
+              <vBC>10000000.00</vBC>
+              <pICMS>18.00</pICMS>
+              <vICMS>1800000.00</vICMS>
+            </ICMS00>
+          </ICMS>
+          <PIS>
+            <PISAliq>
+              <CST>01</CST>
+              <vBC>10000000.00</vBC>
+              <pPIS>0.65</pPIS>
+              <vPIS>65000</vPIS>
+            </PISAliq>
+          </PIS>
+          <COFINS>
+            <COFINSAliq>
+              <CST>01</CST>
+              <vBC>10000000.00</vBC>
+              <pCOFINS>2.00</pCOFINS>
+              <vCOFINS>200000.00</vCOFINS>
+            </COFINSAliq>
+          </COFINS>
+        </imposto>
+      </det>
+      <det nItem="2">
+        <prod>
+          <cProd>00002</cProd>
+          <cEAN />
+          <xProd>Agua Mineral</xProd>
+          <CFOP>5101</CFOP>
+          <uCom>pack</uCom>
+          <qCom>5000000.0000</qCom>
+          <vUnCom>2</vUnCom>
+          <vProd>10000000.00</vProd>
+          <cEANTrib />
+          <uTrib>und</uTrib>
+          <qTrib>3000000.0000</qTrib>
+          <vUnTrib>0.3333</vUnTrib>
+        </prod>
+        <imposto>
+          <ICMS>
+            <ICMS00>
+              <orig>0</orig>
+              <CST>00</CST>
+              <modBC>0</modBC>
+              <vBC>10000000.00</vBC>
+              <pICMS>18.00</pICMS>
+              <vICMS>1800000.00</vICMS>
+            </ICMS00>
+          </ICMS>
+          <PIS>
+            <PISAliq>
+              <CST>01</CST>
+              <vBC>10000000.00</vBC>
+              <pPIS>0.65</pPIS>
+              <vPIS>65000</vPIS>
+            </PISAliq>
+          </PIS>
+          <COFINS>
+            <COFINSAliq>
+              <CST>01</CST>
+              <vBC>10000000.00</vBC>
+              <pCOFINS>2.00</pCOFINS>
+              <vCOFINS>200000.00</vCOFINS>
+            </COFINSAliq>
+          </COFINS>
+        </imposto>
+      </det>
+      <total>
+        <ICMSTot>
+          <vBC>20000000.00</vBC>
+          <vICMS>18.00</vICMS>
+          <vBCST>0</vBCST>
+          <vST>0</vST>
+          <vProd>20000000.00</vProd>
+          <vFrete>0</vFrete>
+          <vSeg>0</vSeg>
+          <vDesc>0</vDesc>
+          <vII>0</vII>
+          <vIPI>0</vIPI>
+          <vPIS>130000.00</vPIS>
+          <vCOFINS>400000.00</vCOFINS>
+          <vOutro>0</vOutro>
+          <vNF>20000000.00</vNF>
+        </ICMSTot>
+      </total>
+      <transp>
+        <modFrete>0</modFrete>
+        <transporta>
+          <CNPJ>123123123000112</CNPJ>
+          <xNome>WS Cargas S/A</xNome>
+          <IE>171999999119</IE>
+          <xEnder>Rua Central 100 - Fundos - Distrito Industrial</xEnder>
+          <cMun>3304557</cMun>
+          <xMun>Rio de Janeiro</xMun>
+          <UF>RJ</UF>
+        </transporta>
+        <veicTransp>
+          <placa>BXI1717</placa>
+          <UF>SP</UF>
+          <RNTC>123456789</RNTC>
+        </veicTransp>
+        <reboque>
+          <placa>BXI1818</placa>
+          <UF>SP</UF>
+          <RNTC>123456789</RNTC>
+        </reboque>
+        <vol>
+          <qVol>10000</qVol>
+          <esp>CAIXA</esp>
+          <marca>LINDOYA</marca>
+          <nVol>500</nVol>
+          <pesoL>1000000000.000</pesoL>
+          <pesoB>1200000000.000</pesoB>
+          <lacres>
+            <nLacre>XYZ10231486</nLacre>
+          </lacres>
+        </vol>
+      </transp>
+      <infAdic>
+        <infAdFisco>Nota Fiscal de exemplo NF-eletronica.com</infAdFisco>
+      </infAdic>
+    </infNFe>
+    <BLANKLINE>
+
 - Quando gerados me lote, apenas o primeiro arquivo deve ter o cabecalho
   padrao do XML 1.0
  - <?xml version="1.0" encoding="UTF-8"?>
