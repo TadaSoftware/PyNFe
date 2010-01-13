@@ -1,7 +1,11 @@
 TESTES BASICOS
 ==============
 
-    >>> import sets
+    >>> try:
+    ...     set
+    ... except:
+    ...     from sets import Set as set
+    <type 'set'>
 
 A biblioteca deve fornecer uma colecao de utilitarios para consumir
 o webservice da NF-e.
@@ -16,9 +20,9 @@ modelo:
   |                         MODELO DE ENTIDADES                       |
   ---------------------------------------------------------------------
   |                                                                   |
-  |                          ------------                             |
-  |                          | Entidade |                             |
-  |                          ------------                             |
+  |                          ------------         --------------      |
+  |                          | Entidade |-------<>| FonteDados |      |
+  |                          ------------         --------------      |
   |                               A                                   |
   |                               |                                   |
   |           ----especializacao--------------------------            |
@@ -41,16 +45,16 @@ modelo:
   |                              PROCESSAMENTO                             |
   --------------------------------------------------------------------------
   |                                                                        |
-  |  ----------------   --------------   --------------------------------  |
-  |  | InterfaceXML |   | Assinatura |   | Comunicacao                  |  |
-  |  ----------------   --------------   --------------------------------  |
-  |  | exportar()   |   | assinar()  |   | transmitir()                 |  |
-  |  | importar()   |   --------------   | cancelar()                   |  |
-  |  ----------------                    | situacao_nfe()               |  |
-  |                     -------------    | status_servico()             |  |
-  |   --------------    | Validacao |    | consultar_cadastro()         |  |
-  |   | DANFE      |    -------------    | inutilizar_faixa_numeracao() |  |
-  |   --------------    | validar() |    --------------------------------  |
+  | -------------------  --------------   -------------------------------- |
+  | | SerializacaoXML |  | Assinatura |   | Comunicacao                  | |
+  | -------------------  --------------   -------------------------------- |
+  | | exportar()      |  | assinar()  |   | transmitir()                 | |
+  | | importar()      |  --------------   | cancelar()                   | |
+  | -------------------                   | situacao_nfe()               | |
+  |                     -------------     | status_servico()             | |
+  |   --------------    | Validacao |     | consultar_cadastro()         | |
+  |   | DANFE      |    -------------     | inutilizar_faixa_numeracao() | |
+  |   --------------    | validar() |     -------------------------------- |
   |   | imprimir() |    -------------                                      |
   |   --------------                                                       |
   |                                                                        |
@@ -62,23 +66,23 @@ Os pacotes da biblioteca sao:
   biblioteca, incluindo flags e funcoes genericas)
 
     >>> from pynfe import utils
-    >>> sets.Set([attr for attr in dir(utils) if not attr.startswith('__')]) == sets.Set(['flags'])
+    >>> set([attr for attr in dir(utils) if not attr.startswith('__')]) == set(['flags'])
     True
 
 - entidades (contem todas as entidades da biblioteca)
 
     >>> from pynfe import entidades
-    >>> sets.Set([attr for attr in dir(entidades) if not attr.startswith('__')]) == sets.Set([
+    >>> set([attr for attr in dir(entidades) if not attr.startswith('__')]) == set([
     ...     'Cliente', 'Emitente', 'LoteNotaFiscal', 'NotaFiscal', 'Produto',
     ...     'Transportadora', 'base', 'cliente', 'emitente', 'lotes', 'notafiscal',
-    ...     'produto', 'transportadora'])
+    ...     'produto', 'transportadora', 'fontes_dados', 'FonteDados'])
     True
 
 - processamento (contem todas as funcionalidades de processamento da
   biblioteca
 
     >>> from pynfe import processamento
-    >>> sets.Set([attr for attr in dir(processamento) if not attr.startswith('__')]) == sets.Set([
+    >>> set([attr for attr in dir(processamento) if not attr.startswith('__')]) == set([
     ...     'Assinatura', 'Comunicacao', 'DANFE', 'InterfaceXML', 'Validacao',
     ...     'assinatura', 'comunicacao', 'danfe', 'interfaces', 'validacao'])
     True

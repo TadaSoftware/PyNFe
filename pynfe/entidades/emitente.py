@@ -54,3 +54,6 @@ class Emitente(Entidade):
     # Logotipo
     logotipo = None
 
+    def __repr__(self):
+        return '<Emitente cnpj="%s" razao_social="%s"/>'%(self.cnpj, self.razao_social)
+

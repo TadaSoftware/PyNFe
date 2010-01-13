@@ -1,16 +1,6 @@
 PROCESSAMENTO
 =============
 
-Validar NF-e
-------------
-
-- Efetuar validacoes dos XSD no(s) XML(s) gerado(s)
-
-Assinar NF-e
-------------
-
-- Na hora de assinar, selecionar um Certificado Digital
-
 Gerar arquivos XML
 ------------------
 
@@ -24,6 +14,16 @@ Gerar arquivos XML
    própria tag <Signature>, conforme exemplo abaixo.
  - Cada documento XML deverá ter o seu namespace individual em seu elemento raiz.
  
+Validar NF-e
+------------
+
+- Efetuar validacoes dos XSD no(s) XML(s) gerado(s)
+
+Assinar NF-e
+------------
+
+- Na hora de assinar, selecionar um Certificado Digital
+
 
 Transmitir NF-e (ou lote de NF-e`s)
 -----------------------------------
@@ -49,8 +49,8 @@ Consulta da situação atual da NF-e      Sincrona
 Consulta do status do serviço           Sincrona
 Consulta cadastro                       Sincrona
 
-Imprimir NF-e
--------------
+Imprimir DANF-e
+---------------
 
 - Geracao baseada no Geraldo Reports
 - Gerar codigo de barras (padrao CODE-128C)

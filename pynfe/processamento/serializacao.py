@@ -19,7 +19,7 @@ except ImportError:
         except ImportError:
           raise Exception('Falhou ao importar lxml/ElementTree')
 
-class Interface(object):
+class Serializacao(object):
     """Classe abstrata responsavel por fornecer as funcionalidades basicas para
     exportacao e importacao de Notas Fiscais eletronicas para formatos serializados
     de arquivos. Como XML, JSON, binario, etc.
@@ -29,7 +29,7 @@ class Interface(object):
     lista_de_nfs = None
 
     def __new__(cls, *args, **kwargs):
-        if cls == Interface:
+        if cls == Serializacao:
             raise Exception('Esta classe nao pode ser instanciada diretamente!')
         else:
             return cls(*args, **kwargs)
@@ -49,6 +49,52 @@ class Interface(object):
 
         raise Exception('Metodo nao implementado')
 
-class InterfaceXML(Interface):
-    pass
+class SerializacaoXML(Serializacao):
+    def exportar(self, objetos, destino):
+        """Gera o(s) arquivo(s) de Nofa Fiscal eletronica no padrao oficial da SEFAZ
+        e Receita Federal, para ser(em) enviado(s) para o webservice ou para ser(em)
+        armazenado(s) em cache local."""
+
+        saida = []
+
+        # Dados do emitente
+        saida.append(self._serializar_emitente(objetos))
+
+        # Certificado Digital? XXX
+
+        # Clientes
+        saida.append(self._serializar_clientes(objetos))
+
+        # Transportadoras
+        saida.append(self._serializar_transportadoras(objetos))
+
+        # Produtos
+        saida.append(self._serializar_produtos(objetos))
+
+        # Lote de Notas Fiscais
+        saida.append(self._serializar_notas_fiscais(objetos))
+
+        # FIXME
+        return '\n'.join(saida)
+
+    def importar(self, objetos, origem):
+        """Cria as instancias do PyNFe a partir de arquivos XML no formato padrao da
+        SEFAZ e Receita Federal."""
+
+        raise Exception('Metodo nao implementado')
+
+    def _serializar_emitente(self, objetos):
+        return ''
+
+    def _serializar_clientes(self, objetos):
+        return ''
+
+    def _serializar_transportadoras(self, objetos):
+        return ''
+
+    def _serializar_produtos(self, objetos):
+        return ''
+
+    def _serializar_notas_fiscais(self, objetos):
+        return ''
 
