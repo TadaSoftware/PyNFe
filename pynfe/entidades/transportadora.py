@@ -27,3 +27,6 @@ class Transportadora(Entidade):
     # - Municipio (obrigatorio)
     endereco_municipio = str()
 
+    def __str__(self):
+        return ' '.join([self.tipo_documento, self.numero_documento])
+

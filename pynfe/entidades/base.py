@@ -13,6 +13,9 @@ class Entidade(object):
         if self._fonte_dados:
             self._fonte_dados.adicionar_objeto(self)
 
+    def __repr__(self):
+        return '<%s %s>'%(self.__class__.__name__, str(self))
+
 class Lote(object):
     pass
 

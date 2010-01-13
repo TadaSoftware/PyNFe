@@ -1,4 +1,9 @@
 try:
+    set
+except:
+    from sets import Set as set
+
+try:
   from lxml import etree
 except ImportError:
   try:
@@ -19,6 +24,9 @@ except ImportError:
         except ImportError:
           raise Exception('Falhou ao importar lxml/ElementTree')
 
+from pynfe.entidades import Emitente, Cliente, Produto, Transportadora, NotaFiscal
+from pynfe.excecoes import NenhumObjetoEncontrado, MuitosObjetosEncontrados
+
 class Serializacao(object):
     """Classe abstrata responsavel por fornecer as funcionalidades basicas para
     exportacao e importacao de Notas Fiscais eletronicas para formatos serializados
@@ -26,7 +34,7 @@ class Serializacao(object):
     
     Nao deve ser instanciada diretamente!"""
 
-    lista_de_nfs = None
+    _fonte_dados = None
 
     def __new__(cls, *args, **kwargs):
         if cls == Serializacao:
@@ -34,10 +42,10 @@ class Serializacao(object):
         else:
             return cls(*args, **kwargs)
 
-    def __init__(self, nf_ou_lista):
-        self.lista_de_nfs = isinstance(nf_ou_lista, list) and nf_ou_lista or [nf_ou_lista]
+    def __init__(self, fonte_dados):
+        self._fonte_dados = fonte_dados
 
-    def exportar(self, destino):
+    def exportar(self, **kwargs):
         """Gera o(s) arquivo(s) de exportacao a partir da Nofa Fiscal eletronica
         ou lista delas."""
 
@@ -50,38 +58,51 @@ class Serializacao(object):
         raise Exception('Metodo nao implementado')
 
 class SerializacaoXML(Serializacao):
-    def exportar(self, objetos, destino):
+    def exportar(self, **kwargs):
         """Gera o(s) arquivo(s) de Nofa Fiscal eletronica no padrao oficial da SEFAZ
         e Receita Federal, para ser(em) enviado(s) para o webservice ou para ser(em)
         armazenado(s) em cache local."""
 
+        # Carrega lista de Notas Fiscais
+        notas_fiscais = self._fonte_dados.obter_lista(_classe=NotaFiscal, **kwargs)
+
         saida = []
 
         # Dados do emitente
-        saida.append(self._serializar_emitente(objetos))
+        saida.append(self._serializar_emitente(self._obter_emitente_de_notas_fiscais(notas_fiscais)))
 
         # Certificado Digital? XXX
 
         # Clientes
-        saida.append(self._serializar_clientes(objetos))
+        saida.append(self._serializar_clientes(**kwargs))
 
         # Transportadoras
-        saida.append(self._serializar_transportadoras(objetos))
+        saida.append(self._serializar_transportadoras(**kwargs))
 
         # Produtos
-        saida.append(self._serializar_produtos(objetos))
+        saida.append(self._serializar_produtos(**kwargs))
 
         # Lote de Notas Fiscais
-        saida.append(self._serializar_notas_fiscais(objetos))
+        saida.append(self._serializar_notas_fiscais(**kwargs))
 
         # FIXME
         return '\n'.join(saida)
 
-    def importar(self, objetos, origem):
+    def importar(self, origem):
         """Cria as instancias do PyNFe a partir de arquivos XML no formato padrao da
         SEFAZ e Receita Federal."""
 
         raise Exception('Metodo nao implementado')
+
+    def _obter_emitente_de_notas_fiscais(self, notas_fiscais):
+        emitentes = set([nf.emitente for nf in notas_fiscais if nf.emitente])
+
+        if len(lista) == 0:
+            raise NenhumObjetoEncontrado('Nenhum objeto foi encontrado!')
+        elif len(lista) > 1:
+            raise MuitosObjetosEncontrados('Muitos objetos foram encontrados!')
+
+        return lista[0]
 
     def _serializar_emitente(self, objetos):
         return ''

@@ -102,6 +102,8 @@ O contador de objetos retorna a quantidade de instancias que casem com os argume
     >>> fonte_dados.contar_objetos(_classe=Emitente, razao_social='Emitente Novo')
     1
 
+    >>> fonte_dados._objetos
+
 Permitir tambem remover objetos (que por padrao remove apenas da lista da memoria e nao
 eh persistente.
 

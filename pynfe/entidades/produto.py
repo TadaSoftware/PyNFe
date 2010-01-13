@@ -61,6 +61,9 @@ class Produto(Entidade):
 
         super(Produto, self).__init__(*args, **kwargs)
 
+    def __str__(self):
+        return ' '.join([self.codigo, self.descricao])
+
     def adicionar_icms(self, **kwargs):
         u"""Adiciona uma instancia de ICMS a lista de ICMS do produto"""
         self.icms.append(ProdutoICMS(**kwargs))
