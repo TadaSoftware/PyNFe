@@ -4,7 +4,7 @@ from pynfe.utils.flags import NF_STATUS, NF_TIPOS_DOCUMENTO, NF_TIPOS_IMPRESSAO_
         NF_REFERENCIADA_TIPOS, NF_PRODUTOS_ESPECIFICOS, ICMS_TIPOS_TRIBUTACAO,\
         ICMS_ORIGENS, ICMS_MODALIDADES, IPI_TIPOS_TRIBUTACAO, IPI_TIPOS_CALCULO,\
         PIS_TIPOS_TRIBUTACAO, PIS_TIPOS_CALCULO, COFINS_TIPOS_TRIBUTACAO,\
-        COFINS_TIPOS_CALCULO, MODALIDADES_FRETE, ORIGENS_PROCESSO
+        COFINS_TIPOS_CALCULO, MODALIDADES_FRETE, ORIGENS_PROCESSO, CODIGO_BRASIL
 
 from decimal import Decimal
 
@@ -13,7 +13,7 @@ class NotaFiscal(Entidade):
 
     # Nota Fisca eletronica
     # - Modelo (formato: NN)
-    modelo = str()
+    modelo = int()
 
     # - Serie (obrigatorio - formato: NNN)
     serie = str()
@@ -96,7 +96,7 @@ class NotaFiscal(Entidade):
     destinatario_endereco_cep = str()
 
     #  - Pais (seleciona de lista)
-    destinatario_endereco_pais = 'BRASIL'
+    destinatario_endereco_pais = CODIGO_BRASIL
 
     #  - UF (obrigatorio)
     destinatario_endereco_uf = str()

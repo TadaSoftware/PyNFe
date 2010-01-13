@@ -10,8 +10,11 @@ class Entidade(object):
             setattr(self, k, v)
 
         # Adiciona o objeto à fonte de dados informada
-        if self._fonte_dados:
-            self._fonte_dados.adicionar_objeto(self)
+        if not self._fonte_dados:
+            from fontes_dados import _fonte_dados
+            self._fonte_dados = _fonte_dados
+
+        self._fonte_dados.adicionar_objeto(self)
 
     def __repr__(self):
         return '<%s %s>'%(self.__class__.__name__, str(self))

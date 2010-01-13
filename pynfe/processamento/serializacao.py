@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 try:
     set
 except:
@@ -26,6 +27,7 @@ except ImportError:
 
 from pynfe.entidades import Emitente, Cliente, Produto, Transportadora, NotaFiscal
 from pynfe.excecoes import NenhumObjetoEncontrado, MuitosObjetosEncontrados
+from pynfe.utils import so_numeros, obter_municipio_por_codigo, obter_pais_por_codigo
 
 class Serializacao(object):
     """Classe abstrata responsavel por fornecer as funcionalidades basicas para
@@ -40,12 +42,12 @@ class Serializacao(object):
         if cls == Serializacao:
             raise Exception('Esta classe nao pode ser instanciada diretamente!')
         else:
-            return cls(*args, **kwargs)
+            return super(Serializacao, cls).__new__(cls, *args, **kwargs)
 
     def __init__(self, fonte_dados):
         self._fonte_dados = fonte_dados
 
-    def exportar(self, **kwargs):
+    def exportar(self, destino, **kwargs):
         """Gera o(s) arquivo(s) de exportacao a partir da Nofa Fiscal eletronica
         ou lista delas."""
 
@@ -58,7 +60,7 @@ class Serializacao(object):
         raise Exception('Metodo nao implementado')
 
 class SerializacaoXML(Serializacao):
-    def exportar(self, **kwargs):
+    def exportar(self, destino, **kwargs):
         """Gera o(s) arquivo(s) de Nofa Fiscal eletronica no padrao oficial da SEFAZ
         e Receita Federal, para ser(em) enviado(s) para o webservice ou para ser(em)
         armazenado(s) em cache local."""
@@ -74,19 +76,16 @@ class SerializacaoXML(Serializacao):
         # Certificado Digital? XXX
 
         # Clientes
-        saida.append(self._serializar_clientes(**kwargs))
+        #saida.append(self._serializar_clientes(**kwargs))
 
         # Transportadoras
-        saida.append(self._serializar_transportadoras(**kwargs))
+        #saida.append(self._serializar_transportadoras(**kwargs))
 
         # Produtos
-        saida.append(self._serializar_produtos(**kwargs))
+        #saida.append(self._serializar_produtos(**kwargs))
 
         # Lote de Notas Fiscais
-        saida.append(self._serializar_notas_fiscais(**kwargs))
-
-        # FIXME
-        return '\n'.join(saida)
+        #saida.append(self._serializar_notas_fiscais(**kwargs))
 
     def importar(self, origem):
         """Cria as instancias do PyNFe a partir de arquivos XML no formato padrao da
@@ -95,7 +94,7 @@ class SerializacaoXML(Serializacao):
         raise Exception('Metodo nao implementado')
 
     def _obter_emitente_de_notas_fiscais(self, notas_fiscais):
-        lista = set([nf.emitente for nf in notas_fiscais if nf.emitente])
+        lista = list(set([nf.emitente for nf in notas_fiscais if nf.emitente]))
 
         if len(lista) == 0:
             raise NenhumObjetoEncontrado('Nenhum objeto foi encontrado!')
@@ -104,18 +103,82 @@ class SerializacaoXML(Serializacao):
 
         return lista[0]
 
-    def _serializar_emitente(self, emitente):
+    def _serializar_emitente(self, emitente, tag_raiz='emit'):
+        raiz = etree.Element(tag_raiz)
+
+        # Dados do emitente
+        etree.SubElement(raiz, 'CNPJ').text = so_numeros(emitente.cnpj)
+        etree.SubElement(raiz, 'xNome').text = emitente.razao_social
+        etree.SubElement(raiz, 'xFant').text = emitente.nome_fantasia
+        etree.SubElement(raiz, 'IE').text = emitente.inscricao_estadual
+
+        # Endereço
+        endereco = etree.SubElement(raiz, 'enderEmit')
+        etree.SubElement(endereco, 'xLgr').text = emitente.endereco_logradouro
+        etree.SubElement(endereco, 'nro').text = emitente.endereco_numero
+        etree.SubElement(endereco, 'xCpl').text = emitente.endereco_complemento
+        etree.SubElement(endereco, 'xBairro').text = emitente.endereco_bairro
+        etree.SubElement(endereco, 'cMun').text = emitente.endereco_municipio
+        etree.SubElement(endereco, 'xMun').text = obter_municipio_por_codigo(
+                emitente.endereco_municipio, emitente.endereco_uf,
+                )
+        etree.SubElement(endereco, 'UF').text = emitente.endereco_uf
+        etree.SubElement(endereco, 'CEP').text = so_numeros(emitente.endereco_cep)
+        etree.SubElement(endereco, 'cPais').text = emitente.endereco_pais
+        etree.SubElement(endereco, 'xPais').text = obter_pais_por_codigo(emitente.endereco_pais)
+        etree.SubElement(endereco, 'fone').text = emitente.endereco_telefone
+
+        return etree.tostring(raiz, pretty_print=True)
+
+    def _serializar_cliente(self, cliente, tag_raiz='dest'):
+        raiz = etree.Element(tag_raiz)
+
+        # Dados do cliente
+        etree.SubElement(raiz, cliente.tipo_documento).text = so_numeros(cliente.numero_documento)
+        etree.SubElement(raiz, 'xNome').text = cliente.razao_social
+        etree.SubElement(raiz, 'IE').text = cliente.inscricao_estadual
+
+        # Endereço
+        endereco = etree.SubElement(raiz, 'enderDest')
+        etree.SubElement(endereco, 'xLgr').text = cliente.endereco_logradouro
+        etree.SubElement(endereco, 'nro').text = cliente.endereco_numero
+        etree.SubElement(endereco, 'xCpl').text = cliente.endereco_complemento
+        etree.SubElement(endereco, 'xBairro').text = cliente.endereco_bairro
+        etree.SubElement(endereco, 'cMun').text = cliente.endereco_municipio
+        etree.SubElement(endereco, 'xMun').text = obter_municipio_por_codigo(
+                cliente.endereco_municipio, cliente.endereco_uf,
+                )
+        etree.SubElement(endereco, 'UF').text = cliente.endereco_uf
+        etree.SubElement(endereco, 'CEP').text = so_numeros(cliente.endereco_cep)
+        etree.SubElement(endereco, 'cPais').text = cliente.endereco_pais
+        etree.SubElement(endereco, 'xPais').text = obter_pais_por_codigo(cliente.endereco_pais)
+        etree.SubElement(endereco, 'fone').text = cliente.endereco_telefone
+
+        return etree.tostring(raiz, pretty_print=True)
+
+    def _serializar_transportadora(self, transportadora, tag_raiz='transporta'):
+        raiz = etree.Element(tag_raiz)
+
+        # Dados da transportadora
+        etree.SubElement(raiz, transportadora.tipo_documento).text = so_numeros(transportadora.numero_documento)
+        etree.SubElement(raiz, 'xNome').text = transportadora.razao_social
+        etree.SubElement(raiz, 'IE').text = transportadora.inscricao_estadual
+
+        # Endereço
+        etree.SubElement(raiz, 'xEnder').text = transportadora.endereco_logradouro
+        etree.SubElement(raiz, 'cMun').text = transportadora.endereco_municipio
+        etree.SubElement(raiz, 'xMun').text = obter_municipio_por_codigo(
+                transportadora.endereco_municipio, transportadora.endereco_uf,
+                )
+        etree.SubElement(raiz, 'UF').text = transportadora.endereco_uf
+
+        return etree.tostring(raiz, pretty_print=True)
+
+    def _serializar_produto(self, produto, tag_raiz='prod'):
+        # TODO
         return ''
 
-    def _serializar_clientes(self, objetos):
-        return ''
-
-    def _serializar_transportadoras(self, objetos):
-        return ''
-
-    def _serializar_produtos(self, objetos):
-        return ''
-
-    def _serializar_notas_fiscais(self, objetos):
+    def _serializar_notas_fiscal(self, notas_fiscal, tag_raiz='infNFe'):
+        # TODO
         return ''
 

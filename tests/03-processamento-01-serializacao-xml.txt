@@ -4,17 +4,139 @@ PROCESSAMENTO - SERIALIZACAO PARA XML
 Populando fonte de dados
 ------------------------
 
-    >>> from pynfe.entidades import FonteDados
-    >>> fonte_dados = FonteDados()
+    >>> import datetime
+    >>> from pynfe.entidades import Emitente, Cliente, NotaFiscal, Produto,\
+    ...     Transportadora 
+    >>> from pynfe.entidades.fontes_dados import _fonte_dados
+    >>> from pynfe.utils.flags import CODIGO_BRASIL
 
-Inicia uma NF e demais dependentes
+Popula dependentes da NF
 
+    >>> emitente = Emitente(
+    ...     cnpj='12.345.678/0001-90',
+    ...     razao_social='Tarsila Calcados Ltda.',
+    ...     nome_fantasia='Tarsila Calcados Ltda.',
+    ...     inscricao_estadual='123456789012',
+    ...     endereco_logradouro='Rua 10',
+    ...     endereco_numero='15',
+    ...     endereco_complemento='qd 17, lt 10',
+    ...     endereco_bairro='Setor Oeste',
+    ...     endereco_municipio='5208806',   # Goiania
+    ...     endereco_uf='GO',
+    ...     endereco_cep='75370-000',
+    ...     endereco_telefone='6242421212',
+    ... )
 
+    >>> cliente = Cliente(
+    ...     razao_social='Jose Felipe da Silva',
+    ...     tipo_documento='CPF',
+    ...     numero_documento='123.456.789-01',
+    ...     inscricao_estadual='9876543210',
+    ...     endereco_logradouro='AV DAS ROSAS',
+    ...     endereco_numero='1777',
+    ...     endereco_complemento='10 ANDAR',
+    ...     endereco_bairro='PARQUE FONTES',
+    ...     endereco_municipio='3304557',   # Rio de Janeiro
+    ...     endereco_uf='RJ',
+    ...     endereco_pais=CODIGO_BRASIL,
+    ...     endereco_cep='23950-000',
+    ...     endereco_telefone='2132011234',
+    ... )
+
+    >>> produto1 = Produto(codigo=1, descricao='Tenis Adidas Cinza')
+    >>> produto2 = Produto(codigo=2, descricao='Sapato Ferracini Preto')
+
+    >>> transportadora = Transportadora(
+    ...     razao_social='WS Cargas S/A',
+    ...     tipo_documento='CNPJ',
+    ...     numero_documento='123.123.123/0001-12',
+    ...     inscricao_estadual='171999999119',
+    ...     endereco_logradouro='Rua Central 100 - Fundos - Distrito Industrial',
+    ...     endereco_municipio='3304557',   # Rio de Janeiro
+    ...     endereco_uf='RJ',
+    ... )
+
+Instancia a NF
+
+    >>> nota_fiscal = NotaFiscal(
+    ...     emitente=emitente,
+    ...     transporte_transportadora=transportadora,
+    ...     modelo=55,
+    ...     serie='1',
+    ...     numero_nf='1',
+    ...     data_emissao=datetime.date.today(),
+    ...     natureza_operacao='Venda no Varejo',
+    ... )
+
+    >>> _fonte_dados.contar_objetos()
+    6
 
 Gerar arquivos XML
 ------------------
 
+    >>> import os
+    >>> CUR_DIR = '.'
+    >>> CAMINHO_SAIDA = os.path.join(CUR_DIR, 'tests', 'saida')
+
     >>> from pynfe.processamento.serializacao import SerializacaoXML
+    >>> serializador = SerializacaoXML(_fonte_dados)
+
+Serializando por partes
+
+    >>> print serializador._serializar_emitente(emitente)
+    <emit>
+      <CNPJ>12345678000190</CNPJ>
+      <xNome>Tarsila Calcados Ltda.</xNome>
+      <xFant>Tarsila Calcados Ltda.</xFant>
+      <IE>123456789012</IE>
+      <enderEmit>
+        <xLgr>Rua 10</xLgr>
+        <nro>15</nro>
+        <xCpl>qd 17, lt 10</xCpl>
+        <xBairro>Setor Oeste</xBairro>
+        <cMun>5208806</cMun>
+        <xMun>Goianira</xMun>
+        <UF>GO</UF>
+        <CEP>75370000</CEP>
+        <cPais>1058</cPais>
+        <xPais>Brasil</xPais>
+        <fone>6242421212</fone>
+      </enderEmit>
+    </emit>
+    <BLANKLINE>
+
+    >>> print serializador._serializar_cliente(cliente)
+    <dest>
+      <CPF>12345678901</CPF>
+      <xNome>Jose Felipe da Silva</xNome>
+      <IE>9876543210</IE>
+      <enderDest>
+        <xLgr>AV DAS ROSAS</xLgr>
+        <nro>1777</nro>
+        <xCpl>10 ANDAR</xCpl>
+        <xBairro>PARQUE FONTES</xBairro>
+        <cMun>3304557</cMun>
+        <xMun>Rio de Janeiro</xMun>
+        <UF>RJ</UF>
+        <CEP>23950000</CEP>
+        <cPais>1058</cPais>
+        <xPais>Brasil</xPais>
+        <fone>2132011234</fone>
+      </enderDest>
+    </dest>
+    <BLANKLINE>
+
+    >>> print serializador._serializar_transportadora(transportadora)
+    <transporta>
+      <CNPJ>123123123000112</CNPJ>
+      <xNome>WS Cargas S/A</xNome>
+      <IE>171999999119</IE>
+      <xEnder>Rua Central 100 - Fundos - Distrito Industrial</xEnder>
+      <cMun>3304557</cMun>
+      <xMun>Rio de Janeiro</xMun>
+      <UF>RJ</UF>
+    </transporta>
+    <BLANKLINE>
 
 - Gera os arquivos XML a partir dos dados das instancias da NF-e
 - Quando gerados me lote, apenas o primeiro arquivo deve ter o cabecalho

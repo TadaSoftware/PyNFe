@@ -1,4 +1,5 @@
 from base import Entidade
+from pynfe.utils.flags import CODIGO_BRASIL
 
 class Emitente(Entidade):
     # Dados do Emitente
@@ -40,7 +41,7 @@ class Emitente(Entidade):
     endereco_cep = str()
 
     # - Pais (aceita somente Brasil)
-    endereco_pais = 'BRASIL'
+    endereco_pais = CODIGO_BRASIL
 
     # - UF (obrigatorio)
     endereco_uf = str()

@@ -147,5 +147,6 @@ ORIGENS_PROCESSO = (
     'Outros',
 )
 
+CODIGO_BRASIL = '1058'
 
 

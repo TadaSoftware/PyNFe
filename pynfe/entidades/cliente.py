@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from base import Entidade
-from pynfe.utils.flags import TIPOS_DOCUMENTO
+from pynfe.utils.flags import TIPOS_DOCUMENTO, CODIGO_BRASIL
 
 class Cliente(Entidade):
     # Dados do Cliente
@@ -39,7 +39,7 @@ class Cliente(Entidade):
     endereco_cep = str()
 
     # - Pais (seleciona de lista)
-    endereco_pais = 'BRASIL'
+    endereco_pais = CODIGO_BRASIL
 
     # - UF (obrigatorio)
     endereco_uf = str()
