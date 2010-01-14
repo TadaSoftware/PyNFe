@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import random
+
 from base import Entidade
 from pynfe import get_version
 from pynfe.utils.flags import NF_STATUS, NF_TIPOS_DOCUMENTO, NF_TIPOS_IMPRESSAO_DANFE,\
@@ -14,6 +16,12 @@ from decimal import Decimal
 
 class NotaFiscal(Entidade):
     status = NF_STATUS[0]
+
+    # Código numérico aleatório que compõe a chave de acesso
+    codigo_numerico_aleatorio = str()
+
+    # Digito verificador do codigo numerico aleatorio
+    dv_codigo_numerico_aleatorio = str()
 
     # Nota Fisca eletronica
     # - Modelo (formato: NN)
@@ -335,8 +343,8 @@ class NotaFiscal(Entidade):
     @memoize
     def identificador_unico(self):
         # Monta 'Id' da raiz
-        # Ex.: NFe35080599999090910270550010000000015180051273
-        return "NFe%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nNF)s%(cNF)s%(cDV)s"%{
+        # Ex.: NFe35080599999090910270550010000000011518005123
+        return "NFe%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nNF)s%(tpEmis)s%(cNF)s%(cDV)s"%{
                 'uf': CODIGOS_ESTADOS[self.uf],
                 'ano': self.data_emissao.strftime('%y'),
                 'mes': self.data_emissao.strftime('%m'),
@@ -344,8 +352,9 @@ class NotaFiscal(Entidade):
                 'mod': self.modelo,
                 'serie': str(self.serie).zfill(3),
                 'nNF': str(self.numero_nf).zfill(9),
-                'cNF': '518005127'.zfill(9),    # FIXME
-                'cDV': '3',                     # FIXME
+                'tpEmis': str(self.forma_emissao),
+                'cNF': self.codigo_numerico_aleatorio.zfill(8),
+                'cDV': self.dv_codigo_numerico_aleatorio,
                 }
 
 class NotaFiscalReferenciada(Entidade):

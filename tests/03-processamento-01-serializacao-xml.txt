@@ -74,6 +74,8 @@ Instancia a NF
     ...     forma_emissao=1, # Normal
     ...     finalidade_emissao=1,
     ...     municipio='3550308',
+    ...     codigo_numerico_aleatorio='51800512',
+    ...     dv_codigo_numerico_aleatorio='3',
     ... )
 
     >>> _fonte_dados.contar_objetos()
@@ -149,13 +151,13 @@ Serializando por partes
 - Gera os arquivos XML a partir dos dados das instancias da NF-e
 
     >>> print nota_fiscal.identificador_unico
-    NFe52100112345678000190550010000000015180051273
+    NFe52100112345678000190550010000000011518005123
 
     >>> print serializador._serializar_notas_fiscal(nota_fiscal)
-    <infNFe versao="1.10" Id="NFe52100112345678000190550010000000015180051273">
+    <infNFe versao="1.10" Id="NFe52100112345678000190550010000000011518005123">
       <ide>
         <cUF>52</cUF>
-        <cNF>518005127</cNF>
+        <cNF>51800512</cNF>
         <natOp>Venda a vista</natOp>
         <indPag>0</indPag>
         <mod>55</mod>

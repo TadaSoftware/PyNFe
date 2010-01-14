@@ -193,12 +193,12 @@ class SerializacaoXML(Serializacao):
         return ''
 
     def _serializar_notas_fiscal(self, nota_fiscal, tag_raiz='infNFe', retorna_string=True):
-        raiz = etree.Element(tag_raiz, versao="1.10")
+        raiz = etree.Element(tag_raiz, versao="2.00")
 
         # Dados da Nota Fiscal
         ide = etree.SubElement(raiz, 'ide')
         etree.SubElement(ide, 'cUF').text = CODIGOS_ESTADOS[nota_fiscal.uf]
-        etree.SubElement(ide, 'cNF').text = '' # FIXME
+        etree.SubElement(ide, 'cNF').text = nota_fiscal.codigo_numerico_aleatorio
         etree.SubElement(ide, 'natOp').text = nota_fiscal.natureza_operacao
         etree.SubElement(ide, 'indPag').text = str(nota_fiscal.forma_pagamento)
         etree.SubElement(ide, 'mod').text = str(nota_fiscal.modelo)
@@ -210,7 +210,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(ide, 'cMunFG').text = nota_fiscal.municipio
         etree.SubElement(ide, 'tpImp').text = str(nota_fiscal.tipo_impressao_danfe)
         etree.SubElement(ide, 'tpEmis').text = str(nota_fiscal.forma_emissao)
-        etree.SubElement(ide, 'cDV').text = '3' # FIXME
+        etree.SubElement(ide, 'cDV').text = nota_fiscal.dv_codigo_numerico_aleatorio
         etree.SubElement(ide, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(ide, 'finNFe').text = str(nota_fiscal.finalidade_emissao)
         etree.SubElement(ide, 'procEmi').text = str(nota_fiscal.processo_emissao)
@@ -223,8 +223,12 @@ class SerializacaoXML(Serializacao):
         # Destinatário
         raiz.append(self._serializar_cliente(nota_fiscal.cliente, retorna_string=False))
 
+        # Transporte
+        transp = etree.SubElement(raiz, 'transp')
+        transp.append(self._serializar_transportadora(nota_fiscal.transporte_transportadora, retorna_string=False))
+
         # 'Id' da tag raiz
-        # Ex.: NFe35080599999090910270550010000000015180051273
+        # Ex.: NFe35080599999090910270550010000000011518005123
         raiz.attrib['Id'] = nota_fiscal.identificador_unico
 
         if retorna_string:
