@@ -9,7 +9,7 @@ from pynfe.utils.flags import NF_STATUS, NF_TIPOS_DOCUMENTO, NF_TIPOS_IMPRESSAO_
         ICMS_ORIGENS, ICMS_MODALIDADES, IPI_TIPOS_TRIBUTACAO, IPI_TIPOS_CALCULO,\
         PIS_TIPOS_TRIBUTACAO, PIS_TIPOS_CALCULO, COFINS_TIPOS_TRIBUTACAO,\
         COFINS_TIPOS_CALCULO, MODALIDADES_FRETE, ORIGENS_PROCESSO, CODIGO_BRASIL,\
-        NF_PROCESSOS_EMISSAO, CODIGOS_ESTADOS
+        NF_PROCESSOS_EMISSAO, CODIGOS_ESTADOS, TIPOS_DOCUMENTO
 from pynfe.utils import so_numeros, memoize
 
 from decimal import Decimal
@@ -97,33 +97,11 @@ class NotaFiscal(Entidade):
     #  - Identificacao (seleciona de Clientes)
     destinatario_remetente = None
 
-    # - Endereco (ver se pode copiar do Cliente)
-    #  - Logradouro (obrigatorio)
-    destinatario_endereco_logradouro = str()
+    # - Entrega (XXX sera possivel ter entrega e retirada ao mesmo tempo na NF?)
+    entrega = None
 
-    #  - Numero (obrigatorio)
-    destinatario_endereco_numero = str()
-
-    #  - Complemento
-    destinatario_endereco_complemento = str()
-
-    #  - Bairro (obrigatorio)
-    destinatario_endereco_bairro = str()
-
-    #  - CEP
-    destinatario_endereco_cep = str()
-
-    #  - Pais (seleciona de lista)
-    destinatario_endereco_pais = CODIGO_BRASIL
-
-    #  - UF (obrigatorio)
-    destinatario_endereco_uf = str()
-
-    #  - Municipio (obrigatorio)
-    destinatario_endereco_municipio = str()
-
-    #  - Telefone
-    destinatario_endereco_telefone = str()
+    # - Retirada
+    retirada = None
 
     # - Local Retirada/Entrega
     #  - Local de retirada diferente do emitente (Sim/Nao)
@@ -317,27 +295,39 @@ class NotaFiscal(Entidade):
 
     def adicionar_nota_fiscal_referenciada(self, **kwargs):
         u"""Adiciona uma instancia de Nota Fisca referenciada"""
-        self.notas_fiscais_referenciadas.append(NotaFiscalReferenciada(**kwargs))
+        obj = NotaFiscalReferenciada(**kwargs)
+        self.notas_fiscais_referenciadas.append(obj)
+        return obj
 
     def adicionar_produto_servico(self, **kwargs):
         u"""Adiciona uma instancia de Produto"""
-        self.produtos_e_servicos.append(NotaFiscalProduto(**kwargs))
+        obj = NotaFiscalProduto(**kwargs)
+        self.produtos_e_servicos.append(obj)
+        return obj
 
     def adicionar_transporte_volume(self, **kwargs):
         u"""Adiciona uma instancia de Volume de Transporte"""
-        self.transporte_volumes.append(NotaFiscalTransporteVolume(**kwargs))
+        obj = NotaFiscalTransporteVolume(**kwargs)
+        self.transporte_volumes.append(obj)
+        return obj
 
     def adicionar_duplicata(self, **kwargs):
         u"""Adiciona uma instancia de Duplicata"""
-        self.duplicatas.append(NotaFiscalCobrancaDuplicata(**kwargs))
+        obj = NotaFiscalCobrancaDuplicata(**kwargs)
+        self.duplicatas.append(obj)
+        return obj
 
     def adicionar_observacao_contribuinte(self, **kwargs):
         u"""Adiciona uma instancia de Observacao do Contribuinte"""
-        self.observacoes_contribuinte.append(NotaFiscalObservacaoContribuinte(**kwargs))
+        obj = NotaFiscalObservacaoContribuinte(**kwargs)
+        self.observacoes_contribuinte.append(obj)
+        return obj
 
     def adicionar_processo_referenciado(self, **kwargs):
         u"""Adiciona uma instancia de Processo Referenciado"""
-        self.processos_referenciados.append(NotaFiscalProcessoReferenciado(**kwargs))
+        obj = NotaFiscalProcessoReferenciado(**kwargs)
+        self.processos_referenciados.append(obj)
+        return obj
 
     @property
     @memoize
@@ -775,4 +765,39 @@ class NotaFiscalProcessoReferenciado(Entidade):
     #   - Secex/RFB
     #   - Outros
     origem = str()
+
+class NotaFiscalEntregaRetirada(Entidade):
+    # - Tipo de Documento (obrigatorio) - default CNPJ
+    tipo_documento = 'CNPJ'
+
+    # - Numero do Documento (obrigatorio)
+    numero_documento = str()
+
+    # - Endereco
+    #  - Logradouro (obrigatorio)
+    endereco_logradouro = str()
+
+    #  - Numero (obrigatorio)
+    endereco_numero = str()
+
+    #  - Complemento
+    endereco_complemento = str()
+
+    #  - Bairro (obrigatorio)
+    endereco_bairro = str()
+
+    #  - CEP
+    endereco_cep = str()
+
+    #  - Pais (seleciona de lista)
+    endereco_pais = CODIGO_BRASIL
+
+    #  - UF (obrigatorio)
+    endereco_uf = str()
+
+    #  - Municipio (obrigatorio)
+    endereco_municipio = str()
+
+    #  - Telefone
+    endereco_telefone = str()
 

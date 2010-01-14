@@ -10,7 +10,8 @@ Nenhum dos campos deve permitir acentos e/ou cedilhas.
     ...     NotaFiscalProduto, NotaFiscalDeclaracaoImportacao,\
     ...     NotaFiscalDeclaracaoImportacaoAdicao, NotaFiscalTransporteVolume,\
     ...     NotaFiscalTransporteVolumeLacre, NotaFiscalCobrancaDuplicata,\
-    ...     NotaFiscalObservacaoContribuinte, NotaFiscalProcessoReferenciado
+    ...     NotaFiscalObservacaoContribuinte, NotaFiscalProcessoReferenciado,\
+    ...     NotaFiscalEntregaRetirada
 
 - Dados da NF-e
  - Status (controle de estados da NF)
@@ -208,53 +209,7 @@ Nenhum dos campos deve permitir acentos e/ou cedilhas.
     >>> hasattr(NotaFiscal, 'destinatario_remetente')
     True
 
- - Endereco (ver se pode copiar do Cliente)
-  - Logradouro (obrigatorio)
-
-    >>> hasattr(NotaFiscal, 'destinatario_endereco_logradouro')
-    True
-
-  - Numero (obrigatorio)
-
-    >>> hasattr(NotaFiscal, 'destinatario_endereco_numero')
-    True
-
-  - Complemento
-
-    >>> hasattr(NotaFiscal, 'destinatario_endereco_complemento')
-    True
-
-  - Bairro (obrigatorio)
-
-    >>> hasattr(NotaFiscal, 'destinatario_endereco_bairro')
-    True
-
-  - CEP
-
-    >>> hasattr(NotaFiscal, 'destinatario_endereco_cep')
-    True
-
-  - Pais (seleciona de lista)
-
-    >>> hasattr(NotaFiscal, 'destinatario_endereco_pais')
-    True
-
-  - UF (obrigatorio)
-
-    >>> hasattr(NotaFiscal, 'destinatario_endereco_uf')
-    True
-
-  - Municipio (obrigatorio)
-
-    >>> hasattr(NotaFiscal, 'destinatario_endereco_municipio')
-    True
-
-  - Telefone
-
-    >>> hasattr(NotaFiscal, 'destinatario_endereco_telefone')
-    True
-
- - Local Retirada/Entrega
+- Entrega/Retirada
   - Local de retirada diferente do emitente (Sim/Nao)
 
     >>> hasattr(NotaFiscal, 'local_retirada_diferente_emitente')
@@ -263,6 +218,74 @@ Nenhum dos campos deve permitir acentos e/ou cedilhas.
   - Local de entrega diferente do destinatario (Sim/Nao)
 
     >>> hasattr(NotaFiscal, 'local_entrega_diferente_destinatario')
+    True
+
+ - Entrega
+
+    >>> hasattr(NotaFiscal, 'entrega')
+    True
+
+ - Retirada
+
+    >>> hasattr(NotaFiscal, 'retirada')
+    True
+
+ - Campos de Entrega e Retirada
+  - Tipo de Documento (obrigatorio) - default CNPJ
+   - CNPJ
+   - CPF
+
+    >>> hasattr(NotaFiscalEntregaRetirada, 'tipo_documento')
+    True
+
+  - Numero do Documento (obrigatorio)
+
+    >>> hasattr(NotaFiscalEntregaRetirada, 'numero_documento')
+    True
+
+  - Logradouro (obrigatorio)
+
+    >>> hasattr(NotaFiscalEntregaRetirada, 'endereco_logradouro')
+    True
+
+  - Numero (obrigatorio)
+
+    >>> hasattr(NotaFiscalEntregaRetirada, 'endereco_numero')
+    True
+
+  - Complemento
+
+    >>> hasattr(NotaFiscalEntregaRetirada, 'endereco_complemento')
+    True
+
+  - Bairro (obrigatorio)
+
+    >>> hasattr(NotaFiscalEntregaRetirada, 'endereco_bairro')
+    True
+
+  - CEP
+
+    >>> hasattr(NotaFiscalEntregaRetirada, 'endereco_cep')
+    True
+
+  - Pais (seleciona de lista)
+
+    >>> hasattr(NotaFiscalEntregaRetirada, 'endereco_pais')
+    True
+
+  - UF (obrigatorio)
+
+    >>> hasattr(NotaFiscalEntregaRetirada, 'endereco_uf')
+    True
+
+  - Municipio (obrigatorio)
+
+    >>> hasattr(NotaFiscalEntregaRetirada, 'endereco_municipio')
+    True
+
+  - Telefone
+
+    >>> hasattr(NotaFiscalEntregaRetirada, 'endereco_telefone')
     True
 
 - Produtos e Servicos (lista 1 para * / ManyToManyField)

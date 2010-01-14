@@ -5,6 +5,8 @@ from pynfe.utils.flags import ICMS_TIPOS_TRIBUTACAO, ICMS_ORIGENS, ICMS_MODALIDA
 from decimal import Decimal
 
 class Produto(Entidade):
+    """XXX: E provavel que esta entidade sera descartada."""
+
     # Dados do Produto
     # - Descricao (obrigatorio)
     descricao = str()

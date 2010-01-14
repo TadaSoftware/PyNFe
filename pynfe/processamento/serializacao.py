@@ -187,10 +187,53 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
-    def _serializar_produto(self, produto, tag_raiz='prod', retorna_string=True):
-        # Provavelmente nao vai ser feito desta forma, e sim como serializacao do produto
-        # na NF (NotaFiscalProduto)
-        return ''
+    def _serializar_entrega_retirada(self, entrega_retirada, tag_raiz='entrega', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+
+        # Dados da entrega/retirada
+        etree.SubElement(raiz, entrega_retirada.tipo_documento).text = so_numeros(entrega_retirada.numero_documento)
+
+        # Endereço
+        etree.SubElement(raiz, 'xLgr').text = entrega_retirada.endereco_logradouro
+        etree.SubElement(raiz, 'nro').text = entrega_retirada.endereco_numero
+        etree.SubElement(raiz, 'xCpl').text = entrega_retirada.endereco_complemento
+        etree.SubElement(raiz, 'xBairro').text = entrega_retirada.endereco_bairro
+        etree.SubElement(raiz, 'cMun').text = entrega_retirada.endereco_municipio
+        etree.SubElement(raiz, 'xMun').text = obter_municipio_por_codigo(
+                entrega_retirada.endereco_municipio, entrega_retirada.endereco_uf,
+                )
+        etree.SubElement(raiz, 'UF').text = entrega_retirada.endereco_uf
+
+        if retorna_string:
+            return etree.tostring(raiz, pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_produto_servico(self, produto_servico, tag_raiz='det', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+
+        # Produto
+        prod = etree.SubElement(raiz, 'prod')
+        etree.SubElement(prod, 'cProd').text = str(produto_servico.codigo)
+        etree.SubElement(prod, 'cEAN').text = produto_servico.ean
+        etree.SubElement(prod, 'xProd').text = produto_servico.descricao
+        etree.SubElement(prod, 'CFOP').text = produto_servico.cfop
+        etree.SubElement(prod, 'uCom').text = produto_servico.unidade_comercial
+        etree.SubElement(prod, 'qCom').text = '%f'%(produto_servico.quantidade_comercial or 0)
+        etree.SubElement(prod, 'vUnCom').text = '%f'%(produto_servico.valor_unitario_comercial or 0)
+        etree.SubElement(prod, 'vProd').text = '%f'%(produto_servico.valor_total_bruto or 0)
+        etree.SubElement(prod, 'cEANTrib').text = produto_servico.ean_tributavel
+        etree.SubElement(prod, 'uTrib').text = produto_servico.unidade_tributavel
+        etree.SubElement(prod, 'qTrib').text = '%f'%(produto_servico.quantidade_tributavel)
+        etree.SubElement(prod, 'vUnTrib').text = '%f'%(produto_servico.valor_unitario_tributavel)
+
+        # Imposto
+        imposto = etree.SubElement(raiz, 'imposto')
+
+        if retorna_string:
+            return etree.tostring(raiz, pretty_print=True)
+        else:
+            return raiz
 
     def _serializar_notas_fiscal(self, nota_fiscal, tag_raiz='infNFe', retorna_string=True):
         raiz = etree.Element(tag_raiz, versao="2.00")
@@ -222,6 +265,29 @@ class SerializacaoXML(Serializacao):
 
         # Destinatário
         raiz.append(self._serializar_cliente(nota_fiscal.cliente, retorna_string=False))
+
+        # Retirada
+        if nota_fiscal.retirada:
+            raiz.append(self._serializar_entrega_retirada(
+                nota_fiscal.retirada,
+                retorna_string=False,
+                tag_raiz='retirada',
+                ))
+
+        # Entrega
+        if nota_fiscal.entrega:
+            raiz.append(self._serializar_entrega_retirada(
+                nota_fiscal.entrega,
+                retorna_string=False,
+                tag_raiz='entrega',
+                ))
+
+        # Itens
+        for num, item in enumerate(nota_fiscal.produtos_e_servicos):
+            det = self._serializar_produto_servico(item, retorna_string=False)
+            det.attrib['nItem'] = str(num+1)
+
+            raiz.append(det)
 
         # Transporte
         transp = etree.SubElement(raiz, 'transp')

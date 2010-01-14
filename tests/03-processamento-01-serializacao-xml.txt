@@ -4,9 +4,9 @@ PROCESSAMENTO - SERIALIZACAO PARA XML
 Populando fonte de dados
 ------------------------
 
-    >>> import datetime
-    >>> from pynfe.entidades import Emitente, Cliente, NotaFiscal, Produto,\
-    ...     Transportadora 
+    >>> import datetime, decimal
+    >>> from pynfe.entidades import Emitente, Cliente, NotaFiscal, Transportadora
+    >>> from pynfe.entidades.notafiscal import NotaFiscalEntregaRetirada
     >>> from pynfe.entidades.fontes_dados import _fonte_dados
     >>> from pynfe.utils.flags import CODIGO_BRASIL
 
@@ -43,9 +43,6 @@ Popula dependentes da NF
     ...     endereco_telefone='2132011234',
     ... )
 
-    >>> produto1 = Produto(codigo=1, descricao='Tenis Adidas Cinza')
-    >>> produto2 = Produto(codigo=2, descricao='Sapato Ferracini Preto')
-
     >>> transportadora = Transportadora(
     ...     razao_social='WS Cargas S/A',
     ...     tipo_documento='CNPJ',
@@ -66,8 +63,8 @@ Instancia a NF
     ...     modelo=55,
     ...     serie='1',
     ...     numero_nf='1',
-    ...     data_emissao=datetime.date.today(),
-    ...     data_saida_entrada=datetime.date.today(),
+    ...     data_emissao=datetime.date(2010,1,13),
+    ...     data_saida_entrada=datetime.date(2010,1,13),
     ...     natureza_operacao='Venda a vista',
     ...     forma_pagamento=0,
     ...     tipo_impressao_danfe=1, # Retrato
@@ -77,9 +74,53 @@ Instancia a NF
     ...     codigo_numerico_aleatorio='51800512',
     ...     dv_codigo_numerico_aleatorio='3',
     ... )
+    >>> nota_fiscal.retirada = NotaFiscalEntregaRetirada(
+    ...     tipo_documento='CNPJ',
+    ...     numero_documento='99.171.171/0001-94',
+    ...     endereco_logradouro='AV PAULISTA',
+    ...     endereco_numero='12345',
+    ...     endereco_complemento='TERREO',
+    ...     endereco_bairro='CERQUEIRA CESAR',
+    ...     endereco_municipio='3304557',   # Rio de Janeiro
+    ...     endereco_uf='RJ',
+    ... )
+    >>> nota_fiscal.entrega = NotaFiscalEntregaRetirada(
+    ...     tipo_documento='CNPJ',
+    ...     numero_documento='99.299.299/0001-94',
+    ...     endereco_logradouro='AV FARIA LIMA',
+    ...     endereco_numero='1500',
+    ...     endereco_complemento='15 ANDAR',
+    ...     endereco_bairro='PINHEIROS',
+    ...     endereco_municipio='3304557',   # Rio de Janeiro
+    ...     endereco_uf='RJ',
+    ... )
+    >>> nf_prod1 = nota_fiscal.adicionar_produto_servico(
+    ...     codigo='00001',
+    ...     descricao='Agua Mineral',
+    ...     cfop='5101',
+    ...     unidade_comercial='dz',
+    ...     quantidade_comercial=decimal.Decimal('2'),
+    ...     valor_unitario_comercial=decimal.Decimal('10.0'),
+    ...     valor_total_bruto=decimal.Decimal('20.0'),
+    ...     unidade_tributavel='und',
+    ...     quantidade_tributavel=decimal.Decimal('24.0'),
+    ...     valor_unitario_tributavel=decimal.Decimal('3.00'),
+    ... )
+    >>> nf_prod2 = nota_fiscal.adicionar_produto_servico(
+    ...     codigo='00002',
+    ...     descricao='Agua Mineral',
+    ...     cfop='5101',
+    ...     unidade_comercial='pack',
+    ...     quantidade_comercial=decimal.Decimal('5000000'),
+    ...     valor_unitario_comercial=decimal.Decimal('2.0'),
+    ...     valor_total_bruto=decimal.Decimal('10000000.0'),
+    ...     unidade_tributavel='und',
+    ...     quantidade_tributavel=decimal.Decimal('3000000.0'),
+    ...     valor_unitario_tributavel=decimal.Decimal('0.3333'),
+    ... )
 
     >>> _fonte_dados.contar_objetos()
-    6
+    8
 
 Gerar arquivos XML
 ------------------
@@ -218,9 +259,9 @@ Serializando por partes
         <nro>12345</nro>
         <xCpl>TERREO</xCpl>
         <xBairro>CERQUEIRA CESAR</xBairro>
-        <cMun>3550308</cMun>
-        <xMun>SAO PAULO</xMun>
-        <UF>SP</UF>
+        <cMun>3304557</cMun>
+        <xMun>Rio de Janeiro</xMun>
+        <UF>RJ</UF>
       </retirada>
       <entrega>
         <CNPJ>99299299000194</CNPJ>
@@ -228,9 +269,9 @@ Serializando por partes
         <nro>1500</nro>
         <xCpl>15 ANDAR</xCpl>
         <xBairro>PINHEIROS</xBairro>
-        <cMun>3550308</cMun>
-        <xMun>SAO PAULO</xMun>
-        <UF>SP</UF>
+        <cMun>3304557</cMun>
+        <xMun>Rio de Janeiro</xMun>
+        <UF>RJ</UF>
       </entrega>
       <det nItem="1">
         <prod>
@@ -239,13 +280,13 @@ Serializando por partes
           <xProd>Agua Mineral</xProd>
           <CFOP>5101</CFOP>
           <uCom>dz</uCom>
-          <qCom>1000000.0000</qCom>
-          <vUnCom>1</vUnCom>
-          <vProd>10000000.00</vProd>
+          <qCom>2.000000</qCom>
+          <vUnCom>10.000000</vUnCom>
+          <vProd>20.000000</vProd>
           <cEANTrib />
           <uTrib>und</uTrib>
-          <qTrib>12000000.0000</qTrib>
-          <vUnTrib>1</vUnTrib>
+          <qTrib>24.000000</qTrib>
+          <vUnTrib>3.000000</vUnTrib>
         </prod>
         <imposto>
           <ICMS>
@@ -283,13 +324,13 @@ Serializando por partes
           <xProd>Agua Mineral</xProd>
           <CFOP>5101</CFOP>
           <uCom>pack</uCom>
-          <qCom>5000000.0000</qCom>
-          <vUnCom>2</vUnCom>
-          <vProd>10000000.00</vProd>
+          <qCom>5000000.000000</qCom>
+          <vUnCom>2.000000</vUnCom>
+          <vProd>10000000.000000</vProd>
           <cEANTrib />
           <uTrib>und</uTrib>
-          <qTrib>3000000.0000</qTrib>
-          <vUnTrib>0.3333</vUnTrib>
+          <qTrib>3000000.000000</qTrib>
+          <vUnTrib>0.333300</vUnTrib>
         </prod>
         <imposto>
           <ICMS>
