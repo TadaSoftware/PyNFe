@@ -332,7 +332,7 @@ class NotaFiscal(Entidade):
     @property
     @memoize
     def identificador_unico(self):
-        # Monta 'Id' da raiz
+        # Monta 'Id' da tag raiz <infNFe>
         # Ex.: NFe35080599999090910270550010000000011518005123
         return "NFe%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nNF)s%(tpEmis)s%(cNF)s%(cDV)s"%{
                 'uf': CODIGOS_ESTADOS[self.uf],
@@ -440,11 +440,11 @@ class NotaFiscalProduto(Entidade):
     icms_situacao_tributaria = str()
 
     #   - Origem (obrigatorio - seleciona de lista) - ICMS_ORIGENS
-    icms_origem = str()
+    icms_origem = int()
 
     #   - ICMS
     #    - Modalidade de determinacao da BC ICMS (seleciona de lista) - ICMS_MODALIDADES
-    icms_modalidade_determinacao_bc = str()
+    icms_modalidade_determinacao_bc = int()
 
     #    - Percentual reducao da BC ICMS
     icms_percentual_reducao_bc = Decimal()
@@ -735,7 +735,7 @@ class NotaFiscalTransporteVolume(Entidade):
 
 class NotaFiscalTransporteVolumeLacre(Entidade):
     #   - Numero de lacres
-    numero_lacres = str()
+    numero_lacre = str()
 
 class NotaFiscalCobrancaDuplicata(Entidade):
     #  - Numero

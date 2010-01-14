@@ -1102,9 +1102,9 @@ Nenhum dos campos deve permitir acentos e/ou cedilhas.
     >>> hasattr(NotaFiscalTransporteVolume, 'lacres')
     True
 
-   - Numero de lacres
+   - Numero de lacre
 
-    >>> hasattr(NotaFiscalTransporteVolumeLacre, 'numero_lacres')
+    >>> hasattr(NotaFiscalTransporteVolumeLacre, 'numero_lacre')
     True
 
 - Cobranca

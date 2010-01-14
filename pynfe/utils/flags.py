@@ -20,16 +20,16 @@ ICMS_TIPOS_TRIBUTACAO = (
 )
 
 ICMS_ORIGENS = (
-    'Nacional',
-    'Estrangeira - Importacao Direta',
-    'Estrangeira - Adquirida no Mercado Interno',
+    (0, 'Nacional'),
+    (1, 'Estrangeira - Importacao Direta'),
+    (2, 'Estrangeira - Adquirida no Mercado Interno'),
 )
 
 ICMS_MODALIDADES = (
-    'Margem Valor Agregado',
-    'Pauta (valor)',
-    'Preco Tabelado Max. (valor)',
-    'Valor da Operacao',
+    (0, 'Margem Valor Agregado'),
+    (1, 'Pauta (valor)'),
+    (2, 'Preco Tabelado Max. (valor)'),
+    (3, 'Valor da Operacao'),
 )
 
 NF_STATUS = (

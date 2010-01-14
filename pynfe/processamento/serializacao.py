@@ -219,16 +219,39 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'xProd').text = produto_servico.descricao
         etree.SubElement(prod, 'CFOP').text = produto_servico.cfop
         etree.SubElement(prod, 'uCom').text = produto_servico.unidade_comercial
-        etree.SubElement(prod, 'qCom').text = '%f'%(produto_servico.quantidade_comercial or 0)
-        etree.SubElement(prod, 'vUnCom').text = '%f'%(produto_servico.valor_unitario_comercial or 0)
-        etree.SubElement(prod, 'vProd').text = '%f'%(produto_servico.valor_total_bruto or 0)
+        etree.SubElement(prod, 'qCom').text = str(produto_servico.quantidade_comercial or 0)
+        etree.SubElement(prod, 'vUnCom').text = str(produto_servico.valor_unitario_comercial or 0)
+        etree.SubElement(prod, 'vProd').text = str(produto_servico.valor_total_bruto or 0)
         etree.SubElement(prod, 'cEANTrib').text = produto_servico.ean_tributavel
         etree.SubElement(prod, 'uTrib').text = produto_servico.unidade_tributavel
-        etree.SubElement(prod, 'qTrib').text = '%f'%(produto_servico.quantidade_tributavel)
-        etree.SubElement(prod, 'vUnTrib').text = '%f'%(produto_servico.valor_unitario_tributavel)
+        etree.SubElement(prod, 'qTrib').text = str(produto_servico.quantidade_tributavel)
+        etree.SubElement(prod, 'vUnTrib').text = str(produto_servico.valor_unitario_tributavel)
 
         # Imposto
         imposto = etree.SubElement(raiz, 'imposto')
+
+        icms = etree.SubElement(imposto, 'ICMS')
+        icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_situacao_tributaria)
+        etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
+        etree.SubElement(icms_item, 'CST').text = produto_servico.icms_situacao_tributaria
+        etree.SubElement(icms_item, 'modBC').text = str(produto_servico.icms_modalidade_determinacao_bc)
+        etree.SubElement(icms_item, 'vBC').text = str(produto_servico.icms_valor_base_calculo)
+        etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)
+        etree.SubElement(icms_item, 'vICMS').text = str(produto_servico.icms_valor)
+
+        pis = etree.SubElement(imposto, 'PIS')
+        pis_item = etree.SubElement(pis, 'PISAliq')
+        etree.SubElement(pis_item, 'CST').text = str(produto_servico.pis_situacao_tributaria)
+        etree.SubElement(pis_item, 'vBC').text = str(produto_servico.pis_valor_base_calculo)
+        etree.SubElement(pis_item, 'pPIS').text = str(produto_servico.pis_aliquota_percentual)
+        etree.SubElement(pis_item, 'vPIS').text = str(produto_servico.pis_valor)
+
+        cofins = etree.SubElement(imposto, 'COFINS')
+        cofins_item = etree.SubElement(cofins, 'COFINSAliq')
+        etree.SubElement(cofins_item, 'CST').text = str(produto_servico.cofins_situacao_tributaria)
+        etree.SubElement(cofins_item, 'vBC').text = str(produto_servico.cofins_valor_base_calculo)
+        etree.SubElement(cofins_item, 'pCOFINS').text = str(produto_servico.cofins_aliquota_percentual)
+        etree.SubElement(cofins_item, 'vCOFINS').text = str(produto_servico.cofins_valor)
 
         if retorna_string:
             return etree.tostring(raiz, pretty_print=True)
@@ -289,9 +312,62 @@ class SerializacaoXML(Serializacao):
 
             raiz.append(det)
 
+        # Totais
+        total = etree.SubElement(raiz, 'total')
+        icms_total = etree.SubElement(total, 'ICMSTot')
+        etree.SubElement(icms_total, 'vBC').text = str(nota_fiscal.totais_icms_base_calculo)
+        etree.SubElement(icms_total, 'vICMS').text = str(nota_fiscal.totais_icms_total)
+        etree.SubElement(icms_total, 'vBCST').text = str(nota_fiscal.totais_icms_st_base_calculo)
+        etree.SubElement(icms_total, 'vST').text = str(nota_fiscal.totais_icms_st_total)
+        etree.SubElement(icms_total, 'vProd').text = str(nota_fiscal.totais_icms_total_produtos_e_servicos)
+        etree.SubElement(icms_total, 'vFrete').text = str(nota_fiscal.totais_icms_total_frete)
+        etree.SubElement(icms_total, 'vSeg').text = str(nota_fiscal.totais_icms_total_seguro)
+        etree.SubElement(icms_total, 'vDesc').text = str(nota_fiscal.totais_icms_total_desconto)
+        etree.SubElement(icms_total, 'vII').text = str(nota_fiscal.totais_icms_total_ii)
+        etree.SubElement(icms_total, 'vIPI').text = str(nota_fiscal.totais_icms_total_ipi)
+        etree.SubElement(icms_total, 'vPIS').text = str(nota_fiscal.totais_icms_pis)
+        etree.SubElement(icms_total, 'vCOFINS').text = str(nota_fiscal.totais_icms_cofins)
+        etree.SubElement(icms_total, 'vOutro').text = str(nota_fiscal.totais_icms_outras_despesas_acessorias)
+        etree.SubElement(icms_total, 'vNF').text = str(nota_fiscal.totais_icms_total_nota)
+
         # Transporte
         transp = etree.SubElement(raiz, 'transp')
+        etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
+        
+        # Transportadora
         transp.append(self._serializar_transportadora(nota_fiscal.transporte_transportadora, retorna_string=False))
+
+        # Veículo
+        veiculo = etree.SubElement(transp, 'veicTransp')
+        etree.SubElement(veiculo, 'placa').text = nota_fiscal.transporte_veiculo_placa
+        etree.SubElement(veiculo, 'UF').text = nota_fiscal.transporte_veiculo_uf
+        etree.SubElement(veiculo, 'RNTC').text = nota_fiscal.transporte_veiculo_rntc
+
+        # Reboque
+        reboque = etree.SubElement(transp, 'reboque')
+        etree.SubElement(reboque, 'placa').text = nota_fiscal.transporte_reboque_placa
+        etree.SubElement(reboque, 'UF').text = nota_fiscal.transporte_reboque_uf
+        etree.SubElement(reboque, 'RNTC').text = nota_fiscal.transporte_reboque_rntc
+
+        # Volumes
+        for volume in nota_fiscal.transporte_volumes:
+            vol = etree.SubElement(transp, 'vol')
+            etree.SubElement(vol, 'qVol').text = str(volume.quantidade)
+            etree.SubElement(vol, 'esp').text = volume.especie
+            etree.SubElement(vol, 'marca').text = volume.marca
+            etree.SubElement(vol, 'nVol').text = volume.numeracao
+            etree.SubElement(vol, 'pesoL').text = str(volume.peso_liquido)
+            etree.SubElement(vol, 'pesoB').text = str(volume.peso_bruto)
+
+            # Lacres
+            lacres = etree.SubElement(vol, 'lacres')
+            for lacre in volume.lacres:
+                etree.SubElement(lacres, 'nLacre').text = lacre.numero_lacre
+
+        # Informações adicionais
+        info_ad = etree.SubElement(raiz, 'infAdic')
+        etree.SubElement(info_ad, 'infAdFisco').text = nota_fiscal.informacoes_adicionais_interesse_fisco
+        etree.SubElement(info_ad, 'infCpl').text = nota_fiscal.informacoes_complementares_interesse_contribuinte
 
         # 'Id' da tag raiz
         # Ex.: NFe35080599999090910270550010000000011518005123
