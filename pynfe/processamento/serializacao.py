@@ -38,6 +38,8 @@ class Serializacao(object):
     Nao deve ser instanciada diretamente!"""
 
     _fonte_dados = None
+    _ambiente = 1
+    _nome_aplicacao = 'PyNFe'
 
     def __new__(cls, *args, **kwargs):
         if cls == Serializacao:
@@ -45,8 +47,9 @@ class Serializacao(object):
         else:
             return super(Serializacao, cls).__new__(cls, *args, **kwargs)
 
-    def __init__(self, fonte_dados):
+    def __init__(self, fonte_dados, homologacao=False):
         self._fonte_dados = fonte_dados
+        self._ambiente = homologacao and 2 or 1
 
     def exportar(self, destino, **kwargs):
         """Gera o(s) arquivo(s) de exportacao a partir da Nofa Fiscal eletronica
@@ -190,23 +193,39 @@ class SerializacaoXML(Serializacao):
         return ''
 
     def _serializar_notas_fiscal(self, nota_fiscal, tag_raiz='infNFe', retorna_string=True):
-        raiz = etree.Element(tag_raiz)
+        raiz = etree.Element(tag_raiz, versao="1.10")
 
         # Dados da Nota Fiscal
         ide = etree.SubElement(raiz, 'ide')
         etree.SubElement(ide, 'cUF').text = CODIGOS_ESTADOS[nota_fiscal.uf]
+        etree.SubElement(ide, 'cNF').text = '' # FIXME
         etree.SubElement(ide, 'natOp').text = nota_fiscal.natureza_operacao
+        etree.SubElement(ide, 'indPag').text = str(nota_fiscal.forma_pagamento)
         etree.SubElement(ide, 'mod').text = str(nota_fiscal.modelo)
         etree.SubElement(ide, 'serie').text = nota_fiscal.serie
         etree.SubElement(ide, 'nNF').text = nota_fiscal.numero_nf
         etree.SubElement(ide, 'dEmi').text = nota_fiscal.data_emissao.strftime('%Y-%m-%d')
         etree.SubElement(ide, 'dSaiEnt').text = nota_fiscal.data_saida_entrada.strftime('%Y-%m-%d')
+        etree.SubElement(ide, 'tpNF').text = str(nota_fiscal.tipo_documento)
+        etree.SubElement(ide, 'cMunFG').text = nota_fiscal.municipio
+        etree.SubElement(ide, 'tpImp').text = str(nota_fiscal.tipo_impressao_danfe)
+        etree.SubElement(ide, 'tpEmis').text = str(nota_fiscal.forma_emissao)
+        etree.SubElement(ide, 'cDV').text = '3' # FIXME
+        etree.SubElement(ide, 'tpAmb').text = str(self._ambiente)
+        etree.SubElement(ide, 'finNFe').text = str(nota_fiscal.finalidade_emissao)
+        etree.SubElement(ide, 'procEmi').text = str(nota_fiscal.processo_emissao)
+        etree.SubElement(ide, 'verProc').text = '%s %s'%(self._nome_aplicacao,
+                nota_fiscal.versao_processo_emissao)
 
         # Emitente
         raiz.append(self._serializar_emitente(nota_fiscal.emitente, retorna_string=False))
 
         # Destinatário
         raiz.append(self._serializar_cliente(nota_fiscal.cliente, retorna_string=False))
+
+        # 'Id' da tag raiz
+        # Ex.: NFe35080599999090910270550010000000015180051273
+        raiz.attrib['Id'] = nota_fiscal.identificador_unico
 
         if retorna_string:
             return etree.tostring(raiz, pretty_print=True)

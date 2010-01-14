@@ -69,6 +69,11 @@ Instancia a NF
     ...     data_emissao=datetime.date.today(),
     ...     data_saida_entrada=datetime.date.today(),
     ...     natureza_operacao='Venda a vista',
+    ...     forma_pagamento=0,
+    ...     tipo_impressao_danfe=1, # Retrato
+    ...     forma_emissao=1, # Normal
+    ...     finalidade_emissao=1,
+    ...     municipio='3550308',
     ... )
 
     >>> _fonte_dados.contar_objetos()
@@ -82,7 +87,7 @@ Gerar arquivos XML
     >>> CAMINHO_SAIDA = os.path.join(CUR_DIR, 'tests', 'saida')
 
     >>> from pynfe.processamento.serializacao import SerializacaoXML
-    >>> serializador = SerializacaoXML(_fonte_dados)
+    >>> serializador = SerializacaoXML(_fonte_dados, homologacao=True)
 
 Serializando por partes
 
@@ -143,8 +148,11 @@ Serializando por partes
 
 - Gera os arquivos XML a partir dos dados das instancias da NF-e
 
+    >>> print nota_fiscal.identificador_unico
+    NFe52100112345678000190550010000000015180051273
+
     >>> print serializador._serializar_notas_fiscal(nota_fiscal)
-    <infNFe Id="NFe35080599999090910270550010000000015180051273" versao="1.10">
+    <infNFe versao="1.10" Id="NFe52100112345678000190550010000000015180051273">
       <ide>
         <cUF>52</cUF>
         <cNF>518005127</cNF>
@@ -163,7 +171,7 @@ Serializando por partes
         <tpAmb>2</tpAmb>
         <finNFe>1</finNFe>
         <procEmi>0</procEmi>
-        <verProc>NF-eletronica.com</verProc>
+        <verProc>PyNFe 0.1</verProc>
       </ide>
       <emit>
         <CNPJ>12345678000190</CNPJ>

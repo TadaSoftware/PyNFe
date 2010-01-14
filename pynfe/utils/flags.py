@@ -47,9 +47,16 @@ NF_TIPOS_DOCUMENTO = (
     (1, 'Saida'),
 )
 
+NF_PROCESSOS_EMISSAO = (
+    (0, u'Emissão de NF-e com aplicativo do contribuinte'),
+    (1, u'Emissão de NF-e avulsa pelo Fisco'),
+    (2, u'Emissão de NF-e avulsa, pelo contribuinte com seu certificado digital, através do site do Fisco'),
+    (3, u'Emissão NF-e pelo contribuinte com aplicativo fornecido pelo Fisco'),
+)
+
 NF_TIPOS_IMPRESSAO_DANFE = (
-    'Retrato',
-    'Paisagem',
+    (1, 'Retrato'),
+    (2, 'Paisagem'),
 )
 
 NF_FORMAS_PAGAMENTO = (
@@ -59,11 +66,11 @@ NF_FORMAS_PAGAMENTO = (
 )
 
 NF_FORMAS_EMISSAO = (
-    'Normal',
-    'Contingencia',
-    'Contingencia com SCAN',
-    'Contingencia via DPEC',
-    'Contingencia FS-DA',
+    (1, 'Normal'),
+    (2, 'Contingencia'),
+    (3, 'Contingencia com SCAN'),
+    (4, 'Contingencia via DPEC'),
+    (5, 'Contingencia FS-DA'),
 )
 
 NF_FINALIDADES_EMISSAO = (
@@ -82,6 +89,11 @@ NF_PRODUTOS_ESPECIFICOS = (
     'Medicamento',
     'Armamento',
     'Combustivel',
+)
+
+NF_AMBIENTES = (
+    (1, 'Producao'),
+    (2, 'Homologacao'),
 )
 
 IPI_TIPOS_TRIBUTACAO = (

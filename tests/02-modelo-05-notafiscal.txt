@@ -58,6 +58,20 @@ Nenhum dos campos deve permitir acentos e/ou cedilhas.
     >>> hasattr(NotaFiscal, 'tipo_documento')
     True
 
+  - Processo de emissão da NF-e
+   - 0 - emissão de NF-e com aplicativo do contribuinte;
+   - 1 - emissão de NF-e avulsa pelo Fisco;
+   - 2 - emissão de NF-e avulsa, pelo contribuinte com seu certificado digital, através do site do Fisco;
+   - 3 - emissão NF-e pelo contribuinte com aplicativo fornecido pelo Fisco.
+
+    >>> hasattr(NotaFiscal, 'processo_emissao')
+    True
+
+  - Versao do Processo de emissao da NF-e
+
+    >>> hasattr(NotaFiscal, 'versao_processo_emissao')
+    True
+
   - Tipo impressao DANFE (obrigatorio - seleciona de lista)
    - Retrato
    - Paisagem

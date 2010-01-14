@@ -1,10 +1,14 @@
+# -*- coding: utf-8 -*-
 from base import Entidade
+from pynfe import get_version
 from pynfe.utils.flags import NF_STATUS, NF_TIPOS_DOCUMENTO, NF_TIPOS_IMPRESSAO_DANFE,\
         NF_FORMAS_PAGAMENTO, NF_FORMAS_EMISSAO, NF_FINALIDADES_EMISSAO,\
         NF_REFERENCIADA_TIPOS, NF_PRODUTOS_ESPECIFICOS, ICMS_TIPOS_TRIBUTACAO,\
         ICMS_ORIGENS, ICMS_MODALIDADES, IPI_TIPOS_TRIBUTACAO, IPI_TIPOS_CALCULO,\
         PIS_TIPOS_TRIBUTACAO, PIS_TIPOS_CALCULO, COFINS_TIPOS_TRIBUTACAO,\
-        COFINS_TIPOS_CALCULO, MODALIDADES_FRETE, ORIGENS_PROCESSO, CODIGO_BRASIL
+        COFINS_TIPOS_CALCULO, MODALIDADES_FRETE, ORIGENS_PROCESSO, CODIGO_BRASIL,\
+        NF_PROCESSOS_EMISSAO, CODIGOS_ESTADOS
+from pynfe.utils import so_numeros, memoize
 
 from decimal import Decimal
 
@@ -30,14 +34,20 @@ class NotaFiscal(Entidade):
     # - Tipo do Documento (obrigatorio - seleciona de lista) - NF_TIPOS_DOCUMENTO
     tipo_documento = int()
 
+    # - Processo de emissão da NF-e (obrigatorio - seleciona de lista) - NF_PROCESSOS_EMISSAO
+    processo_emissao = 0
+
+    # - Versao do processo de emissão da NF-e
+    versao_processo_emissao = get_version()
+
     # - Tipo impressao DANFE (obrigatorio - seleciona de lista) - NF_TIPOS_IMPRESSAO_DANFE
-    tipo_impressao_danfe = str()
+    tipo_impressao_danfe = int()
 
     # - Data de saida/entrada
     data_saida_entrada = None
 
     # - Forma de pagamento  (obrigatorio - seleciona de lista) - NF_FORMAS_PAGAMENTO
-    forma_pagamento = str()
+    forma_pagamento = int()
 
     # - Forma de emissao (obrigatorio - seleciona de lista) - NF_FORMAS_EMISSAO
     forma_emissao = str()
@@ -321,6 +331,22 @@ class NotaFiscal(Entidade):
         u"""Adiciona uma instancia de Processo Referenciado"""
         self.processos_referenciados.append(NotaFiscalProcessoReferenciado(**kwargs))
 
+    @property
+    @memoize
+    def identificador_unico(self):
+        # Monta 'Id' da raiz
+        # Ex.: NFe35080599999090910270550010000000015180051273
+        return "NFe%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nNF)s%(cNF)s%(cDV)s"%{
+                'uf': CODIGOS_ESTADOS[self.uf],
+                'ano': self.data_emissao.strftime('%y'),
+                'mes': self.data_emissao.strftime('%m'),
+                'cnpj': so_numeros(self.emitente.cnpj),
+                'mod': self.modelo,
+                'serie': str(self.serie).zfill(3),
+                'nNF': str(self.numero_nf).zfill(9),
+                'cNF': '518005127'.zfill(9),    # FIXME
+                'cDV': '3',                     # FIXME
+                }
 
 class NotaFiscalReferenciada(Entidade):
     # - Tipo (seleciona de lista) - NF_REFERENCIADA_TIPOS
