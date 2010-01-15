@@ -41,24 +41,26 @@ modelo:
   ---------------------------------------------------------------------
 
 
-  --------------------------------------------------------------------------
-  |                              PROCESSAMENTO                             |
-  --------------------------------------------------------------------------
-  |                                                                        |
-  | -------------------  --------------   -------------------------------- |
-  | | SerializacaoXML |  | Assinatura |   | Comunicacao                  | |
-  | -------------------  --------------   -------------------------------- |
-  | | exportar()      |  | assinar()  |   | transmitir()                 | |
-  | | importar()      |  --------------   | cancelar()                   | |
-  | -------------------                   | situacao_nfe()               | |
-  |                     -------------     | status_servico()             | |
-  |   --------------    | Validacao |     | consultar_cadastro()         | |
-  |   | DANFE      |    -------------     | inutilizar_faixa_numeracao() | |
-  |   --------------    | validar() |     -------------------------------- |
-  |   | imprimir() |    -------------                                      |
-  |   --------------                                                       |
-  |                                                                        |
-  --------------------------------------------------------------------------
+  ----------------------------------------------------------------------------
+  |                               PROCESSAMENTO                              |
+  ----------------------------------------------------------------------------
+  |                                                                          |
+  | -------------------   --------------    -------------------------------- |
+  | | SerializacaoXML |   | Assinatura |    | Comunicacao                  | |
+  | -------------------   --------------    -------------------------------- |
+  | | exportar()      |   | assinar()  |    | transmitir()                 | |
+  | | importar()      |   --------------    | cancelar()                   | |
+  | -------------------                     | situacao_nfe()               | |
+  |                 ----------------------  | status_servico()             | |
+  | --------------  | Validacao          |  | consultar_cadastro()         | |
+  | | DANFE      |  ----------------------  | inutilizar_faixa_numeracao() | |
+  | --------------  | validar_arquivos() |  -------------------------------- |
+  | | imprimir() |  | validar_xml()      |                                   |
+  | --------------  | validar_etree()    |                                   |
+  |                 | validar_objetos()  |                                   |
+  |                 ----------------------                                   |
+  |                                                                          |
+  ----------------------------------------------------------------------------
 
 Os pacotes da biblioteca sao:
 
@@ -75,7 +77,8 @@ Os pacotes da biblioteca sao:
     >>> set([attr for attr in dir(entidades) if not attr.startswith('__')]) == set([
     ...     'Cliente', 'Emitente', 'LoteNotaFiscal', 'NotaFiscal', 'Produto',
     ...     'Transportadora', 'base', 'cliente', 'emitente', 'lotes', 'notafiscal',
-    ...     'produto', 'transportadora', 'fontes_dados', 'FonteDados'])
+    ...     'produto', 'transportadora', 'fonte_dados', '_fonte_dados','certificado',
+    ...     'CertificadoA1'])
     True
 
 - processamento (contem todas as funcionalidades de processamento da

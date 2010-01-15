@@ -64,48 +64,30 @@ class Serializacao(object):
         raise Exception('Metodo nao implementado')
 
 class SerializacaoXML(Serializacao):
-    def exportar(self, destino, **kwargs):
+    def exportar(self, destino=None, retorna_string=False, **kwargs):
         """Gera o(s) arquivo(s) de Nofa Fiscal eletronica no padrao oficial da SEFAZ
         e Receita Federal, para ser(em) enviado(s) para o webservice ou para ser(em)
         armazenado(s) em cache local."""
 
+        # No raiz do XML de saida
+        raiz = etree.Element('NFe', xmlns="http://www.portalfiscal.inf.br/nfe")
+
         # Carrega lista de Notas Fiscais
         notas_fiscais = self._fonte_dados.obter_lista(_classe=NotaFiscal, **kwargs)
 
-        saida = []
+        for nf in notas_fiscais:
+            raiz.append(self._serializar_notas_fiscal(nf, retorna_string=False))
 
-        # Dados do emitente
-        saida.append(self._serializar_emitente(self._obter_emitente_de_notas_fiscais(notas_fiscais)))
-
-        # Certificado Digital? XXX
-
-        # Clientes
-        #saida.append(self._serializar_clientes(**kwargs))
-
-        # Transportadoras
-        #saida.append(self._serializar_transportadoras(**kwargs))
-
-        # Produtos
-        #saida.append(self._serializar_produtos(**kwargs))
-
-        # Lote de Notas Fiscais
-        #saida.append(self._serializar_notas_fiscais(**kwargs))
+        if retorna_string:
+            return etree.tostring(raiz, pretty_print=True)
+        else:
+            return raiz
 
     def importar(self, origem):
         """Cria as instancias do PyNFe a partir de arquivos XML no formato padrao da
         SEFAZ e Receita Federal."""
 
         raise Exception('Metodo nao implementado')
-
-    def _obter_emitente_de_notas_fiscais(self, notas_fiscais):
-        lista = list(set([nf.emitente for nf in notas_fiscais if nf.emitente]))
-
-        if len(lista) == 0:
-            raise NenhumObjetoEncontrado('Nenhum objeto foi encontrado!')
-        elif len(lista) > 1:
-            raise MuitosObjetosEncontrados('Muitos objetos foram encontrados!')
-
-        return lista[0]
 
     def _serializar_emitente(self, emitente, tag_raiz='emit', retorna_string=True):
         raiz = etree.Element(tag_raiz)
@@ -335,7 +317,10 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
         
         # Transportadora
-        transp.append(self._serializar_transportadora(nota_fiscal.transporte_transportadora, retorna_string=False))
+        transp.append(self._serializar_transportadora(
+            nota_fiscal.transporte_transportadora,
+            retorna_string=False,
+            ))
 
         # Veículo
         veiculo = etree.SubElement(transp, 'veicTransp')

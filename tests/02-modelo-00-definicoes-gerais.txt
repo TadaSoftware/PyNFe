@@ -9,7 +9,7 @@ Todas as entidades devem referenciar uma Fonte de Dados, de forma a evitar
 redundancia de dados (com o objetivo de melhorar o desempenho e possibilitar
 o uso de cache de persistencia de dados serializados).
 
-    >>> from pynfe.entidades import FonteDados
+    >>> from pynfe.entidades.fonte_dados import FonteDados
     >>> fonte_dados = FonteDados()
 
 Nao eh da funcao do PyNFe efetuar a persistencia dos objetos, mas a classe

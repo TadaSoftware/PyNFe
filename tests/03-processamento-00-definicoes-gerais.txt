@@ -7,11 +7,6 @@ Validar NF-e
 - Efetuar validacoes dos XSD no(s) XML(s) gerado(s)
 - Validar nota_fiscal.dv_codigo_numerico_aleatorio (ver pagina 85 do manual de integracao)
 
-Assinar NF-e
-------------
-
-- Na hora de assinar, selecionar um Certificado Digital
-
 
 Transmitir NF-e (ou lote de NF-e`s)
 -----------------------------------

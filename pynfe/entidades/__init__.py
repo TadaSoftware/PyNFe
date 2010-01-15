@@ -4,5 +4,6 @@ from cliente import Cliente
 from transportadora import Transportadora
 from notafiscal import NotaFiscal
 from lotes import LoteNotaFiscal
-from fontes_dados import FonteDados
+from fonte_dados import _fonte_dados
+from certificado import CertificadoA1
 

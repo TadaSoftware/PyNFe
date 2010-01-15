@@ -291,7 +291,7 @@ class NotaFiscal(Entidade):
         super(NotaFiscal, self).__init__(*args, **kwargs)
 
     def __str__(self):
-        return ' '.join([self.modelo, self.serie, self.numero_nf])
+        return ' '.join([str(self.modelo), self.serie, self.numero_nf])
 
     def adicionar_nota_fiscal_referenciada(self, **kwargs):
         u"""Adiciona uma instancia de Nota Fisca referenciada"""
