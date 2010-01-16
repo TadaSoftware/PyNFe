@@ -1,0 +1,25 @@
+Sobre os autores deste e outros créditos
+========================================
+
+O PyNFe foi criado por Marinho Brandão <marinho at gmail.com> e seu
+desenvolvimento só foi possível graças à massiva colaboração de pessoas,
+empresas e outros projetos livres para o mesmo fim, disponívels para outras
+linguagens.
+
+A TaugaRS Sistemas <http://taugars.com.br/> gentil e voluntariamente forneceu o
+código-fonte de seu pacote já testado e maduro para servir de base de apoio
+neste processo, assim como seu know-how de mais de 2 anos em NF-eletronicas.
+Por esse motivo, encontra-se em igual ou maior importância que a do criador, o
+desenvolvedor Ari Caldeira e o restante da diretoria desta empresa.
+
+Outra fonte importante de informação foi do projeto de componentes para Delphi
+voltados para automação comercial ACBr <http://acbr.sourceforge.net/>, que
+inclui um componente que tem a mesma finalidade que o PyNFe.
+
+Outras pessoas que devem ser referenciadas por sua colaboração, seja através de
+know-how e debates, seja através de código enviado para colaborar:
+
+    - Diogo Daniel (Prosig Sistemas)
+    - Antonio Prado (Antonio Prado Sistemas)
+    - Italo Maia <italomaia at gmail.com>
+

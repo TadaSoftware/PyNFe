@@ -1,0 +1,25 @@
+PROCESSAMENTO - ASSINATURA DE XML
+=================================
+
+Carregando Certificado Digital tipo A1
+--------------------------------------
+
+    >>> from pynfe.entidades import CertificadoA1
+
+Assinando NF-e
+--------------
+
+    >>> from pynfe.processamento import AssinaturaC1
+
+Na hora de assinar, selecionar um Certificado Digital
+
+    >>>
+
+A assinatura deve ser feita em quatro tipos diferentes de origem do XML:
+
+- Arquivos
+- 
+
+- Utilizar pyXMLSec para isso
+ - verificar qual eh a integracao do PyXMLSec com o lxml.etree
+

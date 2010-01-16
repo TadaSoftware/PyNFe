@@ -45,21 +45,26 @@ modelo:
   |                               PROCESSAMENTO                              |
   ----------------------------------------------------------------------------
   |                                                                          |
-  | -------------------   --------------    -------------------------------- |
-  | | SerializacaoXML |   | Assinatura |    | Comunicacao                  | |
-  | -------------------   --------------    -------------------------------- |
-  | | exportar()      |   | assinar()  |    | transmitir()                 | |
-  | | importar()      |   --------------    | cancelar()                   | |
-  | -------------------                     | situacao_nfe()               | |
-  |                 ----------------------  | status_servico()             | |
-  | --------------  | Validacao          |  | consultar_cadastro()         | |
-  | | DANFE      |  ----------------------  | inutilizar_faixa_numeracao() | |
-  | --------------  | validar_arquivos() |  -------------------------------- |
-  | | imprimir() |  | validar_xml()      |                                   |
-  | --------------  | validar_etree()    |                                   |
-  |                 | validar_objetos()  |                                   |
-  |                 ----------------------                                   |
-  |                                                                          |
+  | ------------------    --------------    -------------------------------- |
+  | | Serializacao   |    | DANFE      |    | Comunicacao                  | |
+  | ------------------    --------------    -------------------------------- |
+  | | exportar()     |    | imprimir() |    | transmitir()                 | |
+  | | importar()     |    --------------    | cancelar()                   | |
+  | ------------------                      | situacao_nfe()               | |
+  |                                         | status_servico()             | |
+  | ----------------------                  | consultar_cadastro()         | |
+  | | Validacao          |                  | inutilizar_faixa_numeracao() | |
+  | ----------------------                  -------------------------------- |
+  | | validar_arquivos() |                                                   |
+  | | validar_xml()      |                                                   |
+  | | validar_etree()    |    ----------------------                         |
+  | | validar_objetos()  |    | Assinatura         |                         |
+  | ----------------------    ----------------------                         |
+  |                           | assinar_arquivos() |                         |
+  |                           | assinar_xml()      |                         |
+  |                           | assinar_etree()    |                         |
+  |                           | assinar_objetos()  |                         |
+  |                           ----------------------                         |
   ----------------------------------------------------------------------------
 
 Os pacotes da biblioteca sao:
