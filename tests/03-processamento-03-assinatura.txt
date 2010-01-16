@@ -6,19 +6,41 @@ Carregando Certificado Digital tipo A1
 
     >>> from pynfe.entidades import CertificadoA1
 
+    >>> certificado = CertificadoA1(caminho_arquivo='tests/certificado.pfx')
+
 Assinando NF-e
 --------------
 
-    >>> from pynfe.processamento import AssinaturaC1
+    >>> from pynfe.processamento import AssinaturaA1
 
 Na hora de assinar, selecionar um Certificado Digital
 
-    >>>
+    >>> assinatura = AssinaturaA1(certificado, 'senha')
+
+TODO: A senha deveria ser criptografada de forma a evitar que alguem entre nesse
+processo e a capture.
 
 A assinatura deve ser feita em quatro tipos diferentes de origem do XML:
 
 - Arquivos
-- 
+
+    >>> hasattr(AssinaturaA1, 'assinar_arquivos')
+    True
+
+- String de XML
+
+    >>> hasattr(AssinaturaA1, 'assinar_xml')
+    True
+
+- Instancia de lxml.etree
+
+    >>> hasattr(AssinaturaA1, 'assinar_etree')
+    True
+
+- Instancias do PyNFe
+
+    >>> hasattr(AssinaturaA1, 'assinar_objetos')
+    True
 
 - Utilizar pyXMLSec para isso
  - verificar qual eh a integracao do PyXMLSec com o lxml.etree

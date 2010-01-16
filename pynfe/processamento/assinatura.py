@@ -4,8 +4,12 @@ class Assinatura(object):
     """Classe abstrata responsavel por definir os metodos e logica das classes
     de assinatura digital."""
 
-    def __init__(self, certificado):
+    certificado = None
+    senha = None
+
+    def __init__(self, certificado, senha):
         self.certificado = certificado
+        self.senha = senha
 
     def assinar_arquivos(self, caminho_raiz):
         """Efetua a assinatura dos arquivos XML informados"""
@@ -29,8 +33,21 @@ class Assinatura(object):
         """Efetua a assinatura em instancias do PyNFe"""
         pass
 
+    def verificar_arquivos(self, caminho_raiz):
+        pass
+
+    def verificar_xml(self, xml):
+        pass
+
+    def verificar_etree(self, raiz):
+        pass
+
+    def verificar_objetos(self, objetos):
+        pass
+
 class AssinaturaA1(Assinatura):
     """Classe abstrata responsavel por efetuar a assinatura do certificado
     digital no XML informado."""
     
     pass
+
