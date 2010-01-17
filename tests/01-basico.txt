@@ -55,12 +55,12 @@ modelo:
   | ----------------------                  | consultar_cadastro()         | |
   | | Validacao          |                  | inutilizar_faixa_numeracao() | |
   | ----------------------                  -------------------------------- |
-  | | validar_arquivos() |                                                   |
+  | | validar_arquivo()  |                                                   |
   | | validar_xml()      |                                                   |
   | | validar_etree()    |    ----------------------                         |
   | | validar_objetos()  |    | Assinatura         |                         |
   | ----------------------    ----------------------                         |
-  |                           | assinar_arquivos() |                         |
+  |                           | assinar_arquivo()  |                         |
   |                           | assinar_xml()      |                         |
   |                           | assinar_etree()    |                         |
   |                           | assinar_objetos()  |                         |

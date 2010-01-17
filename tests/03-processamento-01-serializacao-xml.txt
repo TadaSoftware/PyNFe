@@ -497,6 +497,12 @@ Exportacao completa
 
     >>> xml = serializador.exportar(modelo=55)
 
+    >>> from lxml import etree
+    
+    >>> fp = file('tests/saida/nfe-1.xml', 'w')
+    >>> fp.write(etree.tostring(xml, pretty_print=True, xml_declaration=True, encoding='utf-8'))
+    >>> fp.close()
+
 - Quando gerados me lote, apenas o primeiro arquivo deve ter o cabecalho
   padrao do XML 1.0
  - <?xml version="1.0" encoding="UTF-8"?>
