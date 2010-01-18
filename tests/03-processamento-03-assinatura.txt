@@ -22,7 +22,7 @@ processo e a capture.
 
 A assinatura deve ser feita em quatro tipos diferentes de origem do XML:
 
-- Arquivos
+- Arquivo
 
     >>> assinatura.assinar_arquivo('tests/saida/nfe-1.xml')
     True
@@ -48,4 +48,13 @@ A assinatura deve ser feita em quatro tipos diferentes de origem do XML:
 Verificando assinatura
 ----------------------
 
+TODO
+
+Da mesma forma que na assinatura, a verificacao deve suportar os seguintes
+formatos de dados:
+
+- Arquivos
+- String de XML
+- Instancias do PyNFe
+- Instancia de lxml.etree
 
