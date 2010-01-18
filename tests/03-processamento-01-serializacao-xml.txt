@@ -8,7 +8,7 @@ Populando fonte de dados
     >>> from decimal import Decimal
     >>> from pynfe.entidades import Emitente, Cliente, NotaFiscal, Transportadora
     >>> from pynfe.entidades.notafiscal import NotaFiscalEntregaRetirada
-    >>> from pynfe.entidades.fontes_dados import _fonte_dados
+    >>> from pynfe.entidades.fonte_dados import _fonte_dados
     >>> from pynfe.utils.flags import CODIGO_BRASIL
 
 Popula dependentes da NF
