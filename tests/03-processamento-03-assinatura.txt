@@ -15,7 +15,7 @@ Assinando NF-e
 
 Na hora de assinar, selecionar um Certificado Digital
 
-    >>> assinatura = AssinaturaA1(certificado, 'senha')
+    >>> assinatura = AssinaturaA1(certificado, senha='associacao')
 
 TODO: A senha deveria ser criptografada de forma a evitar que alguem entre nesse
 processo e a capture.

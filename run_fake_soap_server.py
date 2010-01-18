@@ -1,12 +1,13 @@
 from soaplib.wsgi_soap import SimpleWSGISoapApp
 from soaplib.service import soapmethod
+from soaplib.serializers.primitive import String, Integer, Array, Null
 
 class ServidorNFEFalso(SimpleWSGISoapApp):
-    from soaplib.serializers.primitive import String, Integer, Array, Null
-
-    @soapmethod(String, Integer, _returns=String)
-    def ping(self, palavra, vezes):
-        return ','.join([palavra for i in range(vezes)])
+    @soapmethod(String, Integer, _returns=Array(String))
+    def ping(self, nome, vezes):
+        ret = [nome for i in range(vezes)]
+        print ret
+        return ret
 
 if __name__ == '__main__':
     porta = 8080

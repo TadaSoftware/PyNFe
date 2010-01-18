@@ -91,7 +91,7 @@ Os pacotes da biblioteca sao:
 
     >>> from pynfe import processamento
     >>> set([attr for attr in dir(processamento) if not attr.startswith('__')]) == set([
-    ...     'AssinaturaA1', 'Comunicacao', 'DANFE', 'InterfaceXML', 'Validacao',
+    ...     'AssinaturaA1', 'ComunicacaoSefaz', 'DANFE', 'InterfaceXML', 'Validacao',
     ...     'assinatura', 'comunicacao', 'danfe', 'interfaces', 'validacao'])
     True
 

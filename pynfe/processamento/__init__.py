@@ -1,6 +1,6 @@
-from interfaces import InterfaceXML
+from serializacao import SerializacaoXML
 from validacao import Validacao
 from assinatura import AssinaturaA1
-from comunicacao import Comunicacao
+from comunicacao import ComunicacaoSefaz
 from danfe import DANFE
 
