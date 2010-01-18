@@ -6,25 +6,25 @@ except ImportError:
     from StringIO import StringIO
 
 try:
-  from lxml import etree
+    from lxml import etree
 except ImportError:
-  try:
-    # Python 2.5 - cElementTree
-    import xml.etree.cElementTree as etree
-  except ImportError:
     try:
-      # Python 2.5 - ElementTree
-      import xml.etree.ElementTree as etree
+        # Python 2.5 - cElementTree
+        import xml.etree.cElementTree as etree
     except ImportError:
-      try:
-        # Instalacao normal do cElementTree
-        import cElementTree as etree
-      except ImportError:
         try:
-          # Instalacao normal do ElementTree
-          import elementtree.ElementTree as etree
+            # Python 2.5 - ElementTree
+            import xml.etree.ElementTree as etree
         except ImportError:
-          raise Exception('Falhou ao importar lxml/ElementTree')
+            try:
+                # Instalacao normal do cElementTree
+                import cElementTree as etree
+            except ImportError:
+                try:
+                    # Instalacao normal do ElementTree
+                    import elementtree.ElementTree as etree
+                except ImportError:
+                    raise Exception('Falhou ao importar lxml/ElementTree')
 
 import xmlsec, libxml2 # FIXME: verificar ambiguidade de dependencias: lxml e libxml2
 
@@ -54,11 +54,11 @@ class Assinatura(object):
 
     def assinar_etree(self, raiz):
         u"""Efetua a assinatura numa instancia da biblioteca lxml.etree.
-        
+
         Este metodo de assinatura será utilizado internamente pelos demais,
         sendo que eles convertem para uma instancia lxml.etree para somente
         depois efetivar a assinatura.
-        
+
         TODO: Verificar o funcionamento da PyXMLSec antes de efetivar isso."""
         pass
 
@@ -86,7 +86,7 @@ def extrair_tag(root):
 class AssinaturaA1(Assinatura):
     """Classe abstrata responsavel por efetuar a assinatura do certificado
     digital no XML informado."""
-    
+
     def assinar_arquivo(self, caminho_arquivo):
         # Carrega o XML do arquivo
         raiz = etree.parse(caminho_arquivo)
@@ -113,10 +113,10 @@ class AssinaturaA1(Assinatura):
         # Tag de assinatura
         if raiz.getroot().find('Signature') is None:
             signature = etree.Element(
-                    'Signature',
-                    URI=raiz.getroot().getchildren()[0].attrib['Id'],
-                    xmlns=NAMESPACE_SIG,
-                    )
+                'Signature',
+                URI=raiz.getroot().getchildren()[0].attrib['Id'],
+                xmlns=NAMESPACE_SIG,
+            )
             signature.text = ''
             raiz.getroot().insert(0, signature)
 
@@ -132,26 +132,26 @@ class AssinaturaA1(Assinatura):
 
         # Colocamos o texto no avaliador XML
         #doc_xml = libxml2.parseMemory(xml, len(xml))
-    
+
         # Cria o contexto para manipulação do XML via sintaxe XPATH
         #ctxt = doc_xml.xpathNewContext()
         #ctxt.xpathRegisterNs(u'sig', NAMESPACE_SIG)
-    
+
         # Separa o nó da assinatura
         #noh_assinatura = ctxt.xpathEval(u'//*/sig:Signature')[0]
-    
+
         # Buscamos a chave no arquivo do certificado
         chave = xmlsec.cryptoAppKeyLoad(
-                filename=str(self.certificado.caminho_arquivo),
-                format=xmlsec.KeyDataFormatPkcs12,
-                pwd=str(self.senha),
-                pwdCallback=None,
-                pwdCallbackCtx=None,
-                )
-    
+            filename=str(self.certificado.caminho_arquivo),
+            format=xmlsec.KeyDataFormatPkcs12,
+            pwd=str(self.senha),
+            pwdCallback=None,
+            pwdCallbackCtx=None,
+        )
+
         # Cria a variável de chamada (callable) da função de assinatura
         assinador = xmlsec.DSigCtx()
-    
+
         # Atribui a chave ao assinador
         assinador.signKey = chave
 
@@ -164,26 +164,26 @@ class AssinaturaA1(Assinatura):
         # Ativa as funções de análise de arquivos XML FIXME
         libxml2.initParser()
         libxml2.substituteEntitiesDefault(1)
-        
+
         # Ativa as funções da API de criptografia
         xmlsec.init()
         xmlsec.cryptoAppInit(None)
         xmlsec.cryptoInit()
-    
+
     def _desativa_funcoes_criptograficas(self):
         ''' Desativa as funções criptográficas e de análise XML
         As funções devem ser chamadas aproximadamente na ordem inversa da ativação
         '''
-        
+
         # Shutdown xmlsec-crypto library
         xmlsec.cryptoShutdown()
-        
+
         # Shutdown crypto library
         xmlsec.cryptoAppShutdown()
-        
+
         # Shutdown xmlsec library
         xmlsec.shutdown()
-        
+
         # Shutdown LibXML2 FIXME
         libxml2.cleanupParser()
 
