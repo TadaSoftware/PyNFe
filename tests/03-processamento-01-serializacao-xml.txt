@@ -268,7 +268,7 @@ Serializando por partes
     NFe52100112345678000190550010000000011518005123
 
     >>> print serializador._serializar_notas_fiscal(nota_fiscal)
-    <infNFe versao="2.00" Id="NFe52100112345678000190550010000000011518005123">
+    <infNFe versao="1.01" Id="NFe52100112345678000190550010000000011518005123">
       <ide>
         <cUF>52</cUF>
         <cNF>51800512</cNF>

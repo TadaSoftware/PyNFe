@@ -7,7 +7,7 @@ except:
 from pynfe.entidades import Emitente, Cliente, Produto, Transportadora, NotaFiscal
 from pynfe.excecoes import NenhumObjetoEncontrado, MuitosObjetosEncontrados
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, obter_pais_por_codigo
-from pynfe.utils.flags import CODIGOS_ESTADOS
+from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO
 
 class Serializacao(object):
     """Classe abstrata responsavel por fornecer as funcionalidades basicas para
@@ -43,6 +43,8 @@ class Serializacao(object):
         raise Exception('Metodo nao implementado')
 
 class SerializacaoXML(Serializacao):
+    _versao = VERSAO_PADRAO
+
     def exportar(self, destino=None, retorna_string=False, **kwargs):
         """Gera o(s) arquivo(s) de Nofa Fiscal eletronica no padrao oficial da SEFAZ
         e Receita Federal, para ser(em) enviado(s) para o webservice ou para ser(em)
@@ -220,7 +222,7 @@ class SerializacaoXML(Serializacao):
             return raiz
 
     def _serializar_notas_fiscal(self, nota_fiscal, tag_raiz='infNFe', retorna_string=True):
-        raiz = etree.Element(tag_raiz, versao="2.00")
+        raiz = etree.Element(tag_raiz, versao=self._versao)
 
         # Dados da Nota Fiscal
         ide = etree.SubElement(raiz, 'ide')

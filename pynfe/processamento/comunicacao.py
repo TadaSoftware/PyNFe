@@ -3,7 +3,7 @@
 from httplib import HTTPSConnection, HTTPResponse
 
 from pynfe.utils import etree, StringIO
-from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP
+from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, VERSAO_PADRAO
 
 class Comunicacao(object):
     u"""Classe abstrata responsavel por definir os metodos e logica das classes
@@ -21,7 +21,7 @@ class Comunicacao(object):
 class ComunicacaoSefaz(Comunicacao):
     u"""Classe de comunicação que segue o padrão definido para as SEFAZ dos Estados."""
 
-    _versao = '1.01'
+    _versao = VERSAO_PADRAO
     
     def transmitir(self, nota_fiscal):
         pass
