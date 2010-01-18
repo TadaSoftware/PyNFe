@@ -91,8 +91,8 @@ Os pacotes da biblioteca sao:
 
     >>> from pynfe import processamento
     >>> set([attr for attr in dir(processamento) if not attr.startswith('__')]) == set([
-    ...     'AssinaturaA1', 'ComunicacaoSefaz', 'DANFE', 'InterfaceXML', 'Validacao',
-    ...     'assinatura', 'comunicacao', 'danfe', 'interfaces', 'validacao'])
+    ...     'AssinaturaA1', 'ComunicacaoSefaz', 'DANFE', 'SerializacaoXML', 'Validacao',
+    ...     'assinatura', 'comunicacao', 'danfe', 'serializacao', 'validacao'])
     True
 
 Ha ainda uma pasta dentro da pasta 'pynfe', chamada 'data', que deve
@@ -113,28 +113,28 @@ Geracao e importacao de XML
 As objetos Python devem ser traduzidos para arquivos XML e o caminho
 inverso, de introspecao, tambem deve ser feito, atraves de uma fabrica.
 
-    >>> from pynfe.processamento.interfaces import Interface
+    >>> from pynfe.processamento.serializacao import Serializacao
 
-    >>> bool(Interface.exportar)
+    >>> bool(Serializacao.exportar)
     True
 
-    >>> bool(Interface.importar)
+    >>> bool(Serializacao.importar)
     True
 
-A classe basica de Interface eh abstrata, ou seja, nao pode ser
+A classe basica de Serializacao eh abstrata, ou seja, nao pode ser
 instanciada diretamente.
 
     >>> lista_de_nfs = []
 
     >>> try:
-    ...     Interface(lista_de_nfs)
+    ...     Serializacao(lista_de_nfs)
     ... except Exception, e:
     ...     print e.message
     Esta classe nao pode ser instanciada diretamente!
 
-Classe de interface especifica para XML, usando lxml
+Classe de serializacao especifica para XML, usando lxml
 
-    >>> from pynfe.processamento.interfaces import InterfaceXML
+    >>> from pynfe.processamento.serializacao import SerializacaoXML
 
 Esse procedimento sera feito por padrao atraves da lxml, devido ao seu
 desempenho, mas pode ser extendido para outros formatos, dependendo do
