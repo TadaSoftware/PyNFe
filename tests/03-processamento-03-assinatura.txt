@@ -6,7 +6,7 @@ Carregando Certificado Digital tipo A1
 
     >>> from pynfe.entidades import CertificadoA1
 
-    >>> certificado = CertificadoA1(caminho_arquivo='tests/certificado.pem')
+    >>> certificado = CertificadoA1(caminho_arquivo='tests/certificado.pfx')
 
 Assinando NF-e
 --------------

@@ -1,37 +1,11 @@
 # -*- coding: utf-8 -*-
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
-
-try:
-  from lxml import etree
-except ImportError:
-  try:
-    # Python 2.5 - cElementTree
-    import xml.etree.cElementTree as etree
-  except ImportError:
-    try:
-      # Python 2.5 - ElementTree
-      import xml.etree.ElementTree as etree
-    except ImportError:
-      try:
-        # Instalacao normal do cElementTree
-        import cElementTree as etree
-      except ImportError:
-        try:
-          # Instalacao normal do ElementTree
-          import elementtree.ElementTree as etree
-        except ImportError:
-          raise Exception('Falhou ao importar lxml/ElementTree')
-
 import xmlsec, libxml2 # FIXME: verificar ambiguidade de dependencias: lxml e libxml2
 
 from geraldo.utils import memoize
 
-NAMESPACE_NFE = u'http://www.portalfiscal.inf.br/nfe'
-NAMESPACE_SIG = u'http://www.w3.org/2000/09/xmldsig#'
+from pynfe.utils import etree, StringIO
+from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SIG
 
 class Assinatura(object):
     """Classe abstrata responsavel por definir os metodos e logica das classes
@@ -113,11 +87,10 @@ class AssinaturaA1(Assinatura):
         # Tag de assinatura
         if raiz.getroot().find('Signature') is None:
             signature = etree.Element(
-                    'Signature',
+                    '{%s}Signature'%NAMESPACE_SIG,
                     URI=raiz.getroot().getchildren()[0].attrib['Id'],
-                    xmlns=NAMESPACE_SIG,
+                    nsmap={'sig': NAMESPACE_SIG},
                     )
-            signature.text = ''
             raiz.getroot().insert(0, signature)
 
         # Acrescenta a tag de doctype (como o lxml nao suporta alteracao do doctype,
@@ -202,6 +175,7 @@ class AssinaturaA1(Assinatura):
         return resultado
 
     def _antes_de_assinar_ou_verificar(self, raiz):
+        raise Exception(dir(raiz))
         # Converte etree para string
         xml = etree.tostring(raiz, xml_declaration=True, encoding='utf-8')
 

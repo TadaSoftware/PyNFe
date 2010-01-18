@@ -4,30 +4,9 @@ try:
 except:
     from sets import Set as set
 
-try:
-  from lxml import etree
-except ImportError:
-  try:
-    # Python 2.5 - cElementTree
-    import xml.etree.cElementTree as etree
-  except ImportError:
-    try:
-      # Python 2.5 - ElementTree
-      import xml.etree.ElementTree as etree
-    except ImportError:
-      try:
-        # Instalacao normal do cElementTree
-        import cElementTree as etree
-      except ImportError:
-        try:
-          # Instalacao normal do ElementTree
-          import elementtree.ElementTree as etree
-        except ImportError:
-          raise Exception('Falhou ao importar lxml/ElementTree')
-
 from pynfe.entidades import Emitente, Cliente, Produto, Transportadora, NotaFiscal
 from pynfe.excecoes import NenhumObjetoEncontrado, MuitosObjetosEncontrados
-from pynfe.utils import so_numeros, obter_municipio_por_codigo, obter_pais_por_codigo
+from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, obter_pais_por_codigo
 from pynfe.utils.flags import CODIGOS_ESTADOS
 
 class Serializacao(object):
