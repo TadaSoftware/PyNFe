@@ -1,0 +1,31 @@
+Validação
+---------
+A validação dos arquivos de nota fiscal são controladas pelo módulo validacao.
+
+    >>> from processamento import validacao
+
+A classe Validacao é utilizada para validar os tanto arquivos xml quanto documentos
+etree. Não há problemas em utilizar list-comprehension com a mesma pois ela implementa
+um cache simples.
+
+    >>> val = validacao.Validacao()
+    >>> nfe_caminho = 'tests/xml/NFe.xml'
+    >>> nfe_assin_caminho = 'tests/xml/NFe_assinada.xml'
+    >>> nfe_inval_caminho = 'tests/xml/NFe_falhaSchema.xml'
+    >>> val.validar_xml(nfe_caminho, validacao.XSD_NFE)
+    True
+    >>> import lxml as etree
+    >>> val.validar_etree(etree.parse(nfe_caminho), validacao.XSD_NFE)
+    True
+    >>> val.validar_xml(nfe_assin_caminho, XSD_NFE_PROCESSADA)
+    True
+    >>> val.validar_xml(nfe_inval_caminho, XSD_NFE)
+    False
+
+Note que o schema utilizado para validação contra o xml é definido por variáveis
+globais presentes no módulo. São elas:
+
+- XSD_NFE : valida nfe's não certificadas
+- XSD_NFE_PROCESSADA : valida nfe's certificadas
+- XSD_PD_CANCELAR_NFE : valida um pedido de cancelamento de nfe
+- XSD_PD_INUTILIZAR_NFE : valida um pedido de inutilização de nfe
