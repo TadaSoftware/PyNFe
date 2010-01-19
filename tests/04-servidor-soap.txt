@@ -5,9 +5,11 @@ Este teste vai verificar um servidor, executado atraves do comando
 'run_fake_soap_server.py', para enviar requisicoes SOAP e esperar as
 responstas em formato WSDL, de forma a simular o servidor da SEFAZ.
 
-    >>> from suds.client import Client
-    >>> url = 'http://localhost:8080/ServidorNFEFalso?wsdl'
-    >>> #client = Client(url)
-    >>> #print client
-    >>> #print client.service.ping('mario', 5)
+Usando suds
+
+    >>> #from suds.client import Client
+    >>> #client = Client('http://localhost:8080/ServidorNFEFalso?wsdl', cache=None)
+    >>> #client.set_options(retxml=True)
+    >>> #bool(client.service.ping('mario', 5))
+    True
 

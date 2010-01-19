@@ -1,0 +1,23 @@
+PROCESSAMENTO - COMUNICACAO
+===========================
+
+    >>> from pynfe.processamento import ComunicacaoSefaz
+
+Carregando certificado digital tipo A1
+
+    >>> from pynfe.entidades import CertificadoA1
+    >>> certificado = CertificadoA1(caminho_arquivo='tests/certificado.pfx')
+
+Instancia de comunicacao
+
+    >>> comunicacao = ComunicacaoSefaz(
+    ...     #servidor='localhost:8080',
+    ...     servidor='homologacao.nfe.fazenda.sp.gov.br',
+    ...     certificado=certificado,
+    ...     certificado_senha='associacao',
+    ... )
+
+Verifica o status do servico
+
+    >>> comunicacao.status_servico()
+
