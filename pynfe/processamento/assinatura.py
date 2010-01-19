@@ -68,8 +68,6 @@ class AssinaturaA1(Assinatura):
         # Efetua a assinatura
         xml = self.assinar_etree(raiz, retorna_xml=True)
 
-        raise Exception(xml)
-
         # Grava XML assinado no arquivo
         if salva:
             fp = file(caminho_arquivo, 'w')
@@ -149,15 +147,13 @@ class AssinaturaA1(Assinatura):
     
         resultado = assinador.status == xmlsec.DSigStatusSucceeded
 
+        # Gera o XML para retornar
+        xml = doc_xml.serialize()
+
         # Limpa objetos da memoria e desativa funções criptográficas
         self._depois_de_assinar_ou_verificar(doc_xml, ctxt, assinador)
 
-        # Gera o XML para retornar
-        raise Exception(dir(doc_xml))
-        xml = doc_xml.serialize()
-
         if retorna_xml:
-            raise Exception(xml)
             return xml
         else:
             return etree.parse(StringIO(xml))
