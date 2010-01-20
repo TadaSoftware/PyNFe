@@ -14,11 +14,11 @@ if __name__ == '__main__':
     
     # Test each package
     if run_level is None:
-        test_files = glob.glob('%s/*.txt' % os.path.join(CUR_DIR, 'tests'))        
-    else: 
-        test_files = glob.glob('%s/%s-*.txt' % \
-            (os.path.join(CUR_DIR, 'tests'), run_level))
+        search_path = '%s/*.txt' % os.path.join(CUR_DIR, 'tests')
+    else: search_path = '%s/%s-*.txt' % \
+        (os.path.join(CUR_DIR, 'tests'), run_level)
     
+    test_files = glob.glob(search_path)
     test_files = map(lambda i: i[len(CUR_DIR)+1:], test_files)
 
     # Run the tests
