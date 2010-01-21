@@ -36,6 +36,11 @@ Instancia do emitente (auxiliar para este teste)
     ...     endereco_telefone='6242421212',
     ... )
 
+Instancia do certificado
+
+    >>> from pynfe.entidades import CertificadoA1
+    >>> certificado = CertificadoA1(caminho_arquivo='tests/certificado.pfx')
+
 Verifica o status do servico
 
     >>> comunicacao.status_servico()
@@ -60,6 +65,8 @@ Consulta de cadastro (???)
 Inulitilizacao de faixa de numeracao
 
     >>> comunicacao.inutilizar_faixa_numeracao(
+    ...     certificado=certificado,
+    ...     senha='associacao',
     ...     numero_inicial=10,
     ...     numero_final=20,
     ...     emitente=emitente,

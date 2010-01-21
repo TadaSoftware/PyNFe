@@ -2,9 +2,7 @@
 
 import xmlsec, libxml2 # FIXME: verificar ambiguidade de dependencias: lxml e libxml2
 
-from geraldo.utils import memoize
-
-from pynfe.utils import etree, StringIO
+from pynfe.utils import etree, StringIO, extrair_tag
 from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SIG
 
 class Assinatura(object):
@@ -51,11 +49,6 @@ class Assinatura(object):
 
     def verificar_objetos(self, objetos):
         pass
-
-
-@memoize
-def extrair_tag(root):
-    return root.tag.split('}')[-1]
 
 class AssinaturaA1(Assinatura):
     """Classe abstrata responsavel por efetuar a assinatura do certificado

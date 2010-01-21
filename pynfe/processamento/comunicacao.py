@@ -5,6 +5,7 @@ from httplib import HTTPSConnection, HTTPResponse
 from pynfe.utils import etree, StringIO, so_numeros
 from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, VERSAO_PADRAO
 from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO
+from assinatura import AssinaturaA1
 
 class Comunicacao(object):
     u"""Classe abstrata responsavel por definir os metodos e logica das classes
@@ -27,6 +28,7 @@ class ComunicacaoSefaz(Comunicacao):
     u"""Classe de comunicação que segue o padrão definido para as SEFAZ dos Estados."""
 
     _versao = VERSAO_PADRAO
+    _assinatura = AssinaturaA1
     
     def transmitir(self, nota_fiscal):
         pass
@@ -46,8 +48,8 @@ class ComunicacaoSefaz(Comunicacao):
 
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap(
-                metodo='CadConsultaCadastro', # FIXME
-                tag_metodo='consultaCadastro', # FIXME
+                metodo='nfeRecepcao2', # FIXME
+                tag_metodo='nfeStatusServicoNF2', # FIXME
                 cabecalho=self._cabecalho_soap(),
                 dados=dados,
                 )
@@ -64,8 +66,8 @@ class ComunicacaoSefaz(Comunicacao):
         #post = '/nfeweb/services/cadconsultacadastro.asmx'
         post = '/nfeweb/services/nfeconsulta.asmx'
 
-    def inutilizar_faixa_numeracao(self, numero_inicial, numero_final, emitente, ano=None,
-            serie='1', justificativa=''):
+    def inutilizar_faixa_numeracao(self, numero_inicial, numero_final, emitente, certificado,
+            senha, ano=None, serie='1', justificativa=''):
         post = '/nfeweb/services/nfestatusservico.asmx'
 
         # Valores default
@@ -87,7 +89,7 @@ class ComunicacaoSefaz(Comunicacao):
 
         # Monta XML do corpo da requisição # FIXME
         raiz = etree.Element('inutNFe', xmlns="http://www.portalfiscal.inf.br/nfe", versao="1.07")
-        inf_inut = etree.SubElement(raiz, 'infInut', Id=id_unico) # FIXME
+        inf_inut = etree.SubElement(raiz, 'infInut', Id=id_unico)
         etree.SubElement(inf_inut, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(inf_inut, 'xServ').text = 'INUTILIZAR'
         etree.SubElement(inf_inut, 'cUF').text = uf
@@ -98,13 +100,16 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(inf_inut, 'nNFIni').text = str(numero_inicial)
         etree.SubElement(inf_inut, 'nNFFin').text = str(numero_final)
         etree.SubElement(inf_inut, 'xJust').text = justificativa
-        dados = etree.tostring(raiz, encoding='utf-8', xml_declaration=True)
+        #dados = etree.tostring(raiz, encoding='utf-8', xml_declaration=True)
 
         # Efetua assinatura
+        assinatura = self._assinatura(certificado, senha)
+        dados = assinatura.assinar_etree(etree.ElementTree(raiz), retorna_xml=True)
+
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap(
-                metodo='CadConsultaCadastro', # FIXME
-                tag_metodo='consultaCadastro', # FIXME
+                metodo='nfeRecepcao2', # XXX
+                tag_metodo='nfeInutilizacaoNF', # XXX
                 cabecalho=self._cabecalho_soap(),
                 dados=dados,
                 )
