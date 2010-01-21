@@ -31,14 +31,15 @@ XSD_PD_CANCELAR_NFE="procCancNFe_v1.07.xsd"
 XSD_PD_INUTILIZAR_NFE="procInutNFe_v1.07.xsd"
 
 def get_xsd(xsd_file):
-    """Retorna o caminho absoluto para um arquivo xsd
+    """Retorna o caminho absoluto para um arquivo xsd.
     Argumentos:
         xsd_file - nome do arquivo xsd (utilizar nomes definidos em validacao.py)
     """
     return path.abspath(path.join(XSD_FOLDER, xsd_file))
 
 class Validacao(object):
-    '''Valida documentos xml a partir do xsd informado'''
+    '''Valida documentos xml a partir do xsd informado.'''
+    
     def __init__(self):
         self.clear_cache()
     
@@ -46,7 +47,7 @@ class Validacao(object):
         self.MEM_CACHE = {}
     
     def validar_xml(self, xml_path, xsd_file):
-        '''Valida um arquivo xml
+        '''Valida um arquivo xml.
         Argumentos:
             xml_filepath - caminho para arquivo xml
             xsd_file - caminho para o arquivo xsd
@@ -57,10 +58,11 @@ class Validacao(object):
         return self.validar_etree(xml_doc, xsd_file)
     
     def validar_etree(self, xml_doc, xsd_file):
-        '''Valida um documento lxml diretamente
+        '''Valida um documento lxml diretamente.
         Argumentos:
             xml_doc - documento etree
-            xsd_file - caminho para o arquivo xsd'''
+            xsd_file - caminho para o arquivo xsd
+        '''
         xsd_filepath = get_xsd(xsd_file)
         
         try:
