@@ -1,7 +1,6 @@
 #-*- coding:utf-8 -*-
 
 from os import path
-from glob import glob
 
 try:
     from lxml import etree
@@ -24,12 +23,19 @@ except ImportError:
                 except ImportError:
                     raise Exception('Falhou ao importar lxml/ElementTree')
 
-XSD_FOLDER = "data/XSDs/"
+XSD_FOLDER = "pynfe/data/XSDs/"
 
 XSD_NFE="nfe_v1.10.xsd"
 XSD_NFE_PROCESSADA="procNFe_v1.10.xsd"
 XSD_PD_CANCELAR_NFE="procCancNFe_v1.07.xsd"
 XSD_PD_INUTILIZAR_NFE="procInutNFe_v1.07.xsd"
+
+def get_xsd(xsd_file):
+    """Retorna o caminho absoluto para um arquivo xsd
+    Argumentos:
+        xsd_file - nome do arquivo xsd (utilizar nomes definidos em validacao.py)
+    """
+    return path.abspath(path.join(XSD_FOLDER, xsd_file))
 
 class Validacao(object):
     '''Valida documentos xml a partir do xsd informado'''
@@ -45,18 +51,24 @@ class Validacao(object):
             xml_filepath - caminho para arquivo xml
             xsd_file - caminho para o arquivo xsd
         '''
-        return self._validar(etree.parse(xml_path), xsd_file)
+        
+        with open(xml_path) as file:
+            xml_doc = etree.parse(file)
+        return self.validar_etree(xml_doc, xsd_file)
     
-    def _validar(self, xml_doc, xsd_file):
-        xsd_filepath = path.join(XSD_FOLDER, xsd_file)
+    def validar_etree(self, xml_doc, xsd_file):
+        '''Valida um documento lxml diretamente
+        Argumentos:
+            xml_doc - documento etree
+            xsd_file - caminho para o arquivo xsd'''
+        xsd_filepath = get_xsd(xsd_file)
         
         try:
-            xsd_schema = self.MEM_CACHE[xsd_file]
+            # checa se o schema ja existe no cache
+            xsd_schema = self.MEM_CACHE[xsd_filepath]
         except:
-            xsd_doc = etree.parse(xsd_file)
-            xsd_schema = etree.XMLSchema(xsd_doc)
-        return xsd_schema.validate(xml_doc)
-    
-    # alias
-    validar_etree = _validar
-    
+            with open(xsd_filepath) as file: # lê xsd e atualiza cache
+                xsd_doc = etree.parse(file)
+                xsd_schema = etree.XMLSchema(xsd_doc)
+            self.MEM_CACHE[xsd_file] = xsd_schema
+        return xsd_schema.validate(xml_doc)       
