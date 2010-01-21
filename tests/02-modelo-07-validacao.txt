@@ -8,13 +8,13 @@ A classe Validacao é utilizada para validar os tanto arquivos xml quanto docume
 etree. Não há problemas em utilizar list-comprehension com a mesma pois ela implementa
 um cache simples.
 
+    >>> from lxml import etree
     >>> validador = validacao.Validacao()
-    >>> nfe_caminho = 'tests/xml/NFe.xml'
+    >>> nfe_caminho = 'tests/saida/nfe-1.xml'
     >>> nfe_assin_caminho = 'tests/xml/NFe_assinada.xml'
     >>> nfe_inval_caminho = 'tests/xml/NFe_falhaSchema.xml'
     >>> validador.validar_xml(nfe_caminho, validacao.XSD_NFE)
-    True
-    >>> from lxml import etree
+    True    
     >>> validador.validar_etree(etree.parse(nfe_caminho), validacao.XSD_NFE)
     True
     >>> validador.validar_xml(nfe_assin_caminho, validacao.XSD_NFE_PROCESSADA)
