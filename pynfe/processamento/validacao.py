@@ -46,22 +46,21 @@ class Validacao(object):
     def clear_cache(self):
         self.MEM_CACHE = {}
     
-    def validar_xml(self, xml_path, xsd_file, guess_error=False):
+    def validar_xml(self, xml_path, xsd_file, use_assert=False):
         '''Valida um arquivo xml.
         Argumentos:
-            xml_filepath - caminho para arquivo xml
+            xml_path - caminho para arquivo xml
             xsd_file - caminho para o arquivo xsd
-            guess_error - levantar exceção caso documento não valide?
+            use_assert - levantar exceção caso documento não valide?
         '''
-        return self.validar_etree(etree.parse(xml_path), xsd_file, 
-                                  guess_error=guess_error)
+        return self.validar_etree(etree.parse(xml_path), xsd_file, use_assert)
     
-    def validar_etree(self, xml_doc, xsd_file, guess_error=False):
+    def validar_etree(self, xml_doc, xsd_file, use_assert=False):
         '''Valida um documento lxml diretamente.
         Argumentos:
             xml_doc - documento etree
             xsd_file - caminho para o arquivo xsd
-            guess_error - levantar exceção caso documento não valide?
+            use_assert - levantar exceção caso documento não valide?
         '''
         xsd_filepath = get_xsd(xsd_file)
         
@@ -73,14 +72,5 @@ class Validacao(object):
             xsd_doc = etree.parse(xsd_filepath)
             xsd_schema = etree.XMLSchema(xsd_doc)
             self.MEM_CACHE[xsd_file] = xsd_schema
-        return self._validar(xsd_schema, xml_doc, guess_error)
-    
-    def _validar(self, xsd_schema, xml_doc, use_assert=False):
-        """Checa se um documento eh valido, podendo jogar exceção caso não seja.
-        Argumentos
-            xsd_schema - documento schema usado na validacao
-            xml_doc - documento xml a ser validado
-            use_assert - gerar exceção com o erro caso o documento seja inválido?
-        """
         return use_assert and xsd_schema.assertValid(xml_doc) \
                or xsd_schema.validate(xml_doc)
