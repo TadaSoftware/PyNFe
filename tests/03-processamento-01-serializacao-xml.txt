@@ -63,7 +63,7 @@ Instancia a NF
     ...     uf='GO',
     ...     modelo=55,
     ...     serie='1',
-    ...     numero_nf='1',
+    ...     numero_nf=1,
     ...     data_emissao=datetime.date(2010,1,13),
     ...     data_saida_entrada=datetime.date(2010,1,13),
     ...     natureza_operacao='Venda a vista',
