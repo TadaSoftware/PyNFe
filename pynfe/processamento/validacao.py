@@ -52,10 +52,7 @@ class Validacao(object):
             xml_filepath - caminho para arquivo xml
             xsd_file - caminho para o arquivo xsd
         '''
-        
-        with open(xml_path) as file:
-            xml_doc = etree.parse(file)
-        return self.validar_etree(xml_doc, xsd_file)
+        return self.validar_etree(etree.parse(xml_path), xsd_file)
     
     def validar_etree(self, xml_doc, xsd_file):
         '''Valida um documento lxml diretamente.
@@ -69,8 +66,8 @@ class Validacao(object):
             # checa se o schema ja existe no cache
             xsd_schema = self.MEM_CACHE[xsd_filepath]
         except:
-            with open(xsd_filepath) as file: # lê xsd e atualiza cache
-                xsd_doc = etree.parse(file)
-                xsd_schema = etree.XMLSchema(xsd_doc)
+            # lê xsd e atualiza cache
+            xsd_doc = etree.parse(xsd_filepath)
+            xsd_schema = etree.XMLSchema(xsd_doc)
             self.MEM_CACHE[xsd_file] = xsd_schema
         return xsd_schema.validate(xml_doc)       
