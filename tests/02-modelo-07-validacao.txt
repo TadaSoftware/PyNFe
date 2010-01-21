@@ -2,25 +2,28 @@ Validação
 ---------
 A validação dos arquivos de nota fiscal são controladas pelo módulo validacao.
 
-    >>> from pynfe.processamento import validacao
+    >>> from pynfe.processamento.validacao import *
 
 A classe Validacao é utilizada para validar os tanto arquivos xml quanto documentos
 etree. Não há problemas em utilizar list-comprehension com a mesma pois ela implementa
 um cache simples.
 
     >>> from lxml import etree
-    >>> validador = validacao.Validacao()
-    >>> nfe_caminho = 'tests/saida/nfe-1.xml'
-    >>> nfe_assin_caminho = 'tests/xml/NFe_assinada.xml'
-    >>> nfe_inval_caminho = 'tests/xml/NFe_falhaSchema.xml'
-    >>> validador.validar_xml(nfe_caminho, validacao.XSD_NFE)
-    True    
-    >>> validador.validar_etree(etree.parse(nfe_caminho), validacao.XSD_NFE)
+    >>> validador = Validacao()
+    >>>
+    >>> nfe = 'tests/xml/NFe.xml'
+    >>> nfe_assin = 'tests/xml/NFe_assinada.xml'
+    >>> nfe_inval = 'tests/xml/NFe_falhaSchema.xml'
+    >>>
+    >>> try: validador.validar_xml(nfe, XSD_NFE, True)
+    ... except Exception, e: print unicode(repr(e))
     True
-    >>> validador.validar_xml(nfe_assin_caminho, validacao.XSD_NFE_PROCESSADA)
-    True
-    >>> validador.validar_xml(nfe_inval_caminho, validacao.XSD_NFE)
+    >>> try: validador.validar_xml(nfe_inval, XSD_NFE, False)
+    ... except Exception, e: print unicode(repr(e))
     False
+    >>> try: validador.validar_xml(nfe_assin, XSD_NFE_PROCESSADA, True)
+    ... except Exception, e: print unicode(repr(e))
+    True    
 
 Note que o schema utilizado para validação contra o xml é definido por variáveis
 globais presentes no módulo. São elas:
