@@ -64,4 +64,8 @@ def obter_municipio_por_codigo(codigo, uf):
     municipios = carregar_arquivo_municipios(uf)
 
     return municipios[codigo]
-    
+
+@memoize
+def extrair_tag(root):
+    return root.tag.split('}')[-1]
+

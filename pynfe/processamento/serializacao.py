@@ -17,7 +17,7 @@ class Serializacao(object):
     Nao deve ser instanciada diretamente!"""
 
     _fonte_dados = None
-    _ambiente = 1
+    _ambiente = 1   # 1 = Produção, 2 = Homologação
     _nome_aplicacao = 'PyNFe'
 
     def __new__(cls, *args, **kwargs):
@@ -232,7 +232,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(ide, 'indPag').text = str(nota_fiscal.forma_pagamento)
         etree.SubElement(ide, 'mod').text = str(nota_fiscal.modelo)
         etree.SubElement(ide, 'serie').text = nota_fiscal.serie
-        etree.SubElement(ide, 'nNF').text = nota_fiscal.numero_nf
+        etree.SubElement(ide, 'nNF').text = str(nota_fiscal.numero_nf)
         etree.SubElement(ide, 'dEmi').text = nota_fiscal.data_emissao.strftime('%Y-%m-%d')
         etree.SubElement(ide, 'dSaiEnt').text = nota_fiscal.data_saida_entrada.strftime('%Y-%m-%d')
         etree.SubElement(ide, 'tpNF').text = str(nota_fiscal.tipo_documento)
