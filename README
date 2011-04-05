@@ -12,8 +12,6 @@ Dependências
 
 - Geraldo Reports (http://geraldo.sourceforge.net/)
   - para a geração da DANFE
-- SUDS (https://fedorahosted.org/suds/)
-  - para consumir o webservice SOAP/WSDL
 - lxml
   - biblioteca de leitura e gravação de arquivos XML, de alta
     performance e fácil de implementar.

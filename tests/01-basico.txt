@@ -163,12 +163,7 @@ objetivo pretendido.
  
 Consumacao de WebService
 ------------------------
- 
-O webservice a ser consumido esta no padrao SOAP, que no Python sera
-interpretado pela biblioteca SUDS.
- 
-    >>> import suds
- 
+
 Para executar estes testes é preciso instalar a soaplib, para servir
 WSDL via SOAP, num servidor falso (mock).
  

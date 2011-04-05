@@ -1,0 +1,21 @@
+PLANEJAMENTO
+============
+
+Este documento tem como propósito estabelecer as metas para as versões da biblioteca,
+uma vez que algumas funcionalidades são mais urgentes em relação a outras
+
+Versão 1.0
+----------
+
+- Serialização para versões 1.00 e 2.00 da NF-e
+- Assinatura com certificados A1
+- Suporte a diferenças entre webservices (produção e homologação)
+
+Versões Posteriores
+-------------------
+
+- Certificados A3
+- Validação
+- Fontes de Dados
+- Servidor SOAP para testes
+
