@@ -58,7 +58,7 @@ Descrição unitária de cada schema
  - Pedido de Cancelamento de  NF-e processado
  - inclui: leiauteCancNFe_v1.07
 
-- procInutNFe_v1.07:
+- procInutNFe_v1.07
  - Pedido de inutilzação de númeração de  NF-e processado
  - inclui: leiauteInutNFe_v1.07
 

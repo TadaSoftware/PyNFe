@@ -244,4 +244,3 @@ class AssinaturaA1(Assinatura):
 
         # E, por fim, desativa todas as funções ativadas anteriormente
         self._desativar_funcoes_criptograficas()
-
