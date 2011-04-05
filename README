@@ -80,6 +80,15 @@ Referências
 - Descricao do Code128 na Wikipedia
  - http://en.wikipedia.org/wiki/Code_128
 
+- Documentação do módulo de geração de Code128 no ReportLab
+ - http://www.reportlab.com/apis/reportlab/reportlab.graphics.barcode.code128-module.html
+
+- Exemplo de codigo de barras da DANF-e usando ReportLab
+ - http://pastebin.com/f17b153a8
+
+- Thread da lista pyhton-brasil sobre streching do codigo de barras
+ - http://br.groups.yahoo.com/group/python-brasil/message/41299
+
 - Lista de codigos para campo EX TIPI
  - http://www.fisconet.com.br/ipi/tipi/04.htm
 

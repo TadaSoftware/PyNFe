@@ -201,5 +201,13 @@ Reports.
 
     >>> import geraldo
     >>> import PIL
+
+Temos um codigo para geracao de codigo de barras Code128...
+
     >>> from pynfe.utils import bar_code_128
+
+Mas essa geracao podera ser feita diretamente pelo Geraldo, usando uma biblioteca
+do ReportLab que existe para isso
+
+    >>> from reportlab.graphics.barcode import code128
 
