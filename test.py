@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
+from pynfe.entidades.cliente import Cliente
 from pynfe.entidades.emitente import Emitente
+from pynfe.entidades.notafiscal import NotaFiscal
 from pynfe.utils.flags import CODIGO_BRASIL
 
 
@@ -15,9 +17,31 @@ emitente = Emitente(
     endereco_bairro='PINHEIROS',
     endereco_municipio='SAO PAULO',
     endereco_uf='SP',
-    endereco_cep='05428000', 
+    endereco_cep='05428000',
     endereco_pais=CODIGO_BRASIL,
+)
+
+cliente = Cliente(
+    razao_social='MARIANA DE CARVALHO CASCELLI',
+    tipo_documento='CPF', #CPF ou CNPJ
+    email='ianafonteboa@hotmail.com',
+    numero_documento='04247008161',
+    endereco_logradouro='Q SHIS QI 23 CONJUNTO 1',
+    endereco_numero='SN',
+    endereco_complemento='CASA 05',
+    endereco_bairro='SETOR DE HABITACOES INDIVIDUAI',
+    endereco_municipio='Brasilia',
+    endereco_uf='DF',
+    endereco_cep='71660150',
+    endereco_pais=CODIGO_BRASIL,
+    endereco_telefone='6132029975',
+)
+
+nota_fiscal = NotaFiscal(
+    emitente=emitente,
+    cliente=cliente,
 )
 
 import pprint
 pprint.pprint(emitente.__dict__)
+pprint.pprint(cliente.__dict__)
