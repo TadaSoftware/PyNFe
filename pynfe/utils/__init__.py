@@ -1,3 +1,5 @@
+# *-* encoding: utf-8 *-*
+
 import os
 
 try:
@@ -43,9 +45,30 @@ def obter_pais_por_codigo(codigo):
 
 CAMINHO_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data')
 CAMINHO_MUNICIPIOS = os.path.join(CAMINHO_DATA, 'MunIBGE')
+CARACTERS_ACENTUADOS = {
+    ord(u'á'): u'a',
+    ord(u'â'): u'a',
+    ord(u'à'): u'a',
+    ord(u'ã'): u'a',
+    ord(u'é'): u'e',
+    ord(u'ê'): u'e',
+    ord(u'í'): u'i',
+    ord(u'ó'): u'o',
+    ord(u'õ'): u'o',
+    ord(u'ô'): u'o',
+    ord(u'ú'): u'u',
+    ord(u'ç'): u'c',
+}
 
 @memoize
-def carregar_arquivo_municipios(uf):
+def normalizar_municipio(municipio):
+    if not isinstance(municipio, unicode):  
+        municipio = municipio.decode('utf-8')
+    
+    return municipio.lower().translate(CARACTERS_ACENTUADOS) 
+
+@memoize
+def carregar_arquivo_municipios(uf, reverso=False):
     caminho_arquivo = os.path.join(
             CAMINHO_MUNICIPIOS,
             'MunIBGE-UF%s.txt'%flags.CODIGOS_ESTADOS[uf.upper()],
@@ -55,8 +78,25 @@ def carregar_arquivo_municipios(uf):
     fp = file(caminho_arquivo)
     linhas = list(fp.readlines())
     fp.close()
+   
+    municipios_dict = {}
 
-    return dict([(linha[:7], linha[7:].strip()) for linha in linhas])
+    for linha in linhas: 
+        codigo = linha[:7]
+        municipio = linha[7:].strip()
+    
+        if not reverso:
+            municipios_dict[codigo] = municipio
+        else:
+            municipios_dict[normalizar_municipio(municipio)] = codigo
+
+    return municipios_dict
+
+@memoize
+def obter_codigo_por_municipio(municipio, uf):
+    # TODO: fazer UF ser opcional
+    municipios = carregar_arquivo_municipios(uf, True)
+    return municipios[normalizar_municipio(municipio)] 
 
 @memoize
 def obter_municipio_por_codigo(codigo, uf):
