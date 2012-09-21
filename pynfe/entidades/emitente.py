@@ -23,6 +23,9 @@ class Emitente(Entidade):
 
     # - Inscricao Estadual (Subst. Tributario)
     inscricao_estadual_subst_tributaria = str()
+    
+    # - Codigo de Regime Tributario (obrigatorio)
+    codigo_de_regime_tributario = str()
 
     # Endereco
     # - Logradouro (obrigatorio)

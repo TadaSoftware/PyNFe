@@ -7,6 +7,9 @@ class Cliente(Entidade):
     # - Nome/Razão Social (obrigatorio)
     razao_social = str()
 
+    # - Email
+    email = str()
+
     # - Tipo de Documento (obrigatorio) - default CNPJ - TIPOS_DOCUMENTO
     tipo_documento = 'CNPJ'
 
