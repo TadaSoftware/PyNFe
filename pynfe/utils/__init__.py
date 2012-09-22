@@ -65,7 +65,7 @@ def normalizar_municipio(municipio):
     if not isinstance(municipio, unicode):  
         municipio = municipio.decode('utf-8')
     
-    return municipio.lower().translate(CARACTERS_ACENTUADOS) 
+    return municipio.lower().translate(CARACTERS_ACENTUADOS).upper() 
 
 @memoize
 def carregar_arquivo_municipios(uf, reverso=False):
@@ -99,11 +99,15 @@ def obter_codigo_por_municipio(municipio, uf):
     return municipios[normalizar_municipio(municipio)] 
 
 @memoize
-def obter_municipio_por_codigo(codigo, uf):
+def obter_municipio_por_codigo(codigo, uf, normalizado=False):
     # TODO: fazer UF ser opcional
     municipios = carregar_arquivo_municipios(uf)
 
-    return municipios[codigo]
+    municipio = municipios[codigo]
+    if normalizado:
+        return normalizar_municipio(municipio)
+
+    return municipio
 
 @memoize
 def extrair_tag(root):
