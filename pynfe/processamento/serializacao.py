@@ -416,3 +416,31 @@ class SerializacaoPipes(Serializacao):
         ]
 
         return '|'.join(serial_data)
+
+    def _serializar_produto_servico(self, produto_servico):
+        serial_data = [
+            'I',
+            produto_servico.codigo,
+            produto_servico.ean,
+            produto_servico.descricao,
+            produto_servico.ncm,
+            produto_servico.ex_tipi,
+            produto_servico.cfop,
+            produto_servico.unidade_comercial,
+            str(produto_servico.quantidade_comercial),
+            str(produto_servico.valor_unitario_comercial),
+            str(produto_servico.valor_total_bruto),
+            produto_servico.ean_tributavel,
+            produto_servico.unidade_tributavel,
+            str(produto_servico.quantidade_tributavel),
+            str(produto_servico.valor_unitario_tributavel),
+            str(produto_servico.total_frete),
+            str(produto_servico.total_seguro),
+            str(produto_servico.desconto),
+            str(produto_servico.outras_despesas_acessorias),
+            str(produto_servico.compoe_valor_total),
+            produto_servico.numero_pedido,
+            produto_servico.numero_do_item,
+            '\nM',
+        ]
+        return '|'.join(serial_data)

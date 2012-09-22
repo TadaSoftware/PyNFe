@@ -428,8 +428,20 @@ class NotaFiscalProduto(Entidade):
     #  - Desconto
     desconto = Decimal()
 
+    # - Outras despesas acessórias
+    outras_despesas_acessorias = Decimal()
+
+    # - Indica se valor do Item (vProd) entra no valor total da NF-e
+    compoe_valor_total = 1
+
     #  - Valor total bruto (obrigatorio)
     valor_total_bruto = Decimal()
+
+    # - Número do Pedido de Compra
+    numero_pedido = str()
+
+    # - Item do Pedido de Compra
+    numero_do_item = str()
 
     #  - Produto especifico (seleciona de lista) - NF_PRODUTOS_ESPECIFICOS
     produto_especifico = str()
