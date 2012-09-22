@@ -1,6 +1,7 @@
 # *-* encoding: utf-8 *-*
 
 import os
+import codecs
 
 try:
   from lxml import etree
@@ -75,20 +76,25 @@ def carregar_arquivo_municipios(uf, reverso=False):
             )
 
     # Carrega o conteudo do arquivo
-    fp = file(caminho_arquivo)
+    fp = codecs.open(caminho_arquivo, "r", "utf-8-sig")
     linhas = list(fp.readlines())
     fp.close()
    
     municipios_dict = {}
 
     for linha in linhas: 
-        codigo = linha[:7]
-        municipio = linha[7:].strip()
-    
+        codigo, municipio = linha.split('\t')
+        codigo = codigo.strip()
+        municipio = municipio.strip() 
+
         if not reverso:
             municipios_dict[codigo] = municipio
         else:
             municipios_dict[normalizar_municipio(municipio)] = codigo
+
+    if uf == 'DF':
+        import pprint
+        pprint.pprint(municipios_dict)
 
     return municipios_dict
 
