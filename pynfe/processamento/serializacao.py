@@ -6,7 +6,7 @@ except:
 
 from pynfe.entidades import Emitente, Cliente, Produto, Transportadora, NotaFiscal
 from pynfe.excecoes import NenhumObjetoEncontrado, MuitosObjetosEncontrados
-from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, obter_pais_por_codigo, obter_codigo_por_municipio
+from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, obter_pais_por_codigo, obter_municipio_e_codigo
 from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO
 
 class Serializacao(object):
@@ -352,18 +352,9 @@ class SerializacaoPipes(Serializacao):
 
     def _serializar_emitente(self, emitente):
 
-        try:
-            cod_municipio = int(emitente.endereco_municipio)
-        except ValueError:
-            cod_municipio = obter_codigo_por_municipio(
-                emitente.endereco_municipio,
-                emitente.endereco_uf
-            )
-
-        municipio = obter_municipio_por_codigo(
-            cod_municipio,
-            emitente.endereco_uf,
-            normalizado=True,
+        cod_municipio, municipio = obter_municipio_e_codigo(
+            emitente.endereco_municipio,
+            emitente.endereco_uf
         )
 
         serial_emitente_list = [
@@ -394,3 +385,5 @@ class SerializacaoPipes(Serializacao):
 
         return '|'.join(serial_emitente_list)
 
+    def _serializar_cliente(self, cliente):
+        pass 

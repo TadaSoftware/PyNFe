@@ -110,6 +110,16 @@ def obter_municipio_por_codigo(codigo, uf, normalizado=False):
     return municipio
 
 @memoize
+def obter_municipio_e_codigo(municipio_ou_codigo, uf):
+    try:
+        cod_municipio = int(municipio_ou_codigo)
+    except ValueError:
+        cod_municipio = obter_codigo_por_municipio(municipio_ou_codigo, uf)
+
+    municipio = obter_municipio_por_codigo(cod_municipio, uf, normalizado=True)
+
+    return cod_municipio, municipio
+
+@memoize
 def extrair_tag(root):
     return root.tag.split('}')[-1]
-
