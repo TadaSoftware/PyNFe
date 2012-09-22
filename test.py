@@ -1,10 +1,14 @@
 #!/usr/bin/env python
+# *-* encoding: utf8 *-*
 
 from pynfe.entidades.cliente import Cliente
 from pynfe.entidades.emitente import Emitente
 from pynfe.entidades.notafiscal import NotaFiscal
+from pynfe.entidades.fonte_dados import _fonte_dados
+from pynfe.processamento.serializacao import SerializacaoPipes
 from pynfe.utils.flags import CODIGO_BRASIL
 
+serializador = SerializacaoPipes(_fonte_dados, homologacao=True)
 
 emitente = Emitente(
     razao_social='Spring Publicacoes Ltda',
@@ -20,6 +24,8 @@ emitente = Emitente(
     endereco_cep='05428000',
     endereco_pais=CODIGO_BRASIL,
 )
+
+print serializador._serializar_emitente(emitente)
 
 cliente = Cliente(
     razao_social='MARIANA DE CARVALHO CASCELLI',

@@ -6,7 +6,7 @@ except:
 
 from pynfe.entidades import Emitente, Cliente, Produto, Transportadora, NotaFiscal
 from pynfe.excecoes import NenhumObjetoEncontrado, MuitosObjetosEncontrados
-from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, obter_pais_por_codigo
+from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, obter_pais_por_codigo, obter_codigo_por_municipio
 from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO
 
 class Serializacao(object):
@@ -34,13 +34,13 @@ class Serializacao(object):
         """Gera o(s) arquivo(s) de exportacao a partir da Nofa Fiscal eletronica
         ou lista delas."""
 
-        raise Exception('Metodo nao implementado')
+        raise NotImplementedError
 
     def importar(self, origem):
         """Fabrica que recebe o caminho ou objeto de origem e instancia os objetos
         da PyNFe"""
 
-        raise Exception('Metodo nao implementado')
+        raise NotImplementedError
 
 class SerializacaoXML(Serializacao):
     _versao = VERSAO_PADRAO
@@ -343,4 +343,54 @@ class SerializacaoXML(Serializacao):
             return etree.tostring(raiz, pretty_print=True)
         else:
             return raiz
+
+class SerializacaoPipes(Serializacao):
+    """Serialização utilizada pela SEFAZ-SP para a importação de notas."""
+
+    def exportar(self, destino, **kwargs):
+        pass
+
+    def _serializar_emitente(self, emitente):
+
+        try:
+            cod_municipio = int(emitente.endereco_municipio)
+        except ValueError:
+            cod_municipio = obter_codigo_por_municipio(
+                emitente.endereco_municipio,
+                emitente.endereco_uf
+            )
+
+        municipio = obter_municipio_por_codigo(
+            cod_municipio,
+            emitente.endereco_uf,
+            normalizado=True,
+        )
+
+        serial_emitente_list = [
+            'C',
+            emitente.razao_social,
+            emitente.nome_fantasia,
+            emitente.inscricao_estadual,
+            emitente.inscricao_estadual_subst_tributaria,
+            emitente.inscricao_municipal,
+            emitente.cnae_fiscal,
+            emitente.codigo_de_regime_tributario,
+            '\nC02',
+            emitente.cnpj,
+            '\nC05',
+            emitente.endereco_logradouro,
+            emitente.endereco_numero,
+            emitente.endereco_complemento,
+            emitente.endereco_bairro,
+            cod_municipio,
+            municipio,
+            emitente.endereco_uf,
+            emitente.endereco_cep,
+            emitente.endereco_pais,
+            obter_pais_por_codigo(emitente.endereco_pais),
+            emitente.endereco_telefone,
+            '\n',
+        ]
+
+        return '|'.join(serial_emitente_list)
 
