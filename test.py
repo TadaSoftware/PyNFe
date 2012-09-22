@@ -28,19 +28,19 @@ emitente = Emitente(
 print serializador._serializar_emitente(emitente)
 
 cliente = Cliente(
-    razao_social='MARIANA DE CARVALHO CASCELLI',
+    razao_social='MARIANA CARVALHO SILVA',
     tipo_documento='CPF', #CPF ou CNPJ
-    email='ianafonteboa@hotmail.com',
-    numero_documento='04247008161',
-    endereco_logradouro='Q SHIS QI 23 CONJUNTO 1',
-    endereco_numero='SN',
-    endereco_complemento='CASA 05',
-    endereco_bairro='SETOR DE HABITACOES INDIVIDUAI',
+    email='email@email.com',
+    numero_documento='12345678900',
+    endereco_logradouro='Rua dos Bobos',
+    endereco_numero='Zero',
+    endereco_complemento='Ao lado de lugar nenhum',
+    endereco_bairro='Aquele Mesmo',
     endereco_municipio='Brasilia',
     endereco_uf='DF',
-    endereco_cep='71660150',
+    endereco_cep='12345123',
     endereco_pais=CODIGO_BRASIL,
-    endereco_telefone='6132029975',
+    endereco_telefone='11912341234',
 )
 
 nota_fiscal = NotaFiscal(
