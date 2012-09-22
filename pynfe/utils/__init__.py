@@ -92,10 +92,6 @@ def carregar_arquivo_municipios(uf, reverso=False):
         else:
             municipios_dict[normalizar_municipio(municipio)] = codigo
 
-    if uf == 'DF':
-        import pprint
-        pprint.pprint(municipios_dict)
-
     return municipios_dict
 
 @memoize
