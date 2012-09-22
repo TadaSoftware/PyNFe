@@ -42,6 +42,7 @@ cliente = Cliente(
     endereco_pais=CODIGO_BRASIL,
     endereco_telefone='11912341234',
 )
+print serializador._serializar_cliente(cliente)
 
 nota_fiscal = NotaFiscal(
     emitente=emitente,

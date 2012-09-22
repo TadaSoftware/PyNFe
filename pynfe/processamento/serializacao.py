@@ -13,7 +13,7 @@ class Serializacao(object):
     """Classe abstrata responsavel por fornecer as funcionalidades basicas para
     exportacao e importacao de Notas Fiscais eletronicas para formatos serializados
     de arquivos. Como XML, JSON, binario, etc.
-    
+
     Nao deve ser instanciada diretamente!"""
 
     _fonte_dados = None
@@ -296,7 +296,7 @@ class SerializacaoXML(Serializacao):
         # Transporte
         transp = etree.SubElement(raiz, 'transp')
         etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
-        
+
         # Transportadora
         transp.append(self._serializar_transportadora(
             nota_fiscal.transporte_transportadora,
@@ -386,4 +386,33 @@ class SerializacaoPipes(Serializacao):
         return '|'.join(serial_emitente_list)
 
     def _serializar_cliente(self, cliente):
-        pass 
+
+        cod_municipio, municipio = obter_municipio_e_codigo(
+            cliente.endereco_municipio,
+            cliente.endereco_uf
+        )
+
+        serial_data = [
+            'E',
+            cliente.razao_social,
+            cliente.inscricao_estadual,
+            cliente.inscricao_suframa,
+            cliente.email,
+            '\nE02' if cliente.tipo_documento == 'CNPJ' else '\nE03',
+            cliente.numero_documento,
+            '\nE05',
+            cliente.endereco_logradouro,
+            cliente.endereco_numero,
+            cliente.endereco_complemento,
+            cliente.endereco_bairro,
+            cod_municipio,
+            municipio,
+            cliente.endereco_uf,
+            cliente.endereco_cep,
+            cliente.endereco_pais,
+            obter_pais_por_codigo(cliente.endereco_pais),
+            cliente.endereco_telefone,
+            '\n',
+        ]
+
+        return '|'.join(serial_data)
