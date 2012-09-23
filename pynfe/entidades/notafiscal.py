@@ -10,7 +10,8 @@ from pynfe.utils.flags import NF_STATUS, NF_TIPOS_DOCUMENTO, NF_TIPOS_IMPRESSAO_
         PIS_TIPOS_TRIBUTACAO, PIS_TIPOS_CALCULO, COFINS_TIPOS_TRIBUTACAO,\
         COFINS_TIPOS_CALCULO, MODALIDADES_FRETE, ORIGENS_PROCESSO, CODIGO_BRASIL,\
         NF_PROCESSOS_EMISSAO, CODIGOS_ESTADOS, TIPOS_DOCUMENTO
-from pynfe.utils import so_numeros, memoize
+# from pynfe.utils import so_numeros, memoize
+from pynfe.utils import so_numeros
 
 from decimal import Decimal
 
@@ -330,7 +331,7 @@ class NotaFiscal(Entidade):
         return obj
 
     @property
-    @memoize
+    # @memoize
     def identificador_unico(self):
         # Monta 'Id' da tag raiz <infNFe>
         # Ex.: NFe35080599999090910270550010000000011518005123

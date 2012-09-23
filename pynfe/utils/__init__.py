@@ -31,14 +31,14 @@ except ImportError:
 
 import flags
 
-from geraldo.utils import memoize
+# from geraldo.utils import memoize
 
-@memoize
+# @memoize
 def so_numeros(texto):
     """Retorna o texto informado mas somente os numeros"""
     return ''.join(filter(lambda c: ord(c) in range(48,58), texto))
 
-@memoize
+# @memoize
 def obter_pais_por_codigo(codigo):
     # TODO
     if codigo == '1058':
@@ -61,14 +61,14 @@ CARACTERS_ACENTUADOS = {
     ord(u'ç'): u'c',
 }
 
-@memoize
+# @memoize
 def normalizar_municipio(municipio):
     if not isinstance(municipio, unicode):  
         municipio = municipio.decode('utf-8')
     
     return municipio.lower().translate(CARACTERS_ACENTUADOS).upper() 
 
-@memoize
+# @memoize
 def carregar_arquivo_municipios(uf, reverso=False):
     caminho_arquivo = os.path.join(
             CAMINHO_MUNICIPIOS,
@@ -94,13 +94,13 @@ def carregar_arquivo_municipios(uf, reverso=False):
 
     return municipios_dict
 
-@memoize
+# @memoize
 def obter_codigo_por_municipio(municipio, uf):
     # TODO: fazer UF ser opcional
     municipios = carregar_arquivo_municipios(uf, True)
     return municipios[normalizar_municipio(municipio)] 
 
-@memoize
+# @memoize
 def obter_municipio_por_codigo(codigo, uf, normalizado=False):
     # TODO: fazer UF ser opcional
     municipios = carregar_arquivo_municipios(uf)
@@ -111,7 +111,7 @@ def obter_municipio_por_codigo(codigo, uf, normalizado=False):
 
     return municipio
 
-@memoize
+# @memoize
 def obter_municipio_e_codigo(municipio_ou_codigo, uf):
     try:
         cod_municipio = int(municipio_ou_codigo)
@@ -122,6 +122,6 @@ def obter_municipio_e_codigo(municipio_ou_codigo, uf):
 
     return cod_municipio, municipio
 
-@memoize
+# @memoize
 def extrair_tag(root):
     return root.tag.split('}')[-1]
