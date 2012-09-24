@@ -307,6 +307,20 @@ class NotaFiscal(Entidade):
         u"""Adiciona uma instancia de Produto"""
         obj = NotaFiscalProduto(**kwargs)
         self.produtos_e_servicos.append(obj)
+        self.totais_icms_base_calculo += obj.icms_valor_base_calculo
+        self.totais_icms_total += obj.icms_valor
+        self.totais_icms_st_base_calculo += obj.icms_st_valor_base_calculo
+        self.totais_icms_st_total += obj.icms_st_valor
+        self.totais_icms_total_produtos_e_servicos += obj.valor_total_bruto
+        self.totais_icms_total_frete += obj.total_frete
+        self.totais_icms_total_seguro += obj.total_seguro
+        self.totais_icms_total_desconto += obj.desconto
+        # self.totais_icms_total_ii += # tem que entender o cálculo
+        self.totais_icms_total_ipi += obj.ipi_valor_ipi
+        self.totais_icms_pis += obj.pis_valor
+        self.totais_icms_cofins += obj.cofins_valor
+        self.totais_icms_outras_despesas_acessorias += obj.outras_despesas_acessorias
+        self.totais_icms_total_nota += obj.valor_total_bruto
         return obj
 
     def adicionar_transporte_volume(self, **kwargs):
