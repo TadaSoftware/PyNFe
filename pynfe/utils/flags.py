@@ -139,7 +139,7 @@ PIS_TIPOS_TRIBUTACAO = (
 PIS_TIPOS_CALCULO = IPI_TIPOS_CALCULO
 
 COFINS_TIPOS_TRIBUTACAO = (
-    ('00', 'COFINS 01 - Operacao Tributavel - Base de Calculo = Valor da Operacao Aliquota...'), # FIXME
+    ('01', 'COFINS 01 - Operacao Tributavel - Base de Calculo = Valor da Operacao Aliquota...'), # FIXME
     ('02', 'COFINS 02 - Operacao Tributavel - Base de Calculo = Valor da Operacao (Aliquota...'), # FIXME
     ('03', 'COFINS 03 - Operacao Tributavel - Base de Calculo = Quantidade Vendida x Aliquota...'), # FIXME
     ('04', 'COFINS 04 - Operacao Tributavel - Tributacao Monofasica - (Aliquota Zero)'),
