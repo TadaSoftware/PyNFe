@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # *-* encoding: utf8 *-*
 
+
 from decimal import Decimal
 
 from pynfe.entidades.cliente import Cliente
@@ -9,6 +10,7 @@ from pynfe.entidades.notafiscal import NotaFiscal, NotaFiscalProduto
 from pynfe.entidades.fonte_dados import _fonte_dados
 from pynfe.processamento.serializacao import SerializacaoPipes
 from pynfe.utils.flags import CODIGO_BRASIL
+import datetime
 
 serializador = SerializacaoPipes(_fonte_dados, homologacao=True)
 
@@ -27,7 +29,7 @@ emitente = Emitente(
     endereco_pais=CODIGO_BRASIL,
 )
 
-print serializador._serializar_emitente(emitente)
+#print serializador._serializar_emitente(emitente)
 
 cliente = Cliente(
     razao_social='MARIANA CARVALHO SILVA',
@@ -44,9 +46,9 @@ cliente = Cliente(
     endereco_pais=CODIGO_BRASIL,
     endereco_telefone='11912341234',
 )
-print serializador._serializar_cliente(cliente)
+#print serializador._serializar_cliente(cliente)
 
-produto = NotaFiscalProduto(
+produto = dict(
     codigo='000328', # id do produto (000328 era o id no antigo sistemas de assinatura)
     descricao='Assinatura Rolling Stone',
     ncm='49029000', # categoria international do prod (sempre esse para assinaturas)
@@ -60,10 +62,65 @@ produto = NotaFiscalProduto(
     valor_unitario_tributavel=Decimal('9.75'),
     numero_pedido='12345', # id da ordem
     numero_do_item='12345328', # id do item (pode ser o id do produto concatenado com o do pedido)
+    icms_origem=0,
+    icms_modalidade_determinacao_bc=41,
+    pis_tipo_calculo='01',
+    pis_valor_base_calculo=Decimal('117.00'),
+    pis_aliquota_percentual=Decimal('0.65'),
+    pis_valor=Decimal('0.76'),
+    cofins_situacao_tributaria='01',
+    cofins_valor_base_calculo=Decimal('117.00'),
+    cofins_aliquota_percentual=Decimal('3.00'),
+    cofins_valor=Decimal('3.51')
 )
-print serializador._serializar_produto_servico(produto)
+#print serializador._serializar_produto_servico(produto)
 
-#nota_fiscal = NotaFiscal(
-#    emitente=emitente,
-#    cliente=cliente,
-#)
+nota_fiscal = NotaFiscal(
+   emitente=emitente,
+   cliente=cliente,
+   uf='SP',
+   codigo_numerico_aleatorio='66998237',
+   natureza_operacao='VENDA ASSINATURAS',
+   forma_pagamento='1',
+   modelo=55,
+   serie='2',
+   numero_nf='1138',
+   data_emissao=datetime.date(2012,03,06),
+   data_saida_entrada=datetime.date(2012,03,06),
+   hora_saida_entrada=datetime.time(03,12,00),
+   tipo_documento=1,
+   municipio='SAO PAULO',
+   tipo_impressao_danfe=1,
+   forma_emissao='1',
+   #dv_codigo_numerico_aleatorio=, ?
+   finalidade_emissao='1',
+   processo_emissao='3',
+   transporte_modalidade_frete=0,
+   informacoes_adicionais_interesse_fisco='NF-e emitida de acordo com os termos do Convenio ICMS 24/2011. Assinatura Numero 8061746'
+)
+nota_fiscal.adicionar_produto_servico(codigo='000328', # id do produto (000328 era o id no antigo sistemas de assinatura)
+    descricao='Assinatura Rolling Stone',
+    ncm='49029000', # categoria international do prod (sempre esse para assinaturas)
+    cfop='6922', 
+    unidade_comercial='UN',
+    quantidade_comercial=Decimal('12'), # 12 unidades (12 revistas) 
+    valor_unitario_comercial=Decimal('9.75'),
+    valor_total_bruto=Decimal('117.00'),
+    unidade_tributavel='UN',
+    quantidade_tributavel=Decimal('12'),
+    valor_unitario_tributavel=Decimal('9.75'),
+    numero_pedido='12345', # id da ordem
+    numero_do_item='12345328', # id do item (pode ser o id do produto concatenado com o do pedido)
+    icms_origem=0,
+    icms_modalidade_determinacao_bc=41,
+    pis_tipo_calculo='01',
+    pis_valor_base_calculo=Decimal('117.00'),
+    pis_aliquota_percentual=Decimal('0.65'),
+    pis_valor=Decimal('0.76'),
+    cofins_situacao_tributaria='01',
+    cofins_valor_base_calculo=Decimal('117.00'),
+    cofins_aliquota_percentual=Decimal('3.00'),
+    cofins_valor=Decimal('3.51'))
+from pprint import pprint
+pprint(serializador._serializar_nota_fiscal(nota_fiscal, retorna_string=False))
+print serializador._serializar_nota_fiscal(nota_fiscal)
