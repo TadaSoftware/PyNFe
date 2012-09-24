@@ -350,7 +350,7 @@ class SerializacaoPipes(Serializacao):
     def exportar(self, destino, **kwargs):
         pass
 
-    def _serializar_emitente(self, emitente):
+    def _serializar_emitente(self, emitente, retorna_string=True):
 
         cod_municipio, municipio = obter_municipio_e_codigo(
             emitente.endereco_municipio,
@@ -358,7 +358,7 @@ class SerializacaoPipes(Serializacao):
         )
 
         serial_emitente_list = [
-            'C',
+            '\nC',
             emitente.razao_social,
             emitente.nome_fantasia,
             emitente.inscricao_estadual,
@@ -380,12 +380,13 @@ class SerializacaoPipes(Serializacao):
             emitente.endereco_pais,
             obter_pais_por_codigo(emitente.endereco_pais),
             emitente.endereco_telefone,
-            '\n',
         ]
 
-        return '|'.join(serial_emitente_list)
+        if retorna_string:
+            return '|'.join(serial_emitente_list)
+        return serial_emitente_list
 
-    def _serializar_cliente(self, cliente):
+    def _serializar_cliente(self, cliente, retorna_string=True):
 
         cod_municipio, municipio = obter_municipio_e_codigo(
             cliente.endereco_municipio,
@@ -393,7 +394,7 @@ class SerializacaoPipes(Serializacao):
         )
 
         serial_data = [
-            'E',
+            '\nE',
             cliente.razao_social,
             cliente.inscricao_estadual,
             cliente.inscricao_suframa,
@@ -411,15 +412,16 @@ class SerializacaoPipes(Serializacao):
             cliente.endereco_cep,
             cliente.endereco_pais,
             obter_pais_por_codigo(cliente.endereco_pais),
-            cliente.endereco_telefone,
-            '\n',
+            cliente.endereco_telefone
         ]
 
-        return '|'.join(serial_data)
+        if retorna_string:
+            return '|'.join(serial_data)
+        return serial_data
 
-    def _serializar_produto_servico(self, produto_servico):
+    def _serializar_produto_servico(self, produto_servico, retorna_string=True):
         serial_data = [
-            'I',
+            '\nI',
             produto_servico.codigo,
             produto_servico.ean,
             produto_servico.descricao,
@@ -441,6 +443,111 @@ class SerializacaoPipes(Serializacao):
             str(produto_servico.compoe_valor_total),
             produto_servico.numero_pedido,
             produto_servico.numero_do_item,
-            '\nM',
+            '\nM', #IMPOSTOS
+            '\nN', #ICMS
+            '\nN06',
+            str(produto_servico.icms_origem),
+            str(produto_servico.icms_modalidade_determinacao_bc),
+            str(produto_servico.icms_valor),
+            str(produto_servico.icms_motivo_desoneracao),
+            '\nQ', #PIS
+            '\nQ02',
+            produto_servico.pis_tipo_calculo,
+            str(produto_servico.pis_valor_base_calculo),
+            str(produto_servico.pis_aliquota_percentual),
+            str(produto_servico.pis_valor),
+            '\nS', #COFINS
+            '\nS02',
+            produto_servico.cofins_situacao_tributaria,
+            str(produto_servico.cofins_valor_base_calculo),
+            str(produto_servico.cofins_aliquota_percentual),
+            str(produto_servico.cofins_valor)
         ]
-        return '|'.join(serial_data)
+
+        if retorna_string:
+            return '|'.join(serial_data)
+        return serial_data
+
+
+    def _serializar_nota_fiscal(self, nota_fiscal, retorna_string=True):
+
+        cod_municipio, municipio = obter_municipio_e_codigo(
+            nota_fiscal.municipio,
+            nota_fiscal.uf
+        )
+
+        serial_data = [
+            'A',
+            '2.00', # Versão da NFe | notasfiscal.modelo está em int()
+            nota_fiscal.identificador_unico,
+            '\nB',
+            CODIGOS_ESTADOS.get(nota_fiscal.uf, str(nota_fiscal.uf)),
+            nota_fiscal.codigo_numerico_aleatorio,
+            nota_fiscal.natureza_operacao,
+            nota_fiscal.forma_pagamento,
+            str(nota_fiscal.modelo),
+            nota_fiscal.serie,
+            nota_fiscal.numero_nf,
+            nota_fiscal.data_emissao.strftime('%Y-%m-%d'),
+            nota_fiscal.data_saida_entrada.strftime('%Y-%m-%d'),
+            nota_fiscal.hora_saida_entrada.strftime('%H:%M:%S'),
+            str(nota_fiscal.tipo_documento),
+            str(cod_municipio),
+            str(nota_fiscal.tipo_impressao_danfe),
+            nota_fiscal.forma_emissao,
+            nota_fiscal.dv_codigo_numerico_aleatorio,
+            str(self._ambiente),
+            str(nota_fiscal.finalidade_emissao),
+            str(nota_fiscal.processo_emissao),
+            '%s %s' % (self._nome_aplicacao, 
+                                nota_fiscal.versao_processo_emissao),
+            '', # dhCont - Data e Hora da entrada em contingência
+            '', # xJust - Justificativa da entrada em contingência
+        ]
+
+        serial_data += self._serializar_emitente(nota_fiscal.emitente,
+                                                        retorna_string=False)
+        serial_data += self._serializar_cliente(nota_fiscal.cliente,
+                                                        retorna_string=False)
+
+        # Produtos e serviços
+        produtos_servicos = enumerate(nota_fiscal.produtos_e_servicos, start=1)
+        for num, produto_servico in produtos_servicos:
+            num_produto = [
+                '\nH',
+                str(num), # Número do produto na lista
+                ''
+                '' # End Pipe
+            ]
+            serial_data += num_produto
+            serial_data += self._serializar_produto_servico(produto_servico,
+                                                        retorna_string=False)
+
+        serial_data += [
+            '\nW', #Valores totais NFe,
+            '\nW02',
+            str(nota_fiscal.totais_icms_base_calculo),
+            str(nota_fiscal.totais_icms_total),
+            str(nota_fiscal.totais_icms_st_base_calculo),
+            str(nota_fiscal.totais_icms_st_total),
+            str(nota_fiscal.totais_icms_total_produtos_e_servicos),
+            str(nota_fiscal.totais_icms_total_frete),
+            str(nota_fiscal.totais_icms_total_seguro),
+            str(nota_fiscal.totais_icms_total_desconto),
+            str(nota_fiscal.totais_icms_total_ii),
+            str(nota_fiscal.totais_icms_total_ipi),
+            str(nota_fiscal.totais_icms_pis),
+            str(nota_fiscal.totais_icms_cofins),
+            str(nota_fiscal.totais_icms_outras_despesas_acessorias),
+            str(nota_fiscal.totais_icms_total_nota),
+            '\nX',
+            str(nota_fiscal.transporte_modalidade_frete),
+            '\nZ',
+            nota_fiscal.informacoes_adicionais_interesse_fisco,
+            nota_fiscal.informacoes_complementares_interesse_contribuinte,
+            '' # End Pipe
+        ]
+
+        if retorna_string:
+            return '|'.join(serial_data)
+        return serial_data
