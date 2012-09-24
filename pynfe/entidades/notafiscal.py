@@ -55,6 +55,9 @@ class NotaFiscal(Entidade):
     # - Data de saida/entrada
     data_saida_entrada = None
 
+    # - Hora de saida/entrada
+    hora_saida_entrada = None
+
     # - Forma de pagamento  (obrigatorio - seleciona de lista) - NF_FORMAS_PAGAMENTO
     forma_pagamento = int()
 
@@ -470,6 +473,10 @@ class NotaFiscalProduto(Entidade):
 
     #    - Valor do ICMS
     icms_valor = Decimal()
+
+    #    - Motivo da desoneração do ICMS
+    # TODO: Criar opções possíveis em flags.py
+    icms_motivo_desoneracao = int()
 
     #   - ICMS ST
     #    - Modalidade de determinacao da BC ICMS ST (seleciona de lista) - ICMS_MODALIDADES
