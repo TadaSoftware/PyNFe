@@ -48,33 +48,6 @@ cliente = Cliente(
 )
 #print serializador._serializar_cliente(cliente)
 
-produto = dict(
-    codigo='000328', # id do produto (000328 era o id no antigo sistemas de assinatura)
-    descricao='Assinatura Rolling Stone',
-    ncm='49029000', # categoria international do prod (sempre esse para assinaturas)
-    cfop='6922', 
-    unidade_comercial='UN',
-    quantidade_comercial=Decimal('12'), # 12 unidades (12 revistas) 
-    valor_unitario_comercial=Decimal('9.75'),
-    valor_total_bruto=Decimal('117.00'),
-    unidade_tributavel='UN',
-    quantidade_tributavel=Decimal('12'),
-    valor_unitario_tributavel=Decimal('9.75'),
-    numero_pedido='12345', # id da ordem
-    numero_do_item='12345328', # id do item (pode ser o id do produto concatenado com o do pedido)
-    icms_origem=0,
-    icms_modalidade_determinacao_bc=41,
-    pis_tipo_calculo='01',
-    pis_valor_base_calculo=Decimal('117.00'),
-    pis_aliquota_percentual=Decimal('0.65'),
-    pis_valor=Decimal('0.76'),
-    cofins_situacao_tributaria='01',
-    cofins_valor_base_calculo=Decimal('117.00'),
-    cofins_aliquota_percentual=Decimal('3.00'),
-    cofins_valor=Decimal('3.51')
-)
-#print serializador._serializar_produto_servico(produto)
-
 nota_fiscal = NotaFiscal(
    emitente=emitente,
    cliente=cliente,
@@ -121,6 +94,7 @@ nota_fiscal.adicionar_produto_servico(codigo='000328', # id do produto (000328 e
     cofins_valor_base_calculo=Decimal('117.00'),
     cofins_aliquota_percentual=Decimal('3.00'),
     cofins_valor=Decimal('3.51'))
+
 from pprint import pprint
 pprint(serializador._serializar_nota_fiscal(nota_fiscal, retorna_string=False))
 print serializador._serializar_nota_fiscal(nota_fiscal)
