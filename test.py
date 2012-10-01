@@ -95,6 +95,4 @@ nota_fiscal.adicionar_produto_servico(codigo='000328', # id do produto (000328 e
     cofins_aliquota_percentual=Decimal('3.00'),
     cofins_valor=Decimal('3.51'))
 
-from pprint import pprint
-pprint(serializador._serializar_nota_fiscal(nota_fiscal, retorna_string=False))
 print serializador._serializar_nota_fiscal(nota_fiscal)
