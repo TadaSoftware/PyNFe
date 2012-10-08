@@ -376,7 +376,7 @@ class SerializacaoPipes(Serializacao):
             cod_municipio,
             municipio,
             emitente.endereco_uf,
-            emitente.endereco_cep,
+            emitente.endereco_cep.replace('-',''),
             emitente.endereco_pais,
             obter_pais_por_codigo(emitente.endereco_pais),
             emitente.endereco_telefone,
@@ -409,7 +409,7 @@ class SerializacaoPipes(Serializacao):
             cod_municipio,
             municipio,
             cliente.endereco_uf,
-            cliente.endereco_cep,
+            cliente.endereco_cep.replace('-',''),
             cliente.endereco_pais,
             obter_pais_por_codigo(cliente.endereco_pais),
             cliente.endereco_telefone
