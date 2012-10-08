@@ -125,3 +125,9 @@ def obter_municipio_e_codigo(municipio_ou_codigo, uf):
 # @memoize
 def extrair_tag(root):
     return root.tag.split('}')[-1]
+
+def formatar_decimal(dec):
+    if dec*100 - int(dec):
+        return str(dec)
+    else:
+        return "%.2f" % dec

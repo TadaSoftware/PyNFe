@@ -6,7 +6,7 @@ except:
 
 from pynfe.entidades import Emitente, Cliente, Produto, Transportadora, NotaFiscal
 from pynfe.excecoes import NenhumObjetoEncontrado, MuitosObjetosEncontrados
-from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, obter_pais_por_codigo, obter_municipio_e_codigo
+from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, obter_pais_por_codigo, obter_municipio_e_codigo, formatar_decimal
 from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO
 
 class Serializacao(object):
@@ -429,39 +429,39 @@ class SerializacaoPipes(Serializacao):
             produto_servico.ex_tipi,
             produto_servico.cfop,
             produto_servico.unidade_comercial,
-            str(produto_servico.quantidade_comercial),
-            str(produto_servico.valor_unitario_comercial),
-            str(produto_servico.valor_total_bruto),
+            formatar_decimal(produto_servico.quantidade_comercial),
+            formatar_decimal(produto_servico.valor_unitario_comercial),
+            formatar_decimal(produto_servico.valor_total_bruto),
             produto_servico.ean_tributavel,
             produto_servico.unidade_tributavel,
-            str(produto_servico.quantidade_tributavel),
-            str(produto_servico.valor_unitario_tributavel),
-            str(produto_servico.total_frete),
-            str(produto_servico.total_seguro),
-            str(produto_servico.desconto),
-            str(produto_servico.outras_despesas_acessorias),
-            str(produto_servico.compoe_valor_total),
+            formatar_decimal(produto_servico.quantidade_tributavel),
+            formatar_decimal(produto_servico.valor_unitario_tributavel),
+            formatar_decimal(produto_servico.total_frete),
+            formatar_decimal(produto_servico.total_seguro),
+            formatar_decimal(produto_servico.desconto),
+            formatar_decimal(produto_servico.outras_despesas_acessorias),
+            formatar_decimal(produto_servico.compoe_valor_total),
             produto_servico.numero_pedido,
             produto_servico.numero_do_item,
             '\nM', #IMPOSTOS
             '\nN', #ICMS
             '\nN06',
-            str(produto_servico.icms_origem),
-            str(produto_servico.icms_modalidade_determinacao_bc),
-            str(produto_servico.icms_valor),
-            str(produto_servico.icms_motivo_desoneracao),
+            formatar_decimal(produto_servico.icms_origem),
+            formatar_decimal(produto_servico.icms_modalidade_determinacao_bc),
+            formatar_decimal(produto_servico.icms_valor),
+            formatar_decimal(produto_servico.icms_motivo_desoneracao),
             '\nQ', #PIS
             '\nQ02',
             produto_servico.pis_tipo_calculo,
-            str(produto_servico.pis_valor_base_calculo),
-            str(produto_servico.pis_aliquota_percentual),
-            str(produto_servico.pis_valor),
+            formatar_decimal(produto_servico.pis_valor_base_calculo),
+            formatar_decimal(produto_servico.pis_aliquota_percentual),
+            formatar_decimal(produto_servico.pis_valor),
             '\nS', #COFINS
             '\nS02',
             produto_servico.cofins_situacao_tributaria,
-            str(produto_servico.cofins_valor_base_calculo),
-            str(produto_servico.cofins_aliquota_percentual),
-            str(produto_servico.cofins_valor)
+            formatar_decimal(produto_servico.cofins_valor_base_calculo),
+            formatar_decimal(produto_servico.cofins_aliquota_percentual),
+            formatar_decimal(produto_servico.cofins_valor)
         ]
 
         if retorna_string:
@@ -526,22 +526,22 @@ class SerializacaoPipes(Serializacao):
         serial_data += [
             '\nW', #Valores totais NFe,
             '\nW02',
-            str(nota_fiscal.totais_icms_base_calculo),
-            str(nota_fiscal.totais_icms_total),
-            str(nota_fiscal.totais_icms_st_base_calculo),
-            str(nota_fiscal.totais_icms_st_total),
-            str(nota_fiscal.totais_icms_total_produtos_e_servicos),
-            str(nota_fiscal.totais_icms_total_frete),
-            str(nota_fiscal.totais_icms_total_seguro),
-            str(nota_fiscal.totais_icms_total_desconto),
-            str(nota_fiscal.totais_icms_total_ii),
-            str(nota_fiscal.totais_icms_total_ipi),
-            str(nota_fiscal.totais_icms_pis),
-            str(nota_fiscal.totais_icms_cofins),
-            str(nota_fiscal.totais_icms_outras_despesas_acessorias),
-            str(nota_fiscal.totais_icms_total_nota),
+            formatar_decimal(nota_fiscal.totais_icms_base_calculo),
+            formatar_decimal(nota_fiscal.totais_icms_total),
+            formatar_decimal(nota_fiscal.totais_icms_st_base_calculo),
+            formatar_decimal(nota_fiscal.totais_icms_st_total),
+            formatar_decimal(nota_fiscal.totais_icms_total_produtos_e_servicos),
+            formatar_decimal(nota_fiscal.totais_icms_total_frete),
+            formatar_decimal(nota_fiscal.totais_icms_total_seguro),
+            formatar_decimal(nota_fiscal.totais_icms_total_desconto),
+            formatar_decimal(nota_fiscal.totais_icms_total_ii),
+            formatar_decimal(nota_fiscal.totais_icms_total_ipi),
+            formatar_decimal(nota_fiscal.totais_icms_pis),
+            formatar_decimal(nota_fiscal.totais_icms_cofins),
+            formatar_decimal(nota_fiscal.totais_icms_outras_despesas_acessorias),
+            formatar_decimal(nota_fiscal.totais_icms_total_nota),
             '\nX',
-            str(nota_fiscal.transporte_modalidade_frete),
+            formatar_decimal(nota_fiscal.transporte_modalidade_frete),
             '\nZ',
             nota_fiscal.informacoes_adicionais_interesse_fisco,
             nota_fiscal.informacoes_complementares_interesse_contribuinte,
