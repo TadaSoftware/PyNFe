@@ -359,31 +359,31 @@ class SerializacaoPipes(Serializacao):
 
         serial_emitente_list = [
             '\nC',
-            str(emitente.razao_social),
-            str(emitente.nome_fantasia),
-            str(emitente.inscricao_estadual),
-            str(emitente.inscricao_estadual_subst_tributaria),
-            str(emitente.inscricao_municipal),
-            str(emitente.cnae_fiscal),
-            str(emitente.codigo_de_regime_tributario),
+            emitente.razao_social,
+            emitente.nome_fantasia,
+            emitente.inscricao_estadual,
+            emitente.inscricao_estadual_subst_tributaria,
+            emitente.inscricao_municipal,
+            emitente.cnae_fiscal,
+            emitente.codigo_de_regime_tributario,
             '\nC02',
-            str(emitente.cnpj),
+            emitente.cnpj,
             '\nC05',
-            str(emitente.endereco_logradouro),
-            str(emitente.endereco_numero),
-            str(emitente.endereco_complemento),
-            str(emitente.endereco_bairro),
-            str(cod_municipio),
-            str(municipio),
-            str(emitente.endereco_uf),
-            str(emitente.endereco_cep).replace('-',''),
-            str(emitente.endereco_pais),
+            emitente.endereco_logradouro,
+            emitente.endereco_numero,
+            emitente.endereco_complemento,
+            emitente.endereco_bairro,
+            cod_municipio,
+            municipio,
+            emitente.endereco_uf,
+            emitente.endereco_cep.replace('-',''),
+            emitente.endereco_pais,
             obter_pais_por_codigo(emitente.endereco_pais),
-            str(emitente.endereco_telefone),
+            emitente.endereco_telefone,
         ]
 
         if retorna_string:
-            return '|'.join(serial_emitente_list)
+            return '|'.join(map(str,serial_emitente_list))
         return serial_emitente_list
 
     def _serializar_cliente(self, cliente, retorna_string=True):
@@ -395,77 +395,77 @@ class SerializacaoPipes(Serializacao):
 
         serial_data = [
             '\nE',
-            str(cliente.razao_social),
-            str(cliente.inscricao_estadual),
-            str(cliente.inscricao_suframa),
-            str(cliente.email),
+            cliente.razao_social,
+            cliente.inscricao_estadual,
+            cliente.inscricao_suframa,
+            cliente.email,
             '\nE02' if cliente.tipo_documento == 'CNPJ' else '\nE03',
-            str(cliente.numero_documento),
+            cliente.numero_documento,
             '\nE05',
-            str(cliente.endereco_logradouro),
-            str(cliente.endereco_numero),
-            str(cliente.endereco_complemento),
-            str(cliente.endereco_bairro),
-            str(cod_municipio),
-            str(municipio),
-            str(cliente.endereco_uf),
-            str(cliente.endereco_cep).replace('-',''),
-            str(cliente.endereco_pais),
+            cliente.endereco_logradouro,
+            cliente.endereco_numero,
+            cliente.endereco_complemento,
+            cliente.endereco_bairro,
+            cod_municipio,
+            municipio,
+            cliente.endereco_uf,
+            cliente.endereco_cep.replace('-',''),
+            cliente.endereco_pais,
             obter_pais_por_codigo(cliente.endereco_pais),
-            str(cliente.endereco_telefone)
+            cliente.endereco_telefone
         ]
 
         if retorna_string:
-            return '|'.join(serial_data)
+            return '|'.join(map(str,serial_data))
         return serial_data
 
     def _serializar_produto_servico(self, produto_servico, retorna_string=True):
         serial_data = [
             '\nI',
-            str(produto_servico.codigo),
-            str(produto_servico.ean),
-            str(produto_servico.descricao),
-            str(produto_servico.ncm),
-            str(produto_servico.ex_tipi),
-            str(produto_servico.cfop),
-            str(produto_servico.unidade_comercial),
+            produto_servico.codigo,
+            produto_servico.ean,
+            produto_servico.descricao,
+            produto_servico.ncm,
+            produto_servico.ex_tipi,
+            produto_servico.cfop,
+            produto_servico.unidade_comercial,
             formatar_decimal(produto_servico.quantidade_comercial),
             formatar_decimal(produto_servico.valor_unitario_comercial),
             formatar_decimal(produto_servico.valor_total_bruto),
-            str(produto_servico.ean_tributavel),
-            str(produto_servico.unidade_tributavel),
+            produto_servico.ean_tributavel,
+            produto_servico.unidade_tributavel,
             formatar_decimal(produto_servico.quantidade_tributavel),
             formatar_decimal(produto_servico.valor_unitario_tributavel),
             formatar_decimal(produto_servico.total_frete),
             formatar_decimal(produto_servico.total_seguro),
             formatar_decimal(produto_servico.desconto),
             formatar_decimal(produto_servico.outras_despesas_acessorias),
-            str(produto_servico.compoe_valor_total),
-            str(produto_servico.numero_pedido),
-            str(produto_servico.numero_do_item),
+            produto_servico.compoe_valor_total,
+            produto_servico.numero_pedido,
+            produto_servico.numero_do_item,
             '\nM', #IMPOSTOS
             '\nN', #ICMS
             '\nN06',
-            str(produto_servico.icms_origem),
-            str(produto_servico.icms_modalidade_determinacao_bc),
-            formatar_decimal(produto_servico.icms_valor),
-            str(produto_servico.icms_motivo_desoneracao),
+            produto_servico.icms_origem,
+            produto_servico.icms_modalidade_determinacao_bc,
+            produto_servico.icms_valor if produto_servico.icms_valor else '',
+            produto_servico.icms_motivo_desoneracao if produto_servico.icms_valor else '',
             '\nQ', #PIS
             '\nQ02',
-            str(produto_servico.pis_tipo_calculo),
+            produto_servico.pis_tipo_calculo,
             formatar_decimal(produto_servico.pis_valor_base_calculo),
             formatar_decimal(produto_servico.pis_aliquota_percentual),
             formatar_decimal(produto_servico.pis_valor),
             '\nS', #COFINS
             '\nS02',
-            str(produto_servico.cofins_situacao_tributaria),
+            produto_servico.cofins_situacao_tributaria,
             formatar_decimal(produto_servico.cofins_valor_base_calculo),
             formatar_decimal(produto_servico.cofins_aliquota_percentual),
             formatar_decimal(produto_servico.cofins_valor)
         ]
 
         if retorna_string:
-            return '|'.join(serial_data)
+            return '|'.join(map(str,serial_data))
         return serial_data
 
 
@@ -481,24 +481,24 @@ class SerializacaoPipes(Serializacao):
             '2.00', # Versão da NFe | notasfiscal.modelo está em int()
             nota_fiscal.identificador_unico,
             '\nB',
-            CODIGOS_ESTADOS.get(nota_fiscal.uf, str(nota_fiscal.uf)),
-            str(nota_fiscal.codigo_numerico_aleatorio),
-            str(nota_fiscal.natureza_operacao),
-            str(nota_fiscal.forma_pagamento),
-            str(nota_fiscal.modelo),
-            str(nota_fiscal.serie),
-            str(nota_fiscal.numero_nf),
-            str(nota_fiscal.data_emissao.strftime('%Y-%m-%d')),
-            str(nota_fiscal.data_saida_entrada.strftime('%Y-%m-%d')),
-            str(nota_fiscal.hora_saida_entrada.strftime('%H:%M:%S')),
-            str(nota_fiscal.tipo_documento),
-            str(cod_municipio),
-            str(nota_fiscal.tipo_impressao_danfe),
-            str(nota_fiscal.forma_emissao),
-            str(nota_fiscal.dv_codigo_numerico_aleatorio),
-            str(self._ambiente),
-            str(nota_fiscal.finalidade_emissao),
-            str(nota_fiscal.processo_emissao),
+            CODIGOS_ESTADOS.get(nota_fiscal.uf, nota_fiscal.uf),
+            nota_fiscal.codigo_numerico_aleatorio,
+            nota_fiscal.natureza_operacao,
+            nota_fiscal.forma_pagamento,
+            nota_fiscal.modelo,
+            nota_fiscal.serie,
+            nota_fiscal.numero_nf,
+            nota_fiscal.data_emissao.strftime('%Y-%m-%d'),
+            nota_fiscal.data_saida_entrada.strftime('%Y-%m-%d'),
+            nota_fiscal.hora_saida_entrada.strftime('%H:%M:%S'),
+            nota_fiscal.tipo_documento,
+            cod_municipio,
+            nota_fiscal.tipo_impressao_danfe,
+            nota_fiscal.forma_emissao,
+            nota_fiscal.dv_codigo_numerico_aleatorio,
+            self._ambiente,
+            nota_fiscal.finalidade_emissao,
+            nota_fiscal.processo_emissao,
             '%s %s' % (self._nome_aplicacao, 
                                 nota_fiscal.versao_processo_emissao),
             '', # dhCont - Data e Hora da entrada em contingência
@@ -515,7 +515,7 @@ class SerializacaoPipes(Serializacao):
         for num, produto_servico in produtos_servicos:
             num_produto = [
                 '\nH',
-                str(num), # Número do produto na lista
+                num, # Número do produto na lista
                 ''
                 '' # End Pipe
             ]
@@ -541,13 +541,13 @@ class SerializacaoPipes(Serializacao):
             formatar_decimal(nota_fiscal.totais_icms_outras_despesas_acessorias),
             formatar_decimal(nota_fiscal.totais_icms_total_nota),
             '\nX',
-            str(nota_fiscal.transporte_modalidade_frete),
+            nota_fiscal.transporte_modalidade_frete,
             '\nZ',
-            str(nota_fiscal.informacoes_adicionais_interesse_fisco),
-            str(nota_fiscal.informacoes_complementares_interesse_contribuinte),
+            nota_fiscal.informacoes_adicionais_interesse_fisco,
+            nota_fiscal.informacoes_complementares_interesse_contribuinte,
             '' # End Pipe
         ]
 
         if retorna_string:
-            return '|'.join(serial_data)
+            return '|'.join(map(str,serial_data))
         return serial_data
