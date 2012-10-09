@@ -549,5 +549,16 @@ class SerializacaoPipes(Serializacao):
         ]
 
         if retorna_string:
-            return '|'.join(serial_data)
+            try:
+                return '|'.join(serial_data)
+            except TypeError as err:
+                enum_args = '\n'.join(
+                    map(
+                        lambda x: str(x[0]) + ' ' + str(x[1]), 
+                        enumerate(serial_data)
+                    )
+                )
+                message = err.message + '\n' + enum_args
+                raise TypeError(message)
+
         return serial_data
