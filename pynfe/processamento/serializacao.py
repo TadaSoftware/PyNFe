@@ -440,7 +440,7 @@ class SerializacaoPipes(Serializacao):
             formatar_decimal(produto_servico.total_seguro),
             formatar_decimal(produto_servico.desconto),
             formatar_decimal(produto_servico.outras_despesas_acessorias),
-            formatar_decimal(produto_servico.compoe_valor_total),
+            produto_servico.compoe_valor_total,
             produto_servico.numero_pedido,
             produto_servico.numero_do_item,
             '\nM', #IMPOSTOS
