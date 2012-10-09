@@ -127,7 +127,7 @@ def extrair_tag(root):
     return root.tag.split('}')[-1]
 
 def formatar_decimal(dec):
-    if dec*100 - int(dec):
+    if dec*100 - int(dec*100):
         return str(dec)
     else:
         return "%.2f" % dec
