@@ -131,3 +131,11 @@ def formatar_decimal(dec):
         return str(dec)
     else:
         return "%.2f" % dec
+
+def safe_str(str_):
+    is not isinstance(str_, unicode):
+        if isinstance(str_, str):
+            str_ = str_.decode('utf8')
+        else:
+            str_ = unicode(str_)
+    return unicodedata.normalize('NFKD', str_).encode('ascii', 'ignore')

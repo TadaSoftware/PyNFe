@@ -6,7 +6,9 @@ except:
 
 from pynfe.entidades import Emitente, Cliente, Produto, Transportadora, NotaFiscal
 from pynfe.excecoes import NenhumObjetoEncontrado, MuitosObjetosEncontrados
-from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, obter_pais_por_codigo, obter_municipio_e_codigo, formatar_decimal
+from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
+                        obter_pais_por_codigo, obter_municipio_e_codigo, \
+                        formatar_decimal, safe_str
 from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO
 
 class Serializacao(object):
@@ -550,7 +552,7 @@ class SerializacaoPipes(Serializacao):
 
         if retorna_string:
             try:
-                return '|'.join(map(str,serial_data))
+                return '|'.join(map(safe_str, serial_data))
             except TypeError as err:
                 enum_args = '\n'.join(
                     map(
