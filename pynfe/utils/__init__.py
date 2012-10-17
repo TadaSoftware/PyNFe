@@ -2,6 +2,7 @@
 
 import os
 import codecs
+import unicodedata
 
 try:
   from lxml import etree
@@ -133,7 +134,7 @@ def formatar_decimal(dec):
         return "%.2f" % dec
 
 def safe_str(str_):
-    is not isinstance(str_, unicode):
+    if not isinstance(str_, unicode):
         if isinstance(str_, str):
             str_ = str_.decode('utf8')
         else:
