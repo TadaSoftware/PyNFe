@@ -143,3 +143,11 @@ def safe_str(str_):
         else:
             str_ = unicode(str_)
     return unicodedata.normalize('NFKD', str_).encode('ascii', 'ignore')
+
+
+def obter_uf_por_codigo(codigo_uf):
+    if isinstance(codigo_uf, basestring):
+        return codigo_uf
+
+    estados = {v: k for k, v in flags.CODIGOS_ESTADOS.items()}
+    return estados[unicode(codigo_uf)]

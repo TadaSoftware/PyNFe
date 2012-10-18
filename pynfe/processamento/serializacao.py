@@ -8,7 +8,7 @@ from pynfe.entidades import Emitente, Cliente, Produto, Transportadora, NotaFisc
 from pynfe.excecoes import NenhumObjetoEncontrado, MuitosObjetosEncontrados
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
                         obter_pais_por_codigo, obter_municipio_e_codigo, \
-                        formatar_decimal, safe_str
+                        formatar_decimal, safe_str, obter_uf_por_codigo
 from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO
 
 class Serializacao(object):
@@ -377,7 +377,7 @@ class SerializacaoPipes(Serializacao):
             emitente.endereco_bairro,
             cod_municipio,
             municipio,
-            emitente.endereco_uf,
+            obter_uf_por_codigo(emitente.endereco_uf),
             emitente.endereco_cep.replace('-',''),
             emitente.endereco_pais,
             obter_pais_por_codigo(emitente.endereco_pais),
@@ -410,7 +410,7 @@ class SerializacaoPipes(Serializacao):
             cliente.endereco_bairro,
             cod_municipio,
             municipio,
-            cliente.endereco_uf,
+            obter_uf_por_codigo(cliente.endereco_uf),
             cliente.endereco_cep.replace('-',''),
             cliente.endereco_pais,
             obter_pais_por_codigo(cliente.endereco_pais),
