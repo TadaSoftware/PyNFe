@@ -109,7 +109,7 @@ def obter_municipio_por_codigo(codigo, uf, normalizado=False):
     # TODO: fazer UF ser opcional
     municipios = carregar_arquivo_municipios(uf)
 
-    municipio = municipios[codigo]
+    municipio = municipios[unicode(codigo)]
     if normalizado:
         return normalizar_municipio(municipio)
 
