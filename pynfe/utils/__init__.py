@@ -71,10 +71,13 @@ def normalizar_municipio(municipio):
 
 # @memoize
 def carregar_arquivo_municipios(uf, reverso=False):
-    caminho_arquivo = os.path.join(
-            CAMINHO_MUNICIPIOS,
-            'MunIBGE-UF%s.txt'%flags.CODIGOS_ESTADOS[uf.upper()],
-            )
+    if isinstance(uf, basestring):
+        try:
+            uf = int(uf)
+        except ValueError:
+            uf = flags.CODIGOS_ESTADOS[uf.upper()]
+
+    caminho_arquivo = os.path.join(CAMINHO_MUNICIPIOS, 'MunIBGE-UF%s.txt' % uf)
 
     # Carrega o conteudo do arquivo
     fp = codecs.open(caminho_arquivo, "r", "utf-8-sig")
