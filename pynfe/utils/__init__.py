@@ -146,7 +146,7 @@ def safe_str(str_):
 
 
 def obter_uf_por_codigo(codigo_uf):
-    if isinstance(codigo_uf, basestring):
+    if isinstance(codigo_uf, basestring) and codigo_uf.isalpha():
         return codigo_uf
 
     estados = {v: k for k, v in flags.CODIGOS_ESTADOS.items()}
