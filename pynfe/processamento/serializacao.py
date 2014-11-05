@@ -35,7 +35,6 @@ class Serializacao(object):
     def exportar(self, destino, **kwargs):
         """Gera o(s) arquivo(s) de exportacao a partir da Nofa Fiscal eletronica
         ou lista delas."""
-
         raise NotImplementedError
 
     def importar(self, origem):
@@ -87,10 +86,9 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(endereco, 'nro').text = emitente.endereco_numero
         etree.SubElement(endereco, 'xCpl').text = emitente.endereco_complemento
         etree.SubElement(endereco, 'xBairro').text = emitente.endereco_bairro
-        etree.SubElement(endereco, 'cMun').text = emitente.endereco_municipio
-        etree.SubElement(endereco, 'xMun').text = obter_municipio_por_codigo(
-                emitente.endereco_municipio, emitente.endereco_uf,
-                )
+        etree.SubElement(endereco, 'cMun').text = obter_codigo_por_municipio(
+            emitente.endereco_municipio, emitente.endereco_uf)
+        etree.SubElement(endereco, 'xMun').text = emitente.endereco_municipio
         etree.SubElement(endereco, 'UF').text = emitente.endereco_uf
         etree.SubElement(endereco, 'CEP').text = so_numeros(emitente.endereco_cep)
         etree.SubElement(endereco, 'cPais').text = emitente.endereco_pais
@@ -116,10 +114,9 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(endereco, 'nro').text = cliente.endereco_numero
         etree.SubElement(endereco, 'xCpl').text = cliente.endereco_complemento
         etree.SubElement(endereco, 'xBairro').text = cliente.endereco_bairro
-        etree.SubElement(endereco, 'cMun').text = cliente.endereco_municipio
-        etree.SubElement(endereco, 'xMun').text = obter_municipio_por_codigo(
-                cliente.endereco_municipio, cliente.endereco_uf,
-                )
+        etree.SubElement(endereco, 'cMun').text = obter_codigo_por_municipio(
+            cliente.endereco_municipio, cliente.endereco_uf)
+        etree.SubElement(endereco, 'xMun').text = cliente.endereco_municipio
         etree.SubElement(endereco, 'UF').text = cliente.endereco_uf
         etree.SubElement(endereco, 'CEP').text = so_numeros(cliente.endereco_cep)
         etree.SubElement(endereco, 'cPais').text = cliente.endereco_pais
@@ -501,7 +498,7 @@ class SerializacaoPipes(Serializacao):
             self._ambiente,
             nota_fiscal.finalidade_emissao,
             nota_fiscal.processo_emissao,
-            '%s %s' % (self._nome_aplicacao, 
+            '%s %s' % (self._nome_aplicacao,
                                 nota_fiscal.versao_processo_emissao),
             '', # dhCont - Data e Hora da entrada em contingência
             '', # xJust - Justificativa da entrada em contingência
@@ -556,7 +553,7 @@ class SerializacaoPipes(Serializacao):
             except TypeError as err:
                 enum_args = '\n'.join(
                     map(
-                        lambda x: str(x[0]) + ' ' + str(x[1]), 
+                        lambda x: str(x[0]) + ' ' + str(x[1]),
                         enumerate(serial_data)
                     )
                 )
