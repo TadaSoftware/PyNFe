@@ -5,25 +5,25 @@ import codecs
 import unicodedata
 
 try:
-  from lxml import etree
+    from lxml import etree
 except ImportError:
-  try:
-    # Python 2.5 - cElementTree
-    import xml.etree.cElementTree as etree
-  except ImportError:
     try:
-      # Python 2.5 - ElementTree
-      import xml.etree.ElementTree as etree
+    # Python 2.5 - cElementTree
+        import xml.etree.cElementTree as etree
     except ImportError:
-      try:
-        # Instalacao normal do cElementTree
-        import cElementTree as etree
-      except ImportError:
         try:
-          # Instalacao normal do ElementTree
-          import elementtree.ElementTree as etree
+        # Python 2.5 - ElementTree
+            import xml.etree.ElementTree as etree
         except ImportError:
-          raise Exception('Falhou ao importar lxml/ElementTree')
+            try:
+            # Instalacao normal do cElementTree
+                import cElementTree as etree
+            except ImportError:
+                try:
+                # Instalacao normal do ElementTree
+                    import elementtree.ElementTree as etree
+                except ImportError:
+                    raise Exception('Falhou ao importar lxml/ElementTree')
 
 try:
     from cStringIO import StringIO
@@ -34,10 +34,12 @@ import flags
 
 # from geraldo.utils import memoize
 
+
 # @memoize
 def so_numeros(texto):
     """Retorna o texto informado mas somente os numeros"""
-    return ''.join(filter(lambda c: ord(c) in range(48,58), texto))
+    return ''.join(filter(lambda c: ord(c) in range(48, 58), texto))
+
 
 # @memoize
 def obter_pais_por_codigo(codigo):
@@ -45,7 +47,8 @@ def obter_pais_por_codigo(codigo):
     if codigo == '1058':
         return 'Brasil'
 
-CAMINHO_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data')
+CAMINHO_DATA = os.path.join(os.path.dirname(
+    os.path.abspath(__file__)), '..', 'data')
 CAMINHO_MUNICIPIOS = os.path.join(CAMINHO_DATA, 'MunIBGE')
 CARACTERS_ACENTUADOS = {
     ord(u'á'): u'a',
@@ -62,12 +65,14 @@ CARACTERS_ACENTUADOS = {
     ord(u'ç'): u'c',
 }
 
+
 # @memoize
 def normalizar_municipio(municipio):
-    if not isinstance(municipio, unicode):  
+    if not isinstance(municipio, unicode):
         municipio = municipio.decode('utf-8')
-    
-    return municipio.lower().translate(CARACTERS_ACENTUADOS).upper() 
+
+    return municipio.lower().translate(CARACTERS_ACENTUADOS).upper()
+
 
 # @memoize
 def carregar_arquivo_municipios(uf, reverso=False):
@@ -83,13 +88,13 @@ def carregar_arquivo_municipios(uf, reverso=False):
     fp = codecs.open(caminho_arquivo, "r", "utf-8-sig")
     linhas = list(fp.readlines())
     fp.close()
-   
+
     municipios_dict = {}
 
-    for linha in linhas: 
+    for linha in linhas:
         codigo, municipio = linha.split('\t')
         codigo = codigo.strip()
-        municipio = municipio.strip() 
+        municipio = municipio.strip()
 
         if not reverso:
             municipios_dict[codigo] = municipio
@@ -98,22 +103,24 @@ def carregar_arquivo_municipios(uf, reverso=False):
 
     return municipios_dict
 
+
 # @memoize
 def obter_codigo_por_municipio(municipio, uf):
     # TODO: fazer UF ser opcional
     municipios = carregar_arquivo_municipios(uf, True)
-    return municipios[normalizar_municipio(municipio)] 
+    return municipios[normalizar_municipio(municipio)]
+
 
 # @memoize
 def obter_municipio_por_codigo(codigo, uf, normalizado=False):
     # TODO: fazer UF ser opcional
     municipios = carregar_arquivo_municipios(uf)
-
-    municipio = municipios[unicode(codigo)]
+    municipio = municipios.get(unicode(codigo))
     if normalizado:
         return normalizar_municipio(municipio)
 
     return municipio
+
 
 # @memoize
 def obter_municipio_e_codigo(municipio_ou_codigo, uf):
@@ -126,15 +133,18 @@ def obter_municipio_e_codigo(municipio_ou_codigo, uf):
 
     return cod_municipio, municipio
 
+
 # @memoize
 def extrair_tag(root):
     return root.tag.split('}')[-1]
 
+
 def formatar_decimal(dec):
-    if dec*100 - int(dec*100):
+    if dec * 100 - int(dec * 100):
         return str(dec)
     else:
         return "%.2f" % dec
+
 
 def safe_str(str_):
     if not isinstance(str_, unicode):
