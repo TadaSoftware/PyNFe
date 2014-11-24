@@ -832,6 +832,9 @@ class NotaFiscalEntregaRetirada(Entidade):
     #  - Municipio (obrigatorio)
     endereco_municipio = str()
 
+    # - Código Município (opt)
+    endereco_cod_municipio = str()
+
     #  - Telefone
     endereco_telefone = str()
 

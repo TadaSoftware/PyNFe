@@ -352,7 +352,8 @@ class SerializacaoPipes(Serializacao):
     def _serializar_emitente(self, emitente, retorna_string=True):
 
         cod_municipio, municipio = obter_municipio_e_codigo(
-            emitente.endereco_municipio,
+            dict(codigo=emitente.endereco_cod_municipio,
+                municipio=emitente.endereco_municipio),
             emitente.endereco_uf
         )
 
@@ -388,7 +389,8 @@ class SerializacaoPipes(Serializacao):
     def _serializar_cliente(self, cliente, retorna_string=True):
 
         cod_municipio, municipio = obter_municipio_e_codigo(
-            cliente.endereco_municipio,
+            dict(codigo=cliente.endereco_cod_municipio,
+                 municipio=cliente.endereco_municipio),
             cliente.endereco_uf
         )
 
@@ -464,14 +466,14 @@ class SerializacaoPipes(Serializacao):
         ]
 
         if retorna_string:
-            return '|'.join(map(str,serial_data))
+            return '|'.join(map(str, serial_data))
         return serial_data
-
 
     def _serializar_nota_fiscal(self, nota_fiscal, retorna_string=True):
 
         cod_municipio, municipio = obter_municipio_e_codigo(
-            nota_fiscal.municipio,
+            dict(codigo='',
+                 municipio=nota_fiscal.municipio),
             nota_fiscal.uf
         )
 
