@@ -116,23 +116,31 @@ def obter_municipio_por_codigo(codigo, uf, normalizado=False):
     # TODO: fazer UF ser opcional
     municipios = carregar_arquivo_municipios(uf)
     municipio = municipios.get(unicode(codigo))
+    if municipio is None:
+        raise ValueError
     if normalizado:
         return normalizar_municipio(municipio)
-
     return municipio
 
 
 # @memoize
-def obter_municipio_e_codigo(municipio_ou_codigo, uf):
+def obter_municipio_e_codigo(dados, uf):
+    '''Retorna código e município
+    municipio_ou_codigo - espera receber um dicionário no formato:
+        {codigo: 121212, municipio: u'municipio'}
+    '''
+
+    cod = dados.get('codigo', '')
+    mun = normalizar_municipio(dados.get('municipio', ''))
     try:
-        cod_municipio = int(municipio_ou_codigo)
+        cod = int(cod)
     except ValueError:
-        cod_municipio = obter_codigo_por_municipio(municipio_ou_codigo, uf)
-
-    municipio = obter_municipio_por_codigo(cod_municipio, uf, normalizado=True)
-
-    return cod_municipio, municipio
-
+        cod = obter_codigo_por_municipio(mun, uf)
+    # TODO: se ainda com este teste apresentar erros de nessa seção
+    # desenvolver um retorno que informe ao cliente quais nfes estão com erro
+    # e não explodir esse a geração das outras nfes
+    municipio = obter_municipio_por_codigo(cod, uf, normalizado=True)
+    return cod, municipio
 
 # @memoize
 def extrair_tag(root):

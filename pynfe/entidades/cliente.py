@@ -2,6 +2,7 @@
 from base import Entidade
 from pynfe.utils.flags import TIPOS_DOCUMENTO, CODIGO_BRASIL
 
+
 class Cliente(Entidade):
     # Dados do Cliente
     # - Nome/Razão Social (obrigatorio)
@@ -50,9 +51,11 @@ class Cliente(Entidade):
     # - Municipio (obrigatorio)
     endereco_municipio = str()
 
+    # - Código do Município (opt)
+    endereco_cod_municipio = str()
+
     # - Telefone
     endereco_telefone = str()
 
     def __str__(self):
         return ' '.join([self.tipo_documento, self.numero_documento])
-

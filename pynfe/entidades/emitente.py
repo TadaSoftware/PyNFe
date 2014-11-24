@@ -23,7 +23,7 @@ class Emitente(Entidade):
 
     # - Inscricao Estadual (Subst. Tributario)
     inscricao_estadual_subst_tributaria = str()
-    
+
     # - Codigo de Regime Tributario (obrigatorio)
     codigo_de_regime_tributario = str()
 
@@ -52,6 +52,9 @@ class Emitente(Entidade):
     # - Municipio (obrigatorio)
     endereco_municipio = str()
 
+    # - Codigo Municipio (opt)
+    endereco_cod_municipio = str()
+
     # - Telefone
     endereco_telefone = str()
 
@@ -60,4 +63,3 @@ class Emitente(Entidade):
 
     def __str__(self):
         return self.cnpj
-
