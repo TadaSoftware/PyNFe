@@ -492,12 +492,15 @@ class SerializacaoPipes(Serializacao):
             nota_fiscal.data_emissao.strftime('%Y-%m-%dT%H:%M:%S'),
             nota_fiscal.data_saida_entrada.strftime('%Y-%m-%dT%H:%M:%S'),
             nota_fiscal.tipo_documento,
+            '', # idDest
             cod_municipio,
             nota_fiscal.tipo_impressao_danfe,
             nota_fiscal.forma_emissao,
             nota_fiscal.dv_codigo_numerico_aleatorio,
             self._ambiente,
             nota_fiscal.finalidade_emissao,
+            '', # indFinal
+            '', # indPres
             nota_fiscal.processo_emissao,
             '%s %s' % (self._nome_aplicacao,
                                 nota_fiscal.versao_processo_emissao),
