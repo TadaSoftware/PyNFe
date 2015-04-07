@@ -55,9 +55,6 @@ class NotaFiscal(Entidade):
     # - Data de saida/entrada
     data_saida_entrada = None
 
-    # - Hora de saida/entrada
-    hora_saida_entrada = None
-
     # - Forma de pagamento  (obrigatorio - seleciona de lista) - NF_FORMAS_PAGAMENTO
     forma_pagamento = int()
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import time
 try:
     set
 except:
@@ -397,8 +398,10 @@ class SerializacaoPipes(Serializacao):
         serial_data = [
             '\nE',
             cliente.razao_social,
+            '2', # indIEDest
             cliente.inscricao_estadual,
             cliente.inscricao_suframa,
+            '', # IM
             cliente.email,
             '\nE02' if cliente.tipo_documento == 'CNPJ' else '\nE03',
             cliente.numero_documento,
@@ -444,6 +447,7 @@ class SerializacaoPipes(Serializacao):
             produto_servico.compoe_valor_total,
             produto_servico.numero_pedido,
             produto_servico.numero_do_item,
+            '', # nFCI
             '\nM', #IMPOSTOS
             '\nN', #ICMS
             '\nN06',
@@ -477,9 +481,17 @@ class SerializacaoPipes(Serializacao):
             nota_fiscal.uf
         )
 
+        if nota_fiscal.emitente.endereco_uf == nota_fiscal.cliente.endereco_uf:
+            id_dest = '1'
+        else:
+            id_dest = '2'
+
+        tz = time.strftime("%z")
+        tz = "{}:{}".format(tz[:-2], tz[-2:])
+
         serial_data = [
             'A',
-            '2.00', # Versão da NFe | notasfiscal.modelo está em int()
+            '3.10',
             nota_fiscal.identificador_unico,
             '\nB',
             CODIGOS_ESTADOS.get(nota_fiscal.uf, nota_fiscal.uf),
@@ -489,16 +501,18 @@ class SerializacaoPipes(Serializacao):
             nota_fiscal.modelo,
             nota_fiscal.serie,
             nota_fiscal.numero_nf,
-            nota_fiscal.data_emissao.strftime('%Y-%m-%d'),
-            nota_fiscal.data_saida_entrada.strftime('%Y-%m-%d'),
-            nota_fiscal.hora_saida_entrada.strftime('%H:%M:%S'),
+            nota_fiscal.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz,
+            nota_fiscal.data_saida_entrada.strftime('%Y-%m-%dT%H:%M:%S') + tz,
             nota_fiscal.tipo_documento,
+            id_dest, # idDest
             cod_municipio,
             nota_fiscal.tipo_impressao_danfe,
             nota_fiscal.forma_emissao,
             nota_fiscal.dv_codigo_numerico_aleatorio,
             self._ambiente,
             nota_fiscal.finalidade_emissao,
+            '', # indFinal
+            '', # indPres
             nota_fiscal.processo_emissao,
             '%s %s' % (self._nome_aplicacao,
                                 nota_fiscal.versao_processo_emissao),
@@ -529,6 +543,7 @@ class SerializacaoPipes(Serializacao):
             '\nW02',
             formatar_decimal(nota_fiscal.totais_icms_base_calculo),
             formatar_decimal(nota_fiscal.totais_icms_total),
+            '', # ICMSDeson
             formatar_decimal(nota_fiscal.totais_icms_st_base_calculo),
             formatar_decimal(nota_fiscal.totais_icms_st_total),
             formatar_decimal(nota_fiscal.totais_icms_total_produtos_e_servicos),
@@ -541,6 +556,7 @@ class SerializacaoPipes(Serializacao):
             formatar_decimal(nota_fiscal.totais_icms_cofins),
             formatar_decimal(nota_fiscal.totais_icms_outras_despesas_acessorias),
             formatar_decimal(nota_fiscal.totais_icms_total_nota),
+            '', # vTotTrib
             '\nX',
             nota_fiscal.transporte_modalidade_frete,
             '\nZ',
