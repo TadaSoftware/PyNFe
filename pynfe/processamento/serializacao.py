@@ -397,8 +397,10 @@ class SerializacaoPipes(Serializacao):
         serial_data = [
             '\nE',
             cliente.razao_social,
+            '', # indIEDest
             cliente.inscricao_estadual,
             cliente.inscricao_suframa,
+            '', # IM
             cliente.email,
             '\nE02' if cliente.tipo_documento == 'CNPJ' else '\nE03',
             cliente.numero_documento,
