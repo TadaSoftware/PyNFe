@@ -489,7 +489,7 @@ class SerializacaoPipes(Serializacao):
             nota_fiscal.modelo,
             nota_fiscal.serie,
             nota_fiscal.numero_nf,
-            nota_fiscal.data_emissao.strftime('%Y-%m-%d'),
+            nota_fiscal.data_emissao.strftime('%Y-%m-%dT%H:%M:%S'),
             nota_fiscal.data_saida_entrada.strftime('%Y-%m-%dT%H:%M:%S'),
             nota_fiscal.tipo_documento,
             cod_municipio,
