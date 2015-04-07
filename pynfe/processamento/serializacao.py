@@ -479,7 +479,7 @@ class SerializacaoPipes(Serializacao):
 
         serial_data = [
             'A',
-            '2.00', # Versão da NFe | notasfiscal.modelo está em int()
+            '3.10',
             nota_fiscal.identificador_unico,
             '\nB',
             CODIGOS_ESTADOS.get(nota_fiscal.uf, nota_fiscal.uf),
