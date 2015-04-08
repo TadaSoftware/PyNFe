@@ -511,8 +511,8 @@ class SerializacaoPipes(Serializacao):
             nota_fiscal.dv_codigo_numerico_aleatorio,
             self._ambiente,
             nota_fiscal.finalidade_emissao,
-            '', # indFinal
-            '', # indPres
+            nota_fiscal.cliente_final, # indFinal
+            nota_fiscal.indicador_presencial, # indPres
             nota_fiscal.processo_emissao,
             '%s %s' % (self._nome_aplicacao,
                                 nota_fiscal.versao_processo_emissao),

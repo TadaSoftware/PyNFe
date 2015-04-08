@@ -64,6 +64,12 @@ class NotaFiscal(Entidade):
     # - Finalidade de emissao (obrigatorio - seleciona de lista) - NF_FINALIDADES_EMISSAO
     finalidade_emissao = int()
 
+    # - Indica se a nota e para consumidor final
+    cliente_final = int()
+
+    # - Indica se a compra foi feita presencialmente, telefone, internet, etc
+    indicador_presencial = int()
+
     # - UF - converter para codigos em CODIGOS_ESTADOS
     uf = str()
 
