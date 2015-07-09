@@ -9,7 +9,7 @@ from pynfe.entidades import Emitente, Cliente, Produto, Transportadora, NotaFisc
 from pynfe.excecoes import NenhumObjetoEncontrado, MuitosObjetosEncontrados
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
                         obter_pais_por_codigo, obter_municipio_e_codigo, \
-                        formatar_decimal, safe_str, obter_uf_por_codigo
+                        formatar_decimal, safe_str, obter_uf_por_codigo, obter_codigo_por_municipio
 from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO
 
 class Serializacao(object):
@@ -48,7 +48,7 @@ class SerializacaoXML(Serializacao):
     _versao = VERSAO_PADRAO
 
     def exportar(self, destino=None, retorna_string=False, **kwargs):
-        """Gera o(s) arquivo(s) de Nofa Fiscal eletronica no padrao oficial da SEFAZ
+        """Gera o(s) arquivo(s) de Nota Fiscal eletronica no padrao oficial da SEFAZ
         e Receita Federal, para ser(em) enviado(s) para o webservice ou para ser(em)
         armazenado(s) em cache local."""
 
@@ -59,7 +59,7 @@ class SerializacaoXML(Serializacao):
         notas_fiscais = self._fonte_dados.obter_lista(_classe=NotaFiscal, **kwargs)
 
         for nf in notas_fiscais:
-            raiz.append(self._serializar_notas_fiscal(nf, retorna_string=False))
+            raiz.append(self._serializar_nota_fiscal(nf, retorna_string=False))
 
         if retorna_string:
             return etree.tostring(raiz, pretty_print=True)
@@ -221,7 +221,7 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
-    def _serializar_notas_fiscal(self, nota_fiscal, tag_raiz='infNFe', retorna_string=True):
+    def _serializar_nota_fiscal(self, nota_fiscal, tag_raiz='infNFe', retorna_string=True):
         raiz = etree.Element(tag_raiz, versao=self._versao)
 
         # Dados da Nota Fiscal
@@ -298,10 +298,11 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
 
         # Transportadora
-        transp.append(self._serializar_transportadora(
-            nota_fiscal.transporte_transportadora,
-            retorna_string=False,
-            ))
+        if nota_fiscal.transporte_transportadora:
+            transp.append(self._serializar_transportadora(
+                nota_fiscal.transporte_transportadora,
+                retorna_string=False,
+                ))
 
         # Veículo
         veiculo = etree.SubElement(transp, 'veicTransp')

@@ -8,11 +8,12 @@ from pynfe.entidades.cliente import Cliente
 from pynfe.entidades.emitente import Emitente
 from pynfe.entidades.notafiscal import NotaFiscal, NotaFiscalProduto
 from pynfe.entidades.fonte_dados import _fonte_dados
-from pynfe.processamento.serializacao import SerializacaoPipes
+from pynfe.processamento.serializacao import SerializacaoPipes, SerializacaoXML
 from pynfe.utils.flags import CODIGO_BRASIL
 import datetime
 
-serializador = SerializacaoPipes(_fonte_dados, homologacao=True)
+#serializador = SerializacaoPipes(_fonte_dados, homologacao=True)
+serializador = SerializacaoXML(_fonte_dados, homologacao=True)
 
 emitente = Emitente(
     razao_social='Spring Publicacoes Ltda',
@@ -95,4 +96,8 @@ nota_fiscal.adicionar_produto_servico(codigo='000328', # id do produto (000328 e
     cofins_aliquota_percentual=Decimal('3.00'),
     cofins_valor=Decimal('3.51'))
 
-print serializador._serializar_nota_fiscal(nota_fiscal)
+#print serializador._serializar_nota_fiscal(nota_fiscal)
+#print serializador._serializar_nota_fiscal(nota_fiscal)
+arquivo = file('teste.xml', 'w')
+arquivo.write(serializador._serializar_nota_fiscal(nota_fiscal))
+arquivo.close()
