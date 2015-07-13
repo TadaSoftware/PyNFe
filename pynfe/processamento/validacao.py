@@ -62,14 +62,16 @@ class Validacao(object):
             xsd_file - caminho para o arquivo xsd
             use_assert - levantar exceção caso documento não valide?
         '''
-        xsd_filepath = get_xsd(xsd_file)
+        #xsd_filepath = get_xsd(xsd_file)
         
         try:
             # checa se o schema ja existe no cache
-            xsd_schema = self.MEM_CACHE[xsd_filepath]
+            #xsd_schema = self.MEM_CACHE[xsd_filepath]
+            xsd_schema = self.MEM_CACHE[xsd_file]
         except:
             # lê xsd e atualiza cache
-            xsd_doc = etree.parse(xsd_filepath)
+            #xsd_doc = etree.parse(xsd_filepath)
+            xsd_doc = etree.parse(xsd_file)
             xsd_schema = etree.XMLSchema(xsd_doc)
             self.MEM_CACHE[xsd_file] = xsd_schema
         return use_assert and xsd_schema.assertValid(xml_doc) \

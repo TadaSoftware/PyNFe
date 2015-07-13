@@ -9,7 +9,7 @@ from pynfe.entidades import Emitente, Cliente, Produto, Transportadora, NotaFisc
 from pynfe.excecoes import NenhumObjetoEncontrado, MuitosObjetosEncontrados
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
                         obter_pais_por_codigo, obter_municipio_e_codigo, \
-                        formatar_decimal, safe_str, obter_uf_por_codigo
+                        formatar_decimal, safe_str, obter_uf_por_codigo, obter_codigo_por_municipio
 from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO
 
 class Serializacao(object):
@@ -48,7 +48,7 @@ class SerializacaoXML(Serializacao):
     _versao = VERSAO_PADRAO
 
     def exportar(self, destino=None, retorna_string=False, **kwargs):
-        """Gera o(s) arquivo(s) de Nofa Fiscal eletronica no padrao oficial da SEFAZ
+        """Gera o(s) arquivo(s) de Nota Fiscal eletronica no padrao oficial da SEFAZ
         e Receita Federal, para ser(em) enviado(s) para o webservice ou para ser(em)
         armazenado(s) em cache local."""
 
@@ -59,7 +59,7 @@ class SerializacaoXML(Serializacao):
         notas_fiscais = self._fonte_dados.obter_lista(_classe=NotaFiscal, **kwargs)
 
         for nf in notas_fiscais:
-            raiz.append(self._serializar_notas_fiscal(nf, retorna_string=False))
+            raiz.append(self._serializar_nota_fiscal(nf, retorna_string=False))
 
         if retorna_string:
             return etree.tostring(raiz, pretty_print=True)
@@ -221,8 +221,17 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
-    def _serializar_notas_fiscal(self, nota_fiscal, tag_raiz='infNFe', retorna_string=True):
+    def _serializar_nota_fiscal(self, nota_fiscal, tag_raiz='infNFe', retorna_string=True):
+        #raiz = etree.Element('NFe', xmlns='http://www.portalfiscal.inf.br/nfe')
         raiz = etree.Element(tag_raiz, versao=self._versao)
+
+        # 'Id' da tag raiz
+        # Ex.: NFe35080599999090910270550010000000011518005123
+        raiz.attrib['Id'] = nota_fiscal.identificador_unico
+
+        # timezone Brasília -03:00
+        tz = time.strftime("%z")
+        tz = "{}:{}".format(tz[:-2], tz[-2:])
 
         # Dados da Nota Fiscal
         ide = etree.SubElement(raiz, 'ide')
@@ -233,9 +242,15 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(ide, 'mod').text = str(nota_fiscal.modelo)
         etree.SubElement(ide, 'serie').text = nota_fiscal.serie
         etree.SubElement(ide, 'nNF').text = str(nota_fiscal.numero_nf)
-        etree.SubElement(ide, 'dEmi').text = nota_fiscal.data_emissao.strftime('%Y-%m-%d')
-        etree.SubElement(ide, 'dSaiEnt').text = nota_fiscal.data_saida_entrada.strftime('%Y-%m-%d')
-        etree.SubElement(ide, 'tpNF').text = str(nota_fiscal.tipo_documento)
+        etree.SubElement(ide, 'dhEmi').text = nota_fiscal.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz
+        etree.SubElement(ide, 'dhSaiEnt').text = nota_fiscal.data_saida_entrada.strftime('%Y-%m-%dT%H:%M:%S') + tz
+        """dhCont Data e Hora da entrada em contingência E B01 D 0-1 Formato AAAA-MM-DDThh:mm:ssTZD (UTC - Universal
+            Coordinated Time)
+            Exemplo: no formato UTC para os campos de Data-Hora, "TZD" pode ser -02:00 (Fernando de Noronha), -03:00 (Brasília) ou -04:00 (Manaus), no
+            horário de verão serão -01:00, -02:00 e -03:00. Exemplo: "2010-08-19T13:00:15-03:00". 
+        """
+        etree.SubElement(ide, 'tpNF').text = str(nota_fiscal.tipo_documento)  # 0=entrada 1=saida
+        etree.SubElement(ide, 'idDest').text = str(1) # Identificador de local de destino da operação 1=Operação interna;2=Operação interestadual;3=Operação com exterior. 
         etree.SubElement(ide, 'cMunFG').text = nota_fiscal.municipio
         etree.SubElement(ide, 'tpImp').text = str(nota_fiscal.tipo_impressao_danfe)
         etree.SubElement(ide, 'tpEmis').text = str(nota_fiscal.forma_emissao)
@@ -298,10 +313,11 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
 
         # Transportadora
-        transp.append(self._serializar_transportadora(
-            nota_fiscal.transporte_transportadora,
-            retorna_string=False,
-            ))
+        if nota_fiscal.transporte_transportadora:
+            transp.append(self._serializar_transportadora(
+                nota_fiscal.transporte_transportadora,
+                retorna_string=False,
+                ))
 
         # Veículo
         veiculo = etree.SubElement(transp, 'veicTransp')
@@ -334,10 +350,6 @@ class SerializacaoXML(Serializacao):
         info_ad = etree.SubElement(raiz, 'infAdic')
         etree.SubElement(info_ad, 'infAdFisco').text = nota_fiscal.informacoes_adicionais_interesse_fisco
         etree.SubElement(info_ad, 'infCpl').text = nota_fiscal.informacoes_complementares_interesse_contribuinte
-
-        # 'Id' da tag raiz
-        # Ex.: NFe35080599999090910270550010000000011518005123
-        raiz.attrib['Id'] = nota_fiscal.identificador_unico
 
         if retorna_string:
             return etree.tostring(raiz, pretty_print=True)

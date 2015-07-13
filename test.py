@@ -8,14 +8,18 @@ from pynfe.entidades.cliente import Cliente
 from pynfe.entidades.emitente import Emitente
 from pynfe.entidades.notafiscal import NotaFiscal, NotaFiscalProduto
 from pynfe.entidades.fonte_dados import _fonte_dados
-from pynfe.processamento.serializacao import SerializacaoPipes
+from pynfe.processamento.serializacao import SerializacaoPipes, SerializacaoXML
+from pynfe.processamento.validacao import Validacao
+from pynfe.processamento.assinatura import AssinaturaA1
 from pynfe.utils.flags import CODIGO_BRASIL
 import datetime
 
-serializador = SerializacaoPipes(_fonte_dados, homologacao=True)
+#serializador = SerializacaoPipes(_fonte_dados, homologacao=True)
+#serializador = SerializacaoXML(_fonte_dados, homologacao=True)
 
 emitente = Emitente(
     razao_social='Spring Publicacoes Ltda',
+    nome_fantasia='Falcao Ferragens',
     cnpj='08234482000156',
     codigo_de_regime_tributario='3', # 1 para simples nacional ou 3 para normal
     inscricao_estadual='149431130117', # numero de IE da empresa
@@ -36,6 +40,7 @@ cliente = Cliente(
     tipo_documento='CPF', #CPF ou CNPJ
     email='email@email.com',
     numero_documento='12345678900', # numero do cpf ou cnpj
+    inscricao_estadual='ISENTO',
     endereco_logradouro='Rua dos Bobos',
     endereco_numero='Zero',
     endereco_complemento='Ao lado de lugar nenhum',
@@ -51,19 +56,19 @@ cliente = Cliente(
 nota_fiscal = NotaFiscal(
    emitente=emitente,
    cliente=cliente,
-   uf='SP',
+   uf='PR',
    codigo_numerico_aleatorio='66998237',
    natureza_operacao='VENDA ASSINATURAS',
    forma_pagamento='1',
    modelo=55,
-   serie='2',
-   numero_nf='1138',
-   data_emissao=datetime.date(2012,03,06),
-   data_saida_entrada=datetime.date(2012,03,06),
+   serie='1',
+   numero_nf='1',
+   data_emissao=datetime.datetime.now(),
+   data_saida_entrada=datetime.datetime.now(),
    hora_saida_entrada=datetime.time(03,12,00),
    tipo_documento=1,
-   municipio='SAO PAULO',
-   tipo_impressao_danfe=1,
+   municipio='4118402',
+   tipo_impressao_danfe=1, # nfce 4
    forma_emissao='1',
    #dv_codigo_numerico_aleatorio=, ?
    finalidade_emissao='1',
@@ -95,4 +100,17 @@ nota_fiscal.adicionar_produto_servico(codigo='000328', # id do produto (000328 e
     cofins_aliquota_percentual=Decimal('3.00'),
     cofins_valor=Decimal('3.51'))
 
-print serializador._serializar_nota_fiscal(nota_fiscal)
+#_fonte_dados.adicionar_objeto(nota_fiscal)
+
+serializador = SerializacaoXML(_fonte_dados, homologacao=True)
+xml= serializador.exportar(retorna_string=True)
+arquivo = file('nota1.xml', 'w')
+arquivo.write(xml)
+certificado = '/home/junior/Projetos/falcao/doc/JC FERRAGENS S=12345678.pfx'
+senha = '12345328'
+# assinatura
+a = AssinaturaA1(certificado, senha)
+print a.assinar_xml(xml)
+
+#print serializador._serializar_nota_fiscal(nota_fiscal)
+
