@@ -350,11 +350,46 @@ class NotaFiscal(Entidade):
         self.processos_referenciados.append(obj)
         return obj
 
+    def _codigo_numerico_aleatorio(self):
+        codigo_numerico_aleatorio = str(random.randint(0, 99999999)).zfill(8)
+        return codigo_numerico_aleatorio
+
+    def _dv_codigo_numerico(self, key):
+        assert len(key) == 43
+
+        weights = [2, 3, 4, 5, 6, 7, 8, 9]
+        weights_size = len(weights)
+        key_numbers = [int(k) for k in key]
+        key_numbers.reverse()
+
+        key_sum = 0
+        for i, key_number in enumerate(key_numbers):
+            # cycle though weights
+            i = i % weights_size
+            key_sum += key_number * weights[i]
+
+        remainder = key_sum % 11
+        if remainder == 0 or remainder == 1:
+            return '0'
+        dv_codigo_numerico_aleatorio = str(11 - remainder)
+        return str(dv_codigo_numerico_aleatorio) 
+
     @property
     # @memoize
     def identificador_unico(self):
         # Monta 'Id' da tag raiz <infNFe>
         # Ex.: NFe35080599999090910270550010000000011518005123
+        key = "%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nNF)s%(tpEmis)s%(cNF)s"%{
+                'uf': CODIGOS_ESTADOS[self.uf],
+                'ano': self.data_emissao.strftime('%y'),
+                'mes': self.data_emissao.strftime('%m'),
+                'cnpj': so_numeros(self.emitente.cnpj),
+                'mod': self.modelo,
+                'serie': str(self.serie).zfill(3),
+                'nNF': str(self.numero_nf).zfill(9),
+                'tpEmis': str(self.forma_emissao),
+                'cNF': self._codigo_numerico_aleatorio(),
+                }
         return "NFe%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nNF)s%(tpEmis)s%(cNF)s%(cDV)s"%{
                 'uf': CODIGOS_ESTADOS[self.uf],
                 'ano': self.data_emissao.strftime('%y'),
@@ -364,8 +399,8 @@ class NotaFiscal(Entidade):
                 'serie': str(self.serie).zfill(3),
                 'nNF': str(self.numero_nf).zfill(9),
                 'tpEmis': str(self.forma_emissao),
-                'cNF': self.codigo_numerico_aleatorio.zfill(8),
-                'cDV': self.dv_codigo_numerico_aleatorio,
+                'cNF': str(self.codigo_numerico_aleatorio),
+                'cDV': self._dv_codigo_numerico(key),
                 }
 
 class NotaFiscalReferenciada(Entidade):

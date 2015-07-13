@@ -160,8 +160,8 @@ class AssinaturaA1(Assinatura):
         
         # Ativa as funções da API de criptografia
         xmlsec.init()
-        xmlsec.cryptoAppInit(None)
-        xmlsec.cryptoInit()
+        #xmlsec.cryptoAppInit(None)
+        #xmlsec.cryptoInit()
     
     def _desativar_funcoes_criptograficas(self):
         ''' Desativa as funções criptográficas e de análise XML
@@ -219,13 +219,18 @@ class AssinaturaA1(Assinatura):
         noh_assinatura = ctxt.xpathEval(u'//*/sig:Signature')[0]
     
         # Buscamos a chave no arquivo do certificado
-        chave = xmlsec.cryptoAppKeyLoad(
+        chave = xmlsec.CryptoAppKeyLoad(
                 filename=str(self.certificado.caminho_arquivo),
                 format=xmlsec.KeyDataFormatPkcs12,
                 pwd=str(self.senha),
                 pwdCallback=None,
                 pwdCallbackCtx=None,
                 )
+        # chave = xmlsec.key.from_file(
+        #         filename=str(self.certificado.caminho_arquivo),
+        #         format=xmlsec.KeyDataFormatPkcs12,
+        #         pwd=str(self.senha)
+        #         )
     
         # Cria a variável de chamada (callable) da função de assinatura
         assinador = xmlsec.DSigCtx()
