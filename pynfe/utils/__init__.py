@@ -7,37 +7,21 @@ import unicodedata
 try:
     from lxml import etree
 except ImportError:
+    # Instalacao normal do ElementTree
     try:
-    # Python 2.5 - cElementTree
-        import xml.etree.cElementTree as etree
+        import xml.etree.ElementTree as etree
     except ImportError:
-        try:
-        # Python 2.5 - ElementTree
-            import xml.etree.ElementTree as etree
-        except ImportError:
-            try:
-            # Instalacao normal do cElementTree
-                import cElementTree as etree
-            except ImportError:
-                try:
-                # Instalacao normal do ElementTree
-                    import elementtree.ElementTree as etree
-                except ImportError:
-                    raise Exception('Falhou ao importar lxml/ElementTree')
+        raise Exception('Falhou ao importar lxml/ElementTree')
 
 try:
-    from cStringIO import StringIO
+    from StringIO import StringIO
 except ImportError:
-    try:
-        from StringIO import StringIO
-    except ImportError:
-        from io import StringIO  
+    from io import StringIO
 
 try:
     import flags
 except ImportError:
-    pass
-    #raise Exception('Falhou ao importar flags')
+    raise Exception('Falhou ao importar flags')
 # from geraldo.utils import memoize
 
 

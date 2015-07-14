@@ -40,7 +40,7 @@ class CertificadoA1(Certificado):
         caminho_cert = caminho_cert or os.path.join(self.pasta_temporaria, self.arquivo_cert)
 
         # Lendo o arquivo pfx no formato pkcs12 como binario
-        pkcs12 = crypto.load_pkcs12(file(self.caminho_arquivo, 'rb').read(), senha)
+        pkcs12 = crypto.load_pkcs12(open(self.caminho_arquivo, 'rb').read(), senha)
 
         # Retorna a string decodificado da chave privada
         key_str = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
@@ -49,10 +49,10 @@ class CertificadoA1(Certificado):
         cert_str = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate())
 
         # Gravando a string no dicso
-        file(caminho_cert, 'wb').write(cert_str)
+        open(caminho_cert, 'wb').write(cert_str)
 
         # Gravando a string no dicso
-        file(caminho_chave, 'wb').write(key_str)
+        open(caminho_chave, 'wb').write(key_str)
 
         return caminho_chave, caminho_cert
 

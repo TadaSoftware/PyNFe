@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import signxml
+from pynfe.utils import etree
+from pynfe.entidades.certificado import CertificadoA1
 from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SIG
+
 
 class Assinatura(object):
     """Classe abstrata responsavel por definir os metodos e logica das classes
@@ -18,19 +22,17 @@ class Assinatura(object):
         pass
 
 class AssinaturaA1(Assinatura):
-    """Classe abstrata responsavel por efetuar a assinatura do certificado
+    """Classe responsavel por efetuar a assinatura do certificado
     digital no XML informado."""
 
     def assinar_nfe(self, xml):
-        #from lxml import etree
-        import signxml
-        from signxml import xmldsig
-
-        cert = open("cert.pem").read()
-        key = open("key.pem", "rb").read()
+        arquivo_cert = CertificadoA1("cert.pfx")
+        key, cert = arquivo_cert.separar_arquivo('12345678')
+        #cert = open("cert.pem").read()
+        #key = open("key.pem", "rb").read()
 
         root = etree.parse(xml).getroot()
-        signer = xmldsig(root, digest_algorithm="sha1")
+        signer = signxml.xmldsig(root, digest_algorithm="sha1")
         signer.sign(method=signxml.methods.enveloped, key=key, cert=cert,
                     algorithm="rsa-sha1", c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
                     reference_uri='#NFe41150715380524000122651010000000271333611649')
