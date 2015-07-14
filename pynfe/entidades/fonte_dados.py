@@ -49,7 +49,7 @@ class FonteDados(object):
         u"""Método responsável por adicionar o(s) objeto(s) informado(s) ao
         repositorio de objetos da fonte de dados."""
 
-        from base import Entidade
+        from .base import Entidade
 
         # Adiciona _objeto como objeto
         if isinstance(_objeto, Entidade):

@@ -31,7 +31,7 @@ except ImportError:
     try:
         from StringIO import StringIO
     except ImportError:
-        from io import StringIO  
+        from io import StringIO
 
 try:
     import flags
@@ -74,7 +74,7 @@ CARACTERS_ACENTUADOS = {
 
 # @memoize
 def normalizar_municipio(municipio):
-    if not isinstance(municipio, unicode):
+    if not isinstance(municipio, str):
         municipio = municipio.decode('utf-8')
 
     return municipio.lower().translate(CARACTERS_ACENTUADOS).upper()
@@ -82,7 +82,7 @@ def normalizar_municipio(municipio):
 
 # @memoize
 def carregar_arquivo_municipios(uf, reverso=False):
-    if isinstance(uf, basestring):
+    if isinstance(uf, str):
         try:
             uf = int(uf)
         except ValueError:

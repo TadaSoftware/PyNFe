@@ -11,7 +11,7 @@ class Entidade(object):
 
         # Adiciona o objeto à fonte de dados informada
         if not self._fonte_dados:
-            from fonte_dados import _fonte_dados
+            from .fonte_dados import _fonte_dados
             self._fonte_dados = _fonte_dados
 
         self._fonte_dados.adicionar_objeto(self)

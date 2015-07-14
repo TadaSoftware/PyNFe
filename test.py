@@ -79,9 +79,9 @@ nota_fiscal = NotaFiscal(
 nota_fiscal.adicionar_produto_servico(codigo='000328', # id do produto (000328 era o id no antigo sistemas de assinatura)
     descricao='Assinatura Rolling Stone',
     ncm='49029000', # categoria international do prod (sempre esse para assinaturas)
-    cfop='6922', 
+    cfop='6922',
     unidade_comercial='UN',
-    quantidade_comercial=Decimal('12'), # 12 unidades (12 revistas) 
+    quantidade_comercial=Decimal('12'), # 12 unidades (12 revistas)
     valor_unitario_comercial=Decimal('9.75'),
     valor_total_bruto=Decimal('117.00'),
     unidade_tributavel='UN',
@@ -104,7 +104,7 @@ nota_fiscal.adicionar_produto_servico(codigo='000328', # id do produto (000328 e
 
 serializador = SerializacaoXML(_fonte_dados, homologacao=True)
 xml= serializador.exportar(retorna_string=True)
-arquivo = file('nota1.xml', 'w')
+arquivo = open('nota1.xml', 'wb')
 arquivo.write(xml)
 certificado = '/home/junior/Projetos/falcao/doc/JC FERRAGENS S=12345678.pfx'
 senha = '12345328'
@@ -113,4 +113,3 @@ a = AssinaturaA1(certificado, senha)
 print (a.assinar_nfe(xml))
 
 #print serializador._serializar_nota_fiscal(nota_fiscal)
-
