@@ -38,9 +38,7 @@ class CertificadoA1(Certificado):
         
         caminho_chave = caminho_chave or os.path.join(self.pasta_temporaria, self.arquivo_chave)
         caminho_cert = caminho_cert or os.path.join(self.pasta_temporaria, self.arquivo_cert)
-        
-        import pdb
-        pdb.set_trace()
+
         # Lendo o arquivo pfx no formato pkcs12 como binario
         pkcs12 = crypto.load_pkcs12(open(self.caminho_arquivo, 'rb').read(), senha)
 
