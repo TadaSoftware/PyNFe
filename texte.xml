@@ -1,0 +1,141 @@
+<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+  <infNFe versao="3.10" Id="NFe41150708234482000156550010000000011669982376">
+    <ide>
+      <cUF>41</cUF>
+      <cNF>66998237</cNF>
+      <natOp>VENDA ASSINATURAS</natOp>
+      <indPag>1</indPag>
+      <mod>55</mod>
+      <serie>1</serie>
+      <nNF>1</nNF>
+      <dhEmi>2015-07-14T00:03:20-03:00</dhEmi>
+      <dhSaiEnt>2015-07-14T00:03:20-03:00</dhSaiEnt>
+      <tpNF>1</tpNF>
+      <idDest>1</idDest>
+      <cMunFG>4118402</cMunFG>
+      <tpImp>1</tpImp>
+      <tpEmis>1</tpEmis>
+      <cDV></cDV>
+      <tpAmb>2</tpAmb>
+      <finNFe>1</finNFe>
+      <procEmi>3</procEmi>
+      <verProc>PyNFe 0.1</verProc>
+    </ide>
+    <emit>
+      <CNPJ>08234482000156</CNPJ>
+      <xNome>Spring Publicacoes Ltda</xNome>
+      <xFant>Falcao Ferragens</xFant>
+      <IE>149431130117</IE>
+      <enderEmit>
+        <xLgr>RUA FERREIRA DE ARAUJO</xLgr>
+        <nro>202</nro>
+        <xCpl>9o andar - cj 91/92</xCpl>
+        <xBairro>PINHEIROS</xBairro>
+        <cMun>3550308</cMun>
+        <xMun>SAO PAULO</xMun>
+        <UF>SP</UF>
+        <CEP>05428000</CEP>
+        <cPais>1058</cPais>
+        <xPais>Brasil</xPais>
+        <fone></fone>
+      </enderEmit>
+    </emit>
+    <dest>
+      <CPF>12345678900</CPF>
+      <xNome>MARIANA CARVALHO SILVA</xNome>
+      <IE>ISENTO</IE>
+      <enderDest>
+        <xLgr>Rua dos Bobos</xLgr>
+        <nro>Zero</nro>
+        <xCpl>Ao lado de lugar nenhum</xCpl>
+        <xBairro>Aquele Mesmo</xBairro>
+        <cMun>5300108</cMun>
+        <xMun>Brasilia</xMun>
+        <UF>DF</UF>
+        <CEP>12345123</CEP>
+        <cPais>1058</cPais>
+        <xPais>Brasil</xPais>
+        <fone>11912341234</fone>
+      </enderDest>
+    </dest>
+    <det nItem="1">
+      <prod>
+        <cProd>000328</cProd>
+        <cEAN></cEAN>
+        <xProd>Assinatura Rolling Stone</xProd>
+        <CFOP>6922</CFOP>
+        <uCom>UN</uCom>
+        <qCom>12</qCom>
+        <vUnCom>9.75</vUnCom>
+        <vProd>117.00</vProd>
+        <cEANTrib></cEANTrib>
+        <uTrib>UN</uTrib>
+        <qTrib>12</qTrib>
+        <vUnTrib>9.75</vUnTrib>
+      </prod>
+      <imposto>
+        <ICMS>
+          <ICMS>
+            <orig>0</orig>
+            <CST></CST>
+            <modBC>41</modBC>
+            <vBC>0</vBC>
+            <pICMS>0</pICMS>
+            <vICMS>0</vICMS>
+          </ICMS>
+        </ICMS>
+        <PIS>
+          <PISAliq>
+            <CST></CST>
+            <vBC>117.00</vBC>
+            <pPIS>0.65</pPIS>
+            <vPIS>0.76</vPIS>
+          </PISAliq>
+        </PIS>
+        <COFINS>
+          <COFINSAliq>
+            <CST>01</CST>
+            <vBC>117.00</vBC>
+            <pCOFINS>3.00</pCOFINS>
+            <vCOFINS>3.51</vCOFINS>
+          </COFINSAliq>
+        </COFINS>
+      </imposto>
+    </det>
+    <total>
+      <ICMSTot>
+        <vBC>0</vBC>
+        <vICMS>0</vICMS>
+        <vBCST>0</vBCST>
+        <vST>0</vST>
+        <vProd>117.00</vProd>
+        <vFrete>0</vFrete>
+        <vSeg>0</vSeg>
+        <vDesc>0</vDesc>
+        <vII>0</vII>
+        <vIPI>0</vIPI>
+        <vPIS>0.76</vPIS>
+        <vCOFINS>3.51</vCOFINS>
+        <vOutro>0</vOutro>
+        <vNF>117.00</vNF>
+      </ICMSTot>
+    </total>
+    <transp>
+      <modFrete>0</modFrete>
+      <veicTransp>
+        <placa></placa>
+        <UF></UF>
+        <RNTC></RNTC>
+      </veicTransp>
+      <reboque>
+        <placa></placa>
+        <UF></UF>
+        <RNTC></RNTC>
+      </reboque>
+    </transp>
+    <infAdic>
+      <infAdFisco>NF-e emitida de acordo com os termos do Convenio ICMS 24/2011. Assinatura Numero 8061746</infAdFisco>
+      <infCpl></infCpl>
+    </infAdic>
+  </infNFe>
+</NFe>

@@ -103,10 +103,10 @@ nota_fiscal.adicionar_produto_servico(codigo='000328', # id do produto (000328 e
 #_fonte_dados.adicionar_objeto(nota_fiscal)
 
 serializador = SerializacaoXML(_fonte_dados, homologacao=True)
-xml= serializador.exportar(retorna_string=True)
-arquivo = open('nota1.xml', 'wb')
+xml = serializador.exportar(retorna_string=True)
+arquivo = open('texte.xml', 'wb')
 arquivo.write(xml)
-certificado = '/home/junior/Projetos/falcao/doc/JC FERRAGENS S=12345678.pfx'
+certificado = "cert.pfx"
 senha = '12345328'
 # assinatura
 a = AssinaturaA1(certificado, senha)

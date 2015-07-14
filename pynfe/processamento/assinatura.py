@@ -26,11 +26,11 @@ class AssinaturaA1(Assinatura):
     digital no XML informado."""
 
     def assinar_nfe(self, xml):
-        arquivo_cert = CertificadoA1("cert.pfx")
-        key, cert = arquivo_cert.separar_arquivo('12345678')
+        arquivo_cert = CertificadoA1(self.certificado)
+        key, cert = arquivo_cert.separar_arquivo(self.senha)
         #cert = open("cert.pem").read()
         #key = open("key.pem", "rb").read()
-
+        # converte xml para bytes antes do parse
         root = etree.parse(xml).getroot()
         signer = signxml.xmldsig(root, digest_algorithm="sha1")
         signer.sign(method=signxml.methods.enveloped, key=key, cert=cert,
