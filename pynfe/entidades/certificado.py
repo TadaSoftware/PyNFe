@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from base import Entidade
+from .base import Entidade
 
 from OpenSSL import crypto
 

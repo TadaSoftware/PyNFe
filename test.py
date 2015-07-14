@@ -65,7 +65,7 @@ nota_fiscal = NotaFiscal(
    numero_nf='1',
    data_emissao=datetime.datetime.now(),
    data_saida_entrada=datetime.datetime.now(),
-   hora_saida_entrada=datetime.time(03,12,00),
+   #hora_saida_entrada=datetime.time(03,12,00),
    tipo_documento=1,
    municipio='4118402',
    tipo_impressao_danfe=1, # nfce 4
@@ -110,7 +110,7 @@ certificado = '/home/junior/Projetos/falcao/doc/JC FERRAGENS S=12345678.pfx'
 senha = '12345328'
 # assinatura
 a = AssinaturaA1(certificado, senha)
-print a.assinar_xml(xml)
+print (a.assinar_nfe(xml))
 
 #print serializador._serializar_nota_fiscal(nota_fiscal)
 

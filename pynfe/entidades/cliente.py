@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from base import Entidade
-from pynfe.utils.flags import TIPOS_DOCUMENTO, CODIGO_BRASIL
+from .base import Entidade
+from pynfe.utils.flags import CODIGO_BRASIL
 
 
 class Cliente(Entidade):

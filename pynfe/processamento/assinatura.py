@@ -24,6 +24,10 @@ class Assinatura(object):
         """Efetua a assinatura numa string contendo XML valido."""
         pass
 
+    def assinar_nfe(self, xml):
+        """Efetua a assinatura da nfe"""
+        pass
+
     def assinar_etree(self, raiz):
         u"""Efetua a assinatura numa instancia da biblioteca lxml.etree.
         
@@ -74,6 +78,23 @@ class AssinaturaA1(Assinatura):
 
         # Efetua a assinatura
         return self.assinar_etree(raiz, retorna_xml=True)
+
+    def assinar_nfe(self, xml):
+        #from lxml import etree
+        import signxml
+        from signxml import xmldsig
+
+        cert = open("cert.pem").read()
+        key = open("key.pem", "rb").read()
+
+        root = etree.parse(xml).getroot()
+        signer = xmldsig(root, digest_algorithm="sha1")
+        signer.sign(method=signxml.methods.enveloped, key=key, cert=cert,
+                    algorithm="rsa-sha1", c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
+                    reference_uri='#NFe41150715380524000122651010000000271333611649')
+        #verified_data = signer.verify(require_x509=True, ca_pem_file="cert.pem")
+        e = etree.tostring(signer.data)
+        open("testesig.xml", "wb").write(e)
 
     def assinar_etree(self, raiz, retorna_xml=False):
         # Extrai a tag do elemento raiz
@@ -219,7 +240,7 @@ class AssinaturaA1(Assinatura):
         noh_assinatura = ctxt.xpathEval(u'//*/sig:Signature')[0]
     
         # Buscamos a chave no arquivo do certificado
-        chave = xmlsec.CryptoAppKeyLoad(
+        chave = xmlsec.cryptoAppKeyLoad(
                 filename=str(self.certificado.caminho_arquivo),
                 format=xmlsec.KeyDataFormatPkcs12,
                 pwd=str(self.senha),

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import random
 
-from base import Entidade
+from .base import Entidade
 from pynfe import get_version
 from pynfe.utils.flags import NF_STATUS, NF_TIPOS_DOCUMENTO, NF_TIPOS_IMPRESSAO_DANFE,\
         NF_FORMAS_PAGAMENTO, NF_FORMAS_EMISSAO, NF_FINALIDADES_EMISSAO,\

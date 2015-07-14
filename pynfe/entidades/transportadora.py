@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from base import Entidade
+from .base import Entidade
 from pynfe.utils.flags import TIPOS_DOCUMENTO
 
 class Transportadora(Entidade):

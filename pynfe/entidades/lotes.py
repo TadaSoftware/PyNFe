@@ -1,4 +1,4 @@
-from base import Lote
+from .base import Lote
 
 class LoteNotaFiscal(Lote):
     pass

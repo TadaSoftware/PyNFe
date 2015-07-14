@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from base import Entidade
+from .base import Entidade
 from pynfe.utils.flags import ICMS_TIPOS_TRIBUTACAO, ICMS_ORIGENS, ICMS_MODALIDADES
 
 from decimal import Decimal
