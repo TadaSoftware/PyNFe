@@ -27,7 +27,7 @@ class Serializacao(object):
         if cls == Serializacao:
             raise Exception('Esta classe nao pode ser instanciada diretamente!')
         else:
-            return super(Serializacao, cls).__new__(cls, *args, **kwargs)
+            return super(Serializacao, cls).__new__(cls)
 
     def __init__(self, fonte_dados, homologacao=False):
         self._fonte_dados = fonte_dados
@@ -247,10 +247,10 @@ class SerializacaoXML(Serializacao):
         """dhCont Data e Hora da entrada em contingência E B01 D 0-1 Formato AAAA-MM-DDThh:mm:ssTZD (UTC - Universal
             Coordinated Time)
             Exemplo: no formato UTC para os campos de Data-Hora, "TZD" pode ser -02:00 (Fernando de Noronha), -03:00 (Brasília) ou -04:00 (Manaus), no
-            horário de verão serão -01:00, -02:00 e -03:00. Exemplo: "2010-08-19T13:00:15-03:00". 
+            horário de verão serão -01:00, -02:00 e -03:00. Exemplo: "2010-08-19T13:00:15-03:00".
         """
         etree.SubElement(ide, 'tpNF').text = str(nota_fiscal.tipo_documento)  # 0=entrada 1=saida
-        etree.SubElement(ide, 'idDest').text = str(1) # Identificador de local de destino da operação 1=Operação interna;2=Operação interestadual;3=Operação com exterior. 
+        etree.SubElement(ide, 'idDest').text = str(1) # Identificador de local de destino da operação 1=Operação interna;2=Operação interestadual;3=Operação com exterior.
         etree.SubElement(ide, 'cMunFG').text = nota_fiscal.municipio
         etree.SubElement(ide, 'tpImp').text = str(nota_fiscal.tipo_impressao_danfe)
         etree.SubElement(ide, 'tpEmis').text = str(nota_fiscal.forma_emissao)
