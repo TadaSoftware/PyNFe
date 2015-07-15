@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import signxml
+from OpenSSL import crypto
 from pynfe.utils import etree
 from pynfe.entidades.certificado import CertificadoA1
 from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SIG
@@ -27,22 +28,17 @@ class AssinaturaA1(Assinatura):
 
     def assinar_nfe(self, xml):
         arquivo_cert = CertificadoA1(self.certificado)
-        #key, cert = arquivo_cert.separar_arquivo(self.senha)
-        cert = open("cert.pem").read()
-        key = open("key.pem", "rb").read()
+        chave, cert = arquivo_cert.separar_arquivo(self.senha)
         
-        begin = cert.find('-----BEGIN CERTIFICATE-----')
-        if begin < 0:
-            raise Exception('Formato de certificado inválido. Não encontrado tag inicial BEGIN.')
-        cert = cert[begin:]
-        
-        # converte xml para bytes antes do parse
         #root = etree.parse(xml).getroot()  # caminho
         root = etree.fromstring(xml)  # string
         signer = signxml.xmldsig(root, digest_algorithm="sha1")
-        signer.sign(method=signxml.methods.enveloped, key=key, cert=cert,
+        signer.sign(method=signxml.methods.enveloped, key=chave, cert=cert,
                     algorithm="rsa-sha1", c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
-                    reference_uri='#NFe41150715380524000122651010000000271333611649')
+                    reference_uri='')
         #verified_data = signer.verify(require_x509=True, ca_pem_file="cert.pem")
+        
+        #root = etree.SubElement(signer.data, "{http://www.w3.org/2000/09/xmldsig#}Reference",
+        #                 URI='#NFe41150715389524000122651010000000271333611649')
         result = etree.tostring(signer.data)
         return result

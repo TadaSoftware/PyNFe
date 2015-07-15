@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-import os
 
 from .base import Entidade
-
 from OpenSSL import crypto
 
+
 class Certificado(Entidade):
-    u"""Classe abstrata responsavel por definir o modelo padrao para as demais
+    """Classe abstrata responsavel por definir o modelo padrao para as demais
     classes de certificados digitais.
     
     Caso va implementar um novo formato de certificado, crie uma classe que
@@ -18,41 +17,31 @@ class Certificado(Entidade):
         else:
             return super(Certificado, cls).__new__(cls)
 
+
 class CertificadoA1(Certificado):
-    u"""Implementa a entidade do certificado eCNPJ A1, suportado pelo OpenSSL,
+    """Implementa a entidade do certificado eCNPJ A1, suportado pelo OpenSSL,
     e amplamente utilizado."""
 
     caminho_arquivo = None
-    conteudo_x509 = None
-    pasta_temporaria = '/tmp/'
-    arquivo_chave = 'key.pem'
-    arquivo_cert = 'cert.pem'
 
-    def __init__(self, caminho_arquivo=None, conteudo_x509=None):
-        self.caminho_arquivo = caminho_arquivo or self.caminho_arquivo
-        self.conteudo_x509 = conteudo_x509 or self.conteudo_x509
+    def __init__(self, caminho_arquivo=None):
+        self.caminho_arquivo = caminho_arquivo
     
     def separar_arquivo(self, senha, caminho_chave=None, caminho_cert=None):
-        u"""Separa o arquivo de certificado em dois: de chave e de certificado,
-        em arquivos temporários separados"""
+        """Separa o arquivo de certificado em dois: de chave e de certificado,
+        e retorna a string."""
         
-        caminho_chave = caminho_chave or os.path.join(self.pasta_temporaria, self.arquivo_chave)
-        caminho_cert = caminho_cert or os.path.join(self.pasta_temporaria, self.arquivo_cert)
-
-        # Lendo o arquivo pfx no formato pkcs12 como binario
-        pkcs12 = crypto.load_pkcs12(open(self.caminho_arquivo, 'rb').read(), senha)
-
-        # Retorna a string decodificado da chave privada
-        key_str = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
-
-        # Retorna a string decodificado do certificado
-        cert_str = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate())
-
-        # Gravando a string no dicso
-        open(caminho_cert, 'wb').write(cert_str)
-
-        # Gravando a string no dicso
-        open(caminho_chave, 'wb').write(key_str)
-
-        return caminho_chave, caminho_cert
+        # Carrega o arquivo .pfx, erro pode ocorrer se a senha estiver errada ou formato invalido.
+        pkcs12 = crypto.load_pkcs12(open(self.caminho_arquivo, "rb").read(), senha)
+        
+        # Certificado
+        cert = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate()).decode('utf-8')
+        cert = cert.replace('\n', '')
+        cert = cert.replace('-----BEGIN CERTIFICATE-----', '')
+        cert = cert.replace('-----END CERTIFICATE-----', '')
+        
+        # Chave, string decodificada da chave privada
+        chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
+        
+        return chave, cert
 

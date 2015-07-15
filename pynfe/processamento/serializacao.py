@@ -62,7 +62,7 @@ class SerializacaoXML(Serializacao):
             raiz.append(self._serializar_nota_fiscal(nf, retorna_string=False))
 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True)
+            return etree.tostring(raiz, pretty_print=True).decode('utf-8')
         else:
             return raiz
 
