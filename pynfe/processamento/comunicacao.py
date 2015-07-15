@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 import datetime
-from httplib import HTTPSConnection, HTTPResponse
-
+import requests
 from pynfe.utils import etree, StringIO, so_numeros
 from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, VERSAO_PADRAO
 from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO
-from assinatura import AssinaturaA1
+from .assinatura import AssinaturaA1
 
 class Comunicacao(object):
     u"""Classe abstrata responsavel por definir os metodos e logica das classes
     de comunicação com os webservices da NF-e."""
 
-    _ambiente = 1   # 1 = Produção, 2 = Homologação
+    _ambiente = 2   # 1 = Produção, 2 = Homologação
     servidor = None
     porta = 80
     certificado = None
@@ -22,14 +21,14 @@ class Comunicacao(object):
         self.porta = porta
         self.certificado = certificado
         self.certificado_senha = certificado_senha
-        self._ambiente = homologacao and 2 or 1
+        self._ambiente = 2
 
 class ComunicacaoSefaz(Comunicacao):
     u"""Classe de comunicação que segue o padrão definido para as SEFAZ dos Estados."""
 
     _versao = VERSAO_PADRAO
     _assinatura = AssinaturaA1
-    
+
     def transmitir(self, nota_fiscal):
         pass
 
@@ -40,27 +39,21 @@ class ComunicacaoSefaz(Comunicacao):
         pass
 
     def status_servico(self):
-        post = '/nfeweb/services/nfestatusservico.asmx'
+        post = self.servidor
 
-        # Monta XML do corpo da requisição # FIXME
-        raiz = etree.Element('teste')
-        dados = etree.tostring(raiz)
-
+        # Monta XML do corpo da requisição
+        raiz = etree.Element('consStatServ', versao='3.10', xmlns='http://www.portalfiscal.inf.br/nfe')
+        etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
+        etree.SubElement(raiz, 'cUF').text = str(41)
+        etree.SubElement(raiz, 'xServ').text = 'STATUS'
+        dados = etree.tostring(raiz, encoding='UTF-8')
         # Monta XML para envio da requisição
-        xml = self._construir_xml_soap(
-                metodo='nfeRecepcao2', # FIXME
-                tag_metodo='nfeStatusServicoNF2', # FIXME
-                cabecalho=self._cabecalho_soap(),
-                dados=dados,
-                )
+        xml = self._construir_xml_soap(cabecalho=self._cabecalho_soap(), dados=dados)
 
         # Chama método que efetua a requisição POST no servidor SOAP
         retorno = self._post(post, xml, self._post_header())
-
-        # Transforma o retorno em etree
-        #retorno = etree.parse(StringIO(retorno))
-
-        return bool(retorno)
+        return retorno
+        #return bool(retorno)
 
     def consultar_cadastro(self, instancia):
         #post = '/nfeweb/services/cadconsultacadastro.asmx'
@@ -125,50 +118,48 @@ class ComunicacaoSefaz(Comunicacao):
     def _cabecalho_soap(self):
         u"""Monta o XML do cabeçalho da requisição SOAP"""
 
-        raiz = etree.Element('cabecMsg', xmlns=NAMESPACE_NFE, versao="1.02")
-        etree.SubElement(raiz, 'versaoDados').text = self._versao
+        raiz = etree.Element('nfeCabecMsg')
+        etree.SubElement(raiz, 'cUF').text = str(41)
+        etree.SubElement(raiz, 'versaoDados').text = VERSAO_PADRAO
 
-        return etree.tostring(raiz, encoding='utf-8', xml_declaration=True)
+        return etree.tostring(raiz, encoding='UTF-8')
 
-    def _construir_xml_soap(self, metodo, tag_metodo, cabecalho, dados):
+    def _construir_xml_soap(self, cabecalho, dados):
         u"""Mota o XML para o envio via SOAP"""
 
-        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'soap': NAMESPACE_SOAP})
-
+        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'soap': NAMESPACE_SOAP}, xmlns=self.servidor)
+        etree.SubElement(raiz, '{%s}Header'%NAMESPACE_SOAP).text = cabecalho
         body = etree.SubElement(raiz, '{%s}Body'%NAMESPACE_SOAP)
-        met = etree.SubElement(
-                body, tag_metodo, xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/%s"%metodo,
-                )
+        etree.SubElement(body, 'nfeDadosMsg').text = dados
 
-        etree.SubElement(met, 'nfeCabecMsg').text = cabecalho
-        etree.SubElement(met, 'nfeDadosMsg').text = dados
-
-        return etree.tostring(raiz, encoding='utf-8', xml_declaration=True)
+        return etree.tostring(raiz, encoding='UTF-8', xml_declaration=True)
 
     def _post_header(self):
         u"""Retorna um dicionário com os atributos para o cabeçalho da requisição HTTP"""
         return {
             u'content-type': u'application/soap+xml; charset=utf-8',
+            #u'content-type': u'text/xml; charset=utf-8',
+            #u'Accept': u'text/xml; charset=utf-8',
             u'Accept': u'application/soap+xml; charset=utf-8',
             }
 
     def _post(self, post, xml, header):
         # Separa arquivos de certificado para chave e certificado (sozinho)
-        caminho_chave, caminho_cert = self.certificado.separar_arquivo(senha=self.certificado_senha)
+        #caminho_chave, caminho_cert = self.certificado.separar_arquivo(senha=self.certificado_senha)
+        caminho_chave = '/home/junior/Documentos/Certificados/key.pem'
+        caminho_cert = '/home/junior/Documentos/Certificados/cert.pem'
 
         # Abre a conexão HTTPS
-        con = HTTPSConnection(self.servidor, self.porta, key_file=caminho_chave, cert_file=caminho_cert)
-
-        try:
-            #con.set_debuglevel(100)
-
-            con.request(u'POST', post, xml, header)
-
-            resp = con.getresponse()
+        cert = (caminho_cert, caminho_chave)
+        s = str(xml, 'utf-8').replace('&lt;', '<').replace('&gt;', '>').replace('\'', '"').replace('\n', '')
+        #headers = {'content-type': 'text/xml'}
         
-            # Tudo certo!
-            if resp.status == 200:
-                return resp.read()
+        try:
+            r = requests.post(post, s, headers=self._post_header(), cert=cert, verify=False)
+            print (r.content)
+            if r == 200:
+                return r.text
+        except Exception as e:
+            pass
         finally:
-            con.close()
-
+            pass
