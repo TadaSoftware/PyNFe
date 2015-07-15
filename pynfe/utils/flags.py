@@ -196,5 +196,3 @@ CODIGOS_ESTADOS = {
     'GO': '52',
     'DF': '53',
 }
-
-
