@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import datetime
 import requests
-from pynfe.utils import etree, StringIO, so_numeros
-from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, VERSAO_PADRAO
-from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO
+from pynfe.utils import etree, so_numeros
+from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, VERSAO_PADRAO, CODIGOS_ESTADOS
 from .assinatura import AssinaturaA1
 
 class Comunicacao(object):
@@ -11,17 +10,15 @@ class Comunicacao(object):
     de comunicação com os webservices da NF-e."""
 
     _ambiente = 2   # 1 = Produção, 2 = Homologação
-    servidor = None
-    porta = 80
+    uf = None
     certificado = None
     certificado_senha = None
 
-    def __init__(self, servidor, porta, certificado, certificado_senha, homologacao=False):
-        self.servidor = servidor
-        self.porta = porta
+    def __init__(self, uf, certificado, certificado_senha, homologacao=False):
+        self.uf = uf
         self.certificado = certificado
         self.certificado_senha = certificado_senha
-        self._ambiente = 2
+        self._ambiente = 2 if homologacao else 1
 
 class ComunicacaoSefaz(Comunicacao):
     u"""Classe de comunicação que segue o padrão definido para as SEFAZ dos Estados."""
@@ -38,21 +35,30 @@ class ComunicacaoSefaz(Comunicacao):
     def situacao_nfe(self, nota_fiscal):
         pass
 
-    def status_servico(self):
-        post = self.servidor
+    def status_servico(self, tipo):
+        """ Verifica status do servidor da receita. """
+        if self._ambiente == 1:
+            ambiente = 'https://'
+        else:
+            ambiente = 'https://homologacao.'
+        if tipo == 'nfe':
+            # nfe
+            url = ambiente + 'nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3'
+        else:
+            # nfce 
+            url = ambiente + 'nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3'
 
         # Monta XML do corpo da requisição
-        raiz = etree.Element('consStatServ', versao='3.10', xmlns='http://www.portalfiscal.inf.br/nfe')
+        raiz = etree.Element('consStatServ', versao='3.10', xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
-        etree.SubElement(raiz, 'cUF').text = str(41)
+        etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
         etree.SubElement(raiz, 'xServ').text = 'STATUS'
         dados = etree.tostring(raiz, encoding='UTF-8')
         # Monta XML para envio da requisição
-        xml = self._construir_xml_soap(cabecalho=self._cabecalho_soap(), dados=dados)
-
+        xml = self._construir_xml_soap(cabecalho=self._cabecalho_soap(), dados=dados, url=url)
+       
         # Chama método que efetua a requisição POST no servidor SOAP
-        retorno = self._post(post, xml, self._post_header())
-        return retorno
+        return self._post(url, xml, self._post_header())
         #return bool(retorno)
 
     def consultar_cadastro(self, instancia):
@@ -124,10 +130,10 @@ class ComunicacaoSefaz(Comunicacao):
 
         return etree.tostring(raiz, encoding='UTF-8')
 
-    def _construir_xml_soap(self, cabecalho, dados):
+    def _construir_xml_soap(self, cabecalho, dados, url):
         u"""Mota o XML para o envio via SOAP"""
 
-        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'soap': NAMESPACE_SOAP}, xmlns=self.servidor)
+        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'soap': NAMESPACE_SOAP}, xmlns=url)
         etree.SubElement(raiz, '{%s}Header'%NAMESPACE_SOAP).text = cabecalho
         body = etree.SubElement(raiz, '{%s}Body'%NAMESPACE_SOAP)
         etree.SubElement(body, 'nfeDadosMsg').text = dados
