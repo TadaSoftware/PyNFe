@@ -3,13 +3,14 @@ import datetime
 import requests
 from pynfe.utils import etree, so_numeros
 from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, VERSAO_PADRAO, CODIGOS_ESTADOS
+from pynfe.utils.webservices import NFCE, NFE
 from .assinatura import AssinaturaA1
 
 class Comunicacao(object):
     u"""Classe abstrata responsavel por definir os metodos e logica das classes
     de comunicação com os webservices da NF-e."""
 
-    _ambiente = 2   # 1 = Produção, 2 = Homologação
+    _ambiente = 1   # 1 = Produção, 2 = Homologação
     uf = None
     certificado = None
     certificado_senha = None
@@ -26,7 +27,7 @@ class ComunicacaoSefaz(Comunicacao):
     _versao = VERSAO_PADRAO
     _assinatura = AssinaturaA1
 
-    def transmitir(self, nota_fiscal):
+    def autorizacao(self, nota_fiscal):
         pass
 
     def cancelar(self, nota_fiscal):
@@ -37,16 +38,22 @@ class ComunicacaoSefaz(Comunicacao):
 
     def status_servico(self, tipo):
         """ Verifica status do servidor da receita. """
+        """ tipo é a string com tipo de serviço que deseja consultar
+            Ex: nfe ou nfce 
+        """
         if self._ambiente == 1:
             ambiente = 'https://'
         else:
             ambiente = 'https://homologacao.'
         if tipo == 'nfe':
-            # nfe
-            url = ambiente + 'nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3'
+            # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
+            url = ambiente + NFE[self.uf.upper()]['STATUS']
+        elif tipo == 'nfce':
+            # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
+            url = ambiente + NFCE[self.uf.upper()]['STATUS']
         else:
-            # nfce 
-            url = ambiente + 'nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3'
+            # TODO implementar outros tipos de notas como NFS-e
+            pass
 
         # Monta XML do corpo da requisição
         raiz = etree.Element('consStatServ', versao='3.10', xmlns=NAMESPACE_NFE)
@@ -59,7 +66,6 @@ class ComunicacaoSefaz(Comunicacao):
        
         # Chama método que efetua a requisição POST no servidor SOAP
         return self._post(url, xml, self._post_header())
-        #return bool(retorno)
 
     def consultar_cadastro(self, instancia):
         #post = '/nfeweb/services/cadconsultacadastro.asmx'

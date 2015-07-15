@@ -100,17 +100,13 @@ nota_fiscal.adicionar_produto_servico(codigo='000328', # id do produto (000328 e
     cofins_aliquota_percentual=Decimal('3.00'),
     cofins_valor=Decimal('3.51'))
 
-#_fonte_dados.adicionar_objeto(nota_fiscal)
-
 serializador = SerializacaoXML(_fonte_dados, homologacao=True)
 xml = serializador.exportar(retorna_string=True).decode('utf-8')
-certificado = "JC.pfx"
-senha = '12345328'
+certificado = "certificado_A1.pfx"
+senha = 'sua_senha'
 # assinatura
 a1 = AssinaturaA1(certificado, senha)
 xml = a1.assinar_nfe(xml)
 # escreve
 with open('teste.xml', 'wb') as arquivo:
     arquivo.write(xml)
-
-#print serializador._serializar_nota_fiscal(nota_fiscal)
