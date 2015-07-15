@@ -57,7 +57,7 @@ nota_fiscal = NotaFiscal(
    cliente=cliente,
    uf='PR',
    codigo_numerico_aleatorio='66998237',
-   natureza_operacao='VENDA ASSINATURAS',
+   natureza_operacao='VENDA',
    forma_pagamento='1',
    modelo=65,
    serie='1',
@@ -100,9 +100,9 @@ nota_fiscal.adicionar_produto_servico(codigo='000328', # id do produto (000328 e
     cofins_valor=Decimal('3.51'))
 
 serializador = SerializacaoXML(_fonte_dados, homologacao=True)
-xml = serializador.exportar(retorna_string=True).decode('utf-8')
-certificado = "certificado_A1.pfx"
-senha = 'sua_senha'
+xml = serializador.exportar(retorna_string=True)
+certificado = "JC.pfx"
+senha = '12345678'
 # assinatura
 a1 = AssinaturaA1(certificado, senha)
 xml = a1.assinar_nfe(xml)
