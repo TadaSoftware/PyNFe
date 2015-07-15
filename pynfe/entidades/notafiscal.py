@@ -68,8 +68,20 @@ class NotaFiscal(Entidade):
     cliente_final = int()
 
     # - Indica se a compra foi feita presencialmente, telefone, internet, etc
+    """
+        0=Não se aplica (por exemplo, Nota Fiscal complementar ou deajuste);
+        1=Operação presencial;
+        2=Operação não presencial, pela Internet;
+        3=Operação não presencial, Teleatendimento;
+        4=NFC-e em operação com entrega a domicílio;
+        9=Operação não presencial, outros.
+    """
     indicador_presencial = int()
 
+    """ nfce suporta apenas operação interna
+        Identificador de local de destino da operação 1=Operação interna;2=Operação interestadual;3=Operação com exterior.
+    """
+    indicador_destino = int()
     # - UF - converter para codigos em CODIGOS_ESTADOS
     uf = str()
 
@@ -351,8 +363,8 @@ class NotaFiscal(Entidade):
         return obj
 
     def _codigo_numerico_aleatorio(self):
-        codigo_numerico_aleatorio = str(random.randint(0, 99999999)).zfill(8)
-        return codigo_numerico_aleatorio
+        self.codigo_numerico_aleatorio = str(random.randint(0, 99999999)).zfill(8)
+        return self.codigo_numerico_aleatorio
 
     def _dv_codigo_numerico(self, key):
         assert len(key) == 43
@@ -371,8 +383,8 @@ class NotaFiscal(Entidade):
         remainder = key_sum % 11
         if remainder == 0 or remainder == 1:
             return '0'
-        dv_codigo_numerico_aleatorio = str(11 - remainder)
-        return str(dv_codigo_numerico_aleatorio) 
+        self.dv_codigo_numerico_aleatorio = str(11 - remainder)
+        return str(self.dv_codigo_numerico_aleatorio) 
 
     @property
     # @memoize
@@ -390,6 +402,8 @@ class NotaFiscal(Entidade):
                 'tpEmis': str(self.forma_emissao),
                 'cNF': self._codigo_numerico_aleatorio(),
                 }
+        print (self.codigo_numerico_aleatorio)
+        print (key)
         return "NFe%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nNF)s%(tpEmis)s%(cNF)s%(cDV)s"%{
                 'uf': CODIGOS_ESTADOS[self.uf],
                 'ano': self.data_emissao.strftime('%y'),

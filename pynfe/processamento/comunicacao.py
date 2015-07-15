@@ -28,8 +28,17 @@ class ComunicacaoSefaz(Comunicacao):
     _assinatura = AssinaturaA1
 
     def autorizacao(self, nota_fiscal):
-        pass
+        # tipo de nota, nfce ou nfe para pegar url correta
+        tipo = 'nfce' if nota_fiscal.modelo == 65 else 'nfe'
+        url = self._get_url(tipo=tipo, consulta='AUTORIZACAO')
 
+        # Monta XML do corpo da requisição
+        raiz = etree.Element('enviNFe')
+        etree.SubElement(raiz, 'versaoDados').text = self._versao
+        etree.SubElement(raiz, 'idLote').text = str(1) # numero autoincremental gerado pelo sistema
+        etree.SubElement(raiz, 'indSinc').text = str(1) # 0 para assincrono, 1 para sincrono
+        etree.SubElement(raiz, 'NFe').text = nota_fiscal # conjunto de nfe tramistidas (max 50)
+        
     def cancelar(self, nota_fiscal):
         pass
 
@@ -41,19 +50,7 @@ class ComunicacaoSefaz(Comunicacao):
         """ tipo é a string com tipo de serviço que deseja consultar
             Ex: nfe ou nfce 
         """
-        if self._ambiente == 1:
-            ambiente = 'https://'
-        else:
-            ambiente = 'https://homologacao.'
-        if tipo == 'nfe':
-            # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
-            url = ambiente + NFE[self.uf.upper()]['STATUS']
-        elif tipo == 'nfce':
-            # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
-            url = ambiente + NFCE[self.uf.upper()]['STATUS']
-        else:
-            # TODO implementar outros tipos de notas como NFS-e
-            pass
+        url = self._get_url(tipo=tipo, consulta='STATUS')
 
         # Monta XML do corpo da requisição
         raiz = etree.Element('consStatServ', versao='3.10', xmlns=NAMESPACE_NFE)
@@ -62,8 +59,10 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(raiz, 'xServ').text = 'STATUS'
         dados = etree.tostring(raiz, encoding='UTF-8')
         # Monta XML para envio da requisição
-        xml = self._construir_xml_soap(cabecalho=self._cabecalho_soap(), dados=dados, url=url)
-       
+        if self.uf.upper() == 'PR':
+            xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(), dados=dados, url=url)
+        else:
+            xml = self._construir_xml_soap(cabecalho=self._cabecalho_soap(), metodo='nfeRecepcao2', tag_metodo='nfeStatusServicoNF2', dados=dados)
         # Chama método que efetua a requisição POST no servidor SOAP
         return self._post(url, xml, self._post_header())
 
@@ -71,8 +70,7 @@ class ComunicacaoSefaz(Comunicacao):
         #post = '/nfeweb/services/cadconsultacadastro.asmx'
         post = '/nfeweb/services/nfeconsulta.asmx'
 
-    def inutilizar_faixa_numeracao(self, numero_inicial, numero_final, emitente, certificado,
-            senha, ano=None, serie='1', justificativa=''):
+    def inutilizar_faixa_numeracao(self, numero_inicial, numero_final, emitente, certificado, senha, ano=None, serie='1', justificativa=''):
         post = '/nfeweb/services/nfestatusservico.asmx'
 
         # Valores default
@@ -127,6 +125,22 @@ class ComunicacaoSefaz(Comunicacao):
 
         return retorno
 
+    def _get_url(self, tipo, consulta):
+        if self._ambiente == 1:
+            ambiente = 'https://'
+        else:
+            ambiente = 'https://homologacao.'
+        if tipo == 'nfe':
+            # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
+            url = ambiente + NFE[self.uf.upper()][consulta]
+        elif tipo == 'nfce':
+            # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
+            url = ambiente + NFCE[self.uf.upper()][consulta]
+        else:
+            # TODO implementar outros tipos de notas como NFS-e
+            pass
+        return url
+
     def _cabecalho_soap(self):
         u"""Monta o XML do cabeçalho da requisição SOAP"""
 
@@ -136,7 +150,22 @@ class ComunicacaoSefaz(Comunicacao):
 
         return etree.tostring(raiz, encoding='UTF-8')
 
-    def _construir_xml_soap(self, cabecalho, dados, url):
+    def _construir_xml_soap(self, cabecalho, metodo, tag_metodo, dados):
+        """Mota o XML para o envio via SOAP"""
+
+        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'soap': NAMESPACE_SOAP})
+
+        body = etree.SubElement(raiz, '{%s}Body'%NAMESPACE_SOAP)
+        met = etree.SubElement(
+                body, tag_metodo, xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/%s"%metodo,
+                )
+
+        etree.SubElement(met, 'nfeCabecMsg').text = cabecalho
+        etree.SubElement(met, 'nfeDadosMsg').text = dados
+
+        return etree.tostring(raiz, encoding='utf-8', xml_declaration=True)
+
+    def _construir_xml_status_pr(self, cabecalho, dados, url):
         u"""Mota o XML para o envio via SOAP"""
 
         raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'soap': NAMESPACE_SOAP}, xmlns=url)
@@ -155,7 +184,7 @@ class ComunicacaoSefaz(Comunicacao):
             u'Accept': u'application/soap+xml; charset=utf-8',
             }
 
-    def _post(self, post, xml, header):
+    def _post(self, url, xml, header):
         # Separa arquivos de certificado para chave e certificado (sozinho)
         #caminho_chave, caminho_cert = self.certificado.separar_arquivo(senha=self.certificado_senha)
         caminho_chave = '/home/junior/Documentos/Certificados/key.pem'
@@ -167,7 +196,7 @@ class ComunicacaoSefaz(Comunicacao):
         #headers = {'content-type': 'text/xml'}
         
         try:
-            r = requests.post(post, s, headers=self._post_header(), cert=cert, verify=False)
+            r = requests.post(url, s, headers=self._post_header(), cert=cert, verify=False)
             print (r.content)
             if r == 200:
                 return r.text

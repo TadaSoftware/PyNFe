@@ -17,15 +17,15 @@ class Assinatura(object):
         self.certificado = certificado
         self.senha = senha
 
-    def assinar_nfe(self, xml):
-        """Efetua a assinatura da nfe"""
+    def assinar(self, xml):
+        """Efetua a assinatura da nota"""
         pass
 
 class AssinaturaA1(Assinatura):
     """Classe responsavel por efetuar a assinatura do certificado
     digital no XML informado. Passar XML como string."""
 
-    def assinar_nfe(self, xml):
+    def assinar(self, xml):
         arquivo_cert = CertificadoA1(self.certificado)
         #key, cert = arquivo_cert.separar_arquivo(self.senha)
         cert = open("cert.pem").read()

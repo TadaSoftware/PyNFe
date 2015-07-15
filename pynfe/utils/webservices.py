@@ -1,4 +1,8 @@
 
+"""
+	@author: Junior Tada, Leonardo Tada
+"""
+
 # Nfc-e
 NFCE = {
 	    'RO': {
