@@ -36,10 +36,14 @@ class AssinaturaA1(Assinatura):
         signer = signxml.xmldsig(root, digest_algorithm="sha1")
         signer.sign(method=signxml.methods.enveloped, key=chave, cert=cert,
                     algorithm="rsa-sha1", c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
-                    reference_uri='')
+                    reference_uri='#NFe42140903657739000169550020000000011000000011')
+        # reference_uri nao funciona
         #verified_data = signer.verify(require_x509=True, ca_pem_file="cert.pem")
-        
-        #root = etree.SubElement(signer.data, "{http://www.w3.org/2000/09/xmldsig#}Reference",
-        #                 URI='#NFe41150715389524000122651010000000271333611649')
-        result = etree.tostring(signer.data, encoding="unicode")
+
+        ##chave_id = root.find('.//infNFe[@Id]').attrib['Id']
+        #root.findall('.//{http://www.w3.org/2000/09/xmldsig#}Reference')[0] \
+        #    .attrib['URI'] = '#chaveteste'
+
+        result = etree.tostring(root, encoding="unicode", pretty_print=True)
+
         return result

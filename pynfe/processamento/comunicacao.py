@@ -38,17 +38,11 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(raiz, 'idLote').text = str(1) # numero autoincremental gerado pelo sistema
         etree.SubElement(raiz, 'indSinc').text = str(1) # 0 para assincrono, 1 para sincrono
         etree.SubElement(raiz, 'NFe').text = nota_fiscal # conjunto de nfe tramistidas (max 50)
-        import ipdb
-        #ipdb.set_trace()
-        print (type(nota_fiscal))
-        dados = etree.tostring(raiz, encoding="unicode")
-        print (dados)
-        print (type(dados))
-        #print (dados)
+        dados = etree.tostring(raiz, encoding="unicode")  # BUG < retorna caracteres ASCII
         # Monta XML para envio da requisição
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(), dados=dados, url=url)
-        return xml
-        #return self._post(url, xml, self._post_header())
+        #return xml
+        return self._post(url, xml, self._post_header())
 
     def cancelar(self, modelo, xml):
         """ Envia um evento de cancelamento de nota fiscal """
@@ -86,12 +80,14 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
         etree.SubElement(raiz, 'xServ').text = 'STATUS'
-        dados = etree.tostring(raiz, encoding="UTF-8").decode('utf-8')
+        dados = etree.tostring(raiz, encoding="utf-8").decode('utf-8')
         # Monta XML para envio da requisição
         if self.uf.upper() == 'PR':
             xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(), dados=dados, url=url)
         else:
             xml = self._construir_xml_soap(cabecalho=self._cabecalho_soap(), metodo='nfeRecepcao2', tag_metodo='nfeStatusServicoNF2', dados=dados)
+        #xml = str(xml, 'utf-8').replace('&lt;', '<').replace('&gt;', '>').replace('\'', '"').replace('\n', '')
+        xml = replace('&amp;','').replace('lt;','<').replace('gt;','>').replace('&','')
         # Chama método que efetua a requisição POST no servidor SOAP
         return self._post(url, xml, self._post_header())
 
@@ -192,7 +188,7 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(met, 'nfeCabecMsg').text = cabecalho
         etree.SubElement(met, 'nfeDadosMsg').text = dados
 
-        return etree.tostring(raiz, encoding="unicode", xml_declaration=True)
+        return etree.tostring(raiz, encoding="utf-8", xml_declaration=True)
 
     def _construir_xml_status_pr(self, cabecalho, dados, url):
         u"""Mota o XML para o envio via SOAP"""
@@ -216,20 +212,19 @@ class ComunicacaoSefaz(Comunicacao):
     def _post(self, url, xml, header):
         # Separa arquivos de certificado para chave e certificado (sozinho)
         #caminho_chave, caminho_cert = self.certificado.separar_arquivo(senha=self.certificado_senha)
-        caminho_chave = '/home/junior/Documentos/Certificados/key.pem'
-        caminho_cert = '/home/junior/Documentos/Certificados/cert.pem'
+        caminho_chave = 'key.pem'
+        caminho_cert = 'cert.pem'
 
         # Abre a conexão HTTPS
         cert = (caminho_cert, caminho_chave)
-        s = str(xml, 'utf-8').replace('&lt;', '<').replace('&gt;', '>').replace('\'', '"').replace('\n', '')
         #headers = {'content-type': 'text/xml'}
         
         try:
-            r = requests.post(url, s, headers=self._post_header(), cert=cert, verify=False)
-            print (r.content)
-            if r == 200:
-                return r.text
-        except Exception as e:
-            pass
-        finally:
-            pass
+            result = requests.post(url, xml, headers=self._post_header(), cert=cert, verify=False)
+            print (result.content)
+            if result == 200:
+                return result.text
+            else:
+                return result
+        except Exception:
+            raise
