@@ -41,7 +41,8 @@ class ComunicacaoSefaz(Comunicacao):
         dados = etree.tostring(raiz, encoding="unicode")  # BUG < retorna caracteres ASCII
         # Monta XML para envio da requisição
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(), dados=dados, url=url)
-        #return xml
+        xml = str(xml).replace('&amp;','').replace('lt;','<').replace('gt;','>').replace('&','')
+        
         return self._post(url, xml, self._post_header())
 
     def cancelar(self, modelo, xml):
@@ -62,6 +63,7 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(raiz, 'infEvento').text = xml # Evento, um lote pode conter até 20 eventos
         dados = etree.tostring(raiz, encoding="unicode")
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(), dados=dados, url=url)
+        xml = str(xml).replace('&amp;','').replace('lt;','<').replace('gt;','>').replace('&','')
         return xml
         #return self._post(url, xml, self._post_header())
 
@@ -86,8 +88,7 @@ class ComunicacaoSefaz(Comunicacao):
             xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(), dados=dados, url=url)
         else:
             xml = self._construir_xml_soap(cabecalho=self._cabecalho_soap(), metodo='nfeRecepcao2', tag_metodo='nfeStatusServicoNF2', dados=dados)
-        #xml = str(xml, 'utf-8').replace('&lt;', '<').replace('&gt;', '>').replace('\'', '"').replace('\n', '')
-        xml = replace('&amp;','').replace('lt;','<').replace('gt;','>').replace('&','')
+        xml = str(xml, 'utf-8').replace('&lt;', '<').replace('&gt;', '>').replace('\'', '"').replace('\n', '')
         # Chama método que efetua a requisição POST no servidor SOAP
         return self._post(url, xml, self._post_header())
 
