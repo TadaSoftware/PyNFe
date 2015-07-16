@@ -8,6 +8,7 @@ from pynfe.entidades.cliente import Cliente
 from pynfe.entidades.emitente import Emitente
 from pynfe.entidades.notafiscal import NotaFiscal, NotaFiscalProduto
 from pynfe.entidades.fonte_dados import _fonte_dados
+from pynfe.processamento.comunicacao import ComunicacaoSefaz
 from pynfe.processamento.serializacao import SerializacaoXML
 from pynfe.processamento.assinatura import AssinaturaA1
 from pynfe.utils.flags import CODIGO_BRASIL
@@ -105,7 +106,15 @@ certificado = "JC.pfx"
 senha = '12345678'
 # assinatura
 a1 = AssinaturaA1(certificado, senha)
-xml = a1.assinar_nfe(xml)
+xml = a1.assinar(xml)
+#print(xml)
+#print(type(xml))
+con = ComunicacaoSefaz('PR', certificado, senha, homologacao=True)
+x = con.autorizacao('nfce', xml)
+#x = x.replace('&amp;','').replace('lt;','<').replace('gt;','>').replace('&','')
+print(x)
+# print(type(x))
+
 # escreve
-with open('teste.xml', 'wb') as arquivo:
-    arquivo.write(xml)
+# with open('teste.xml', 'w') as arquivo:
+#    arquivo.write(x)

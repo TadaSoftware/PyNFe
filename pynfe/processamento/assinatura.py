@@ -40,10 +40,10 @@ class AssinaturaA1(Assinatura):
         # reference_uri nao funciona
         #verified_data = signer.verify(require_x509=True, ca_pem_file="cert.pem")
 
-        #chave_id = root.find('.//infNFe[@Id]').attrib['Id']
-        root.findall('.//{http://www.w3.org/2000/09/xmldsig#}Reference')[0] \
-            .attrib['URI'] = '#chaveteste'
+        ##chave_id = root.find('.//infNFe[@Id]').attrib['Id']
+        #root.findall('.//{http://www.w3.org/2000/09/xmldsig#}Reference')[0] \
+        #    .attrib['URI'] = '#chaveteste'
 
-        result = etree.tostring(root)
+        result = etree.tostring(root, encoding="unicode", pretty_print=True)
 
         return result
