@@ -372,6 +372,34 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
+    def _serializar_evento(self, evento, tag_raiz='infEvento', retorna_string=False):
+
+        # timezone Brasília -03:00
+        tz = time.strftime("%z")
+        tz = "{}:{}".format(tz[:-2], tz[-2:])
+
+        raiz = etree.Element(tag_raiz)
+        etree.SubElement(raiz, 'Id').text = evento.id
+        etree.SubElement(raiz, 'cOrgao').text = CODIGOS_ESTADOS[evento.uf.upper()]
+        etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
+        etree.SubElement(raiz, 'CNPJ').text = evento.cnpj
+        #etree.SubElement(raiz, 'CPF').text = ''
+        etree.SubElement(raiz, 'chNFe').text = evento.chave 
+        etree.SubElement(raiz, 'dhEvento').text = evento.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz
+        etree.SubElement(raiz, 'tpEvento').text = evento.tp_evento
+        etree.SubElement(raiz, 'nSeqEvento').text = evento.n_seq_evento
+        etree.SubElement(raiz, 'verEvento').text = evento.ver_evento
+        etree.SubElement(raiz, 'detEvento').text = evento.det_evento
+        etree.SubElement(raiz, 'versao').text = evento.versao
+        etree.SubElement(raiz, 'descEvento').text = evento.descricao
+        etree.SubElement(raiz, 'nPro').text = evento.protocolo
+        etree.SubElement(raiz, 'xJust').text = evento.justificativa
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
 class SerializacaoPipes(Serializacao):
     """Serialização utilizada pela SEFAZ-SP para a importação de notas."""
 

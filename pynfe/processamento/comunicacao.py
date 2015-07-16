@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+import time
 import requests
 from pynfe.utils import etree, so_numeros
 from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, VERSAO_PADRAO, CODIGOS_ESTADOS
@@ -49,8 +50,26 @@ class ComunicacaoSefaz(Comunicacao):
         return xml
         #return self._post(url, xml, self._post_header())
 
-    def cancelar(self, nota_fiscal):
-        pass
+    def cancelar(self, modelo, xml):
+        """ Envia um evento de cancelamento de nota fiscal """
+        # timezone Brasília -03:00
+        tz = time.strftime("%z")
+        tz = "{}:{}".format(tz[:-2], tz[-2:])
+
+        # url do serviço
+        url = self._get_url(modelo=modelo, consulta='EVENTOS')
+        # Monta XML do corpo da requisição
+        raiz = etree.Element('envEvento')
+        #etree.SubElement(raiz, 'versao').text = self._versao # Na documentaçao 6.0 está desta forma
+        etree.SubElement(raiz, 'versaoDados').text = self._versao # Na documentaçao 6.0 está desta forma
+        etree.SubElement(raiz, 'idLote').text = str(1) # numero autoincremental gerado pelo sistema
+        evento = etree.SubElement(raiz, 'evento')
+        etree.SubElement(evento, 'versao').text = '1' # versao do leiaute do evento (cancelamento = 1)
+        etree.SubElement(raiz, 'infEvento').text = xml # Evento, um lote pode conter até 20 eventos
+        dados = etree.tostring(raiz, encoding="unicode")
+        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(), dados=dados, url=url)
+        return xml
+        #return self._post(url, xml, self._post_header())
 
     def situacao_nfe(self, nota_fiscal):
         pass
