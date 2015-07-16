@@ -18,20 +18,21 @@ class Assinatura(object):
         self.certificado = certificado
         self.senha = senha
 
-    def assinar_nfe(self, xml):
-        """Efetua a assinatura da nfe"""
+    def assinar(self, xml):
+        """Efetua a assinatura da nota"""
         pass
 
 class AssinaturaA1(Assinatura):
     """Classe responsavel por efetuar a assinatura do certificado
     digital no XML informado. Passar XML como string."""
 
-    def assinar_nfe(self, xml):
+    def assinar(self, xml):
         arquivo_cert = CertificadoA1(self.certificado)
         chave, cert = arquivo_cert.separar_arquivo(self.senha)
         
         #root = etree.parse(xml).getroot()  # caminho
         root = etree.fromstring(xml)  # string
+        #root = etree.XML(xml)  # string
         signer = signxml.xmldsig(root, digest_algorithm="sha1")
         signer.sign(method=signxml.methods.enveloped, key=chave, cert=cert,
                     algorithm="rsa-sha1", c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
@@ -44,4 +45,5 @@ class AssinaturaA1(Assinatura):
             .attrib['URI'] = '#chaveteste'
 
         result = etree.tostring(root)
+
         return result

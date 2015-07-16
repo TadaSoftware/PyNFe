@@ -8,8 +8,7 @@ from pynfe.entidades.cliente import Cliente
 from pynfe.entidades.emitente import Emitente
 from pynfe.entidades.notafiscal import NotaFiscal, NotaFiscalProduto
 from pynfe.entidades.fonte_dados import _fonte_dados
-from pynfe.processamento.serializacao import SerializacaoPipes, SerializacaoXML
-from pynfe.processamento.validacao import Validacao
+from pynfe.processamento.serializacao import SerializacaoXML
 from pynfe.processamento.assinatura import AssinaturaA1
 from pynfe.utils.flags import CODIGO_BRASIL
 import datetime
@@ -60,7 +59,7 @@ nota_fiscal = NotaFiscal(
    codigo_numerico_aleatorio='66998237',
    natureza_operacao='VENDA',
    forma_pagamento='1',
-   modelo=55,
+   modelo=65,
    serie='1',
    numero_nf='1',
    data_emissao=datetime.datetime.now(),

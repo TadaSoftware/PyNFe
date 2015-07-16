@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
-import time
-try:
-    set
-except:
-    from sets import Set as set
 
-from pynfe.entidades import Emitente, Cliente, Produto, Transportadora, NotaFiscal
-from pynfe.excecoes import NenhumObjetoEncontrado, MuitosObjetosEncontrados
+import time
+
+from pynfe.entidades import NotaFiscal
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
                         obter_pais_por_codigo, obter_municipio_e_codigo, \
                         formatar_decimal, safe_str, obter_uf_por_codigo, obter_codigo_por_municipio
@@ -62,7 +58,7 @@ class SerializacaoXML(Serializacao):
             raiz.append(self._serializar_nota_fiscal(nf, retorna_string=False))
 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True).decode('utf-8')
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
 
@@ -97,18 +93,19 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(endereco, 'fone').text = emitente.endereco_telefone
 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True)
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
 
-    def _serializar_cliente(self, cliente, tag_raiz='dest', retorna_string=True):
+    def _serializar_cliente(self, cliente, modelo, tag_raiz='dest', retorna_string=True):
         raiz = etree.Element(tag_raiz)
 
-        # Dados do cliente
+        # Dados do cliente (distinatario)
         etree.SubElement(raiz, cliente.tipo_documento).text = so_numeros(cliente.numero_documento)
         etree.SubElement(raiz, 'xNome').text = cliente.razao_social
-        etree.SubElement(raiz, 'IE').text = cliente.inscricao_estadual
-
+        # nfc-e nao possui IE mesmo que seja uma empresa
+        if modelo == 55:
+            etree.SubElement(raiz, 'IE').text = cliente.inscricao_estadual
         # Endereço
         endereco = etree.SubElement(raiz, 'enderDest')
         etree.SubElement(endereco, 'xLgr').text = cliente.endereco_logradouro
@@ -125,7 +122,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(endereco, 'fone').text = cliente.endereco_telefone
 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True)
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
 
@@ -144,9 +141,9 @@ class SerializacaoXML(Serializacao):
                 transportadora.endereco_municipio, transportadora.endereco_uf,
                 )
         etree.SubElement(raiz, 'UF').text = transportadora.endereco_uf
-
+ 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True)
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
 
@@ -168,11 +165,11 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(raiz, 'UF').text = entrega_retirada.endereco_uf
 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True)
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
 
-    def _serializar_produto_servico(self, produto_servico, tag_raiz='det', retorna_string=True):
+    def _serializar_produto_servico(self, produto_servico, modelo, tag_raiz='det', retorna_string=True):
         raiz = etree.Element(tag_raiz)
 
         # Produto
@@ -202,22 +199,24 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)
         etree.SubElement(icms_item, 'vICMS').text = str(produto_servico.icms_valor)
 
-        pis = etree.SubElement(imposto, 'PIS')
-        pis_item = etree.SubElement(pis, 'PISAliq')
-        etree.SubElement(pis_item, 'CST').text = str(produto_servico.pis_situacao_tributaria)
-        etree.SubElement(pis_item, 'vBC').text = str(produto_servico.pis_valor_base_calculo)
-        etree.SubElement(pis_item, 'pPIS').text = str(produto_servico.pis_aliquota_percentual)
-        etree.SubElement(pis_item, 'vPIS').text = str(produto_servico.pis_valor)
+        # apenas nfe
+        if modelo == 55:
+            pis = etree.SubElement(imposto, 'PIS')
+            pis_item = etree.SubElement(pis, 'PISAliq')
+            etree.SubElement(pis_item, 'CST').text = str(produto_servico.pis_situacao_tributaria)
+            etree.SubElement(pis_item, 'vBC').text = str(produto_servico.pis_valor_base_calculo)
+            etree.SubElement(pis_item, 'pPIS').text = str(produto_servico.pis_aliquota_percentual)
+            etree.SubElement(pis_item, 'vPIS').text = str(produto_servico.pis_valor)
 
-        cofins = etree.SubElement(imposto, 'COFINS')
-        cofins_item = etree.SubElement(cofins, 'COFINSAliq')
-        etree.SubElement(cofins_item, 'CST').text = str(produto_servico.cofins_situacao_tributaria)
-        etree.SubElement(cofins_item, 'vBC').text = str(produto_servico.cofins_valor_base_calculo)
-        etree.SubElement(cofins_item, 'pCOFINS').text = str(produto_servico.cofins_aliquota_percentual)
-        etree.SubElement(cofins_item, 'vCOFINS').text = str(produto_servico.cofins_valor)
+            cofins = etree.SubElement(imposto, 'COFINS')
+            cofins_item = etree.SubElement(cofins, 'COFINSAliq')
+            etree.SubElement(cofins_item, 'CST').text = str(produto_servico.cofins_situacao_tributaria)
+            etree.SubElement(cofins_item, 'vBC').text = str(produto_servico.cofins_valor_base_calculo)
+            etree.SubElement(cofins_item, 'pCOFINS').text = str(produto_servico.cofins_aliquota_percentual)
+            etree.SubElement(cofins_item, 'vCOFINS').text = str(produto_servico.cofins_valor)
 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True)
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
 
@@ -250,7 +249,17 @@ class SerializacaoXML(Serializacao):
             horário de verão serão -01:00, -02:00 e -03:00. Exemplo: "2010-08-19T13:00:15-03:00".
         """
         etree.SubElement(ide, 'tpNF').text = str(nota_fiscal.tipo_documento)  # 0=entrada 1=saida
-        etree.SubElement(ide, 'idDest').text = str(1) # Identificador de local de destino da operação 1=Operação interna;2=Operação interestadual;3=Operação com exterior.
+        """ nfce suporta apenas operação interna
+            Identificador de local de destino da operação 1=Operação interna;2=Operação interestadual;3=Operação com exterior.
+        """
+        if nota_fiscal.modelo == 65:
+            etree.SubElement(ide, 'idDest').text = str(1) 
+            etree.SubElement(ide, 'indPres').text = str(1)
+            etree.SubElement(ide, 'indFinal').text = str(1)
+        else:
+            etree.SubElement(ide, 'idDest').text = str(nota_fiscal.indicador_destino)
+            etree.SubElement(ide, 'indPres').text = str(nota_fiscal.indicador_presencial)
+            etree.SubElement(ide, 'indFinal').text = str(nota_fiscal.cliente_final)
         etree.SubElement(ide, 'cMunFG').text = nota_fiscal.municipio
         etree.SubElement(ide, 'tpImp').text = str(nota_fiscal.tipo_impressao_danfe)
         etree.SubElement(ide, 'tpEmis').text = str(nota_fiscal.forma_emissao)
@@ -258,14 +267,16 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(ide, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(ide, 'finNFe').text = str(nota_fiscal.finalidade_emissao)
         etree.SubElement(ide, 'procEmi').text = str(nota_fiscal.processo_emissao)
-        etree.SubElement(ide, 'verProc').text = '%s %s'%(self._nome_aplicacao,
-                nota_fiscal.versao_processo_emissao)
+        etree.SubElement(ide, 'verProc').text = '%s %s'%(self._nome_aplicacao, nota_fiscal.versao_processo_emissao)
+        ### CONTINGENCIA ###
+        #etree.SubElement(ide, 'dhCont').text = '' # Data e Hora da entrada em contingência AAAA-MM-DDThh:mm:ssTZD
+        #etree.SubElement(ide, 'xJust').text = ''  # Justificativa da entrada em contingência (min 20, max 256 caracteres)
 
         # Emitente
         raiz.append(self._serializar_emitente(nota_fiscal.emitente, retorna_string=False))
 
         # Destinatário
-        raiz.append(self._serializar_cliente(nota_fiscal.cliente, retorna_string=False))
+        raiz.append(self._serializar_cliente(nota_fiscal.cliente, modelo=nota_fiscal.modelo, retorna_string=False))
 
         # Retirada
         if nota_fiscal.retirada:
@@ -285,7 +296,7 @@ class SerializacaoXML(Serializacao):
 
         # Itens
         for num, item in enumerate(nota_fiscal.produtos_e_servicos):
-            det = self._serializar_produto_servico(item, retorna_string=False)
+            det = self._serializar_produto_servico(item, modelo=nota_fiscal.modelo, retorna_string=False)
             det.attrib['nItem'] = str(num+1)
 
             raiz.append(det)
@@ -301,50 +312,55 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_total, 'vFrete').text = str(nota_fiscal.totais_icms_total_frete)
         etree.SubElement(icms_total, 'vSeg').text = str(nota_fiscal.totais_icms_total_seguro)
         etree.SubElement(icms_total, 'vDesc').text = str(nota_fiscal.totais_icms_total_desconto)
-        etree.SubElement(icms_total, 'vII').text = str(nota_fiscal.totais_icms_total_ii)
-        etree.SubElement(icms_total, 'vIPI').text = str(nota_fiscal.totais_icms_total_ipi)
-        etree.SubElement(icms_total, 'vPIS').text = str(nota_fiscal.totais_icms_pis)
-        etree.SubElement(icms_total, 'vCOFINS').text = str(nota_fiscal.totais_icms_cofins)
         etree.SubElement(icms_total, 'vOutro').text = str(nota_fiscal.totais_icms_outras_despesas_acessorias)
         etree.SubElement(icms_total, 'vNF').text = str(nota_fiscal.totais_icms_total_nota)
 
-        # Transporte
-        transp = etree.SubElement(raiz, 'transp')
-        etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
 
-        # Transportadora
-        if nota_fiscal.transporte_transportadora:
-            transp.append(self._serializar_transportadora(
-                nota_fiscal.transporte_transportadora,
-                retorna_string=False,
-                ))
+        # Apenas NF-e
+        if nota_fiscal.modelo == 55:
+            # Tributos
+            etree.SubElement(icms_total, 'vIPI').text = str(nota_fiscal.totais_icms_total_ipi)
+            etree.SubElement(icms_total, 'vPIS').text = str(nota_fiscal.totais_icms_pis)
+            etree.SubElement(icms_total, 'vCOFINS').text = str(nota_fiscal.totais_icms_cofins)
+            etree.SubElement(icms_total, 'vII').text = str(nota_fiscal.totais_icms_total_ii)
 
-        # Veículo
-        veiculo = etree.SubElement(transp, 'veicTransp')
-        etree.SubElement(veiculo, 'placa').text = nota_fiscal.transporte_veiculo_placa
-        etree.SubElement(veiculo, 'UF').text = nota_fiscal.transporte_veiculo_uf
-        etree.SubElement(veiculo, 'RNTC').text = nota_fiscal.transporte_veiculo_rntc
+            # Transporte
+            transp = etree.SubElement(raiz, 'transp')
+            etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
 
-        # Reboque
-        reboque = etree.SubElement(transp, 'reboque')
-        etree.SubElement(reboque, 'placa').text = nota_fiscal.transporte_reboque_placa
-        etree.SubElement(reboque, 'UF').text = nota_fiscal.transporte_reboque_uf
-        etree.SubElement(reboque, 'RNTC').text = nota_fiscal.transporte_reboque_rntc
+            # Transportadora
+            if nota_fiscal.transporte_transportadora:
+                transp.append(self._serializar_transportadora(
+                    nota_fiscal.transporte_transportadora,
+                    retorna_string=False,
+                    ))
 
-        # Volumes
-        for volume in nota_fiscal.transporte_volumes:
-            vol = etree.SubElement(transp, 'vol')
-            etree.SubElement(vol, 'qVol').text = str(volume.quantidade)
-            etree.SubElement(vol, 'esp').text = volume.especie
-            etree.SubElement(vol, 'marca').text = volume.marca
-            etree.SubElement(vol, 'nVol').text = volume.numeracao
-            etree.SubElement(vol, 'pesoL').text = str(volume.peso_liquido)
-            etree.SubElement(vol, 'pesoB').text = str(volume.peso_bruto)
+            # Veículo
+            veiculo = etree.SubElement(transp, 'veicTransp')
+            etree.SubElement(veiculo, 'placa').text = nota_fiscal.transporte_veiculo_placa
+            etree.SubElement(veiculo, 'UF').text = nota_fiscal.transporte_veiculo_uf
+            etree.SubElement(veiculo, 'RNTC').text = nota_fiscal.transporte_veiculo_rntc
 
-            # Lacres
-            lacres = etree.SubElement(vol, 'lacres')
-            for lacre in volume.lacres:
-                etree.SubElement(lacres, 'nLacre').text = lacre.numero_lacre
+            # Reboque
+            reboque = etree.SubElement(transp, 'reboque')
+            etree.SubElement(reboque, 'placa').text = nota_fiscal.transporte_reboque_placa
+            etree.SubElement(reboque, 'UF').text = nota_fiscal.transporte_reboque_uf
+            etree.SubElement(reboque, 'RNTC').text = nota_fiscal.transporte_reboque_rntc
+
+            # Volumes
+            for volume in nota_fiscal.transporte_volumes:
+                vol = etree.SubElement(transp, 'vol')
+                etree.SubElement(vol, 'qVol').text = str(volume.quantidade)
+                etree.SubElement(vol, 'esp').text = volume.especie
+                etree.SubElement(vol, 'marca').text = volume.marca
+                etree.SubElement(vol, 'nVol').text = volume.numeracao
+                etree.SubElement(vol, 'pesoL').text = str(volume.peso_liquido)
+                etree.SubElement(vol, 'pesoB').text = str(volume.peso_bruto)
+
+                # Lacres
+                lacres = etree.SubElement(vol, 'lacres')
+                for lacre in volume.lacres:
+                    etree.SubElement(lacres, 'nLacre').text = lacre.numero_lacre
 
         # Informações adicionais
         info_ad = etree.SubElement(raiz, 'infAdic')
@@ -352,7 +368,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(info_ad, 'infCpl').text = nota_fiscal.informacoes_complementares_interesse_contribuinte
 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True)
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
 
