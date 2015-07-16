@@ -37,10 +37,16 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(raiz, 'idLote').text = str(1) # numero autoincremental gerado pelo sistema
         etree.SubElement(raiz, 'indSinc').text = str(1) # 0 para assincrono, 1 para sincrono
         etree.SubElement(raiz, 'NFe').text = nota_fiscal # conjunto de nfe tramistidas (max 50)
-        dados = etree.tostring(raiz, encoding="UTF-8")
+        import ipdb
+        #ipdb.set_trace()
+        print (type(nota_fiscal))
+        dados = etree.tostring(raiz, encoding="unicode")
+        print (dados)
+        print (type(dados))
+        #print (dados)
         # Monta XML para envio da requisição
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(), dados=dados, url=url)
-        return str(xml, 'utf-8').replace('&lt;', '<').replace('&gt;', '>').replace('\'', '"').replace('\n', '')
+        return xml
         #return self._post(url, xml, self._post_header())
 
     def cancelar(self, nota_fiscal):
@@ -61,7 +67,7 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
         etree.SubElement(raiz, 'xServ').text = 'STATUS'
-        dados = etree.tostring(raiz, encoding="UTF-8")
+        dados = etree.tostring(raiz, encoding="UTF-8").decode('utf-8')
         # Monta XML para envio da requisição
         if self.uf.upper() == 'PR':
             xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(), dados=dados, url=url)
@@ -152,7 +158,7 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(raiz, 'cUF').text = str(41)
         etree.SubElement(raiz, 'versaoDados').text = VERSAO_PADRAO
 
-        return etree.tostring(raiz, encoding="UTF-8")
+        return etree.tostring(raiz, encoding="unicode")
 
     def _construir_xml_soap(self, cabecalho, metodo, tag_metodo, dados):
         """Mota o XML para o envio via SOAP"""
@@ -167,7 +173,7 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(met, 'nfeCabecMsg').text = cabecalho
         etree.SubElement(met, 'nfeDadosMsg').text = dados
 
-        return etree.tostring(raiz, encoding="UTF-8", xml_declaration=True)
+        return etree.tostring(raiz, encoding="unicode", xml_declaration=True)
 
     def _construir_xml_status_pr(self, cabecalho, dados, url):
         u"""Mota o XML para o envio via SOAP"""
@@ -175,9 +181,9 @@ class ComunicacaoSefaz(Comunicacao):
         raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'soap': NAMESPACE_SOAP}, xmlns=url)
         etree.SubElement(raiz, '{%s}Header'%NAMESPACE_SOAP).text = cabecalho
         body = etree.SubElement(raiz, '{%s}Body'%NAMESPACE_SOAP)
-        etree.SubElement(body, 'nfeDadosMsg').text = str(dados)
+        etree.SubElement(body, 'nfeDadosMsg').text = dados
 
-        return etree.tostring(raiz, encoding="UTF-8", xml_declaration=True)
+        return etree.tostring(raiz, encoding="UTF-8", xml_declaration=True).decode('utf-8')
 
     def _post_header(self):
         u"""Retorna um dicionário com os atributos para o cabeçalho da requisição HTTP"""

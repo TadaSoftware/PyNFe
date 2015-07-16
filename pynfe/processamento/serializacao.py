@@ -58,7 +58,7 @@ class SerializacaoXML(Serializacao):
             raiz.append(self._serializar_nota_fiscal(nf, retorna_string=False))
 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True).decode('utf-8')
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
 
@@ -93,7 +93,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(endereco, 'fone').text = emitente.endereco_telefone
 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True)
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
 
@@ -122,7 +122,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(endereco, 'fone').text = cliente.endereco_telefone
 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True)
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
 
@@ -141,9 +141,9 @@ class SerializacaoXML(Serializacao):
                 transportadora.endereco_municipio, transportadora.endereco_uf,
                 )
         etree.SubElement(raiz, 'UF').text = transportadora.endereco_uf
-
+ 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True)
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
 
@@ -165,7 +165,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(raiz, 'UF').text = entrega_retirada.endereco_uf
 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True)
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
 
@@ -216,7 +216,7 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(cofins_item, 'vCOFINS').text = str(produto_servico.cofins_valor)
 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True)
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
 
@@ -368,7 +368,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(info_ad, 'infCpl').text = nota_fiscal.informacoes_complementares_interesse_contribuinte
 
         if retorna_string:
-            return etree.tostring(raiz, pretty_print=True)
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
 
