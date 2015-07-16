@@ -402,8 +402,6 @@ class NotaFiscal(Entidade):
                 'tpEmis': str(self.forma_emissao),
                 'cNF': self._codigo_numerico_aleatorio(),
                 }
-        print (self.codigo_numerico_aleatorio)
-        print (key)
         return "NFe%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nNF)s%(tpEmis)s%(cNF)s%(cDV)s"%{
                 'uf': CODIGOS_ESTADOS[self.uf],
                 'ano': self.data_emissao.strftime('%y'),

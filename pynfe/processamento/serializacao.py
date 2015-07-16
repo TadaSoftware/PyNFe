@@ -169,7 +169,7 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
-    def _serializar_produto_servico(self, produto_servico, tag_raiz='det', retorna_string=True):
+    def _serializar_produto_servico(self, produto_servico, modelo, tag_raiz='det', retorna_string=True):
         raiz = etree.Element(tag_raiz)
 
         # Produto
@@ -199,19 +199,21 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)
         etree.SubElement(icms_item, 'vICMS').text = str(produto_servico.icms_valor)
 
-        pis = etree.SubElement(imposto, 'PIS')
-        pis_item = etree.SubElement(pis, 'PISAliq')
-        etree.SubElement(pis_item, 'CST').text = str(produto_servico.pis_situacao_tributaria)
-        etree.SubElement(pis_item, 'vBC').text = str(produto_servico.pis_valor_base_calculo)
-        etree.SubElement(pis_item, 'pPIS').text = str(produto_servico.pis_aliquota_percentual)
-        etree.SubElement(pis_item, 'vPIS').text = str(produto_servico.pis_valor)
+        # apenas nfe
+        if modelo == 55:
+            pis = etree.SubElement(imposto, 'PIS')
+            pis_item = etree.SubElement(pis, 'PISAliq')
+            etree.SubElement(pis_item, 'CST').text = str(produto_servico.pis_situacao_tributaria)
+            etree.SubElement(pis_item, 'vBC').text = str(produto_servico.pis_valor_base_calculo)
+            etree.SubElement(pis_item, 'pPIS').text = str(produto_servico.pis_aliquota_percentual)
+            etree.SubElement(pis_item, 'vPIS').text = str(produto_servico.pis_valor)
 
-        cofins = etree.SubElement(imposto, 'COFINS')
-        cofins_item = etree.SubElement(cofins, 'COFINSAliq')
-        etree.SubElement(cofins_item, 'CST').text = str(produto_servico.cofins_situacao_tributaria)
-        etree.SubElement(cofins_item, 'vBC').text = str(produto_servico.cofins_valor_base_calculo)
-        etree.SubElement(cofins_item, 'pCOFINS').text = str(produto_servico.cofins_aliquota_percentual)
-        etree.SubElement(cofins_item, 'vCOFINS').text = str(produto_servico.cofins_valor)
+            cofins = etree.SubElement(imposto, 'COFINS')
+            cofins_item = etree.SubElement(cofins, 'COFINSAliq')
+            etree.SubElement(cofins_item, 'CST').text = str(produto_servico.cofins_situacao_tributaria)
+            etree.SubElement(cofins_item, 'vBC').text = str(produto_servico.cofins_valor_base_calculo)
+            etree.SubElement(cofins_item, 'pCOFINS').text = str(produto_servico.cofins_aliquota_percentual)
+            etree.SubElement(cofins_item, 'vCOFINS').text = str(produto_servico.cofins_valor)
 
         if retorna_string:
             return etree.tostring(raiz, pretty_print=True)
@@ -294,7 +296,7 @@ class SerializacaoXML(Serializacao):
 
         # Itens
         for num, item in enumerate(nota_fiscal.produtos_e_servicos):
-            det = self._serializar_produto_servico(item, retorna_string=False)
+            det = self._serializar_produto_servico(item, modelo=nota_fiscal.modelo, retorna_string=False)
             det.attrib['nItem'] = str(num+1)
 
             raiz.append(det)
