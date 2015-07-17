@@ -382,6 +382,7 @@ class NotaFiscal(Entidade):
 
         remainder = key_sum % 11
         if remainder == 0 or remainder == 1:
+            self.dv_codigo_numerico_aleatorio = '0'
             return '0'
         self.dv_codigo_numerico_aleatorio = str(11 - remainder)
         return str(self.dv_codigo_numerico_aleatorio) 

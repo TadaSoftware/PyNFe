@@ -26,7 +26,7 @@ class AssinaturaA1(Assinatura):
     """Classe responsavel por efetuar a assinatura do certificado
     digital no XML informado. Passar XML como string."""
 
-    def assinar(self, xml):
+    def assinar(self, xml, retona_string=True):
         arquivo_cert = CertificadoA1(self.certificado)
         chave, cert = arquivo_cert.separar_arquivo(self.senha)
         
@@ -44,6 +44,7 @@ class AssinaturaA1(Assinatura):
         #root.findall('.//{http://www.w3.org/2000/09/xmldsig#}Reference')[0] \
         #    .attrib['URI'] = '#chaveteste'
 
-        result = etree.tostring(root, encoding="unicode", pretty_print=True)
-
-        return result
+        if retona_string:
+            return etree.tostring(root, encoding="unicode", pretty_print=True)
+        else:
+            return root

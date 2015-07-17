@@ -6,7 +6,7 @@ from pynfe.entidades import NotaFiscal
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
                         obter_pais_por_codigo, obter_municipio_e_codigo, \
                         formatar_decimal, safe_str, obter_uf_por_codigo, obter_codigo_por_municipio
-from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO
+from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE
 
 class Serializacao(object):
     """Classe abstrata responsavel por fornecer as funcionalidades basicas para
@@ -49,7 +49,7 @@ class SerializacaoXML(Serializacao):
         armazenado(s) em cache local."""
 
         # No raiz do XML de saida
-        raiz = etree.Element('NFe', xmlns="http://www.portalfiscal.inf.br/nfe")
+        raiz = etree.Element('NFe', xmlns=NAMESPACE_NFE)
 
         # Carrega lista de Notas Fiscais
         notas_fiscais = self._fonte_dados.obter_lista(_classe=NotaFiscal, **kwargs)
@@ -75,8 +75,6 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(raiz, 'CNPJ').text = so_numeros(emitente.cnpj)
         etree.SubElement(raiz, 'xNome').text = emitente.razao_social
         etree.SubElement(raiz, 'xFant').text = emitente.nome_fantasia
-        etree.SubElement(raiz, 'IE').text = emitente.inscricao_estadual
-
         # Endereço
         endereco = etree.SubElement(raiz, 'enderEmit')
         etree.SubElement(endereco, 'xLgr').text = emitente.endereco_logradouro
@@ -91,7 +89,11 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(endereco, 'cPais').text = emitente.endereco_pais
         etree.SubElement(endereco, 'xPais').text = obter_pais_por_codigo(emitente.endereco_pais)
         etree.SubElement(endereco, 'fone').text = emitente.endereco_telefone
-
+        etree.SubElement(raiz, 'IE').text = emitente.inscricao_estadual
+        etree.SubElement(raiz, 'IEST').text = emitente.inscricao_estadual_subst_tributaria
+        etree.SubElement(raiz, 'IM').text = emitente.inscricao_municipal
+        etree.SubElement(raiz, 'CNAE').text = emitente.cnae_fiscal
+        etree.SubElement(raiz, 'CRT').text = emitente.codigo_de_regime_tributario
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
@@ -253,19 +255,21 @@ class SerializacaoXML(Serializacao):
             Identificador de local de destino da operação 1=Operação interna;2=Operação interestadual;3=Operação com exterior.
         """
         if nota_fiscal.modelo == 65:
-            etree.SubElement(ide, 'idDest').text = str(1) 
-            etree.SubElement(ide, 'indPres').text = str(1)
-            etree.SubElement(ide, 'indFinal').text = str(1)
+            etree.SubElement(ide, 'idDest').text = str(1)
         else:
             etree.SubElement(ide, 'idDest').text = str(nota_fiscal.indicador_destino)
-            etree.SubElement(ide, 'indPres').text = str(nota_fiscal.indicador_presencial)
-            etree.SubElement(ide, 'indFinal').text = str(nota_fiscal.cliente_final)
         etree.SubElement(ide, 'cMunFG').text = nota_fiscal.municipio
         etree.SubElement(ide, 'tpImp').text = str(nota_fiscal.tipo_impressao_danfe)
         etree.SubElement(ide, 'tpEmis').text = str(nota_fiscal.forma_emissao)
         etree.SubElement(ide, 'cDV').text = nota_fiscal.dv_codigo_numerico_aleatorio
         etree.SubElement(ide, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(ide, 'finNFe').text = str(nota_fiscal.finalidade_emissao)
+        if nota_fiscal.modelo == 65:
+            etree.SubElement(ide, 'indFinal').text = str(1)
+            etree.SubElement(ide, 'indPres').text = str(1)
+        else:
+            etree.SubElement(ide, 'indFinal').text = str(nota_fiscal.cliente_final)
+            etree.SubElement(ide, 'indPres').text = str(nota_fiscal.indicador_presencial)
         etree.SubElement(ide, 'procEmi').text = str(nota_fiscal.processo_emissao)
         etree.SubElement(ide, 'verProc').text = '%s %s'%(self._nome_aplicacao, nota_fiscal.versao_processo_emissao)
         ### CONTINGENCIA ###

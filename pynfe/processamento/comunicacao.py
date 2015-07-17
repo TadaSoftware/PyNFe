@@ -31,19 +31,21 @@ class ComunicacaoSefaz(Comunicacao):
     def autorizacao(self, modelo, nota_fiscal):
         # url do serviço
         url = self._get_url(modelo=modelo, consulta='AUTORIZACAO')
-
+        parser = etree.XMLParser(remove_blank_text=True)
         # Monta XML do corpo da requisição
-        raiz = etree.Element('enviNFe')
-        etree.SubElement(raiz, 'versaoDados').text = self._versao
+        raiz = etree.Element('enviNFe', versao=VERSAO_PADRAO)
+        #etree.SubElement(raiz, 'versao').text = self._versao
         etree.SubElement(raiz, 'idLote').text = str(1) # numero autoincremental gerado pelo sistema
         etree.SubElement(raiz, 'indSinc').text = str(1) # 0 para assincrono, 1 para sincrono
-        etree.SubElement(raiz, 'NFe').text = nota_fiscal # conjunto de nfe tramistidas (max 50)
-        dados = etree.tostring(raiz, encoding="unicode")  # BUG < retorna caracteres ASCII
+        #etree.SubElement(raiz, 'NFe').text = nota_fiscal # conjunto de nfe tramistidas (max 50)
+        raiz.append(etree.fromstring(nota_fiscal))
+        elem = etree.XML(etree.tostring(raiz, encoding='unicode'), parser=parser)
+        dados = etree.tostring(elem, encoding="unicode")  # BUG < retorna caracteres ASCII
         # Monta XML para envio da requisição
-        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(), dados=dados, url=url)
-        xml = str(xml).replace('&amp;','').replace('lt;','<').replace('gt;','>').replace('&','')
-        
-        return self._post(url, xml, self._post_header())
+        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(), dados=dados)
+        xml = str(xml).replace('lt;','<').replace('gt;','>').replace('&','').replace('ds:','')
+        #print (xml)
+        return self._post(url, xml)
 
     def cancelar(self, modelo, xml):
         """ Envia um evento de cancelamento de nota fiscal """
@@ -65,17 +67,17 @@ class ComunicacaoSefaz(Comunicacao):
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(), dados=dados, url=url)
         xml = str(xml).replace('&amp;','').replace('lt;','<').replace('gt;','>').replace('&','')
         return xml
-        #return self._post(url, xml, self._post_header())
+        #return self._post(url, xml)
 
     def situacao_nfe(self, nota_fiscal):
         pass
 
-    def status_servico(self, tipo):
+    def status_servico(self, modelo):
         """ Verifica status do servidor da receita. """
         """ tipo é a string com tipo de serviço que deseja consultar
             Ex: nfe ou nfce 
         """
-        url = self._get_url(tipo=tipo, consulta='STATUS')
+        url = self._get_url(modelo=modelo, consulta='STATUS')
 
         # Monta XML do corpo da requisição
         raiz = etree.Element('consStatServ', versao='3.10', xmlns=NAMESPACE_NFE)
@@ -85,12 +87,12 @@ class ComunicacaoSefaz(Comunicacao):
         dados = etree.tostring(raiz, encoding="utf-8").decode('utf-8')
         # Monta XML para envio da requisição
         if self.uf.upper() == 'PR':
-            xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(), dados=dados, url=url)
+            xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(), dados=dados)
         else:
             xml = self._construir_xml_soap(cabecalho=self._cabecalho_soap(), metodo='nfeRecepcao2', tag_metodo='nfeStatusServicoNF2', dados=dados)
-        xml = str(xml, 'utf-8').replace('&lt;', '<').replace('&gt;', '>').replace('\'', '"').replace('\n', '')
+        xml = str(xml).replace('&lt;', '<').replace('&gt;', '>').replace('\'', '"').replace('\n', '')
         # Chama método que efetua a requisição POST no servidor SOAP
-        return self._post(url, xml, self._post_header())
+        return self._post(url, xml)
 
     def consultar_cadastro(self, instancia):
         #post = '/nfeweb/services/cadconsultacadastro.asmx'
@@ -183,7 +185,7 @@ class ComunicacaoSefaz(Comunicacao):
 
         body = etree.SubElement(raiz, '{%s}Body'%NAMESPACE_SOAP)
         met = etree.SubElement(
-                body, tag_metodo, xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/%s"%metodo,
+                body, tag_metodo, xmlns=metodo,
                 )
 
         etree.SubElement(met, 'nfeCabecMsg').text = cabecalho
@@ -191,15 +193,15 @@ class ComunicacaoSefaz(Comunicacao):
 
         return etree.tostring(raiz, encoding="utf-8", xml_declaration=True)
 
-    def _construir_xml_status_pr(self, cabecalho, dados, url):
+    def _construir_xml_status_pr(self, cabecalho, dados):
         u"""Mota o XML para o envio via SOAP"""
 
-        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'soap': NAMESPACE_SOAP}, xmlns=url)
+        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'soap': NAMESPACE_SOAP}, xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, '{%s}Header'%NAMESPACE_SOAP).text = cabecalho
         body = etree.SubElement(raiz, '{%s}Body'%NAMESPACE_SOAP)
         etree.SubElement(body, 'nfeDadosMsg').text = dados
 
-        return etree.tostring(raiz, encoding="UTF-8", xml_declaration=True).decode('utf-8')
+        return etree.tostring(raiz, encoding='unicode')
 
     def _post_header(self):
         u"""Retorna um dicionário com os atributos para o cabeçalho da requisição HTTP"""
@@ -210,22 +212,25 @@ class ComunicacaoSefaz(Comunicacao):
             u'Accept': u'application/soap+xml; charset=utf-8',
             }
 
-    def _post(self, url, xml, header):
+    def _post(self, url, xml):
         # Separa arquivos de certificado para chave e certificado (sozinho)
         #caminho_chave, caminho_cert = self.certificado.separar_arquivo(senha=self.certificado_senha)
-        caminho_chave = 'key.pem'
-        caminho_cert = 'cert.pem'
+        #caminho_chave = 'key.pem'
+        #caminho_cert = 'cert.pem'
+        caminho_chave = '/home/junior/Documentos/Certificados/key.pem'
+        caminho_cert = '/home/junior/Documentos/Certificados/cert.pem'
 
         # Abre a conexão HTTPS
         cert = (caminho_cert, caminho_chave)
         #headers = {'content-type': 'text/xml'}
         
         try:
+            print (url)
             result = requests.post(url, xml, headers=self._post_header(), cert=cert, verify=False)
             print (result.content)
             if result == 200:
                 return result.text
             else:
                 return result
-        except Exception:
-            raise
+        except requests.exceptions.ConnectionError as e:
+            raise e
