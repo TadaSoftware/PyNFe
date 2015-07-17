@@ -105,10 +105,6 @@ class SerializacaoXML(Serializacao):
         # Dados do cliente (distinatario)
         etree.SubElement(raiz, cliente.tipo_documento).text = so_numeros(cliente.numero_documento)
         etree.SubElement(raiz, 'xNome').text = cliente.razao_social
-        # nfc-e nao possui IE mesmo que seja uma empresa
-        if modelo == 55:
-            etree.SubElement(raiz, 'IE').text = cliente.inscricao_estadual
-        # Endereço
         endereco = etree.SubElement(raiz, 'enderDest')
         etree.SubElement(endereco, 'xLgr').text = cliente.endereco_logradouro
         etree.SubElement(endereco, 'nro').text = cliente.endereco_numero
@@ -122,7 +118,24 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(endereco, 'cPais').text = cliente.endereco_pais
         etree.SubElement(endereco, 'xPais').text = obter_pais_por_codigo(cliente.endereco_pais)
         etree.SubElement(endereco, 'fone').text = cliente.endereco_telefone
-
+        #Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista; 2 – Contribuinte isento de inscrição; 9 – Não Contribuinte
+        if cliente.isento_icms or cliente.inscricao_estadual.upper() == 'ISENTO':    
+            etree.SubElement(raiz, 'indIEDest').text = str(2)
+            etree.SubElement(raiz, 'IE').text = 'ISENTO'
+        elif cliente.indicador_ie == 9:
+            # 9 – Não Contribuinte
+            etree.SubElement(raiz, 'indIEDest').text = str(9)
+        else:
+            # Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista;
+            etree.SubElement(raiz, 'indIEDest').text = cliente.indicador_ie
+            etree.SubElement(raiz, 'IE').text = cliente.inscricao_estadual
+        # Suframa
+        if cliente.inscricao_suframa:
+            etree.SubElement(raiz, 'ISUF').text = cliente.inscricao_suframa
+        # Inscrição Municipal do tomador do serviço
+        if cliente.inscricao_municipal:
+            etree.SubElement(raiz, 'IM').text = cliente.inscricao_municipal
+        etree.SubElement(raiz, 'email').text = cliente.email
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
@@ -179,6 +192,9 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'cProd').text = str(produto_servico.codigo)
         etree.SubElement(prod, 'cEAN').text = produto_servico.ean
         etree.SubElement(prod, 'xProd').text = produto_servico.descricao
+        etree.SubElement(prod, 'NCM').text = produto_servico.ncm
+        # Codificação opcional que detalha alguns NCM. Formato: duas letras maiúsculas e 4 algarismos. Se a mercadoria se enquadrar em mais de uma codificação, informar até 8 codificações principais.
+        #etree.SubElement(prod, 'NVE').text = ''
         etree.SubElement(prod, 'CFOP').text = produto_servico.cfop
         etree.SubElement(prod, 'uCom').text = produto_servico.unidade_comercial
         etree.SubElement(prod, 'qCom').text = str(produto_servico.quantidade_comercial or 0)

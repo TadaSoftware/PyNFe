@@ -17,8 +17,14 @@ class Cliente(Entidade):
     # - Numero do Documento (obrigatorio)
     numero_documento = str()
 
+    # - Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista; 2 – Contribuinte isento de inscrição; 9 – Não Contribuinte
+    indicador_ie = int()
+    
     # - Inscricao Estadual
     inscricao_estadual = str()
+
+    # - Inscricao Municial
+    inscricao_municipal = str()
 
     # - Inscricao SUFRAMA
     inscricao_suframa = str()
