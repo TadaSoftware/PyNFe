@@ -3,6 +3,7 @@
 from .base import Entidade
 from OpenSSL import crypto
 import tempfile
+import os
 
 
 class Certificado(Entidade):
@@ -27,11 +28,12 @@ class CertificadoA1(Certificado):
 
     def __init__(self, caminho_arquivo=None):
         self.caminho_arquivo = caminho_arquivo
+        self.arquivos_temp = []
     
     def separar_arquivo(self, senha, caminho=False):
         """Separa o arquivo de certificado em dois: de chave e de certificado,
-        e retorna a string. Se caminho for True grava e retorna objeto gravado
-        na pasta temporaria, que tem o caminho(name), apos o uso devem ser fechados com close."""
+        e retorna a string. Se caminho for True grava na pasta temporaria e retorna
+        o caminho dos arquivos, apos o uso devem ser excluidos com o metodo excluir."""
         
         # Carrega o arquivo .pfx, erro pode ocorrer se a senha estiver errada ou formato invalido.
         pkcs12 = crypto.load_pkcs12(open(self.caminho_arquivo, "rb").read(), senha)
@@ -40,11 +42,13 @@ class CertificadoA1(Certificado):
             cert = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate())
             chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
             # cria arquivos temporarios
-            arqcert = tempfile.NamedTemporaryFile()
-            arqcert.write(cert)
-            arqchave = tempfile.NamedTemporaryFile()
-            arqchave.write(chave)
-            return arqchave, arqcert
+            with tempfile.NamedTemporaryFile(delete=False) as arqcert:
+                arqcert.write(cert)
+            with tempfile.NamedTemporaryFile(delete=False) as arqchave:
+                arqchave.write(chave)
+            self.arquivos_temp.append(arqchave.name)
+            self.arquivos_temp.append(arqcert.name)
+            return arqchave.name, arqcert.name
         else:
             # Certificado
             cert = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate()).decode('utf-8')
@@ -56,4 +60,13 @@ class CertificadoA1(Certificado):
             chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
             
             return chave, cert
+        
+    def excluir(self):
+        """Exclui os arquivos temporarios utilizados para o request."""
+        try:
+            for i in self.arquivos_temp:
+                os.remove(i)
+            self.arquivos_temp.clear()
+        except:
+            pass
 
