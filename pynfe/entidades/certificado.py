@@ -27,7 +27,7 @@ class CertificadoA1(Certificado):
     def __init__(self, caminho_arquivo=None):
         self.caminho_arquivo = caminho_arquivo
     
-    def separar_arquivo(self, senha, caminho_chave=None, caminho_cert=None):
+    def separar_arquivo(self, senha):
         """Separa o arquivo de certificado em dois: de chave e de certificado,
         e retorna a string."""
         

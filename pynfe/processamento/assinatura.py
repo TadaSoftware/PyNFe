@@ -28,7 +28,7 @@ class AssinaturaA1(Assinatura):
 
     def assinar(self, xml, retona_string=True):
         arquivo_cert = CertificadoA1(self.certificado)
-        chave, cert = arquivo_cert.separar_arquivo(self.senha)
+        chave, cert = arquivo_cert.separar_arquivo(self.senha, caminho=True)
         
         #root = etree.parse(xml).getroot()  # caminho
         root = etree.fromstring(xml)  # string
