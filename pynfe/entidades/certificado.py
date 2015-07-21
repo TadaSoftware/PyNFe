@@ -2,6 +2,7 @@
 
 from .base import Entidade
 from OpenSSL import crypto
+import tempfile
 
 
 class Certificado(Entidade):
@@ -27,21 +28,32 @@ class CertificadoA1(Certificado):
     def __init__(self, caminho_arquivo=None):
         self.caminho_arquivo = caminho_arquivo
     
-    def separar_arquivo(self, senha, caminho_chave=None, caminho_cert=None):
+    def separar_arquivo(self, senha, caminho=False):
         """Separa o arquivo de certificado em dois: de chave e de certificado,
-        e retorna a string."""
+        e retorna a string. Se caminho for True grava e retorna objeto gravado
+        na pasta temporaria, que tem o caminho(name), apos o uso devem ser fechados com close."""
         
         # Carrega o arquivo .pfx, erro pode ocorrer se a senha estiver errada ou formato invalido.
         pkcs12 = crypto.load_pkcs12(open(self.caminho_arquivo, "rb").read(), senha)
         
-        # Certificado
-        cert = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate()).decode('utf-8')
-        cert = cert.replace('\n', '')
-        cert = cert.replace('-----BEGIN CERTIFICATE-----', '')
-        cert = cert.replace('-----END CERTIFICATE-----', '')
-        
-        # Chave, string decodificada da chave privada
-        chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
-        
-        return chave, cert
+        if caminho:
+            cert = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate())
+            chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
+            # cria arquivos temporarios
+            arqcert = tempfile.NamedTemporaryFile()
+            arqcert.write(cert)
+            arqchave = tempfile.NamedTemporaryFile()
+            arqchave.write(chave)
+            return arqchave, arqcert
+        else:
+            # Certificado
+            cert = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate()).decode('utf-8')
+            cert = cert.replace('\n', '')
+            cert = cert.replace('-----BEGIN CERTIFICATE-----', '')
+            cert = cert.replace('-----END CERTIFICATE-----', '')
+            
+            # Chave, string decodificada da chave privada
+            chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
+            
+            return chave, cert
 
