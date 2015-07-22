@@ -44,9 +44,12 @@ class Produto(Entidade):
     # - Valor Unitario Trib.
     valor_unitario_tributavel = Decimal()
 
-    # Impostos
-    # - ICMS (lista 1 para * / ManyToManyField)
-    icms = None
+    # - indica se valor do item entra no valor total da nota fiscal 
+    # 0=Valor do item (vProd) não compõe o valor total da NF-e 
+    # 1=Valor do item (vProd) compõe o valor total da NF-e (vProd)
+    ind_total = int()
+    
+    # # Impostos
 
     # - IPI
     #  - Classe de Enquadramento (cigarros e bebidas)
@@ -58,6 +61,43 @@ class Produto(Entidade):
     #  - CNPJ do Produtor
     ipi_cnpj_produtor = str()
 
+    # ICMS (Informar apenas um grupo por produto)
+    """
+    ICMS 00 - Tributada integralmente
+    ICMS 10 - Tributada e com cobrança do ICMS por substituição tributária
+    ICMS 20 - Tributada e com cobrança do ICMS por substituição tributária
+    ICMS 30 - Tributação Isenta ou não tributada e com cobrança do ICMS por substituição tributária
+    ICMS 30 - Isenta ou nao tributada e com cobranca do ICMS por substituicao tributaria
+    ICMS 40 - Isenta
+    ICMS 41 - Nao tributada
+    ICMS 50 - Suspensao
+    ICMS 51 - Diferimento
+    ICMS 60 - Cobrado anteriormente por substituicao tributaria
+    ICMS 70 - Com reducao da base de calculo e cobranca do ICMS por substituicao tributaria
+    ICMS 90 - Outras
+    """
+    icms_modalidade = str()
+    icms_origem = int()
+    icms_csosn = str()
+
+    # # PIS
+    pis_modalidade = str()
+    pis_valor_base_calculo = str()
+    pis_aliquota_percentual = str()
+    pis_valor = str()
+
+    # # COFINS
+    cofins_modalidade = str()
+    cofins_valor_base_calculo = str()
+    cofins_aliquota_percentual = str()
+    cofins_valor = str()
+
+    # # - ICMS (lista 1 para * / ManyToManyField)
+    # icms = None
+    # def adicionar_icms(self, **kwargs):
+    #     u"""Adiciona uma instancia de ICMS a lista de ICMS do produto"""
+    #     self.icms.append(ProdutoICMS(**kwargs))
+
     def __init__(self, *args, **kwargs):
         self.icms = []
 
@@ -65,10 +105,6 @@ class Produto(Entidade):
 
     def __str__(self):
         return ' '.join([self.codigo, self.descricao])
-
-    def adicionar_icms(self, **kwargs):
-        u"""Adiciona uma instancia de ICMS a lista de ICMS do produto"""
-        self.icms.append(ProdutoICMS(**kwargs))
 
 class ProdutoICMS(Entidade):
     #  - Tipo de Tributacao (seleciona de lista) - ICMS_TIPOS_TRIBUTACAO

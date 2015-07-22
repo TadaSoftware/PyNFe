@@ -34,7 +34,7 @@ class ComunicacaoSefaz(Comunicacao):
         # url do serviço
         url = self._get_url(modelo=modelo, consulta='AUTORIZACAO')
         # Monta XML do corpo da requisição
-        raiz = etree.Element('enviNFe', versao=VERSAO_PADRAO)
+        raiz = etree.Element('enviNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
         #etree.SubElement(raiz, 'versao').text = self._versao
         etree.SubElement(raiz, 'idLote').text = str(1) # numero autoincremental gerado pelo sistema
         etree.SubElement(raiz, 'indSinc').text = str(1) # 0 para assincrono, 1 para sincrono
@@ -42,6 +42,26 @@ class ComunicacaoSefaz(Comunicacao):
         raiz.append(nota_fiscal)
         # Monta XML para envio da requisição
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeAutorizacao'), metodo='NfeAutorizacao', dados=raiz)
+        #print (xml)
+        return self._post(url, xml)
+
+    def consulta_recibo(self, modelo, numero):
+        """
+            Este método oferece a consulta do resultado do processamento de um lote de NF-e.
+            O aplicativo do Contribuinte deve ser construído de forma a aguardar um tempo mínimo de
+            15 segundos entre o envio do Lote de NF-e para processamento e a consulta do resultado
+            deste processamento, evitando a obtenção desnecessária do status de erro 105 - "Lote em
+            Processamento".
+        """
+        # url do serviço
+        url = self._get_url(modelo=modelo, consulta='RECIBO')
+        # Monta XML do corpo da requisição
+        raiz = etree.Element('consReciNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
+        etree.SubElement(raiz, 'versao').text = self._versao
+        etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
+        etree.SubElement(raiz, 'nRec').text = numero
+        # Monta XML para envio da requisição
+        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeRetAutorizacao'), metodo='NfeRetAutorizacao', dados=raiz)
         #print (xml)
         return self._post(url, xml)
 
@@ -78,7 +98,7 @@ class ComunicacaoSefaz(Comunicacao):
         url = self._get_url(modelo=modelo, consulta='STATUS')
 
         # Monta XML do corpo da requisição
-        raiz = etree.Element('consStatServ', versao='3.10', xmlns=NAMESPACE_NFE)
+        raiz = etree.Element('consStatServ', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
         etree.SubElement(raiz, 'xServ').text = 'STATUS'
@@ -201,13 +221,14 @@ class ComunicacaoSefaz(Comunicacao):
     def _post(self, url, xml):
         certificadoA1 = CertificadoA1(self.certificado)
         chave, cert = certificadoA1.separar_arquivo(self.certificado_senha, caminho=True)
-        cert = (cert, chave)
+        chave_cert = (cert, chave)
         # Abre a conexão HTTPS
         try:
             # Passa o lxml.etree para string
-            xml = etree.tostring(xml, encoding='unicode', pretty_print=False)
+            xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('ds:','')
             # Faz o request com o servidor
-            result = requests.post(url, xml, headers=self._post_header(), cert=cert, verify=False)
+            print (xml)
+            result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False)
             if result == 200:
                 result.encoding='utf-8'
                 return result
@@ -215,3 +236,5 @@ class ComunicacaoSefaz(Comunicacao):
                 return result
         except requests.exceptions.ConnectionError as e:
             raise e
+        finally:
+            certificadoA1.excluir()
