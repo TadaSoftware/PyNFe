@@ -42,6 +42,8 @@ class ComunicacaoSefaz(Comunicacao):
         raiz.append(nota_fiscal)
         # Monta XML para envio da requisição
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeAutorizacao'), metodo='NfeAutorizacao', dados=raiz)
+        #xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeRecepcao2'), metodo='NfeRecepcao2', dados=raiz)
+        
         #print (xml)
         return self._post(url, xml)
 
@@ -57,7 +59,7 @@ class ComunicacaoSefaz(Comunicacao):
         url = self._get_url(modelo=modelo, consulta='RECIBO')
         # Monta XML do corpo da requisição
         raiz = etree.Element('consReciNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
-        etree.SubElement(raiz, 'versao').text = self._versao
+        #etree.SubElement(raiz, 'versao').text = self._versao
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(raiz, 'nRec').text = numero
         # Monta XML para envio da requisição
@@ -186,7 +188,7 @@ class ComunicacaoSefaz(Comunicacao):
     def _cabecalho_soap(self, metodo):
         u"""Monta o XML do cabeçalho da requisição SOAP"""
 
-        raiz = etree.Element('nfeCabecMsg')
+        raiz = etree.Element('nfeCabecMsg', xmlns=NAMESPACE_METODO+metodo)
         etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
         etree.SubElement(raiz, 'versaoDados').text = VERSAO_PADRAO
         return raiz
@@ -203,7 +205,7 @@ class ComunicacaoSefaz(Comunicacao):
     def _construir_xml_status_pr(self, cabecalho, metodo, dados):
         u"""Mota o XML para o envio via SOAP"""
 
-        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'soap': NAMESPACE_SOAP}, xmlns=NAMESPACE_METODO+metodo)
+        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'xsi': NAMESPACE_XSI, 'xsd': NAMESPACE_XSD,'soap': NAMESPACE_SOAP})
         c = etree.SubElement(raiz, '{%s}Header'%NAMESPACE_SOAP)
         c.append(cabecalho)
         body = etree.SubElement(raiz, '{%s}Body'%NAMESPACE_SOAP)
@@ -224,8 +226,10 @@ class ComunicacaoSefaz(Comunicacao):
         chave_cert = (cert, chave)
         # Abre a conexão HTTPS
         try:
-            # Passa o lxml.etree para string
-            xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('ds:','')
+            xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
+            # Passa o lxml.etree para string 
+            xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('ds:','').replace(':ds','')
+            xml = xml_declaration + xml
             # Faz o request com o servidor
             print (xml)
             result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False)

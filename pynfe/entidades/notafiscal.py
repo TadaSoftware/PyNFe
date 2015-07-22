@@ -140,6 +140,9 @@ class NotaFiscal(Entidade):
     #  - Total do ICMS (somente leitura)
     totais_icms_total = Decimal()
 
+    #  - Total do ICMS Desonerado (somente leitura)
+    totais_icms_desonerado = Decimal()
+
     #  - Base de calculo do ICMS ST (somente leitura)
     totais_icms_st_base_calculo = Decimal()
 
@@ -213,6 +216,9 @@ class NotaFiscal(Entidade):
 
     #  - Retencao da Prev. Social
     totais_retencao_retencao_previdencia_social = Decimal()
+
+    #  - Valor aproximado total de tributos federais, estaduais e municipais.
+    totais_tributos_aproximado = Decimal()
 
     # Transporte
     # - Modalidade do Frete (obrigatorio - seleciona de lista) - MODALIDADES_FRETE
@@ -324,6 +330,7 @@ class NotaFiscal(Entidade):
         self.produtos_e_servicos.append(obj)
         self.totais_icms_base_calculo += obj.icms_valor_base_calculo
         self.totais_icms_total += obj.icms_valor
+        self.totais_icms_desonerado += obj.icms_desonerado
         self.totais_icms_st_base_calculo += obj.icms_st_valor_base_calculo
         self.totais_icms_st_total += obj.icms_st_valor
         self.totais_icms_total_produtos_e_servicos += obj.valor_total_bruto
@@ -538,6 +545,9 @@ class NotaFiscalProduto(Entidade):
 
     #    - Valor do ICMS
     icms_valor = Decimal()
+
+    #    - ICMS Desonerado
+    icms_desonerado = Decimal()
 
     #    - Motivo da desoneração do ICMS
     # TODO: Criar opções possíveis em flags.py

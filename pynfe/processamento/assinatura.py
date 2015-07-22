@@ -26,20 +26,19 @@ class AssinaturaA1(Assinatura):
     """Classe responsavel por efetuar a assinatura do certificado
     digital no XML informado. Passar XML como string."""
 
-    def assinar(self, xml, retona_string=True):
+    def assinar(self, xml, retona_string=False:
         arquivo_cert = CertificadoA1(self.certificado)
         chave, cert = arquivo_cert.separar_arquivo(self.senha, caminho=False)
         
         signer = signxml.xmldsig(xml, digest_algorithm="sha1")
         signer.sign(method=signxml.methods.enveloped, key=chave, cert=cert,
-                    algorithm="rsa-sha1", c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
-                    reference_uri='#NFe42140903657739000169550020000000011000000011')
+                    algorithm="rsa-sha1", c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
         # reference_uri nao funciona
         #verified_data = signer.verify(require_x509=True, ca_pem_file="cert.pem")
 
         ##chave_id = xml.find('.//infNFe[@Id]').attrib['Id']
-        #xml.findall('.//{http://www.w3.org/2000/09/xmldsig#}Reference')[0] \
-        #    .attrib['URI'] = '#chaveteste'
+        xml.findall('.//{http://www.w3.org/2000/09/xmldsig#}Reference')[0] \
+            .attrib['URI'] = '#'+xml.findall('infNFe')[0].attrib['Id']
 
         if retona_string:
             return etree.tostring(xml, encoding="unicode", pretty_print=True)
