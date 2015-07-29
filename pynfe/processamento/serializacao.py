@@ -57,8 +57,13 @@ class SerializacaoXML(Serializacao):
         for nf in notas_fiscais:
             raiz.append(self._serializar_nota_fiscal(nf, retorna_string=False))
 
+        # Tag Signature
+        #sig = etree.SubElement(raiz, 'Signature')
+        #sig_info = etree.SubElement(sig, 'SignedInfo')
+        #etree.SubElement(sig_info, 'Reference', URI='#'+raiz.findall('infNFe')[0].attrib['Id'])
+
         if retorna_string:
-            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+            return etree.tostring(raiz, encoding="unicode", pretty_print=False)
         else:
             return raiz
 
@@ -79,7 +84,7 @@ class SerializacaoXML(Serializacao):
         endereco = etree.SubElement(raiz, 'enderEmit')
         etree.SubElement(endereco, 'xLgr').text = emitente.endereco_logradouro
         etree.SubElement(endereco, 'nro').text = emitente.endereco_numero
-        etree.SubElement(endereco, 'xCpl').text = emitente.endereco_complemento
+        #etree.SubElement(endereco, 'xCpl').text = emitente.endereco_complemento
         etree.SubElement(endereco, 'xBairro').text = emitente.endereco_bairro
         etree.SubElement(endereco, 'cMun').text = obter_codigo_por_municipio(
             emitente.endereco_municipio, emitente.endereco_uf)
