@@ -49,7 +49,8 @@ class AssinaturaA1(Assinatura):
             with open('testes.xml', 'w') as arquivo:
                 arquivo.write(etree.tostring(xml, encoding="unicode", pretty_print=False))
 
-            subprocess.check_call('xmlsec1 --sign --pkcs12 '+self.certificado+' --pwd '+self.senha+' --crypto openssl --output funciona.xml --id-attr:Id infNFe testes.xml')
+            subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', 'infNFe', 'testes.xml'])
+            xml = etree.parse('funfa.xml').getroot()
 
             if retorna_string:
                 return etree.tostring(xml, encoding="unicode", pretty_print=False)

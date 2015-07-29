@@ -35,9 +35,9 @@ class ComunicacaoSefaz(Comunicacao):
         url = self._get_url(modelo=modelo, consulta='AUTORIZACAO')
         # Monta XML do corpo da requisição
         raiz = etree.Element('enviNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
-        #etree.SubElement(raiz, 'versao').text = self._versao
+        etree.SubElement(raiz, 'versao').text = self._versao
         etree.SubElement(raiz, 'idLote').text = str(1) # numero autoincremental gerado pelo sistema
-        etree.SubElement(raiz, 'indSinc').text = str(1) # 0 para assincrono, 1 para sincrono
+        etree.SubElement(raiz, 'indSinc').text = str(0) # 0 para assincrono, 1 para sincrono
         #etree.SubElement(raiz, 'NFe').text = nota_fiscal # conjunto de nfe tramistidas (max 50)
         raiz.append(nota_fiscal)
         # Monta XML para envio da requisição
@@ -189,8 +189,8 @@ class ComunicacaoSefaz(Comunicacao):
         u"""Monta o XML do cabeçalho da requisição SOAP"""
 
         raiz = etree.Element('nfeCabecMsg', xmlns=NAMESPACE_METODO+metodo)
-        etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
         etree.SubElement(raiz, 'versaoDados').text = VERSAO_PADRAO
+        etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
         return raiz
 
     def _construir_xml_soap(self, cabecalho, metodo, dados):
@@ -228,10 +228,10 @@ class ComunicacaoSefaz(Comunicacao):
         try:
             xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
             # Passa o lxml.etree para string 
-            xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('ds:','').replace(':ds','')
+            xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('\n','')
             xml = xml_declaration + xml
+            #print (xml)
             # Faz o request com o servidor
-            print (xml)
             result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False)
             if result == 200:
                 result.encoding='utf-8'
