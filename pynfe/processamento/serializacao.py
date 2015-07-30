@@ -57,11 +57,6 @@ class SerializacaoXML(Serializacao):
         for nf in notas_fiscais:
             raiz.append(self._serializar_nota_fiscal(nf, retorna_string=False))
 
-        # Tag Signature
-        #sig = etree.SubElement(raiz, 'Signature')
-        #sig_info = etree.SubElement(sig, 'SignedInfo')
-        #etree.SubElement(sig_info, 'Reference', URI='#'+raiz.findall('infNFe')[0].attrib['Id'])
-
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=False)
         else:
@@ -98,9 +93,9 @@ class SerializacaoXML(Serializacao):
         # Apenas NF-e
         #if nota_fiscal.modelo == 55:
             #etree.SubElement(raiz, 'IEST').text = emitente.inscricao_estadual_subst_tributaria
-        etree.SubElement(raiz, 'IEST').text = emitente.inscricao_estadual_subst_tributaria
+        #etree.SubElement(raiz, 'IEST').text = emitente.inscricao_estadual_subst_tributaria
         etree.SubElement(raiz, 'IM').text = emitente.inscricao_municipal
-        etree.SubElement(raiz, 'CNAE').text = emitente.cnae_fiscal
+        #etree.SubElement(raiz, 'CNAE').text = emitente.cnae_fiscal
         etree.SubElement(raiz, 'CRT').text = emitente.codigo_de_regime_tributario
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
@@ -348,7 +343,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(ide, 'serie').text = nota_fiscal.serie
         etree.SubElement(ide, 'nNF').text = str(nota_fiscal.numero_nf)
         etree.SubElement(ide, 'dhEmi').text = nota_fiscal.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz
-        etree.SubElement(ide, 'dhSaiEnt').text = nota_fiscal.data_saida_entrada.strftime('%Y-%m-%dT%H:%M:%S') + tz
+        #etree.SubElement(ide, 'dhSaiEnt').text = nota_fiscal.data_saida_entrada.strftime('%Y-%m-%dT%H:%M:%S') + tz
         """dhCont Data e Hora da entrada em contingência E B01 D 0-1 Formato AAAA-MM-DDThh:mm:ssTZD (UTC - Universal
             Coordinated Time)
             Exemplo: no formato UTC para os campos de Data-Hora, "TZD" pode ser -02:00 (Fernando de Noronha), -03:00 (Brasília) ou -04:00 (Manaus), no
@@ -412,25 +407,26 @@ class SerializacaoXML(Serializacao):
         # Totais
         total = etree.SubElement(raiz, 'total')
         icms_total = etree.SubElement(total, 'ICMSTot')
-        etree.SubElement(icms_total, 'vBC').text = str(nota_fiscal.totais_icms_base_calculo)
-        etree.SubElement(icms_total, 'vICMS').text = str(nota_fiscal.totais_icms_total)
-        etree.SubElement(icms_total, 'vICMSDeson').text = str(nota_fiscal.totais_icms_desonerado)  # Valor Total do ICMS desonerado
-        etree.SubElement(icms_total, 'vBCST').text = str(nota_fiscal.totais_icms_st_base_calculo)
-        etree.SubElement(icms_total, 'vST').text = str(nota_fiscal.totais_icms_st_total)
-        etree.SubElement(icms_total, 'vProd').text = str(nota_fiscal.totais_icms_total_produtos_e_servicos)
-        etree.SubElement(icms_total, 'vFrete').text = str(nota_fiscal.totais_icms_total_frete)
-        etree.SubElement(icms_total, 'vSeg').text = str(nota_fiscal.totais_icms_total_seguro)
-        etree.SubElement(icms_total, 'vDesc').text = str(nota_fiscal.totais_icms_total_desconto)
+        #etree.SubElement(icms_total, 'vBC').text = str(nota_fiscal.totais_icms_base_calculo)
+        etree.SubElement(icms_total, 'vBC').text = str('{:.2f}').format(nota_fiscal.totais_icms_base_calculo)
+        etree.SubElement(icms_total, 'vICMS').text = str('{:.2f}').format(nota_fiscal.totais_icms_total)
+        etree.SubElement(icms_total, 'vICMSDeson').text = str('{:.2f}').format(nota_fiscal.totais_icms_desonerado)  # Valor Total do ICMS desonerado
+        etree.SubElement(icms_total, 'vBCST').text = str('{:.2f}').format(nota_fiscal.totais_icms_st_base_calculo)
+        etree.SubElement(icms_total, 'vST').text = str('{:.2f}').format(nota_fiscal.totais_icms_st_total)
+        etree.SubElement(icms_total, 'vProd').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_produtos_e_servicos)
+        etree.SubElement(icms_total, 'vFrete').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_frete)
+        etree.SubElement(icms_total, 'vSeg').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_seguro)
+        etree.SubElement(icms_total, 'vDesc').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_desconto)
 
         # Tributos
-        etree.SubElement(icms_total, 'vII').text = str(nota_fiscal.totais_icms_total_ii)
-        etree.SubElement(icms_total, 'vIPI').text = str(nota_fiscal.totais_icms_total_ipi)
-        etree.SubElement(icms_total, 'vPIS').text = str(nota_fiscal.totais_icms_pis)
-        etree.SubElement(icms_total, 'vCOFINS').text = str(nota_fiscal.totais_icms_cofins)
+        etree.SubElement(icms_total, 'vII').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_ii)
+        etree.SubElement(icms_total, 'vIPI').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_ipi)
+        etree.SubElement(icms_total, 'vPIS').text = str('{:.2f}').format(nota_fiscal.totais_icms_pis)
+        etree.SubElement(icms_total, 'vCOFINS').text = str('{:.2f}').format(nota_fiscal.totais_icms_cofins)
         
-        etree.SubElement(icms_total, 'vOutro').text = str(nota_fiscal.totais_icms_outras_despesas_acessorias)
-        etree.SubElement(icms_total, 'vNF').text = str(nota_fiscal.totais_icms_total_nota)
-        etree.SubElement(icms_total, 'vTotTrib').text = str(nota_fiscal.totais_tributos_aproximado)
+        etree.SubElement(icms_total, 'vOutro').text = str('{:.2f}').format(nota_fiscal.totais_icms_outras_despesas_acessorias)
+        etree.SubElement(icms_total, 'vNF').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_nota)
+        etree.SubElement(icms_total, 'vTotTrib').text = str('{:.2f}').format(nota_fiscal.totais_tributos_aproximado)
         
         # Apenas NF-e
         if nota_fiscal.modelo == 55:
@@ -471,6 +467,16 @@ class SerializacaoXML(Serializacao):
                     lacres = etree.SubElement(vol, 'lacres')
                     for lacre in volume.lacres:
                         etree.SubElement(lacres, 'nLacre').text = lacre.numero_lacre
+
+        # Somente NFC-e
+        if nota_fiscal.modelo == 65:
+            pag = etree.SubElement(raiz, 'pag')
+            etree.SubElement(pag, 'tPag').text = '01'# 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
+            etree.SubElement(pag, 'vPag').text = str(nota_fiscal.totais_icms_total_nota)  
+            #etree.SubElement(pag, 'card').text = ''
+            #etree.SubElement(pag, 'CNPJ').text = '' # Informar o CNPJ da Credenciadora de cartão de crédito / débito
+            #etree.SubElement(pag, 'tBand').text = '' # 01=Visa 02=Mastercard 03=American Express 04=Sorocred 99=Outros
+            #etree.SubElement(pag, 'cAut').text = '' # Identifica o número da autorização da transação da operação com cartão de crédito e/ou débito
 
         # Informações adicionais
         info_ad = etree.SubElement(raiz, 'infAdic')

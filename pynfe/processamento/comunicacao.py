@@ -34,17 +34,13 @@ class ComunicacaoSefaz(Comunicacao):
         # url do serviço
         url = self._get_url(modelo=modelo, consulta='AUTORIZACAO')
         # Monta XML do corpo da requisição
-        raiz = etree.Element('enviNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
-        etree.SubElement(raiz, 'versao').text = self._versao
-        etree.SubElement(raiz, 'idLote').text = str(1) # numero autoincremental gerado pelo sistema
-        etree.SubElement(raiz, 'indSinc').text = str(0) # 0 para assincrono, 1 para sincrono
-        #etree.SubElement(raiz, 'NFe').text = nota_fiscal # conjunto de nfe tramistidas (max 50)
+        raiz = etree.Element('enviNFe', xmlns=NAMESPACE_NFE, versao=VERSAO_PADRAO)
+        etree.SubElement(raiz, 'idLote').text = str(2) # numero autoincremental gerado pelo sistema
+        etree.SubElement(raiz, 'indSinc').text = str(1) # 0 para assincrono, 1 para sincrono
         raiz.append(nota_fiscal)
         # Monta XML para envio da requisição
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeAutorizacao'), metodo='NfeAutorizacao', dados=raiz)
-        #xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeRecepcao2'), metodo='NfeRecepcao2', dados=raiz)
         
-        #print (xml)
         return self._post(url, xml)
 
     def consulta_recibo(self, modelo, numero):
@@ -59,7 +55,6 @@ class ComunicacaoSefaz(Comunicacao):
         url = self._get_url(modelo=modelo, consulta='RECIBO')
         # Monta XML do corpo da requisição
         raiz = etree.Element('consReciNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
-        #etree.SubElement(raiz, 'versao').text = self._versao
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(raiz, 'nRec').text = numero
         # Monta XML para envio da requisição
@@ -196,10 +191,12 @@ class ComunicacaoSefaz(Comunicacao):
     def _construir_xml_soap(self, cabecalho, metodo, dados):
         """Mota o XML para o envio via SOAP"""
 
-        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'xsi': NAMESPACE_XSI, 'xsd': NAMESPACE_XSD, 'soap12': NAMESPACE_SOAP})
-        etree.SubElement(raiz, '{%s}Header'%NAMESPACE_SOAP).text = cabecalho
+        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'soap12': NAMESPACE_SOAP})
+        c= etree.SubElement(raiz, '{%s}Header'%NAMESPACE_SOAP)
+        c.append(cabecalho)
         body = etree.SubElement(raiz, '{%s}Body'%NAMESPACE_SOAP)
-        etree.SubElement(body, 'nfeDadosMsg').text = dados
+        a = etree.SubElement(body, 'nfeDadosMsg', xmlns=NAMESPACE_METODO+metodo)
+        a.append(dados)
         return raiz
 
     def _construir_xml_status_pr(self, cabecalho, metodo, dados):
@@ -227,10 +224,8 @@ class ComunicacaoSefaz(Comunicacao):
         # Abre a conexão HTTPS
         try:
             xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
-            # Passa o lxml.etree para string 
             xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('\n','')
             xml = xml_declaration + xml
-            #print (xml)
             # Faz o request com o servidor
             result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False)
             if result == 200:
