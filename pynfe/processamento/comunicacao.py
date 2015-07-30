@@ -59,7 +59,23 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(raiz, 'nRec').text = numero
         # Monta XML para envio da requisição
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeRetAutorizacao'), metodo='NfeRetAutorizacao', dados=raiz)
-        #print (xml)
+        
+        return self._post(url, xml)
+
+    def consulta_nota(self, modelo, chave):
+        """
+            Este método oferece a consulta da situação da NF-e/NFC-e na Base de Dados do Portal da Secretaria de Fazenda Estadual.
+        """
+        # url do serviço
+        url = self._get_url(modelo=modelo, consulta='CHAVE')
+        # Monta XML do corpo da requisição
+        raiz = etree.Element('consSitNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
+        etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
+        etree.SubElement(raiz, 'xServ').text = 'CONSULTAR'
+        etree.SubElement(raiz, 'chNFe').text = chave
+        # Monta XML para envio da requisição
+        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeConsulta2'), metodo='NfeConsulta2', dados=raiz)
+        
         return self._post(url, xml)
 
     def cancelar(self, modelo, xml):
@@ -83,9 +99,6 @@ class ComunicacaoSefaz(Comunicacao):
         xml = str(xml).replace('&amp;','').replace('lt;','<').replace('gt;','>').replace('&','')
         return xml
         #return self._post(url, xml)
-
-    def situacao_nfe(self, nota_fiscal):
-        pass
 
     def status_servico(self, modelo):
         """ Verifica status do servidor da receita. """
