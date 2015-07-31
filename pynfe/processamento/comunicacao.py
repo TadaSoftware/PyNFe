@@ -80,7 +80,6 @@ class ComunicacaoSefaz(Comunicacao):
 
     def cancelar(self, modelo, evento):
         """ Envia um evento de cancelamento de nota fiscal """
-
         # url do serviço
         url = self._get_url(modelo=modelo, consulta='EVENTOS')
         # Monta XML do corpo da requisição

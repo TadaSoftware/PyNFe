@@ -504,7 +504,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(e, 'chNFe').text = evento.chave 
         etree.SubElement(e, 'dhEvento').text = evento.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz
         etree.SubElement(e, 'tpEvento').text = evento.tp_evento
-        etree.SubElement(e, 'nSeqEvento').text = evento.n_seq_evento
+        etree.SubElement(e, 'nSeqEvento').text = str(evento.n_seq_evento)
         etree.SubElement(e, 'verEvento').text = '1.00'
         det = etree.SubElement(e, 'detEvento', versao='1.00')
         etree.SubElement(det, 'descEvento').text = evento.descricao
