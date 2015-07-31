@@ -34,7 +34,8 @@ class AssinaturaA1(Assinatura):
             siginfo = etree.SubElement(raiz, 'SignedInfo')
             etree.SubElement(siginfo, 'CanonicalizationMethod', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
             etree.SubElement(siginfo, 'SignatureMethod', Algorithm='http://www.w3.org/2000/09/xmldsig#rsa-sha1')
-            ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.findall('infNFe')[0].attrib['Id'])
+            #ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.findall('infNFe')[0].attrib['Id'])
+            ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.findall('infEvento')[0].attrib['Id'])
             trans = etree.SubElement(ref, 'Transforms')
             etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/2000/09/xmldsig#enveloped-signature')
             etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
@@ -49,7 +50,8 @@ class AssinaturaA1(Assinatura):
             with open('testes.xml', 'w') as arquivo:
                 arquivo.write(etree.tostring(xml, encoding="unicode", pretty_print=False))
 
-            subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', 'infNFe', 'testes.xml'])
+            #subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', 'infNFe', 'testes.xml'])
+            subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', 'infEvento', 'testes.xml'])
             xml = etree.parse('funfa.xml').getroot()
 
             if retorna_string:

@@ -26,12 +26,12 @@ class EventoCancelarNota(Evento):
     tp_evento = '110111'
     # - Sequencial do evento para o mesmo tipo de evento. Para maioria dos eventos nSeqEvento=1, nos casos em quepossa existir mais de um evento, como é o caso da Carta de Correção, o autor do evento deve numerar de forma sequencial.
     n_seq_evento = '1'
-    # - Versão do detalhe do evento (grupo detEvento – HP17), informação utilizada para a SEFAZ validar o grupo detEvento.
-    ver_evento = str()
-    # - Informações do Pedido de Cancelamento
-    det_evento = str()
-    # - Versão do Pedido de Cancelamento, deve ser informado com a mesma informação da tag verEvento (HP16)
-    versao = str()
+    # # - Versão do detalhe do evento (grupo detEvento – HP17), informação utilizada para a SEFAZ validar o grupo detEvento.
+    # ver_evento = str()
+    # # - Informações do Pedido de Cancelamento
+    # det_evento = str()
+    # # - Versão do Pedido de Cancelamento, deve ser informado com a mesma informação da tag verEvento (HP16)
+    # versao = str()
     # - descEvento
     descricao = 'Cancelamento'
     # - Informar o número do Protocolo de Autorização da NF-e a ser Cancelada. (vide item 5.8).
@@ -45,8 +45,9 @@ class EventoCancelarNota(Evento):
             Gera o valor para o campo id 
             A regra de formação do Id é: “ID” + tpEvento + chave da NF-e + nSeqEvento
         """
-        self.id = "ID%(tp_evento)s%(chave)s%(n_seq_evento)s"%{
+        self.id = "ID%(tp_evento)s%(um)s%(chave)s%(n_seq_evento)s"%{
                 'tp_evento': self.tp_evento,
+                'um': '1',
                 'chave': self.chave,
                 'n_seq_evento': self.n_seq_evento,
         }

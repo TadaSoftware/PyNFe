@@ -182,12 +182,12 @@ NFCE = {
 	    	'EVENTOS': ''
 	    },
 	    'RS': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'STATUS': 'sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx',
+	    	'AUTORIZACAO': 'sefazrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx',
+	    	'RECIBO': 'sefazrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx',
+	    	'CHAVE': 'sefazrs.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx',
+	    	'INUTILIZACAO': 'sefazrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao2.asmx',
+	    	'EVENTOS': 'sefazrs.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx'
 	    },
 	    'MS': {
 	    	'STATUS': '',
@@ -423,17 +423,27 @@ NFE = {
 	    	'EVENTOS': '',
 	    	'CADASTRO': ''
 	    },
+	    # 'RS': {
+	    # 	'STATUS': 'nfe.sefaz.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx',
+	    # 	'AUTORIZACAO': 'nfe.sefaz.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx',
+	    # 	'RECIBO': 'nfe.sefaz.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx',
+	    # 	'CHAVE': 'nfe.sefaz.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx',
+	    # 	'INUTILIZACAO': 'nfe.sefaz.rs.gov.br/ws/NfeInutilizacao/NfeInutilizacao2.asmx',
+	    # 	'EVENTOS': 'nfe.sefaz.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx',
+	    # 	'CADASTRO': 'nfe.sefaz.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro2.asmx',
+	    # 	'DOWNLOAD': 'nfe.sefaz.rs.gov.br/ws/nfeDownloadNF/nfeDownloadNF.asmx',
+	    # 	'DESTINADAS': 'nfe.sefaz.rs.gov.br/ws/nfeConsultaDest/nfeConsultaDest.asmx'
+	    # },
 	    'RS': {
-	    	'STATUS': 'nfe.sefaz.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx',
-	    	'AUTORIZACAO': 'nfe.sefaz.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx',
-	    	'RECIBO': 'nfe.sefaz.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx',
-	    	'CHAVE': 'nfe.sefaz.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx',
-	    	'INUTILIZACAO': 'nfe.sefaz.rs.gov.br/ws/NfeInutilizacao/NfeInutilizacao2.asmx',
-	    	'EVENTOS': 'nfe.sefaz.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx',
-	    	'CADASTRO': 'nfe.sefaz.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro2.asmx',
-	    	'EVENTOS': 'nfe.sefaz.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx',
-	    	'DOWNLOAD': 'nfe.sefaz.rs.gov.br/ws/nfeDownloadNF/nfeDownloadNF.asmx',
-	    	'DESTINADAS': 'nfe.sefaz.rs.gov.br/ws/nfeConsultaDest/nfeConsultaDest.asmx'
+	    	'STATUS': 'sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx',
+	    	'AUTORIZACAO': 'sefazrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx',
+	    	'RECIBO': 'sefazrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx',
+	    	'CHAVE': 'sefazrs.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx',
+	    	'INUTILIZACAO': 'sefazrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao2.asmx',
+	    	'EVENTOS': 'sefazrs.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx',
+	    	'CADASTRO': 'sefazrs.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro2.asmx',
+	    	'DOWNLOAD': 'sefazrs.rs.gov.br/ws/nfeDownloadNF/nfeDownloadNF.asmx',
+	    	'DESTINADAS': 'sefazrs.rs.gov.br/ws/nfeConsultaDest/nfeConsultaDest.asmx'
 	    },
 	    'MS': {
 	    	'STATUS': '',

@@ -78,27 +78,17 @@ class ComunicacaoSefaz(Comunicacao):
         
         return self._post(url, xml)
 
-    def cancelar(self, modelo, xml):
+    def cancelar(self, modelo, evento):
         """ Envia um evento de cancelamento de nota fiscal """
-        # timezone Brasília -03:00
-        tz = time.strftime("%z")
-        tz = "{}:{}".format(tz[:-2], tz[-2:])
 
         # url do serviço
         url = self._get_url(modelo=modelo, consulta='EVENTOS')
         # Monta XML do corpo da requisição
-        raiz = etree.Element('envEvento')
-        #etree.SubElement(raiz, 'versao').text = self._versao # Na documentaçao 6.0 está desta forma
-        etree.SubElement(raiz, 'versaoDados').text = self._versao # Na documentaçao 6.0 está desta forma
+        raiz = etree.Element('envEvento', versao='1.00', xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, 'idLote').text = str(1) # numero autoincremental gerado pelo sistema
-        evento = etree.SubElement(raiz, 'evento')
-        etree.SubElement(evento, 'versao').text = '1' # versao do leiaute do evento (cancelamento = 1)
-        etree.SubElement(raiz, 'infEvento').text = xml # Evento, um lote pode conter até 20 eventos
-        dados = etree.tostring(raiz, encoding="unicode")
-        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='RecepcaoEvento'), metodo='RecepcaoEvento', dados=dados)
-        xml = str(xml).replace('&amp;','').replace('lt;','<').replace('gt;','>').replace('&','')
-        return xml
-        #return self._post(url, xml)
+        raiz.append(evento)
+        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='RecepcaoEvento'), metodo='RecepcaoEvento', dados=raiz)
+        return self._post(url, xml)
 
     def status_servico(self, modelo):
         """ Verifica status do servidor da receita. """
@@ -178,26 +168,50 @@ class ComunicacaoSefaz(Comunicacao):
         return retorno
 
     def _get_url(self, modelo, consulta):
-        if self._ambiente == 1:
-            ambiente = 'https://'
+        # RS utiliza um formato de url diferente dos outros estados
+        if self.uf.upper() == 'RS':
+            if modelo == 'nfe':
+                if consulta == 'CADASTRO':
+                    self.url = 'https://cad.' + NFE[self.uf.upper()][consulta]
+                else:
+                    # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
+                    if self._ambiente == 1:
+                        self.url = 'https://nfe.' + NFE[self.uf.upper()][consulta]
+                    else:
+                        self.url = 'https://nfe-homologacao.' + NFE[self.uf.upper()][consulta]
+            elif modelo == 'nfce':
+                # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
+                if self._ambiente == 1:
+                    self.url = 'https://nfce.' + NFCE[self.uf.upper()][consulta]
+                else:
+                    self.url = 'https://nfce-homologacao.' + NFCE[self.uf.upper()][consulta]
+            else:
+                # TODO implementar outros tipos de notas como NFS-e
+                pass
         else:
-            ambiente = 'https://homologacao.'
-        if modelo == 'nfe':
-            # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
-            self.url = ambiente + NFE[self.uf.upper()][consulta]
-        elif modelo == 'nfce':
-            # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
-            self.url = ambiente + NFCE[self.uf.upper()][consulta]
-        else:
-            # TODO implementar outros tipos de notas como NFS-e
-            pass
+            if self._ambiente == 1:
+                ambiente = 'https://'
+            else:
+                ambiente = 'https://homologacao.'
+            if modelo == 'nfe':
+                # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
+                self.url = ambiente + NFE[self.uf.upper()][consulta]
+            elif modelo == 'nfce':
+                # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
+                self.url = ambiente + NFCE[self.uf.upper()][consulta]
+            else:
+                # TODO implementar outros tipos de notas como NFS-e
+                pass
         return self.url
 
     def _cabecalho_soap(self, metodo):
         u"""Monta o XML do cabeçalho da requisição SOAP"""
 
         raiz = etree.Element('nfeCabecMsg', xmlns=NAMESPACE_METODO+metodo)
-        etree.SubElement(raiz, 'versaoDados').text = VERSAO_PADRAO
+        if metodo == 'RecepcaoEvento':
+            etree.SubElement(raiz, 'versaoDados').text = '1.00'
+        else:
+            etree.SubElement(raiz, 'versaoDados').text = VERSAO_PADRAO
         etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
         return raiz
 
