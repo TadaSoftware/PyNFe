@@ -30,12 +30,12 @@ class ComunicacaoSefaz(Comunicacao):
     _versao = VERSAO_PADRAO
     _assinatura = AssinaturaA1
 
-    def autorizacao(self, modelo, nota_fiscal):
+    def autorizacao(self, modelo, nota_fiscal, idlote=1):
         # url do serviço
         url = self._get_url(modelo=modelo, consulta='AUTORIZACAO')
         # Monta XML do corpo da requisição
         raiz = etree.Element('enviNFe', xmlns=NAMESPACE_NFE, versao=VERSAO_PADRAO)
-        etree.SubElement(raiz, 'idLote').text = str(2) # numero autoincremental gerado pelo sistema
+        etree.SubElement(raiz, 'idLote').text = str(idlote) # numero autoincremental gerado pelo sistema
         etree.SubElement(raiz, 'indSinc').text = str(1) # 0 para assincrono, 1 para sincrono
         raiz.append(nota_fiscal)
         # Monta XML para envio da requisição
@@ -78,13 +78,13 @@ class ComunicacaoSefaz(Comunicacao):
         
         return self._post(url, xml)
 
-    def cancelar(self, modelo, evento):
+    def cancelar(self, modelo, evento, idlote=1):
         """ Envia um evento de cancelamento de nota fiscal """
         # url do serviço
         url = self._get_url(modelo=modelo, consulta='EVENTOS')
         # Monta XML do corpo da requisição
         raiz = etree.Element('envEvento', versao='1.00', xmlns=NAMESPACE_NFE)
-        etree.SubElement(raiz, 'idLote').text = str(1) # numero autoincremental gerado pelo sistema
+        etree.SubElement(raiz, 'idLote').text = str(idlote) # numero autoincremental gerado pelo sistema
         raiz.append(evento)
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='RecepcaoEvento'), metodo='RecepcaoEvento', dados=raiz)
         return self._post(url, xml)

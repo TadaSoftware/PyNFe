@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--  PL_006f versao com correcoes no xServ para tornar a literal STATUS obrigatoria 21/05/2010 -->
 <xs:schema xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns="http://www.portalfiscal.inf.br/nfe" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.portalfiscal.inf.br/nfe" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xs:include schemaLocation="tiposBasico_v1.02.xsd"/>
+	<xs:include schemaLocation="tiposBasico_v3.10.xsd"/>
 	<xs:complexType name="TConsStatServ">
 		<xs:annotation>
 			<xs:documentation>Tipo Pedido de Consulta do Status do Serviço</xs:documentation>
@@ -18,10 +19,15 @@
 					<xs:documentation>Sigla da UF consultada</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="xServ" type="TServ" fixed="STATUS">
+			<xs:element name="xServ">
 				<xs:annotation>
 					<xs:documentation>Serviço Solicitado</xs:documentation>
 				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TServ">
+						<xs:enumeration value="STATUS"/>
+					</xs:restriction>
+				</xs:simpleType>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="versao" type="TVerConsStatServ" use="required"/>
@@ -58,9 +64,9 @@
 					<xs:documentation>Código da UF responsável pelo serviço</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="dhRecbto" type="xs:dateTime">
+			<xs:element name="dhRecbto" type="TDateTimeUTC">
 				<xs:annotation>
-					<xs:documentation>AAAA-MM-DDTHH:MM:SS</xs:documentation>
+					<xs:documentation>Data e hora do recebimento da consulta no formato AAAA-MM-DDTHH:MM:SSTZD</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="tMed" type="TMed" minOccurs="0">
@@ -68,7 +74,7 @@
 					<xs:documentation>Tempo médio de resposta do serviço (em segundos) dos últimos 5 minutos</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="dhRetorno" type="xs:dateTime" minOccurs="0">
+			<xs:element name="dhRetorno" type="TDateTimeUTC" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>AAAA-MM-DDTHH:MM:SSDeve ser preenchida com data e hora previstas para o retorno dos serviços prestados.</xs:documentation>
 				</xs:annotation>
@@ -83,10 +89,10 @@
 	</xs:complexType>
 	<xs:simpleType name="TVerConsStatServ">
 		<xs:annotation>
-			<xs:documentation>Tipo versão do leiuate da Consulta Status do Serviço 1.07</xs:documentation>
+			<xs:documentation>Tipo versão do leiuate da Consulta Status do Serviço 3.10</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:token">
-			<xs:pattern value="1\.07"/>
+			<xs:pattern value="3\.10"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>
