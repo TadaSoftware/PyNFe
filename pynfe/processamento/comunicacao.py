@@ -253,6 +253,7 @@ class ComunicacaoSefaz(Comunicacao):
             xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('\n','')
             xml = xml_declaration + xml
             # Faz o request com o servidor
+            print (xml)
             result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False)
             if result == 200:
                 result.encoding='utf-8'

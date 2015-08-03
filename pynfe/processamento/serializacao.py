@@ -426,7 +426,7 @@ class SerializacaoXML(Serializacao):
         
         etree.SubElement(icms_total, 'vOutro').text = str('{:.2f}').format(nota_fiscal.totais_icms_outras_despesas_acessorias)
         etree.SubElement(icms_total, 'vNF').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_nota)
-        etree.SubElement(icms_total, 'vTotTrib').text = str('{:.2f}').format(nota_fiscal.totais_tributos_aproximado)
+        #etree.SubElement(icms_total, 'vTotTrib').text = str('{:.2f}').format(nota_fiscal.totais_tributos_aproximado)
         
         # Apenas NF-e
         if nota_fiscal.modelo == 55:
@@ -470,6 +470,10 @@ class SerializacaoXML(Serializacao):
 
         # Somente NFC-e
         if nota_fiscal.modelo == 65:
+            # Transporte
+            transp = etree.SubElement(raiz, 'transp')
+            etree.SubElement(transp, 'modFrete').text = str(9)
+            # Pagamento
             pag = etree.SubElement(raiz, 'pag')
             etree.SubElement(pag, 'tPag').text = '01'# 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
             etree.SubElement(pag, 'vPag').text = str(nota_fiscal.totais_icms_total_nota)  
