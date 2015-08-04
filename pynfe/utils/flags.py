@@ -9,6 +9,8 @@ NAMESPACE_METODO = 'http://www.portalfiscal.inf.br/nfe/wsdl/'
 
 VERSAO_PADRAO = '3.10'
 
+VERSAO_QRCODE = '100'
+
 TIPOS_DOCUMENTO = (
     'CNPJ',
     'CPF',

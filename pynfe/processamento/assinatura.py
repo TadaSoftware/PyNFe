@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import signxml
-from OpenSSL import crypto
 from pynfe.utils import etree
-from pynfe.entidades.certificado import CertificadoA1
-from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SIG
 import subprocess
 
 

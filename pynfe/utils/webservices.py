@@ -11,7 +11,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'AC': {
 	    	'STATUS': '',
@@ -19,7 +20,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': 'http://www.sefaznet.ac.gov.br/nfe/NFe.jsp?opc=3'
 	    },
 	    'AM': {
 	    	'STATUS': '',
@@ -27,7 +29,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': 'http://sistemas.sefaz.am.gov.br/nfceweb/consultarNFCe.jsp?'
 	    },
 	    'RR': {
 	    	'STATUS': '',
@@ -35,7 +38,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'PA': {
 	    	'STATUS': '',
@@ -43,7 +47,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'AP': {
 	    	'STATUS': '',
@@ -51,7 +56,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'TO': {
 	    	'STATUS': '',
@@ -59,7 +65,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'MA': {
 	    	'STATUS': '',
@@ -67,7 +74,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': 'http://www.nfce.sefaz.ma.gov.br/portal/consultarNFCe.jsp'
 	    },
 	    'PI': {
 	    	'STATUS': '',
@@ -75,7 +83,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'CE': {
 	    	'STATUS': '',
@@ -83,7 +92,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'RN': {
 	    	'STATUS': '',
@@ -91,7 +101,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': 'http://www.nfe.rn.gov.br/portal/consultarNFCe.jsp?'
 	    },
 	    'PB': {
 	    	'STATUS': '',
@@ -99,7 +110,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'PE': {
 	    	'STATUS': '',
@@ -107,7 +119,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'AL': {
 	    	'STATUS': '',
@@ -115,7 +128,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'SE': {
 	    	'STATUS': '',
@@ -123,7 +137,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': 'http://www.nfe.se.gov.br/portal/consultarNFCe.jsp?'
 	    },
 	    'BA': {
 	    	'STATUS': '',
@@ -131,7 +146,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },	
 	    'MG': {
 	    	'STATUS': '',
@@ -139,7 +155,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'ES': {
 	    	'STATUS': '',
@@ -147,7 +164,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'RJ': {
 	    	'STATUS': '',
@@ -155,7 +173,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'SP': {
 	    	'STATUS': 'nfce.fazenda.sp.gov.br/ws/nfestatusservico2.asmx',
@@ -163,7 +182,8 @@ NFCE = {
 	    	'RECIBO': 'nfce.fazenda.sp.gov.br/ws/nferetautorizacao.asmx',
 	    	'CHAVE': 'nfce.fazenda.sp.gov.br/ws/nfeconsulta2.asmx',
 	    	'INUTILIZACAO': 'nfce.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx',
-	    	'EVENTOS': 'nfce.fazenda.sp.gov.br/ws/recepcaoevento.asmx'
+	    	'EVENTOS': 'nfce.fazenda.sp.gov.br/ws/recepcaoevento.asmx',
+	    	'QR': 'nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaQRCode.aspx'
 	    },
 	    'PR': {
 	    	'STATUS': 'nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3',
@@ -171,7 +191,8 @@ NFCE = {
 	    	'RECIBO': 'nfce.fazenda.pr.gov.br/nfce/NFeRetAutorizacao3',
 	    	'CHAVE': 'nfce.fazenda.pr.gov.br/nfce/NFeConsulta3',
 	    	'INUTILIZACAO': 'nfce.fazenda.pr.gov.br/nfce/NFeInutilizacao3',
-	    	'EVENTOS': 'nfce.fazenda.pr.gov.br/nfce/NFeRecepcaoEvento'
+	    	'EVENTOS': 'nfce.fazenda.pr.gov.br/nfce/NFeRecepcaoEvento',
+	    	'QR': ' http://www.dfeportal.fazenda.pr.gov.br/dfe-portal/rest/servico/consultaNFCe?'
 	    },
 	    'SC': {
 	    	'STATUS': '',
@@ -179,7 +200,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'RS': {
 	    	'STATUS': 'sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx',
@@ -187,7 +209,8 @@ NFCE = {
 	    	'RECIBO': 'sefazrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx',
 	    	'CHAVE': 'sefazrs.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx',
 	    	'INUTILIZACAO': 'sefazrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao2.asmx',
-	    	'EVENTOS': 'sefazrs.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx'
+	    	'EVENTOS': 'sefazrs.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx',
+	    	'QR': 'https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx'
 	    },
 	    'MS': {
 	    	'STATUS': '',
@@ -195,7 +218,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'MT': {
 	    	'STATUS': '',
@@ -203,7 +227,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': 'http://www.sefaz.mt.gov.br/nfe/portal/consultanfce'
 	    },
 	    'GO': {
 	    	'STATUS': '',
@@ -211,7 +236,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 	    'DF': {
 	    	'STATUS': '',
@@ -219,7 +245,8 @@ NFCE = {
 	    	'RECIBO': '',
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
-	    	'EVENTOS': ''
+	    	'EVENTOS': '',
+	    	'QR': ''
 	    },
 }
 
