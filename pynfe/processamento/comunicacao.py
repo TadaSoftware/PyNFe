@@ -45,8 +45,6 @@ class ComunicacaoSefaz(Comunicacao):
         
         # Em caso de sucesso, retorna xml com nfe e protocolo de autorização.
         # Caso contrário, envia todo o soap de resposta da Sefaz para decisão do usuário.
-        import ipdb
-        ipdb.set_trace()
         if retorno.status_code == 200:
             if indSinc == 1:
                 # Procuta status no xml
@@ -59,7 +57,17 @@ class ComunicacaoSefaz(Comunicacao):
                     raiz.append(nota_fiscal)
                     raiz.append(prot)
                     return 0, raiz
-        return 1, retorno
+            else:
+                # Retorna id do protocolo para posterior consulta em caso de sucesso.
+                ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}    # namespace
+                rec = etree.fromstring(retorno.text)
+                rec = rec[1][0][0]
+                status = rec.xpath("ns:cStat", namespaces=ns)[0].text
+                # Lote Recebido com Sucesso!
+                if status == '103':
+                    nrec = rec.xpath("ns:infRec/ns:nRec", namespaces=ns)[0].text
+                    return 0, nrec, nota_fiscal
+        return 1, retorno, nota_fiscal
 
     def consulta_recibo(self, modelo, numero):
         """
