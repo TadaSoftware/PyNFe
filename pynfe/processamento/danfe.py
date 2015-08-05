@@ -13,25 +13,32 @@ class DanfeNfce(Danfe):
 	""" Classe para geração de Danfe para Nota Fiscal de Consumidor Eletrônica (NFC-e). """
 	
 	def gerar_qrcode(self, token, csc, xml, uf):
-		# Procura atributos no xml
-		nfe = xml[1][0][0][2]
-		chave = nfe[0].attrib['Id'].replace('NFe','')
-		data = nfe[0][0][7].text.encode()
-		tpamb = nfe[0][0][14].text
-		cpf = nfe[0][2][0].text
-		total = nfe[0][4][0][14].text
-		icms = nfe[0][4][0][1].text
-		digest = nfe[1][0][2][2].text.encode()
+		""" Classe para gerar url do qrcode da NFC-e """
+		try:
+			# Procura atributos no xml
+			ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}
+			sig = {'sig':'http://www.w3.org/2000/09/xmldsig#'}
+			# Tag Raiz NFe Ex: <NFe>
+			nfe = xml[0]
+			chave = nfe[0].attrib['Id'].replace('NFe','')
+			data = nfe.xpath('ns:infNFe/ns:ide/ns:dhEmi/text()', namespaces=ns)[0].encode()
+			tpamb = nfe.xpath('ns:infNFe/ns:ide/ns:tpAmb/text()', namespaces=ns)[0]
+			cpf = nfe.xpath('ns:infNFe/ns:dest/ns:CPF/text()', namespaces=ns)[0]
+			total = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vNF/text()', namespaces=ns)[0]
+			icms = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vICMS/text()', namespaces=ns)[0]
+			digest = nfe.xpath('sig:Signature/sig:SignedInfo/sig:Reference/sig:DigestValue/text()', namespaces=sig)[0].encode()
 
-		data = base64.b16encode(data).decode()
-		digest = base64.b16encode(digest).decode()
+			data = base64.b16encode(data).decode()
+			digest = base64.b16encode(digest).decode()
 
-		url = 'chNFe={}&nVersao={}&tpAmb={}&cDest={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
-		       chave, VERSAO_QRCODE, tpamb, cpf, data.lower(), total, icms, digest.lower(), token)
+			url = 'chNFe={}&nVersao={}&tpAmb={}&cDest={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
+			       chave, VERSAO_QRCODE, tpamb, cpf, data.lower(), total, icms, digest.lower(), token)
 
-		url_hash = hashlib.sha1(url.encode()+csc.encode()).digest()
-		url_hash = base64.b16encode(url_hash).decode()
+			url_hash = hashlib.sha1(url.encode()+csc.encode()).digest()
+			url_hash = base64.b16encode(url_hash).decode()
 
-		url = url + '&cHashQRCode=' + url_hash.upper()
+			url = url + '&cHashQRCode=' + url_hash.upper()
 
-		return NFCE[uf.upper()]['QR'] + url
+			return NFCE[uf.upper()]['QR'] + url
+		except Exception as e:
+			raise e

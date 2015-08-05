@@ -30,18 +30,36 @@ class ComunicacaoSefaz(Comunicacao):
     _versao = VERSAO_PADRAO
     _assinatura = AssinaturaA1
 
-    def autorizacao(self, modelo, nota_fiscal, idlote=1):
+    def autorizacao(self, modelo, nota_fiscal, idlote=1, indSinc=1):
         # url do serviço
         url = self._get_url(modelo=modelo, consulta='AUTORIZACAO')
         # Monta XML do corpo da requisição
         raiz = etree.Element('enviNFe', xmlns=NAMESPACE_NFE, versao=VERSAO_PADRAO)
         etree.SubElement(raiz, 'idLote').text = str(idlote) # numero autoincremental gerado pelo sistema
-        etree.SubElement(raiz, 'indSinc').text = str(1) # 0 para assincrono, 1 para sincrono
+        etree.SubElement(raiz, 'indSinc').text = str(indSinc) # 0 para assincrono, 1 para sincrono
         raiz.append(nota_fiscal)
         # Monta XML para envio da requisição
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeAutorizacao'), metodo='NfeAutorizacao', dados=raiz)
+        # Faz request no Servidor da Sefaz
+        retorno = self._post(url, xml)
         
-        return self._post(url, xml)
+        # Em caso de sucesso, retorna xml com nfe e protocolo de autorização.
+        # Caso contrário, envia todo o soap de resposta da Sefaz para decisão do usuário.
+        import ipdb
+        ipdb.set_trace()
+        if retorno.status_code == 200:
+            if indSinc == 1:
+                # Procuta status no xml
+                ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}    # namespace
+                prot = etree.fromstring(retorno.text)
+                prot = prot[1][0][0][6]                             # root protNFe
+                status = prot.xpath("ns:infProt/ns:cStat", namespaces=ns)[0].text
+                if status == '100':
+                    raiz = etree.Element('nfeProc', xmlns=NAMESPACE_NFE, versao=VERSAO_PADRAO)
+                    raiz.append(nota_fiscal)
+                    raiz.append(prot)
+                    return 0, raiz
+        return 1, retorno
 
     def consulta_recibo(self, modelo, numero):
         """
@@ -253,13 +271,9 @@ class ComunicacaoSefaz(Comunicacao):
             xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('\n','')
             xml = xml_declaration + xml
             # Faz o request com o servidor
-            print (xml)
             result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False)
-            if result == 200:
-                result.encoding='utf-8'
-                return result
-            else:
-                return result
+            result.encoding='utf-8'
+            return result
         except requests.exceptions.ConnectionError as e:
             raise e
         finally:
