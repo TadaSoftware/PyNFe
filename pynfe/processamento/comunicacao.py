@@ -50,8 +50,14 @@ class ComunicacaoSefaz(Comunicacao):
                 # Procuta status no xml
                 ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}    # namespace
                 prot = etree.fromstring(retorno.text)
-                prot = prot[1][0][0][6]                             # root protNFe
-                status = prot.xpath("ns:infProt/ns:cStat", namespaces=ns)[0].text
+                try:
+                    # Protocolo com envio OK
+                    infProt = prot[1][0][0][6]                             # root protNFe
+                    status = infProt.xpath("ns:infProt/ns:cStat", namespaces=ns)[0].text
+                except IndexError:
+                    # Protocolo com algum erro no Envio
+                    retEnvi = prot[1][0][0]                             # root retEnvi
+                    status = retEnvi.xpath("ns:cStat", namespaces=ns)[0].text
                 if status == '100':
                     raiz = etree.Element('nfeProc', xmlns=NAMESPACE_NFE, versao=VERSAO_PADRAO)
                     raiz.append(nota_fiscal)
