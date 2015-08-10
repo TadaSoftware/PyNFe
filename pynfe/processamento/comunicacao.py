@@ -61,7 +61,7 @@ class ComunicacaoSefaz(Comunicacao):
                 if status == '100':
                     raiz = etree.Element('nfeProc', xmlns=NAMESPACE_NFE, versao=VERSAO_PADRAO)
                     raiz.append(nota_fiscal)
-                    raiz.append(prot)
+                    raiz.append(infProt)
                     return 0, raiz
             else:
                 # Retorna id do protocolo para posterior consulta em caso de sucesso.

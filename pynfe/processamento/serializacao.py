@@ -16,7 +16,8 @@ class Serializacao(object):
     Nao deve ser instanciada diretamente!"""
 
     _fonte_dados = None
-    _ambiente = 1   # 1 = Produção, 2 = Homologação
+    _ambiente = 1           # 1 = Produção, 2 = Homologação
+    _contingencia = None    # Justificativa da entrada em contingência (min 20, max 256 caracteres)
     _nome_aplicacao = 'PyNFe'
 
     def __new__(cls, *args, **kwargs):
@@ -25,9 +26,10 @@ class Serializacao(object):
         else:
             return super(Serializacao, cls).__new__(cls)
 
-    def __init__(self, fonte_dados, homologacao=False):
+    def __init__(self, fonte_dados, homologacao=False, contingencia=None):
         self._fonte_dados = fonte_dados
         self._ambiente = homologacao and 2 or 1
+        self._contingencia = contingencia
 
     def exportar(self, destino, **kwargs):
         """Gera o(s) arquivo(s) de exportacao a partir da Nofa Fiscal eletronica
@@ -359,6 +361,20 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(ide, 'idDest').text = str(nota_fiscal.indicador_destino)
         etree.SubElement(ide, 'cMunFG').text = nota_fiscal.municipio
         etree.SubElement(ide, 'tpImp').text = str(nota_fiscal.tipo_impressao_danfe)
+        """ ### CONTINGENCIA ###
+            1=Emissão normal (não em contingência);
+            2=Contingência FS-IA, com impressão do DANFE em formulário de segurança;
+            3=Contingência SCAN (Sistema de Contingência do Ambiente Nacional);
+            4=Contingência DPEC (Declaração Prévia da Emissão em Contingência);
+            5=Contingência FS-DA, com impressão do DANFE em formulário de segurança;
+            6=Contingência SVC-AN (SEFAZ Virtual de Contingência do AN);
+            7=Contingência SVC-RS (SEFAZ Virtual de Contingência do RS);
+            9=Contingência off-line da NFC-e (as demais opções de contingência são válidas também para a NFC-e).
+            Para a NFC-e somente estão disponíveis e são válidas as opções de contingência 5 e 9.
+        """
+        if self._contingencia != None:
+            if nota_fiscal.forma_emissao == '1':
+                nota_fiscal.forma_emissao = '9'
         etree.SubElement(ide, 'tpEmis').text = str(nota_fiscal.forma_emissao)
         etree.SubElement(ide, 'cDV').text = nota_fiscal.dv_codigo_numerico_aleatorio
         etree.SubElement(ide, 'tpAmb').text = str(self._ambiente)
@@ -372,8 +388,9 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(ide, 'procEmi').text = str(nota_fiscal.processo_emissao)
         etree.SubElement(ide, 'verProc').text = '%s %s'%(self._nome_aplicacao, nota_fiscal.versao_processo_emissao)
         ### CONTINGENCIA ###
-        #etree.SubElement(ide, 'dhCont').text = '' # Data e Hora da entrada em contingência AAAA-MM-DDThh:mm:ssTZD
-        #etree.SubElement(ide, 'xJust').text = ''  # Justificativa da entrada em contingência (min 20, max 256 caracteres)
+        if self._contingencia != None:
+            etree.SubElement(ide, 'dhCont').text = nota_fiscal.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz # Data e Hora da entrada em contingência AAAA-MM-DDThh:mm:ssTZD
+            etree.SubElement(ide, 'xJust').text = nota_fiscal.self._contingencia  # Justificativa da entrada em contingência (min 20, max 256 caracteres)
 
         # Emitente
         raiz.append(self._serializar_emitente(nota_fiscal.emitente, retorna_string=False))
