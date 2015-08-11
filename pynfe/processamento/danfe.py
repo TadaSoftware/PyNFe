@@ -23,7 +23,10 @@ class DanfeNfce(Danfe):
 			chave = nfe[0].attrib['Id'].replace('NFe','')
 			data = nfe.xpath('ns:infNFe/ns:ide/ns:dhEmi/text()', namespaces=ns)[0].encode()
 			tpamb = nfe.xpath('ns:infNFe/ns:ide/ns:tpAmb/text()', namespaces=ns)[0]
-			cpf = nfe.xpath('ns:infNFe/ns:dest/ns:CPF/text()', namespaces=ns)[0]
+			try:
+				cpf = nfe.xpath('ns:infNFe/ns:dest/ns:CPF/text()', namespaces=ns)[0]
+			except IndexError:
+				cpf = None
 			total = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vNF/text()', namespaces=ns)[0]
 			icms = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vICMS/text()', namespaces=ns)[0]
 			digest = nfe.xpath('sig:Signature/sig:SignedInfo/sig:Reference/sig:DigestValue/text()', namespaces=sig)[0].encode()
@@ -31,8 +34,12 @@ class DanfeNfce(Danfe):
 			data = base64.b16encode(data).decode()
 			digest = base64.b16encode(digest).decode()
 
-			url = 'chNFe={}&nVersao={}&tpAmb={}&cDest={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
-			       chave, VERSAO_QRCODE, tpamb, cpf, data.lower(), total, icms, digest.lower(), token)
+			if cpf is None:
+				url = 'chNFe={}&nVersao={}&tpAmb={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
+				       chave, VERSAO_QRCODE, tpamb, data.lower(), total, icms, digest.lower(), token)			
+			else:
+				url = 'chNFe={}&nVersao={}&tpAmb={}&cDest={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
+				       chave, VERSAO_QRCODE, tpamb, cpf, data.lower(), total, icms, digest.lower(), token)
 
 			url_hash = hashlib.sha1(url.encode()+csc.encode()).digest()
 			url_hash = base64.b16encode(url_hash).decode()

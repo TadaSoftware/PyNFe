@@ -396,8 +396,14 @@ class SerializacaoXML(Serializacao):
         raiz.append(self._serializar_emitente(nota_fiscal.emitente, retorna_string=False))
 
         # Destinatário
-        raiz.append(self._serializar_cliente(nota_fiscal.cliente, modelo=nota_fiscal.modelo, retorna_string=False))
-
+        try:
+            raiz.append(self._serializar_cliente(nota_fiscal.cliente, modelo=nota_fiscal.modelo, retorna_string=False))
+        except AttributeError as e:
+            # NFC-e pode ser gerada sem destinatário
+            if nota_fiscal.modelo == 65:
+                pass
+            else:
+                raise e
         # Retirada
         if nota_fiscal.retirada:
             raiz.append(self._serializar_entrega_retirada(
@@ -492,7 +498,7 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(transp, 'modFrete').text = str(9)
             # Pagamento
             pag = etree.SubElement(raiz, 'pag')
-            etree.SubElement(pag, 'tPag').text = '01'# 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
+            etree.SubElement(pag, 'tPag').text = str(nota_fiscal.tipo_pagamento).zfill(2) # 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
             etree.SubElement(pag, 'vPag').text = str(nota_fiscal.totais_icms_total_nota)  
             #etree.SubElement(pag, 'card').text = ''
             #etree.SubElement(pag, 'CNPJ').text = '' # Informar o CNPJ da Credenciadora de cartão de crédito / débito
