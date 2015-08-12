@@ -203,12 +203,12 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'CFOP').text = produto_servico.cfop
         etree.SubElement(prod, 'uCom').text = produto_servico.unidade_comercial
         etree.SubElement(prod, 'qCom').text = str(produto_servico.quantidade_comercial or 0)
-        etree.SubElement(prod, 'vUnCom').text = str(produto_servico.valor_unitario_comercial or 0)
-        etree.SubElement(prod, 'vProd').text = str(produto_servico.valor_total_bruto or 0)
+        etree.SubElement(prod, 'vUnCom').text = str('{:.2f}').format(produto_servico.valor_unitario_comercial or 0)
+        etree.SubElement(prod, 'vProd').text = str('{:.2f}').format(produto_servico.valor_total_bruto or 0)
         etree.SubElement(prod, 'cEANTrib').text = produto_servico.ean_tributavel
         etree.SubElement(prod, 'uTrib').text = produto_servico.unidade_tributavel
         etree.SubElement(prod, 'qTrib').text = str(produto_servico.quantidade_tributavel)
-        etree.SubElement(prod, 'vUnTrib').text = str(produto_servico.valor_unitario_tributavel)
+        etree.SubElement(prod, 'vUnTrib').text = str('{:.2f}').format(produto_servico.valor_unitario_tributavel)
         """ Indica se valor do Item (vProd) entra no valor total da NF-e (vProd)
             0=Valor do item (vProd) não compõe o valor total da NF-e
             1=Valor do item (vProd) compõe o valor total da NF-e (vProd) (v2.0)
@@ -499,7 +499,7 @@ class SerializacaoXML(Serializacao):
             # Pagamento
             pag = etree.SubElement(raiz, 'pag')
             etree.SubElement(pag, 'tPag').text = str(nota_fiscal.tipo_pagamento).zfill(2) # 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
-            etree.SubElement(pag, 'vPag').text = str(nota_fiscal.totais_icms_total_nota)  
+            etree.SubElement(pag, 'vPag').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_nota)  
             #etree.SubElement(pag, 'card').text = ''
             #etree.SubElement(pag, 'CNPJ').text = '' # Informar o CNPJ da Credenciadora de cartão de crédito / débito
             #etree.SubElement(pag, 'tBand').text = '' # 01=Visa 02=Mastercard 03=American Express 04=Sorocred 99=Outros
