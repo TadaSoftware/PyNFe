@@ -41,7 +41,10 @@ class ComunicacaoSefaz(Comunicacao):
         # Monta XML para envio da requisição
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeAutorizacao'), metodo='NfeAutorizacao', dados=raiz)
         # Faz request no Servidor da Sefaz
+        import ipdb
+        ipdb.set_trace()
         retorno = self._post(url, xml)
+        ipdb.set_trace()
         
         # Em caso de sucesso, retorna xml com nfe e protocolo de autorização.
         # Caso contrário, envia todo o soap de resposta da Sefaz para decisão do usuário.
