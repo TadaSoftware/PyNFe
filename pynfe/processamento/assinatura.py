@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pynfe.utils import etree
+from pynfe.utils import etree, remover_acentos
 import subprocess
 
 
@@ -47,8 +47,9 @@ class AssinaturaA1(Assinatura):
 
             xml.append(raiz)
 
+            # Escreve no arquivo depois de remover caracteres especiais e parse string
             with open('testes.xml', 'w') as arquivo:
-                arquivo.write(etree.tostring(xml, encoding="unicode", pretty_print=False))
+                arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False)))
             
             subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'testes.xml'])
             xml = etree.parse('funfa.xml').getroot()

@@ -143,7 +143,9 @@ class SerializacaoXML(Serializacao):
             # Inscrição Municipal do tomador do serviço
             if cliente.inscricao_municipal:
                 etree.SubElement(raiz, 'IM').text = cliente.inscricao_municipal
-            etree.SubElement(raiz, 'email').text = cliente.email
+            # E-mail
+            if cliente.email:
+                etree.SubElement(raiz, 'email').text = cliente.email
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
