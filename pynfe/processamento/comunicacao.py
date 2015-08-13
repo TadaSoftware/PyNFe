@@ -2,7 +2,7 @@
 import datetime
 import time
 import requests
-from pynfe.utils import etree, so_numeros
+from pynfe.utils import etree, so_numeros, remover_acentos
 from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, NAMESPACE_XSI, NAMESPACE_XSD, NAMESPACE_METODO, VERSAO_PADRAO, CODIGOS_ESTADOS
 from pynfe.utils.webservices import NFCE, NFE
 from .assinatura import AssinaturaA1
@@ -287,6 +287,7 @@ class ComunicacaoSefaz(Comunicacao):
             xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
             xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('\n','')
             xml = xml_declaration + xml
+            xml = remover_acentos(xml)
             # Faz o request com o servidor
             result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False)
             result.encoding='utf-8'

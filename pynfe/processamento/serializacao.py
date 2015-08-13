@@ -5,7 +5,7 @@ import time
 from pynfe.entidades import NotaFiscal
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
                         obter_pais_por_codigo, obter_municipio_e_codigo, \
-                        formatar_decimal, safe_str, obter_uf_por_codigo, obter_codigo_por_municipio
+                        formatar_decimal, remover_acentos, obter_uf_por_codigo, obter_codigo_por_municipio
 from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE
 
 class Serializacao(object):
@@ -769,7 +769,7 @@ class SerializacaoPipes(Serializacao):
 
         if retorna_string:
             try:
-                return '|'.join(map(safe_str, serial_data))
+                return '|'.join(map(remover_acentos, serial_data))
             except TypeError as err:
                 enum_args = '\n'.join(
                     map(

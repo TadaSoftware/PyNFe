@@ -2,16 +2,12 @@
 
 import os
 import codecs
-import unicodedata
+from unicodedata import normalize
 
 try:
     from lxml import etree
 except ImportError:
-    # Instalacao normal do ElementTree
-    try:
-        import xml.etree.ElementTree as etree
-    except ImportError:
-        raise Exception('Falhou ao importar lxml/ElementTree')
+    raise Exception('Falhou ao importar lxml/ElementTree')
 
 try:
     from StringIO import StringIO
@@ -144,18 +140,13 @@ def formatar_decimal(dec):
         return "%.2f" % dec
 
 
-def safe_str(str_):
-    if not isinstance(str_, unicode):
-        if isinstance(str_, str):
-            str_ = str_.decode('utf8')
-        else:
-            str_ = unicode(str_)
-    return unicodedata.normalize('NFKD', str_).encode('ascii', 'ignore')
-
-
 def obter_uf_por_codigo(codigo_uf):
     if isinstance(codigo_uf, basestring) and codigo_uf.isalpha():
         return codigo_uf
 
     estados = {v: k for k, v in flags.CODIGOS_ESTADOS.items()}
     return estados[unicode(codigo_uf)]
+
+
+def remover_acentos(txt):
+    return normalize('NFKD', txt).encode('ASCII','ignore').decode('ASCII')
