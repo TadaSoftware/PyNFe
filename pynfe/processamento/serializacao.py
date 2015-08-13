@@ -18,6 +18,7 @@ class Serializacao(object):
     _fonte_dados = None
     _ambiente = 1           # 1 = Produção, 2 = Homologação
     _contingencia = None    # Justificativa da entrada em contingência (min 20, max 256 caracteres)
+    _so_cpf = False         # Destinatário com apenas o cpf do cliente
     _nome_aplicacao = 'PyNFe'
 
     def __new__(cls, *args, **kwargs):
@@ -26,10 +27,11 @@ class Serializacao(object):
         else:
             return super(Serializacao, cls).__new__(cls)
 
-    def __init__(self, fonte_dados, homologacao=False, contingencia=None):
+    def __init__(self, fonte_dados, homologacao=False, contingencia=None, so_cpf=False):
         self._fonte_dados = fonte_dados
         self._ambiente = homologacao and 2 or 1
         self._contingencia = contingencia
+        self._so_cpf = so_cpf
 
     def exportar(self, destino, **kwargs):
         """Gera o(s) arquivo(s) de exportacao a partir da Nofa Fiscal eletronica
@@ -110,37 +112,38 @@ class SerializacaoXML(Serializacao):
         # Dados do cliente (distinatario)
         etree.SubElement(raiz, cliente.tipo_documento).text = so_numeros(cliente.numero_documento)
         etree.SubElement(raiz, 'xNome').text = cliente.razao_social
-        endereco = etree.SubElement(raiz, 'enderDest')
-        etree.SubElement(endereco, 'xLgr').text = cliente.endereco_logradouro
-        etree.SubElement(endereco, 'nro').text = cliente.endereco_numero
-        etree.SubElement(endereco, 'xCpl').text = cliente.endereco_complemento
-        etree.SubElement(endereco, 'xBairro').text = cliente.endereco_bairro
-        etree.SubElement(endereco, 'cMun').text = obter_codigo_por_municipio(
-            cliente.endereco_municipio, cliente.endereco_uf)
-        etree.SubElement(endereco, 'xMun').text = cliente.endereco_municipio
-        etree.SubElement(endereco, 'UF').text = cliente.endereco_uf
-        etree.SubElement(endereco, 'CEP').text = so_numeros(cliente.endereco_cep)
-        etree.SubElement(endereco, 'cPais').text = cliente.endereco_pais
-        etree.SubElement(endereco, 'xPais').text = obter_pais_por_codigo(cliente.endereco_pais)
-        etree.SubElement(endereco, 'fone').text = cliente.endereco_telefone
-        #Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista; 2 – Contribuinte isento de inscrição; 9 – Não Contribuinte
-        if cliente.isento_icms or cliente.inscricao_estadual.upper() == 'ISENTO':    
-            etree.SubElement(raiz, 'indIEDest').text = str(2)
-            etree.SubElement(raiz, 'IE').text = 'ISENTO'
-        elif cliente.indicador_ie == 9:
-            # 9 – Não Contribuinte
-            etree.SubElement(raiz, 'indIEDest').text = str(9)
-        else:
-            # Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista;
-            etree.SubElement(raiz, 'indIEDest').text = cliente.indicador_ie
-            etree.SubElement(raiz, 'IE').text = cliente.inscricao_estadual
-        # Suframa
-        if cliente.inscricao_suframa:
-            etree.SubElement(raiz, 'ISUF').text = cliente.inscricao_suframa
-        # Inscrição Municipal do tomador do serviço
-        if cliente.inscricao_municipal:
-            etree.SubElement(raiz, 'IM').text = cliente.inscricao_municipal
-        etree.SubElement(raiz, 'email').text = cliente.email
+        if not self._so_cpf:
+            endereco = etree.SubElement(raiz, 'enderDest')
+            etree.SubElement(endereco, 'xLgr').text = cliente.endereco_logradouro
+            etree.SubElement(endereco, 'nro').text = cliente.endereco_numero
+            etree.SubElement(endereco, 'xCpl').text = cliente.endereco_complemento
+            etree.SubElement(endereco, 'xBairro').text = cliente.endereco_bairro
+            etree.SubElement(endereco, 'cMun').text = obter_codigo_por_municipio(
+                cliente.endereco_municipio, cliente.endereco_uf)
+            etree.SubElement(endereco, 'xMun').text = cliente.endereco_municipio
+            etree.SubElement(endereco, 'UF').text = cliente.endereco_uf
+            etree.SubElement(endereco, 'CEP').text = so_numeros(cliente.endereco_cep)
+            etree.SubElement(endereco, 'cPais').text = cliente.endereco_pais
+            etree.SubElement(endereco, 'xPais').text = obter_pais_por_codigo(cliente.endereco_pais)
+            etree.SubElement(endereco, 'fone').text = cliente.endereco_telefone
+            #Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista; 2 – Contribuinte isento de inscrição; 9 – Não Contribuinte
+            if cliente.isento_icms or cliente.inscricao_estadual.upper() == 'ISENTO':    
+                etree.SubElement(raiz, 'indIEDest').text = str(2)
+                etree.SubElement(raiz, 'IE').text = 'ISENTO'
+            elif cliente.indicador_ie == 9:
+                # 9 – Não Contribuinte
+                etree.SubElement(raiz, 'indIEDest').text = str(9)
+            else:
+                # Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista;
+                etree.SubElement(raiz, 'indIEDest').text = cliente.indicador_ie
+                etree.SubElement(raiz, 'IE').text = cliente.inscricao_estadual
+            # Suframa
+            if cliente.inscricao_suframa:
+                etree.SubElement(raiz, 'ISUF').text = cliente.inscricao_suframa
+            # Inscrição Municipal do tomador do serviço
+            if cliente.inscricao_municipal:
+                etree.SubElement(raiz, 'IM').text = cliente.inscricao_municipal
+            etree.SubElement(raiz, 'email').text = cliente.email
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
