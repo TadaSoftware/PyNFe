@@ -47,24 +47,33 @@ class Serializacao(object):
 class SerializacaoXML(Serializacao):
     _versao = VERSAO_PADRAO
 
-    def exportar(self, destino=None, retorna_string=False, **kwargs):
+    def exportar(self, destino=None, retorna_string=False, limpar=True, **kwargs):
         """Gera o(s) arquivo(s) de Nota Fiscal eletronica no padrao oficial da SEFAZ
         e Receita Federal, para ser(em) enviado(s) para o webservice ou para ser(em)
-        armazenado(s) em cache local."""
+        armazenado(s) em cache local.
+        @param destino -
+        @param retorna_string - Retorna uma string para debug.
+        @param limpar - Limpa a fonte de dados para não gerar xml com dados duplicados.
+        """
+        try:
+            # No raiz do XML de saida
+            raiz = etree.Element('NFe', xmlns=NAMESPACE_NFE)
 
-        # No raiz do XML de saida
-        raiz = etree.Element('NFe', xmlns=NAMESPACE_NFE)
+            # Carrega lista de Notas Fiscais
+            notas_fiscais = self._fonte_dados.obter_lista(_classe=NotaFiscal, **kwargs)
 
-        # Carrega lista de Notas Fiscais
-        notas_fiscais = self._fonte_dados.obter_lista(_classe=NotaFiscal, **kwargs)
+            for nf in notas_fiscais:
+                raiz.append(self._serializar_nota_fiscal(nf, retorna_string=False))
 
-        for nf in notas_fiscais:
-            raiz.append(self._serializar_nota_fiscal(nf, retorna_string=False))
-
-        if retorna_string:
-            return etree.tostring(raiz, encoding="unicode", pretty_print=False)
-        else:
-            return raiz
+            if retorna_string:
+                return etree.tostring(raiz, encoding="unicode", pretty_print=False)
+            else:
+                return raiz
+        except Exception as e:
+            raise e
+        finally:
+            if limpar:
+                self._fonte_dados.limpar_dados()   
 
     def importar(self, origem):
         """Cria as instancias do PyNFe a partir de arquivos XML no formato padrao da
