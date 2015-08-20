@@ -31,9 +31,11 @@ class AssinaturaA1(Assinatura):
             siginfo = etree.SubElement(raiz, 'SignedInfo')
             etree.SubElement(siginfo, 'CanonicalizationMethod', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
             etree.SubElement(siginfo, 'SignatureMethod', Algorithm='http://www.w3.org/2000/09/xmldsig#rsa-sha1')
-            if xml.findall('infNFe')[0].attrib['Id']:
+            # Tenta achar a tag infNFe
+            try:
                 ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.findall('infNFe')[0].attrib['Id'])
-            elif xml.findall('infEvento')[0].attrib['Id']:
+            # Caso nao tenha a tag infNFe, procura a tag infEvento
+            except IndexError:
                 tag = 'infEvento'
                 ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.findall('infEvento')[0].attrib['Id'])
             trans = etree.SubElement(ref, 'Transforms')
