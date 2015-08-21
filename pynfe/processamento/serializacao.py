@@ -92,7 +92,8 @@ class SerializacaoXML(Serializacao):
         endereco = etree.SubElement(raiz, 'enderEmit')
         etree.SubElement(endereco, 'xLgr').text = emitente.endereco_logradouro
         etree.SubElement(endereco, 'nro').text = emitente.endereco_numero
-        #etree.SubElement(endereco, 'xCpl').text = emitente.endereco_complemento
+        if emitente.endereco_complemento:
+            etree.SubElement(endereco, 'xCpl').text = emitente.endereco_complemento
         etree.SubElement(endereco, 'xBairro').text = emitente.endereco_bairro
         etree.SubElement(endereco, 'cMun').text = obter_codigo_por_municipio(
             emitente.endereco_municipio, emitente.endereco_uf)
@@ -101,7 +102,8 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(endereco, 'CEP').text = so_numeros(emitente.endereco_cep)
         etree.SubElement(endereco, 'cPais').text = emitente.endereco_pais
         etree.SubElement(endereco, 'xPais').text = obter_pais_por_codigo(emitente.endereco_pais)
-        etree.SubElement(endereco, 'fone').text = emitente.endereco_telefone
+        if emitente.endereco_telefone:
+            etree.SubElement(endereco, 'fone').text = emitente.endereco_telefone
         etree.SubElement(raiz, 'IE').text = emitente.inscricao_estadual
         # Apenas NF-e
         #if nota_fiscal.modelo == 55:
@@ -125,7 +127,8 @@ class SerializacaoXML(Serializacao):
             endereco = etree.SubElement(raiz, 'enderDest')
             etree.SubElement(endereco, 'xLgr').text = cliente.endereco_logradouro
             etree.SubElement(endereco, 'nro').text = cliente.endereco_numero
-            etree.SubElement(endereco, 'xCpl').text = cliente.endereco_complemento
+            if cliente.endereco_complemento:
+                etree.SubElement(endereco, 'xCpl').text = cliente.endereco_complemento
             etree.SubElement(endereco, 'xBairro').text = cliente.endereco_bairro
             etree.SubElement(endereco, 'cMun').text = obter_codigo_por_municipio(
                 cliente.endereco_municipio, cliente.endereco_uf)
@@ -134,7 +137,8 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(endereco, 'CEP').text = so_numeros(cliente.endereco_cep)
             etree.SubElement(endereco, 'cPais').text = cliente.endereco_pais
             etree.SubElement(endereco, 'xPais').text = obter_pais_por_codigo(cliente.endereco_pais)
-            etree.SubElement(endereco, 'fone').text = cliente.endereco_telefone
+            if cliente.endereco_telefone:
+                etree.SubElement(endereco, 'fone').text = cliente.endereco_telefone
             #Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista; 2 – Contribuinte isento de inscrição; 9 – Não Contribuinte
             if cliente.isento_icms or cliente.inscricao_estadual.upper() == 'ISENTO':    
                 etree.SubElement(raiz, 'indIEDest').text = str(2)
