@@ -109,7 +109,8 @@ class SerializacaoXML(Serializacao):
         #if nota_fiscal.modelo == 55:
             #etree.SubElement(raiz, 'IEST').text = emitente.inscricao_estadual_subst_tributaria
         #etree.SubElement(raiz, 'IEST').text = emitente.inscricao_estadual_subst_tributaria
-        etree.SubElement(raiz, 'IM').text = emitente.inscricao_municipal
+        if emitente.inscricao_municipal:
+            etree.SubElement(raiz, 'IM').text = emitente.inscricao_municipal
         #etree.SubElement(raiz, 'CNAE').text = emitente.cnae_fiscal
         etree.SubElement(raiz, 'CRT').text = emitente.codigo_de_regime_tributario
         if retorna_string:

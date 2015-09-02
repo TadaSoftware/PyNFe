@@ -433,7 +433,7 @@ NFE = {
 	    	'CADASTRO': 'nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx'
 	    },
 	    'PR': {
-	    	'STATUS': 'nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3', 		# CONSULTA STATUS DO SERVIÇO
+	    	'STATUS': 'nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3', 		# CONSULTA STATUS DO SERVICO
 	    	'AUTORIZACAO': 'nfe.fazenda.pr.gov.br/nfe/NFeAutorizacao3',		# AUTORIZACAO
 	    	'RECIBO': 'nfe.fazenda.pr.gov.br/nfe/NFeRetAutorizacao3',		# CONSULTA RECIBO
 	    	'CHAVE': 'nfe.fazenda.pr.gov.br/nfe/NFeConsulta3',				# CONSULTA CHAVE DE ACESSO

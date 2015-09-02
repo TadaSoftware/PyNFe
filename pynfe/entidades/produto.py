@@ -93,10 +93,10 @@ class Produto(Entidade):
     cofins_valor = str()
 
     # # - ICMS (lista 1 para * / ManyToManyField)
-    # icms = None
-    # def adicionar_icms(self, **kwargs):
-    #     u"""Adiciona uma instancia de ICMS a lista de ICMS do produto"""
-    #     self.icms.append(ProdutoICMS(**kwargs))
+    icms = None
+    def adicionar_icms(self, **kwargs):
+        """Adiciona uma instancia de ICMS a lista de ICMS do produto"""
+        self.icms.append(ProdutoICMS(**kwargs))
 
     def __init__(self, *args, **kwargs):
         self.icms = []
