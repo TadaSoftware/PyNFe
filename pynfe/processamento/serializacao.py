@@ -106,12 +106,12 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(endereco, 'fone').text = emitente.endereco_telefone
         etree.SubElement(raiz, 'IE').text = emitente.inscricao_estadual
         # Apenas NF-e
-        #if nota_fiscal.modelo == 55:
-            #etree.SubElement(raiz, 'IEST').text = emitente.inscricao_estadual_subst_tributaria
-        #etree.SubElement(raiz, 'IEST').text = emitente.inscricao_estadual_subst_tributaria
+        if emitente.inscricao_estadual_subst_tributaria:
+            etree.SubElement(raiz, 'IEST').text = emitente.inscricao_estadual_subst_tributaria
+        # Inscricao Municipal
         if emitente.inscricao_municipal:
             etree.SubElement(raiz, 'IM').text = emitente.inscricao_municipal
-        #etree.SubElement(raiz, 'CNAE').text = emitente.cnae_fiscal
+            etree.SubElement(raiz, 'CNAE').text = emitente.cnae_fiscal
         etree.SubElement(raiz, 'CRT').text = emitente.codigo_de_regime_tributario
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
