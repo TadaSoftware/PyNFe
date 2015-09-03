@@ -347,6 +347,8 @@ class NotaFiscal(Entidade):
         self.totais_icms_cofins += obj.cofins_valor
         self.totais_icms_outras_despesas_acessorias += obj.outras_despesas_acessorias
         self.totais_icms_total_nota += obj.valor_total_bruto
+        ## TODO calcular impostos aproximados
+        #self.totais_tributos_aproximado += obj.tributos
         return obj
 
     def adicionar_transporte_volume(self, **kwargs):

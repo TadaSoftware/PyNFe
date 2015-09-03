@@ -111,7 +111,9 @@ class SerializacaoXML(Serializacao):
         # Inscricao Municipal
         if emitente.inscricao_municipal:
             etree.SubElement(raiz, 'IM').text = emitente.inscricao_municipal
-            etree.SubElement(raiz, 'CNAE').text = emitente.cnae_fiscal
+            # Campo Opcional. Pode ser informado quando a Inscrição Municipal (id:C19) for informada.
+            if emitente.cnae_fiscal:
+                etree.SubElement(raiz, 'CNAE').text = emitente.cnae_fiscal
         etree.SubElement(raiz, 'CRT').text = emitente.codigo_de_regime_tributario
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
@@ -468,7 +470,8 @@ class SerializacaoXML(Serializacao):
         
         etree.SubElement(icms_total, 'vOutro').text = str('{:.2f}').format(nota_fiscal.totais_icms_outras_despesas_acessorias)
         etree.SubElement(icms_total, 'vNF').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_nota)
-        #etree.SubElement(icms_total, 'vTotTrib').text = str('{:.2f}').format(nota_fiscal.totais_tributos_aproximado)
+        if nota_fiscal.totais_tributos_aproximado:
+            etree.SubElement(icms_total, 'vTotTrib').text = str('{:.2f}').format(nota_fiscal.totais_tributos_aproximado)
         
         # Apenas NF-e
         if nota_fiscal.modelo == 55:
