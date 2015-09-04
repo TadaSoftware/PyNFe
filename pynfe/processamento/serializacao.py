@@ -533,9 +533,12 @@ class SerializacaoXML(Serializacao):
             #etree.SubElement(pag, 'cAut').text = '' # Identifica o número da autorização da transação da operação com cartão de crédito e/ou débito
 
         # Informações adicionais
-        info_ad = etree.SubElement(raiz, 'infAdic')
-        etree.SubElement(info_ad, 'infAdFisco').text = nota_fiscal.informacoes_adicionais_interesse_fisco
-        #etree.SubElement(info_ad, 'infCpl').text = nota_fiscal.informacoes_complementares_interesse_contribuinte
+        if nota_fiscal.informacoes_adicionais_interesse_fisco or nota_fiscal.informacoes_complementares_interesse_contribuinte:
+            info_ad = etree.SubElement(raiz, 'infAdic')
+            if nota_fiscal.informacoes_adicionais_interesse_fisco:
+                etree.SubElement(info_ad, 'infAdFisco').text = nota_fiscal.informacoes_adicionais_interesse_fisco
+            if nota_fiscal.informacoes_complementares_interesse_contribuinte:
+                etree.SubElement(info_ad, 'infCpl').text = nota_fiscal.informacoes_complementares_interesse_contribuinte
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
