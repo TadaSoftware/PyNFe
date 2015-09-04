@@ -76,6 +76,10 @@ class Produto(Entidade):
     ICMS 70 - Com reducao da base de calculo e cobranca do ICMS por substituicao tributaria
     ICMS 90 - Outras
     """
+
+    # Tributos aproximados por item
+    valor_tributos_aprox = str()
+
     icms_modalidade = str()
     icms_origem = int()
     icms_csosn = str()

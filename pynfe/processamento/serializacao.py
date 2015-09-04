@@ -239,6 +239,11 @@ class SerializacaoXML(Serializacao):
         # Imposto
         imposto = etree.SubElement(raiz, 'imposto')
 
+        # Lei da transparencia
+        # Tributos aprox por item
+        if produto_servico.valor_tributos_aprox:
+            etree.SubElement(imposto, 'vTotTrib') = produto_servico.valor_tributos_aprox
+
         ### ICMS
         icms = etree.SubElement(imposto, 'ICMS')
         icms_csosn = ('102', '103', '300', '400')
