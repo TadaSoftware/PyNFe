@@ -62,7 +62,7 @@ Referências
 - Exemplo de uso
 - Consulta Status
 
-```python3
+```python
 from pynfe.processamento.comunicacao import ComunicacaoSefaz
 
 certificado = "/home/user/certificado.pfx"
