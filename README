@@ -62,15 +62,15 @@ Referências
 - Exemplo de uso
 - Consulta Status
 
-.. code:: python3
+```python3
+from pynfe.processamento.comunicacao import ComunicacaoSefaz
 
-    from pynfe.processamento.comunicacao import ComunicacaoSefaz
+certificado = "/home/user/certificado.pfx"
+senha = 'senha'
+uf = 'pr'
+homologacao = True
 
-    certificado = "/home/user/certificado.pfx"
-    senha = 'senha'
-    uf = 'pr'
-    homologacao = True
-    
-    con = ComunicacaoSefaz(uf, certificado, senha, homologacao)
-    xml = con.status_servico('nfe')
-    print (xml.text)
+con = ComunicacaoSefaz(uf, certificado, senha, homologacao)
+xml = con.status_servico('nfe')
+print (xml.text)
+```
