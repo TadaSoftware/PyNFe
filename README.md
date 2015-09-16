@@ -60,15 +60,17 @@ Referências
  sudo pip3 install https://github.com/leotada/PyNFe/archive/master.zip
 
 - Exemplo de uso
- - Consulta Status
+- Consulta Status
 
- from pynfe.processamento.comunicacao import ComunicacaoSefaz
+```python
+from pynfe.processamento.comunicacao import ComunicacaoSefaz
 
- certificado = "/home/user/certificado.pfx"
- senha = 'senha'
- uf = 'pr'
- homologacao = True
+certificado = "/home/user/certificado.pfx"
+senha = 'senha'
+uf = 'pr'
+homologacao = True
 
- con = ComunicacaoSefaz(uf, certificado, senha, homologacao)
- xml = con.status_servico('nfe')
- print (xml.text)
+con = ComunicacaoSefaz(uf, certificado, senha, homologacao)
+xml = con.status_servico('nfe')
+print (xml.text)
+```
