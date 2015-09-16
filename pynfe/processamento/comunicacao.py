@@ -110,6 +110,34 @@ class ComunicacaoSefaz(Comunicacao):
         
         return self._post(url, xml)
 
+    def consulta_notas_cnpj(self, cnpj, nsu=0):
+        """
+            “Serviço de Consulta da Relação de Documentos Destinados” para um determinado CNPJ de destinatário informado na NF-e. 
+        """
+        # url do serviço
+        url = self._get_url(modelo='nfe', consulta='DESTINADAS')
+        # Monta XML do corpo da requisição
+        raiz = etree.Element('consNFeDest', versao='1.01', xmlns=NAMESPACE_NFE)
+        etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
+        etree.SubElement(raiz, 'xServ').text = 'CONSULTAR NFE DEST'
+        etree.SubElement(raiz, 'CNPJ').text = cnpj
+        # Indicador de NF-e consultada: 
+        # 0=Todas as NF-e; 
+        # 1=Somente as NF-e que ainda não tiveram manifestação do destinatário (Desconhecimento da operação, Operação não Realizada ou Confirmação da Operação);
+        # 2=Idem anterior, incluindo as NF-e que também não tiveram a Ciência da Operação. 
+        etree.SubElement(raiz, 'indNFe').text = '0'
+        # Indicador do Emissor da NF-e:
+        # 0=Todos os Emitentes / Remetentes;
+        # 1=Somente as NF-e emitidas por emissores / remetentes que não tenham o mesmo CNPJ-Base do destinatário (para excluir as notas fiscais de transferência entre filiais). 
+        etree.SubElement(raiz, 'indEmi').text = '0'
+        # Último NSU recebido pela Empresa. Caso seja informado com zero, ou com um NSU muito antigo, a consulta retornará unicamente as notas fiscais que tenham sido recepcionadas nos últimos 15 dias. 
+        etree.SubElement(raiz, 'ultNSU').text = str(nsu)
+
+        # Monta XML para envio da requisição
+        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeConsultaDest'), metodo='NfeConsultaDest', dados=raiz)
+
+        return self._post(url, xml)
+
     def cancelar(self, modelo, evento, idlote=1):
         """ Envia um evento de cancelamento de nota fiscal """
         # url do serviço
@@ -241,6 +269,8 @@ class ComunicacaoSefaz(Comunicacao):
         raiz = etree.Element('nfeCabecMsg', xmlns=NAMESPACE_METODO+metodo)
         if metodo == 'RecepcaoEvento':
             etree.SubElement(raiz, 'versaoDados').text = '1.00'
+        elif metodo == 'NfeConsultaDest':
+            etree.SubElement(raiz, 'versaoDados').text = '1.01'
         else:
             etree.SubElement(raiz, 'versaoDados').text = VERSAO_PADRAO
         etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
@@ -284,6 +314,7 @@ class ComunicacaoSefaz(Comunicacao):
             xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
             xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('\n','')
             xml = xml_declaration + xml
+
             # Faz o request com o servidor
             result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False)
             result.encoding='utf-8'
