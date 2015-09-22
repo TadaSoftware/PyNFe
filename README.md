@@ -3,9 +3,10 @@ Visão Geral
 
 Biblioteca de interface com o webservice de Nota Fiscal Eletronica,
 (NF-e/NFC-e) da SEFAZ, oficializada pelo Ministerio da Fazendo do 
-Governo do Brasil. Desenvolvido e testado com Python 3 no GNU/Linux.
+Governo do Brasil.  
+Desenvolvido e testado com Python 3 no GNU/Linux.
 
-A NF-e visa substituir as notas fiscais séries 1 e 1A.
+A NF-e visa substituir as notas fiscais séries 1 e 1A.  
 A NFC-e visa substituir as notas fiscais modelo 2 e
 cupom fiscal emitido por ECF.
 
@@ -56,11 +57,12 @@ Referências
  - http://nf-eletronica.com/blog/?p=133
 
 - Instalação
- - Ubuntu
-
+```
  sudo pip3 install https://github.com/leotada/PyNFe/archive/master.zip
+```
 
-- Exemplo de uso
+- Exemplos de uso
+
 - Consulta Status
 
 ```python
