@@ -56,7 +56,8 @@ Referências
 - Certificado para testes
  - http://nf-eletronica.com/blog/?p=133
 
-- Instalação
+Instalação
+-----------
 ```
  sudo pip3 install https://github.com/leotada/PyNFe/archive/master.zip
 ```
@@ -78,6 +79,7 @@ xml = con.status_servico('nfe')
 print (xml.text)
 ```
 
-Documentação
-https://github.com/leotada/PyNFe/wiki
-http://pynfe.readthedocs.org/pt/latest/
+Documentação 
+-----------
+- https://github.com/leotada/PyNFe/wiki
+- http://pynfe.readthedocs.org/pt/latest/
