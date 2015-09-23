@@ -252,6 +252,13 @@ NFCE = {
 
 # Nfe
 NFE = {
+		# Alguns serviços são disponibilizados apenas pelo ambiente nacional
+		'AN': {
+	    	'EVENTOS': 'nfe.fazenda.gov.br/RecepcaoEvento/RecepcaoEvento.asmx',	# versao: 1.00
+	    	'DISTRIBUICAO': 'https://www1.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx',
+	    	'DOWNLOAD': 'nfe.fazenda.gov.br/NfeDownloadNF/NfeDownloadNF.asmx', 				# versao: 2.00/3.10
+	    	'DESTINADAS': '.nfe.fazenda.gov.br/NFeConsultaDest/NFeConsultaDest.asmx'		# versao: 2.00/3.10
+	    },
 	    'RO': {
 	    	'STATUS': '',
 	    	'AUTORIZACAO': '',

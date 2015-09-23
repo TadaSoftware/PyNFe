@@ -78,19 +78,6 @@ xml = con.status_servico('nfe')
 print (xml.text)
 ```
 
-- Consulta Notas Emitidas para um CNPJ (apenas NF-e e no RS)
-
-```python
-from pynfe.processamento.comunicacao import ComunicacaoSefaz
-
-certificado = "/home/user/certificado.pfx"
-senha = 'senha'
-uf = 'rs'
-homologacao = True
-
-con = ComunicacaoSefaz(uf, certificado, senha, homologacao)
-# informar cnpj que deseja consultar (String) e nsu (inteiro) (por default se não informar nsu ele assumirá o valor 0, retornando as dos últimos 15 dias)
-xml = con.consulta_notas_cnpj(cnpj='cnpj_somente_numeros', nsu=0)
-
-print (xml.text)
-```
+Documentação
+https://github.com/leotada/PyNFe/wiki
+http://pynfe.readthedocs.org/pt/latest/

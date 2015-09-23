@@ -138,6 +138,9 @@ class ComunicacaoSefaz(Comunicacao):
 
         return self._post(url, xml)
 
+    def consulta_distribuicao(self, cnpj, nsu=0):
+        pass
+
     def cancelar(self, modelo, evento, idlote=1):
         """ Envia um evento de cancelamento de nota fiscal """
         # url do serviço
@@ -225,6 +228,21 @@ class ComunicacaoSefaz(Comunicacao):
         #retorno = etree.parse(StringIO(retorno))
 
         return retorno
+
+    def _get_url_AN(self, consulta):
+        # producao
+        if self._ambiente == 1:
+            if consulta == 'DISTRIBUICAO':
+                ambiente = 'https://www1.'
+            else:
+                ambiente = 'https://www.'
+        # homologacao
+        else:
+            ambiente = 'https://hom.'
+
+        self.url = ambiente + NFE['AN'][consulta]
+        return self.url
+
 
     def _get_url(self, modelo, consulta):
         # RS utiliza um formato de url diferente dos outros estados
