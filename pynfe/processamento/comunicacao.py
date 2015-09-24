@@ -169,9 +169,28 @@ class ComunicacaoSefaz(Comunicacao):
         # Chama método que efetua a requisição POST no servidor SOAP
         return self._post(url, xml)
 
-    def consultar_cadastro(self, instancia):
-        #post = '/nfeweb/services/cadconsultacadastro.asmx'
-        post = '/nfeweb/services/nfeconsulta.asmx'
+    def consultar_cadastro(self, modelo, ie, cnpj):
+        # RS implementa um método diferente na consulta de cadastro
+        if self.uf.upper() == 'RS':
+            url = NFE['RS']['CADASTRO']
+        elif self.uf.upper() == 'SVRS':
+            url = NFE['SVRS']['CADASTRO']
+        elif self.uf.upper() == 'SVC-RS':
+            url = NFE['SVC-RS']['CADASTRO']
+        else:
+            url = self._get_url(modelo=modelo, consulta='CADASTRO')
+
+        raiz = etree.Element('ConsCad', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
+        info = etree.SubElement(raiz, 'infCons')
+        etree.SubElement(info, 'xServ').text = 'CONS-CAD'
+        etree.SubElement(info, 'UF').text = self.uf.upper()
+        etree.SubElement(info, 'IE').text = ie
+        etree.SubElement(info, 'CNPJ').text = cnpj
+        #etree.SubElement(info, 'CPF').text = cpf
+        # Monta XML para envio da requisição
+        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='CadConsultaCadastro2'), metodo='CadConsultaCadastro2', dados=raiz)
+        # Chama método que efetua a requisição POST no servidor SOAP
+        return self._post(url, xml)
 
     def inutilizar_faixa_numeracao(self, numero_inicial, numero_final, emitente, certificado, senha, ano=None, serie='1', justificativa=''):
         post = '/nfeweb/services/nfestatusservico.asmx'
@@ -245,41 +264,31 @@ class ComunicacaoSefaz(Comunicacao):
 
 
     def _get_url(self, modelo, consulta):
-        # RS utiliza um formato de url diferente dos outros estados
-        if self.uf.upper() == 'RS':
-            if modelo == 'nfe':
-                if consulta == 'CADASTRO':
-                    self.url = 'https://cad.' + NFE[self.uf.upper()][consulta]
-                else:
-                    # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
-                    if self._ambiente == 1:
-                        self.url = 'https://nfe.' + NFE[self.uf.upper()][consulta]
-                    else:
-                        self.url = 'https://nfe-homologacao.' + NFE[self.uf.upper()][consulta]
-            elif modelo == 'nfce':
-                # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
-                if self._ambiente == 1:
-                    self.url = 'https://nfce.' + NFCE[self.uf.upper()][consulta]
-                else:
-                    self.url = 'https://nfce-homologacao.' + NFCE[self.uf.upper()][consulta]
-            else:
-                # TODO implementar outros tipos de notas como NFS-e
-                pass
-        else:
+        """ Retorna a url para comunicação com o webservice """
+        # estado que implementam webservices proprios
+        lista = ['PR','MS','SP','AM','CE','BA','GO','MG','MT','PE','RS']
+        if self.uf.upper() in lista:
             if self._ambiente == 1:
-                ambiente = 'https://'
+                ambiente = 'HTTPS'
             else:
-                ambiente = 'https://homologacao.'
+                ambiente = 'HOMOLOGACAO'
             if modelo == 'nfe':
                 # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
-                self.url = ambiente + NFE[self.uf.upper()][consulta]
+                self.url = NFE[self.uf.upper()][ambiente] + NFE[self.uf.upper()][consulta]
             elif modelo == 'nfce':
                 # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
-                self.url = ambiente + NFCE[self.uf.upper()][consulta]
+                self.url = NFCE[self.uf.upper()][ambiente] + NFCE[self.uf.upper()][consulta]
             else:
                 # TODO implementar outros tipos de notas como NFS-e
                 pass
+        # Estados que utilizam outros ambientes
+        else:
+            self._get_url_uf(modelo, consulta)
         return self.url
+
+    def _get_url_uf(self, modelo, consulta):
+        """ Estados que implementam url diferente do padrão nacional"""
+        pass
 
     def _cabecalho_soap(self, metodo):
         u"""Monta o XML do cabeçalho da requisição SOAP"""

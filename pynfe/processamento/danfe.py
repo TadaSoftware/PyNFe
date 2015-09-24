@@ -12,7 +12,7 @@ class Danfe(object):
 class DanfeNfce(Danfe):
 	""" Classe para geração de Danfe para Nota Fiscal de Consumidor Eletrônica (NFC-e). """
 	
-	def gerar_qrcode(self, token, csc, xml, uf):
+	def gerar_qrcode(self, token, csc, xml, uf, homologacao=False):
 		""" Classe para gerar url do qrcode da NFC-e """
 		try:
 			# Procura atributos no xml
@@ -46,6 +46,12 @@ class DanfeNfce(Danfe):
 
 			url = url + '&cHashQRCode=' + url_hash.upper()
 
-			return NFCE[uf.upper()]['QR'] + url
+			if uf.upper() == 'PR':
+				return NFCE[uf.upper()]['QR'] + url
+			else:
+				if homologacao:
+					return NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['QR'] + url
+				else:
+					return NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['QR'] + url
 		except Exception as e:
 			raise e

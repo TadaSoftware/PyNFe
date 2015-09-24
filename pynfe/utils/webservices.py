@@ -15,22 +15,22 @@ NFCE = {
 	    	'QR': ''
 	    },
 	    'AC': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'QR': 'http://www.sefaznet.ac.gov.br/nfe/NFe.jsp?opc=3'
+	    	'QR': 'sefaznet.ac.gov.br/nfce?',
+	    	'HTTPS': 'http://www.',
+	    	'HOMOLOGACAO': 'http://hml.'
 	    },
 	    'AM': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'QR': 'http://sistemas.sefaz.am.gov.br/nfceweb/consultarNFCe.jsp?'
+	    	# csc_homologacao = '0123456789'
+	    	# token_homologacao = '000001'
+	    	'STATUS': 'nfce.sefaz.am.gov.br/nfce-services-nac/services/NfeStatusServico2',
+	    	'AUTORIZACAO': 'nfce.sefaz.am.gov.br/nfce-services-nac/services/NfeAutorizacao',
+	    	'RECIBO': 'nfce.sefaz.am.gov.br/nfce-services-nac/services/NfeRetAutorizacao',
+	    	'CHAVE': 'nfce.sefaz.am.gov.br/nfce-services-nac/services/NfeConsulta2',
+	    	'INUTILIZACAO': 'nfce.sefaz.am.gov.br/nfce-services-nac/services/NfeInutilizacao2',
+	    	'EVENTOS': 'nfce.sefaz.am.gov.br/nfce-services-nac/services/RecepcaoEvento',
+	    	'QR': 'sefaz.am.gov.br/nfceweb/consultarNFCe.jsp?',
+	    	'HTTPS': 'http://sistemas.',
+	    	'HOMOLOGACAO': 'http://homnfce.'
 	    },
 	    'RR': {
 	    	'STATUS': '',
@@ -69,22 +69,14 @@ NFCE = {
 	    	'QR': ''
 	    },
 	    'MA': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'QR': 'http://www.nfce.sefaz.ma.gov.br/portal/consultarNFCe.jsp'
+	    	'QR': 'nfce.sefaz.ma.gov.br/portal/consultarNFCe.jsp?',
+	    	'HTTPS': 'http://www.',
+	    	'HOMOLOGACAO': 'http://www.hom.'
 	    },
 	    'PI': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'QR': 'sefaz.pi.gov.br/nfceweb/consultarNFCe.jsf?',
+	    	'HTTPS': 'http://webas.',
+	    	'HOMOLOGACAO': 'http://webas.'
 	    },
 	    'CE': {
 	    	'STATUS': '',
@@ -96,13 +88,11 @@ NFCE = {
 	    	'QR': ''
 	    },
 	    'RN': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'QR': 'http://www.nfe.rn.gov.br/portal/consultarNFCe.jsp?'
+	    	#'QR': 'http://www.nfe.rn.gov.br/portal/consultarNFCe.jsp?',
+	    	'QR': 'http://nfce.set.rn.gov.br/consultarNFCe.aspx?',
+	    	'HTTPS': '',
+	    	'HOMOLOGACAO': ''
+	    	
 	    },
 	    'PB': {
 	    	'STATUS': '',
@@ -132,13 +122,9 @@ NFCE = {
 	    	'QR': ''
 	    },
 	    'SE': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'QR': 'http://www.nfe.se.gov.br/portal/consultarNFCe.jsp?'
+	    	'QR': 'nfe.se.gov.br/portal/consultarNFCe.jsp?',
+	    	'HTTPS': 'https://www.',
+	    	'HOMOLOGACAO': 'http://www.hom.'
 	    },
 	    'BA': {
 	    	'STATUS': '',
@@ -183,7 +169,9 @@ NFCE = {
 	    	'CHAVE': 'nfce.fazenda.sp.gov.br/ws/nfeconsulta2.asmx',
 	    	'INUTILIZACAO': 'nfce.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx',
 	    	'EVENTOS': 'nfce.fazenda.sp.gov.br/ws/recepcaoevento.asmx',
-	    	'QR': 'nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaQRCode.aspx'
+	    	'QR': 'nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaQRCode.aspx?',
+	    	'HTTPS': 'https://www.',
+	    	'HOMOLOGACAO': 'https://www.homologacao.'
 	    },
 	    'PR': {
 	    	'STATUS': 'nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3',
@@ -192,7 +180,9 @@ NFCE = {
 	    	'CHAVE': 'nfce.fazenda.pr.gov.br/nfce/NFeConsulta3',
 	    	'INUTILIZACAO': 'nfce.fazenda.pr.gov.br/nfce/NFeInutilizacao3',
 	    	'EVENTOS': 'nfce.fazenda.pr.gov.br/nfce/NFeRecepcaoEvento',
-	    	'QR': ' http://www.dfeportal.fazenda.pr.gov.br/dfe-portal/rest/servico/consultaNFCe?'
+	    	'QR': ' http://www.dfeportal.fazenda.pr.gov.br/dfe-portal/rest/servico/consultaNFCe?',
+	    	'HTTPS': 'https://',
+	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
 	    'SC': {
 	    	'STATUS': '',
@@ -210,7 +200,9 @@ NFCE = {
 	    	'CHAVE': 'sefazrs.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx',
 	    	'INUTILIZACAO': 'sefazrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao2.asmx',
 	    	'EVENTOS': 'sefazrs.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx',
-	    	'QR': 'https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx'
+	    	'QR': 'https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?',
+	    	'HTTPS': '',
+	    	'HOMOLOGACAO': ''
 	    },
 	    'MS': {
 	    	'STATUS': '',
@@ -222,13 +214,9 @@ NFCE = {
 	    	'QR': ''
 	    },
 	    'MT': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'QR': 'http://www.sefaz.mt.gov.br/nfe/portal/consultanfce'
+	    	'QR': 'sefaz.mt.gov.br/nfce/consultanfce?',
+	    	'HTTPS': 'http://www.',
+	    	'HOMOLOGACAO': 'http://homologacao.'
 	    },
 	    'GO': {
 	    	'STATUS': '',
@@ -239,14 +227,17 @@ NFCE = {
 	    	'EVENTOS': '',
 	    	'QR': ''
 	    },
-	    'DF': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'QR': ''
+	    # RO, AC, RR, PA, AP, TO, MA, PI, RN, PB, AL, SE, BA, ES, RJ, GO, DF
+	    'SVRS': {
+	    	'STATUS': 'svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx',
+	    	'AUTORIZACAO': 'svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx',
+	    	'RECIBO': 'svrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx',
+	    	'CHAVE': 'svrs.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx',
+	    	'INUTILIZACAO': 'svrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao2.asmx',
+	    	'EVENTOS': 'svrs.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx',
+	    	'QR': '',
+	    	'HTTPS': 'https://nfce.',
+	    	'HOMOLOGACAO': 'https://nfce-homologacao.'
 	    },
 }
 
@@ -255,180 +246,70 @@ NFE = {
 		# Alguns serviços são disponibilizados apenas pelo ambiente nacional
 		'AN': {
 	    	'EVENTOS': 'nfe.fazenda.gov.br/RecepcaoEvento/RecepcaoEvento.asmx',	# versao: 1.00
-	    	'DISTRIBUICAO': 'https://www1.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx',
+	    	'DISTRIBUICAO': 'nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx',
 	    	'DOWNLOAD': 'nfe.fazenda.gov.br/NfeDownloadNF/NfeDownloadNF.asmx', 				# versao: 2.00/3.10
-	    	'DESTINADAS': '.nfe.fazenda.gov.br/NFeConsultaDest/NFeConsultaDest.asmx'		# versao: 2.00/3.10
-	    },
-	    'RO': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
-	    },
-	    'AC': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
+	    	'DESTINADAS': '.nfe.fazenda.gov.br/NFeConsultaDest/NFeConsultaDest.asmx',		# versao: 2.00/3.10
+	    	'HTTPS': 'https://www.',
+	    	'HOMOLOGACAO': 'https://hom.'
 	    },
 	    'AM': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
-	    },
-	    'RR': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
-	    },
-	    'PA': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
-	    },
-	    'AP': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
-	    },
-	    'TO': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
+	    	'STATUS': 'nfe.sefaz.am.gov.br/services2/services/NfeStatusServico2',
+	    	'AUTORIZACAO': 'nfe.sefaz.am.gov.br/services2/services/NfeAutorizacao',
+	    	'RECIBO': 'nfe.sefaz.am.gov.br/services2/services/NfeRetAutorizacao',
+	    	'CHAVE': 'nfe.sefaz.am.gov.br/services2/services/NfeConsulta2',
+	    	'INUTILIZACAO': 'nfe.sefaz.am.gov.br/services2/services/NfeInutilizacao2',
+	    	'EVENTOS': 'nfe.sefaz.am.gov.br/services2/services/RecepcaoEvento',
+	    	'CADASTRO': 'nfe.sefaz.am.gov.br/services2/services/cadconsultacadastro2',
+	    	'HTTPS': 'https://',
+	    	'HOMOLOGACAO': 'https://hom'
 	    },
 	    'MA': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
-	    },
-	    'PI': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
+	    	'CADASTRO': 'https://sistemas.sefaz.ma.gov.br/wscadastro/CadConsultaCadastro2?wsdl'
 	    },
 	    'CE': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
-	    },
-	    'RN': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
-	    },
-	    'PB': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
+	    	'STATUS': 'sefaz.ce.gov.br/nfe2/services/NfeStatusServico2?wsdl',
+	    	'AUTORIZACAO': 'sefaz.ce.gov.br/nfe2/services/NfeAutorizacao?wsdl',
+	    	'RECIBO': 'sefaz.ce.gov.br/nfe2/services/NfeRetAutorizacao?wsdl',
+	    	'CHAVE': 'sefaz.ce.gov.br/nfe2/services/NfeConsulta2?wsdl',
+	    	'INUTILIZACAO': 'sefaz.ce.gov.br/nfe2/services/NfeInutilizacao2?wsdl',
+	    	'EVENTOS': 'sefaz.ce.gov.br/nfe2/services/RecepcaoEvento?wsdl',
+	    	'CADASTRO': 'sefaz.ce.gov.br/nfe2/services/CadConsultaCadastro2?wsdl',
+	    	'DOWNLOAD': 'sefaz.ce.gov.br/nfe2/services/NfeDownloadNF?wsdl',
+	    	'HTTPS': 'https://nfe.',
+	    	'HOMOLOGACAO': 'https://nfeh.'
 	    },
 	    'PE': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
-	    },
-	    'AL': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
-	    },
-	    'SE': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
+	    	'STATUS': 'sefaz.pe.gov.br/nfe-service/services/NfeStatusServico2',
+	    	'AUTORIZACAO': 'sefaz.pe.gov.br/nfe-service/services/NfeAutorizacao?wsdl',
+	    	'RECIBO': 'sefaz.pe.gov.br/nfe-service/services/NfeRetAutorizacao?wsdl',
+	    	'CHAVE': 'sefaz.pe.gov.br/nfe-service/services/NfeConsulta2',
+	    	'INUTILIZACAO': 'sefaz.pe.gov.br/nfe-service/services/NfeInutilizacao2',
+	    	'EVENTOS': 'sefaz.pe.gov.br/nfe-service/services/RecepcaoEvento',
+	    	'CADASTRO': 'sefaz.pe.gov.br/nfe-service/services/CadConsultaCadastro2',
+	    	'HTTPS': 'https://nfe.',
+	    	'HOMOLOGACAO': 'https://nfehomolog.'
 	    },
 	    'BA': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
+	    	'STATUS': 'nfe.sefaz.ba.gov.br/webservices/NfeStatusServico/NfeStatusServico.asmx',
+	    	'AUTORIZACAO': 'nfe.sefaz.ba.gov.br/webservices/NfeAutorizacao/NfeAutorizacao.asmx',
+	    	'RECIBO': 'nfe.sefaz.ba.gov.br/webservices/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
+	    	'CHAVE': 'nfe.sefaz.ba.gov.br/webservices/NfeConsulta/NfeConsulta.asmx',
+	    	'INUTILIZACAO': 'nfe.sefaz.ba.gov.br/webservices/NfeInutilizacao/NfeInutilizacao.asmx',
+	    	'EVENTOS': 'nfe.sefaz.ba.gov.br/webservices/sre/recepcaoevento.asmx',
+	    	'CADASTRO': 'nfe.sefaz.ba.gov.br/webservices/nfenw/CadConsultaCadastro2.asmx',
+	    	'HTTPS': 'https://',
+	    	'HOMOLOGACAO': 'https://h'
 	    },	
 	    'MG': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
-	    },
-	    'ES': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
-	    },
-	    'RJ': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
+	    	'STATUS': 'nfe.fazenda.mg.gov.br/nfe2/services/NfeStatus2',
+	    	'AUTORIZACAO': 'nfe.fazenda.mg.gov.br/nfe2/services/NfeAutorizacao',
+	    	'RECIBO': 'nfe.fazenda.mg.gov.br/nfe2/services/NfeRetAutorizacao',
+	    	'CHAVE': 'nfe.fazenda.mg.gov.br/nfe2/services/NfeConsulta2',
+	    	'INUTILIZACAO': 'nfe.fazenda.mg.gov.br/nfe2/services/NfeInutilizacao2',
+	    	'EVENTOS': 'nfe.fazenda.mg.gov.br/nfe2/services/RecepcaoEvento',
+	    	'CADASTRO': 'nfe.fazenda.mg.gov.br/nfe2/services/cadconsultacadastro2',
+	    	'HTTPS': 'https://',
+	    	'HOMOLOGACAO': 'https://h'
 	    },
 	    'SP': {
 	    	'STATUS': 'nfe.fazenda.sp.gov.br/ws/nfestatusservico2.asmx',
@@ -436,8 +317,10 @@ NFE = {
 	    	'RECIBO': 'nfe.fazenda.sp.gov.br/ws/nferetautorizacao.asmx',
 	    	'CHAVE': 'nfe.fazenda.sp.gov.br/ws/nfeconsulta2.asmx',
 	    	'INUTILIZACAO': 'nfe.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx',
-	    	'EVENTOS': 'nfe.fazenda.sp.gov.br/ws/nfestatusservico2.asmx',
-	    	'CADASTRO': 'nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx'
+	    	'EVENTOS': 'nfe.fazenda.sp.gov.br/ws/recepcaoevento.asmx',
+	    	'CADASTRO': 'nfe.fazenda.sp.gov.br/ws/cadconsultacadastro2.asmx',
+	    	'HTTPS': 'https://',
+	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
 	    'PR': {
 	    	'STATUS': 'nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3', 		# CONSULTA STATUS DO SERVICO
@@ -446,28 +329,10 @@ NFE = {
 	    	'CHAVE': 'nfe.fazenda.pr.gov.br/nfe/NFeConsulta3',				# CONSULTA CHAVE DE ACESSO
 	    	'INUTILIZACAO': 'nfe.fazenda.pr.gov.br/nfe/NFeInutilizacao3',	# INUTILIZAÇAO
 	    	'EVENTOS': 'nfe.fazenda.pr.gov.br/nfe/NFeRecepcaoEvento',		# REGISTRO DE EVENTOS
-	    	'CADASTRO': 'nfe.fazenda.pr.gov.br/nfe/CadConsultaCadastro2'	# CONSULTA CADASTRO
+	    	'CADASTRO': 'nfe.fazenda.pr.gov.br/nfe/CadConsultaCadastro2',	# CONSULTA CADASTRO
+	    	'HTTPS': 'https://',
+	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
-	    'SC': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
-	    },
-	    # 'RS': {
-	    # 	'STATUS': 'nfe.sefaz.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx',
-	    # 	'AUTORIZACAO': 'nfe.sefaz.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx',
-	    # 	'RECIBO': 'nfe.sefaz.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx',
-	    # 	'CHAVE': 'nfe.sefaz.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx',
-	    # 	'INUTILIZACAO': 'nfe.sefaz.rs.gov.br/ws/NfeInutilizacao/NfeInutilizacao2.asmx',
-	    # 	'EVENTOS': 'nfe.sefaz.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx',
-	    # 	'CADASTRO': 'nfe.sefaz.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro2.asmx',
-	    # 	'DOWNLOAD': 'nfe.sefaz.rs.gov.br/ws/nfeDownloadNF/nfeDownloadNF.asmx',
-	    # 	'DESTINADAS': 'nfe.sefaz.rs.gov.br/ws/nfeConsultaDest/nfeConsultaDest.asmx'
-	    # },
 	    'RS': {
 	    	'STATUS': 'sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx',
 	    	'AUTORIZACAO': 'sefazrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx',
@@ -477,42 +342,82 @@ NFE = {
 	    	'EVENTOS': 'sefazrs.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx',
 	    	'CADASTRO': 'sefazrs.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro2.asmx',
 	    	'DOWNLOAD': 'sefazrs.rs.gov.br/ws/nfeDownloadNF/nfeDownloadNF.asmx',
-	    	'DESTINADAS': 'sefazrs.rs.gov.br/ws/nfeConsultaDest/nfeConsultaDest.asmx'
+	    	'DESTINADAS': 'sefazrs.rs.gov.br/ws/nfeConsultaDest/nfeConsultaDest.asmx',
+	    	'HTTPS': 'https://nfe.',
+	    	'HOMOLOGACAO': 'https://nfe-homologacao.'
 	    },
 	    'MS': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
+	    	'STATUS': 'nfe.fazenda.ms.gov.br/producao/services2/NfeStatusServico2',
+	    	'AUTORIZACAO': 'nfe.fazenda.ms.gov.br/producao/services2/NfeAutorizacao',
+	    	'RECIBO': 'nfe.fazenda.ms.gov.br/producao/services2/NfeRetAutorizacao',
+	    	'CHAVE': 'nfe.fazenda.ms.gov.br/producao/services2/NfeConsulta2',
+	    	'INUTILIZACAO': 'nfe.fazenda.ms.gov.br/producao/services2/NfeInutilizacao2',
+	    	'EVENTOS': 'nfe.fazenda.ms.gov.br/producao/services2/RecepcaoEvento',
+	    	'CADASTRO': 'nfe.fazenda.ms.gov.br/producao/services2/CadConsultaCadastro2',
+	    	'HTTPS': 'https://',
+	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
 	    'MT': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
+	    	'STATUS': 'sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl',
+	    	'AUTORIZACAO': 'sefaz.mt.gov.br/nfews/v2/services/NfeAutorizacao?wsdl',
+	    	'RECIBO': 'sefaz.mt.gov.br/nfews/v2/services/NfeRetAutorizacao?wsdl',
+	    	'CHAVE': 'sefaz.mt.gov.br/nfews/v2/services/NfeConsulta2?wsdl',
+	    	'INUTILIZACAO': 'sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao2?wsdl',
+	    	'EVENTOS': 'sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento?wsdl',
+	    	'CADASTRO': 'sefaz.mt.gov.br/nfews/v2/services/CadConsultaCadastro2?wsdl',
+	    	'HTTPS': 'https://nfe.',
+	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
 	    'GO': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
+	    	'STATUS': 'sefaz.go.gov.br/nfe/services/v2/NfeStatusServico2?wsdl',
+	    	'AUTORIZACAO': 'sefaz.go.gov.br/nfe/services/v2/NfeAutorizacao?wsdl',
+	    	'RECIBO': 'sefaz.go.gov.br/nfe/services/v2/NfeRetAutorizacao?wsdl',
+	    	'CHAVE': 'sefaz.go.gov.br/nfe/services/v2/NfeConsulta2?wsdl',
+	    	'INUTILIZACAO': 'sefaz.go.gov.br/nfe/services/v2/NfeInutilizacao2?wsdl',
+	    	'EVENTOS': 'sefaz.go.gov.br/nfe/services/v2/RecepcaoEvento?wsdl',
+	    	'CADASTRO': 'sefaz.go.gov.br/nfe/services/v2/CadConsultaCadastro2?wsdl',
+	    	'HTTPS': 'https://nfe.',
+	    	'HOMOLOGACAO': 'https://homolog.'
 	    },
-	    'DF': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'CADASTRO': ''
+	    'SVAN': {
+	    	'STATUS': 'sefazvirtual.fazenda.gov.br/NfeStatusServico2/NfeStatusServico2.asmx',
+	    	'AUTORIZACAO': 'sefazvirtual.fazenda.gov.br/NfeAutorizacao/NfeAutorizacao.asmx',
+	    	'RECIBO': 'sefazvirtual.fazenda.gov.br/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
+	    	'CHAVE': 'sefazvirtual.fazenda.gov.br/NfeConsulta2/NfeConsulta2.asmx',
+	    	'INUTILIZACAO': 'sefazvirtual.fazenda.gov.br/NfeInutilizacao2/NfeInutilizacao2.asmx',
+	    	'EVENTOS': 'sefazvirtual.fazenda.gov.br/RecepcaoEvento/RecepcaoEvento.asmx',
+	    	'DOWNLOAD': 'sefazvirtual.fazenda.gov.br/NfeDownloadNF/NfeDownloadNF.asmx',
+	    	'HTTPS': 'https://www.',
+	    	'HOMOLOGACAO': 'https://hom.'
+	    },
+	    'SVRS': {
+	    	'STATUS': 'svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx',
+	    	'AUTORIZACAO': 'svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx',
+	    	'RECIBO': 'svrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx',
+	    	'CHAVE': 'svrs.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx',
+	    	'INUTILIZACAO': 'svrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao2.asmx',
+	    	'EVENTOS': 'svrs.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx',
+	    	'CADASTRO': 'https://cad.svrs.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro2.asmx',
+	    	'HTTPS': 'https://nfe.',
+	    	'HOMOLOGACAO': 'https://nfe-homologacao.'
+	    },
+	    'SVC-AN': {
+	    	'STATUS': 'svc.fazenda.gov.br/NfeStatusServico2/NfeStatusServico2.asmx',
+	    	'AUTORIZACAO': 'svc.fazenda.gov.br/NfeAutorizacao/NfeAutorizacao.asmx',
+	    	'RECIBO': 'svc.fazenda.gov.br/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
+	    	'CHAVE': 'svc.fazenda.gov.br/NfeConsulta2/NfeConsulta2.asmx',
+	    	'EVENTOS': 'svc.fazenda.gov.br/RecepcaoEvento/RecepcaoEvento.asmx',
+	    	'HTTPS': 'https://www.',
+	    	'HOMOLOGACAO': 'https://hom.'
+	    },
+	    'SVC-RS': {
+	    	'STATUS': 'svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico2.asmx',
+	    	'AUTORIZACAO': 'svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx',
+	    	'RECIBO': 'svrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx',
+	    	'CHAVE': 'svrs.rs.gov.br/ws/NfeConsulta/NfeConsulta2.asmx',
+	    	'INUTILIZACAO': 'svrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao2.asmx',
+	    	'EVENTOS': 'svrs.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx',
+	    	'HTTPS': 'https://nfe.',
+	    	'HOMOLOGACAO': 'https://nfe-homologacao.'
 	    },
 }
