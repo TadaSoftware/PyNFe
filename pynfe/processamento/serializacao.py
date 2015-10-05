@@ -125,9 +125,9 @@ class SerializacaoXML(Serializacao):
 
         # Dados do cliente (distinatario)
         etree.SubElement(raiz, cliente.tipo_documento).text = so_numeros(cliente.numero_documento)
-        if cliente.razao_social:
-            etree.SubElement(raiz, 'xNome').text = cliente.razao_social
         if not self._so_cpf:
+            if cliente.razao_social:
+                etree.SubElement(raiz, 'xNome').text = cliente.razao_social
             endereco = etree.SubElement(raiz, 'enderDest')
             etree.SubElement(endereco, 'xLgr').text = cliente.endereco_logradouro
             etree.SubElement(endereco, 'nro').text = cliente.endereco_numero
@@ -144,12 +144,12 @@ class SerializacaoXML(Serializacao):
             if cliente.endereco_telefone:
                 etree.SubElement(endereco, 'fone').text = cliente.endereco_telefone
         #Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista; 2 – Contribuinte isento de inscrição; 9 – Não Contribuinte
-        if cliente.isento_icms or cliente.inscricao_estadual.upper() == 'ISENTO':    
-            etree.SubElement(raiz, 'indIEDest').text = str(2)
-            etree.SubElement(raiz, 'IE').text = 'ISENTO'
-        elif cliente.indicador_ie == 9:
+        if cliente.indicador_ie == 9:    
             # 9 – Não Contribuinte
-            etree.SubElement(raiz, 'indIEDest').text = str(9)
+            etree.SubElement(raiz, 'indIEDest').text = '9'
+        elif cliente.isento_icms or cliente.inscricao_estadual.upper() == 'ISENTO':
+            etree.SubElement(raiz, 'indIEDest').text = '2'
+            etree.SubElement(raiz, 'IE').text = 'ISENTO'
         else:
             # Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista;
             etree.SubElement(raiz, 'indIEDest').text = cliente.indicador_ie
