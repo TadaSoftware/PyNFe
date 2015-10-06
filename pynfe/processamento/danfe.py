@@ -23,9 +23,15 @@ class DanfeNfce(Danfe):
 			chave = nfe[0].attrib['Id'].replace('NFe','')
 			data = nfe.xpath('ns:infNFe/ns:ide/ns:dhEmi/text()', namespaces=ns)[0].encode()
 			tpamb = nfe.xpath('ns:infNFe/ns:ide/ns:tpAmb/text()', namespaces=ns)[0]
+			# tenta encontrar a tag cpf
 			try:
 				cpf = nfe.xpath('ns:infNFe/ns:dest/ns:CPF/text()', namespaces=ns)[0]
 			except IndexError:
+				# em caso de erro tenta procurar a tag cnpj
+				try:
+					cpf = nfe.xpath('ns:infNFe/ns:dest/ns:CNPJ/text()', namespaces=ns)[0]
+				except IndexError:
+					cpf = None
 				cpf = None
 			total = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vNF/text()', namespaces=ns)[0]
 			icms = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vICMS/text()', namespaces=ns)[0]
