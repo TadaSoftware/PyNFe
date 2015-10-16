@@ -256,8 +256,8 @@ class SerializacaoXML(Serializacao):
             icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, 'CSOSN').text = produto_servico.icms_csosn
-            etree.SubElement(icms_item, 'pCredSN').text = ''        # Alíquota aplicável de cálculo do crédito (Simples Nacional).
-            etree.SubElement(icms_item, 'vCredICMSSN').text = ''    # Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123 (Simples Nacional)
+            etree.SubElement(icms_item, 'pCredSN').text = str(produto_servico.icms_aliquota)       # Alíquota aplicável de cálculo do crédito (Simples Nacional).
+            etree.SubElement(icms_item, 'vCredICMSSN').text = str(produto_servico.icms_credito)    # Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123 (Simples Nacional)
         elif produto_servico.icms_modalidade == 'ST':
             icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
