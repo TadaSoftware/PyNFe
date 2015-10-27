@@ -152,7 +152,7 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(raiz, 'IE').text = 'ISENTO'
         else:
             # Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista;
-            etree.SubElement(raiz, 'indIEDest').text = cliente.indicador_ie
+            etree.SubElement(raiz, 'indIEDest').text = str(cliente.indicador_ie)
             etree.SubElement(raiz, 'IE').text = cliente.inscricao_estadual
         # Suframa
         if cliente.inscricao_suframa:
