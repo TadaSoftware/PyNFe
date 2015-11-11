@@ -7,6 +7,8 @@ NAMESPACE_XSI = 'http://www.w3.org/2001/XMLSchema-instance'
 NAMESPACE_XSD = 'http://www.w3.org/2001/XMLSchema'
 NAMESPACE_METODO = 'http://www.portalfiscal.inf.br/nfe/wsdl/'
 
+NAMESPACE_BETHA = 'http://www.betha.com.br/e-nota-contribuinte-ws'
+
 VERSAO_PADRAO = '3.10'
 
 VERSAO_QRCODE = '100'

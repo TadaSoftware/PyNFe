@@ -905,3 +905,29 @@ class NotaFiscalEntregaRetirada(Entidade):
     #  - Telefone
     endereco_telefone = str()
 
+class NotaFiscalServico(Entidade):
+
+    # Empresa que implementa o webservice
+    autorizador = str()     # betha
+    # id do rps
+    identificador = str()
+    # tag competencia
+    data_emissao = None
+    # Serviço executado pelo prestador
+    servico = None
+    # Emitente da NFS-e
+    emitente = None
+    # Cliente para quem a NFS-e será emitida
+    cliente = None
+    # Optante Simples Nacional
+    simples = int()     # 1-Sim; 2-Não
+    # Incentivo Fiscal
+    incentivo = int()   # 1-Sim; 2-Não
+
+    def __init__(self, *args, **kwargs):
+
+        super(NotaFiscalServico, self).__init__(*args, **kwargs)
+
+    def __str__(self):
+        return ' '.join([str(self.identificador)])
+
