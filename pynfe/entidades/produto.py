@@ -83,6 +83,8 @@ class Produto(Entidade):
     icms_modalidade = str()
     icms_origem = int()
     icms_csosn = str()
+    icms_aliquota = Decimal()
+    icms_credito= Decimal()
 
     # # PIS
     pis_modalidade = str()

@@ -3,8 +3,9 @@ import datetime
 import time
 import requests
 from pynfe.utils import etree, so_numeros
-from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, NAMESPACE_XSI, NAMESPACE_XSD, NAMESPACE_METODO, VERSAO_PADRAO, CODIGOS_ESTADOS
-from pynfe.utils.webservices import NFCE, NFE
+from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, NAMESPACE_XSI, NAMESPACE_XSD, NAMESPACE_METODO, VERSAO_PADRAO, CODIGOS_ESTADOS, \
+NAMESPACE_SOAP_NFSE, NAMESPACE_BETHA
+from pynfe.utils.webservices import NFCE, NFE, NFSE
 from .assinatura import AssinaturaA1
 from pynfe.entidades.certificado import CertificadoA1
 
@@ -350,3 +351,61 @@ class ComunicacaoSefaz(Comunicacao):
             raise e
         finally:
             certificadoA1.excluir()
+
+
+class ComunicacaoNfse(Comunicacao):
+    """ Classe de comunicação que segue o padrão definido para as SEFAZ dos Municípios. """
+
+    _versao = ''
+
+    def autorizacao(self, autorizador, nota):
+        # url do serviço
+        url = self._get_url(autorizador) + NFSE[autorizador.upper()]['AUTORIZACAO']
+        # gerar
+        raiz = etree.Element('GerarNfse')
+        # cabecalho
+        raiz.append(self._cabecalho_soap(autorizador))
+        dados = etree.SubElement(raiz, 'nfseDadosMsg')
+        dados.append(nota)
+        # xml soap
+        xml = self._construir_xml(raiz)
+
+        print (url)
+        print (etree.tostring(xml, encoding='unicode').replace(':ns0','').replace('ns0:',''))
+
+
+    def _cabecalho_soap(self, autorizador):
+        u"""Monta o XML do cabeçalho da requisição SOAP"""
+        if autorizador.upper() == 'BETHA':
+            namespace = NAMESPACE_BETHA
+            versao = '2.02'
+
+        raiz = etree.Element('nfseCabecMsg')
+        cabecalho = etree.SubElement(raiz, 'cabecalho', xmlns=namespace, versao=versao)
+        etree.SubElement(cabecalho, 'versaoDados').text = versao
+        return raiz
+
+    def _construir_xml(self, dados):
+        """Mota o XML para o envio via SOAP"""
+
+        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'soapenv': NAMESPACE_SOAP_NFSE})
+        etree.SubElement(raiz, '{%s}Header'%NAMESPACE_SOAP)
+        body = etree.SubElement(raiz, '{%s}Body'%NAMESPACE_SOAP)
+        body.append(dados)
+        return raiz
+
+
+    def _get_url(self, autorizador):
+        """ Retorna a url para comunicação com o webservice """
+        if self._ambiente == 1:
+            ambiente = 'HTTPS'
+        else:
+            ambiente = 'HOMOLOGACAO'
+        if autorizador.upper() in NFSE:
+            self.url = NFSE[autorizador.upper()][ambiente]
+        else:
+            raise Exception('Autorizador nao encontrado!')
+        return self.url
+
+    def _post(self, url):
+        pass

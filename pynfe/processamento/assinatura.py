@@ -62,4 +62,42 @@ class AssinaturaA1(Assinatura):
                 return xml
         except Exception as e:
             raise e
+
+    def assinarNfse(self, xml, retorna_string=False):
+        try:
+            # No raiz do XML de saida
+            tag = 'InfDeclaracaoPrestacaoServico'; # tag que será assinada
+            raiz = etree.Element('Signature', xmlns='http://www.w3.org/2000/09/xmldsig#')
+            siginfo = etree.SubElement(raiz, 'SignedInfo')
+            etree.SubElement(siginfo, 'CanonicalizationMethod', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
+            etree.SubElement(siginfo, 'SignatureMethod', Algorithm='http://www.w3.org/2000/09/xmldsig#rsa-sha1')
+            # Tenta achar a tag infNFe
+            
+            ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.xpath('Rps/InfDeclaracaoPrestacaoServico')[0].attrib['Id'])
+            
+            trans = etree.SubElement(ref, 'Transforms')
+            etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/2000/09/xmldsig#enveloped-signature')
+            etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
+            etree.SubElement(ref, 'DigestMethod', Algorithm='http://www.w3.org/2000/09/xmldsig#sha1')
+            etree.SubElement(ref, 'DigestValue')
+            etree.SubElement(raiz, 'SignatureValue')
+            keyinfo = etree.SubElement(raiz, 'KeyInfo')
+            etree.SubElement(keyinfo, 'X509Data')
+
+            rps = xml.xpath('Rps')[0]
+            rps.append(raiz)
+
+            # Escreve no arquivo depois de remover caracteres especiais e parse string
+            with open('nfse.xml', 'w') as arquivo:
+                arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False)))
+            
+            subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'nfse.xml'])
+            xml = etree.parse('funfa.xml').getroot()
+
+            if retorna_string:
+                return etree.tostring(xml, encoding="unicode", pretty_print=False)
+            else:
+                return xml
+        except Exception as e:
+            raise e
         

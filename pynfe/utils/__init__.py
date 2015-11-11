@@ -18,7 +18,6 @@ try:
     from . import flags
 except ImportError:
     raise Exception('Falhou ao importar flags')
-# from geraldo.utils import memoize
 
 
 # @memoize

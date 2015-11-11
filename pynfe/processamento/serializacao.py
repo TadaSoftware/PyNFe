@@ -6,7 +6,7 @@ from pynfe.entidades import NotaFiscal
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
                         obter_pais_por_codigo, obter_municipio_e_codigo, \
                         formatar_decimal, remover_acentos, obter_uf_por_codigo, obter_codigo_por_municipio
-from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE
+from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE, NAMESPACE_BETHA
 
 class Serializacao(object):
     """Classe abstrata responsavel por fornecer as funcionalidades basicas para
@@ -151,7 +151,7 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(raiz, 'indIEDest').text = '2'
         else:
             # Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista;
-            etree.SubElement(raiz, 'indIEDest').text = cliente.indicador_ie
+            etree.SubElement(raiz, 'indIEDest').text = str(cliente.indicador_ie)
             etree.SubElement(raiz, 'IE').text = cliente.inscricao_estadual
         # Suframa
         if cliente.inscricao_suframa:
@@ -252,11 +252,11 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, 'CSOSN').text = produto_servico.icms_csosn
         elif produto_servico.icms_modalidade == '101':
-            icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
+            icms_item = etree.SubElement(icms, 'ICMSSN'+produto_servico.icms_modalidade)
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, 'CSOSN').text = produto_servico.icms_csosn
-            etree.SubElement(icms_item, 'pCredSN').text = ''        # Alíquota aplicável de cálculo do crédito (Simples Nacional).
-            etree.SubElement(icms_item, 'vCredICMSSN').text = ''    # Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123 (Simples Nacional)
+            etree.SubElement(icms_item, 'pCredSN').text = str(produto_servico.icms_aliquota)       # Alíquota aplicável de cálculo do crédito (Simples Nacional).
+            etree.SubElement(icms_item, 'vCredICMSSN').text = str(produto_servico.icms_credito)    # Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123 (Simples Nacional)
         elif produto_servico.icms_modalidade == 'ST':
             icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
@@ -298,8 +298,9 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(pis_item, 'CST').text = produto_servico.pis_modalidade
                 etree.SubElement(pis_item, 'vBC').text = produto_servico.pis_valor_base_calculo
                 etree.SubElement(pis_item, 'pPIS').text = produto_servico.pis_aliquota_percentual
-                etree.SubElement(pis_item, 'qBCProd').text = produto_servico.quantidade_comercial
-                etree.SubElement(pis_item, 'vAliqProd').text = produto_servico.pis_aliquota_percentual
+                if produto_servico.pis_modalidade is not '99':
+                    etree.SubElement(pis_item, 'qBCProd').text = produto_servico.quantidade_comercial
+                    etree.SubElement(pis_item, 'vAliqProd').text = produto_servico.pis_aliquota_percentual
                 etree.SubElement(pis_item, 'vPIS').text = produto_servico.pis_valor_base_calculo
 
                 ## PISST
@@ -333,7 +334,8 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(cofins_item, 'CST').text = produto_servico.cofins_modalidade
                 etree.SubElement(cofins_item, 'vBC').text = produto_servico.cofins_valor_base_calculo
                 etree.SubElement(cofins_item, 'pCOFINS').text = produto_servico.cofins_aliquota_percentual
-                etree.SubElement(cofins_item, 'vAliqProd').text = produto_servico.cofins_aliquota_percentual
+                if produto_servico.cofins_modalidade is not '99':
+                    etree.SubElement(cofins_item, 'vAliqProd').text = produto_servico.cofins_aliquota_percentual
                 etree.SubElement(cofins_item, 'vCOFINS').text = produto_servico.cofins_valor
 
                 ## COFINSST
@@ -567,6 +569,99 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(det, 'descEvento').text = evento.descricao
         etree.SubElement(det, 'nProt').text = evento.protocolo
         etree.SubElement(det, 'xJust').text = evento.justificativa
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+class SerializacaoNfse(Serializacao):
+
+    def exportar(self):
+        pass
+
+    def importar(self):
+        pass
+
+    def _serializar_emitente(self, emitente, tag_raiz='Prestador', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+        documento = etree.SubElement(raiz, 'CpfCnpj')
+        etree.SubElement(documento, 'Cnpj').text = emitente.cnpj
+        etree.SubElement(raiz, 'InscricaoMunicipal').text = emitente.inscricao_municipal
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_cliente(self, cliente, tag_raiz='Tomador', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+        identificacao = etree.SubElement(raiz, 'IdentificacaoTomador')
+        documento = etree.SubElement(identificacao, 'CpfCnpj')
+        etree.SubElement(documento, cliente.tipo_documento).text = cliente.numero_documento         # Apenas Cnpj ??
+        etree.SubElement(identificacao, 'InscricaoMunicipal').text = cliente.inscricao_municipal    # obrigatório??
+        etree.SubElement(raiz, 'RazaoSocial').text = cliente.razao_social
+        endereco = etree.SubElement(raiz, 'Endereco')
+        etree.SubElement(endereco, 'Endereco').text = cliente.endereco_logradouro
+        etree.SubElement(endereco, 'Numero').text = cliente.endereco_numero
+        if cliente.endereco_complemento:
+            etree.SubElement(endereco, 'Complemento').text = cliente.endereco_complemento
+        etree.SubElement(endereco, 'Bairro').text = cliente.endereco_bairro
+        etree.SubElement(endereco, 'CodigoMunicipio').text = obter_codigo_por_municipio(
+                cliente.endereco_municipio, cliente.endereco_uf)
+        etree.SubElement(endereco, 'Uf').text = cliente.endereco_uf
+        etree.SubElement(endereco, 'CodigoPais').text = cliente.endereco_pais
+        etree.SubElement(endereco, 'Cep').text = so_numeros(cliente.endereco_cep)
+        contato = etree.SubElement(raiz, 'Contato')
+        etree.SubElement(contato, 'Telefone').text = cliente.endereco_telefone
+        etree.SubElement(contato, 'Email').text = cliente.email
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_servico(self, servico, tag_raiz='Servico', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+        valores = etree.SubElement(raiz, 'Valores')
+        etree.SubElement(valores, 'ValorServicos').text = str('{:.2f}').format(servico.valor_servico)
+        etree.SubElement(raiz, 'IssRetido').text = str('{:.2f}').format(servico.iss_retido)
+        #etree.SubElement(raiz, 'ResponsavelRetencao').text = ''
+        etree.SubElement(raiz, 'ItemListaServico').text = servico.item_lista
+        #etree.SubElement(raiz, 'CodigoCnae').text = ''
+        #etree.SubElement(raiz, 'CodigoTributacaoMunicipio').text = ''
+        etree.SubElement(raiz, 'Discriminacao').text = servico.discriminacao
+        etree.SubElement(raiz, 'CodigoMunicipio').text = servico.codigo_municipio
+        #etree.SubElement(raiz, 'CodigoPais').text = ''
+        etree.SubElement(raiz, 'ExigibilidadeISS').text = str(servico.exigibilidade)
+        etree.SubElement(raiz, 'MunicipioIncidencia').text = servico.codigo_municipio
+        #etree.SubElement(raiz, 'NumeroProcesso').text = ''
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_gerar(self, nfse, tag_raiz='GerarNfseEnvio', retorna_string=False):
+
+        if nfse.autorizador.upper() == 'BETHA':
+            raiz = etree.Element(tag_raiz, xmlns=NAMESPACE_BETHA)
+        # TODO - implementar outros sistemas autorizadores
+        else:
+            raiz = etree.Element(tag_raiz)
+        rps = etree.SubElement(raiz, 'Rps')
+        info = etree.SubElement(rps, 'InfDeclaracaoPrestacaoServico', Id=nfse.identificador)
+        etree.SubElement(info, 'Competencia').text = nfse.data_emissao.strftime('%Y-%m-%d')
+
+        # Servico
+        info.append(self._serializar_servico(nfse.servico, retorna_string=False))
+        # Emitente/Prestador
+        info.append(self._serializar_emitente(nfse.emitente, retorna_string=False))
+        # Cliente/Tomador
+        info.append(self._serializar_cliente(nfse.cliente, retorna_string=False))
+
+        etree.SubElement(info, 'OptanteSimplesNacional').text = str(nfse.simples)   # 1-Sim; 2-Não
+        etree.SubElement(info, 'IncentivoFiscal').text = str(nfse.incentivo)        # 1-Sim; 2-Não
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
