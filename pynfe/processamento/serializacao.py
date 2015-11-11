@@ -73,7 +73,7 @@ class SerializacaoXML(Serializacao):
             raise e
         finally:
             if limpar:
-                self._fonte_dados.limpar_dados()   
+                self._fonte_dados.limpar_dados()
 
     def importar(self, origem):
         """Cria as instancias do PyNFe a partir de arquivos XML no formato padrao da
@@ -144,12 +144,11 @@ class SerializacaoXML(Serializacao):
             if cliente.endereco_telefone:
                 etree.SubElement(endereco, 'fone').text = cliente.endereco_telefone
         #Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista; 2 – Contribuinte isento de inscrição; 9 – Não Contribuinte
-        if cliente.indicador_ie == 9:    
+        if cliente.indicador_ie == 9:
             # 9 – Não Contribuinte
             etree.SubElement(raiz, 'indIEDest').text = '9'
-        elif cliente.isento_icms or cliente.inscricao_estadual.upper() == 'ISENTO':
+        elif (cliente.indicador_ie == 2 or cliente.isento_icms) or cliente.inscricao_estadual.upper() == 'ISENTO':
             etree.SubElement(raiz, 'indIEDest').text = '2'
-            etree.SubElement(raiz, 'IE').text = 'ISENTO'
         else:
             # Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista;
             etree.SubElement(raiz, 'indIEDest').text = cliente.indicador_ie
@@ -183,7 +182,7 @@ class SerializacaoXML(Serializacao):
                 transportadora.endereco_municipio, transportadora.endereco_uf,
                 )
         etree.SubElement(raiz, 'UF').text = transportadora.endereco_uf
- 
+
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
@@ -268,7 +267,7 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(icms_item, 'vICMSSTDest').text = ''    # Informar o valor do ICMS ST da UF destino
         else:
             # FIXME
-            ### OUTROS TIPOS DE ICMS 
+            ### OUTROS TIPOS DE ICMS
             etree.SubElement(icms_item, 'modBC').text = str(produto_servico.icms_modalidade_determinacao_bc)
             etree.SubElement(icms_item, 'vBC').text = str(produto_servico.icms_valor_base_calculo)
             etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)
@@ -316,22 +315,22 @@ class SerializacaoXML(Serializacao):
             cofins = etree.SubElement(imposto, 'COFINS')
             if produto_servico.cofins_modalidade in cofinsnt:
                 cofins_item = etree.SubElement(cofins, 'COFINSNT')
-                etree.SubElement(cofins_item, 'CST').text = produto_servico.cofins_modalidade 
-            elif produto_servico.cofins_modalidade == '01' or produto_servico.cofins_modalidade == '02': 
+                etree.SubElement(cofins_item, 'CST').text = produto_servico.cofins_modalidade
+            elif produto_servico.cofins_modalidade == '01' or produto_servico.cofins_modalidade == '02':
                 cofins_item = etree.SubElement(cofins, 'COFINSAliq')
-                etree.SubElement(cofins_item, 'CST').text = produto_servico.cofins_modalidade 
+                etree.SubElement(cofins_item, 'CST').text = produto_servico.cofins_modalidade
                 etree.SubElement(cofins_item, 'vBC').text = produto_servico.cofins_valor_base_calculo
                 etree.SubElement(cofins_item, 'pCOFINS').text = produto_servico.cofins_aliquota_percentual
                 etree.SubElement(cofins_item, 'vCOFINS').text = produto_servico.cofins_valor
             elif produto_servico.cofins_modalidade == '03':
                 cofins_item = etree.SubElement(cofins, 'COFINSQtde')
-                etree.SubElement(cofins_item, 'CST').text = produto_servico.cofins_modalidade 
+                etree.SubElement(cofins_item, 'CST').text = produto_servico.cofins_modalidade
                 etree.SubElement(cofins_item, 'qBCProd').text = produto_servico.quantidade_comercial
                 etree.SubElement(cofins_item, 'vAliqProd').text = produto_servico.cofins_aliquota_percentual
                 etree.SubElement(cofins_item, 'vCOFINS').text = produto_servico.cofins_valor
             else:
                 cofins_item = etree.SubElement(cofins, 'COFINSOutr')
-                etree.SubElement(cofins_item, 'CST').text = produto_servico.cofins_modalidade 
+                etree.SubElement(cofins_item, 'CST').text = produto_servico.cofins_modalidade
                 etree.SubElement(cofins_item, 'vBC').text = produto_servico.cofins_valor_base_calculo
                 etree.SubElement(cofins_item, 'pCOFINS').text = produto_servico.cofins_aliquota_percentual
                 etree.SubElement(cofins_item, 'vAliqProd').text = produto_servico.cofins_aliquota_percentual
@@ -473,12 +472,12 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_total, 'vIPI').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_ipi)
         etree.SubElement(icms_total, 'vPIS').text = str('{:.2f}').format(nota_fiscal.totais_icms_pis)
         etree.SubElement(icms_total, 'vCOFINS').text = str('{:.2f}').format(nota_fiscal.totais_icms_cofins)
-        
+
         etree.SubElement(icms_total, 'vOutro').text = str('{:.2f}').format(nota_fiscal.totais_icms_outras_despesas_acessorias)
         etree.SubElement(icms_total, 'vNF').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_nota)
         if nota_fiscal.totais_tributos_aproximado:
             etree.SubElement(icms_total, 'vTotTrib').text = str('{:.2f}').format(nota_fiscal.totais_tributos_aproximado)
-        
+
         # Apenas NF-e
         if nota_fiscal.modelo == 55:
 
@@ -527,7 +526,7 @@ class SerializacaoXML(Serializacao):
             # Pagamento
             pag = etree.SubElement(raiz, 'pag')
             etree.SubElement(pag, 'tPag').text = str(nota_fiscal.tipo_pagamento).zfill(2) # 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
-            etree.SubElement(pag, 'vPag').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_nota)  
+            etree.SubElement(pag, 'vPag').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_nota)
             #etree.SubElement(pag, 'card').text = ''
             #etree.SubElement(pag, 'CNPJ').text = '' # Informar o CNPJ da Credenciadora de cartão de crédito / débito
             #etree.SubElement(pag, 'tBand').text = '' # 01=Visa 02=Mastercard 03=American Express 04=Sorocred 99=Outros
@@ -559,7 +558,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(e, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(e, 'CNPJ').text = evento.cnpj # Empresas somente terão CNPJ
         #etree.SubElement(evento, 'CPF').text = ''
-        etree.SubElement(e, 'chNFe').text = evento.chave 
+        etree.SubElement(e, 'chNFe').text = evento.chave
         etree.SubElement(e, 'dhEvento').text = evento.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz
         etree.SubElement(e, 'tpEvento').text = evento.tp_evento
         etree.SubElement(e, 'nSeqEvento').text = str(evento.n_seq_evento)
