@@ -645,7 +645,7 @@ class SerializacaoNfse(Serializacao):
 
     def _serializar_gerar(self, nfse, tag_raiz='GerarNfseEnvio', retorna_string=False):
 
-        if nfse.autorizador == 'betha':
+        if nfse.autorizador.upper() == 'BETHA':
             raiz = etree.Element(tag_raiz, xmlns=NAMESPACE_BETHA)
         # TODO - implementar outros sistemas autorizadores
         else:
