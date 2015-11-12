@@ -50,7 +50,11 @@ class ComunicacaoSefaz(Comunicacao):
             if indSinc == 1:
                 # Procuta status no xml
                 ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}    # namespace
-                prot = etree.fromstring(retorno.text)
+                try:
+                    prot = etree.fromstring(retorno.text)
+                except ValueError:
+                    #em SP retorno.text apresenta erro
+                    prot = etree.fromstring(retorno.content)
                 try:
                     # Protocolo com envio OK
                     infProt = prot[1][0][0][6]                             # root protNFe
