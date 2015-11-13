@@ -583,7 +583,7 @@ class SerializacaoNfse(Serializacao):
     def importar(self):
         pass
 
-    def _serializar_emitente(self, emitente, tag_raiz='Prestador', retorna_string=True):
+    def _serializar_emitente(self, emitente, tag_raiz='Prestador', retorna_string=False):
         raiz = etree.Element(tag_raiz)
         documento = etree.SubElement(raiz, 'CpfCnpj')
         etree.SubElement(documento, 'Cnpj').text = emitente.cnpj
@@ -594,7 +594,7 @@ class SerializacaoNfse(Serializacao):
         else:
             return raiz
 
-    def _serializar_cliente(self, cliente, tag_raiz='Tomador', retorna_string=True):
+    def _serializar_cliente(self, cliente, tag_raiz='Tomador', retorna_string=False):
         raiz = etree.Element(tag_raiz)
         identificacao = etree.SubElement(raiz, 'IdentificacaoTomador')
         documento = etree.SubElement(identificacao, 'CpfCnpj')
@@ -621,7 +621,7 @@ class SerializacaoNfse(Serializacao):
         else:
             return raiz
 
-    def _serializar_servico(self, servico, tag_raiz='Servico', retorna_string=True):
+    def _serializar_servico(self, servico, tag_raiz='Servico', retorna_string=False):
         raiz = etree.Element(tag_raiz)
         valores = etree.SubElement(raiz, 'Valores')
         etree.SubElement(valores, 'ValorServicos').text = str('{:.2f}').format(servico.valor_servico)
@@ -633,6 +633,15 @@ class SerializacaoNfse(Serializacao):
         etree.SubElement(raiz, 'Discriminacao').text = servico.discriminacao
         etree.SubElement(raiz, 'CodigoMunicipio').text = servico.codigo_municipio
         #etree.SubElement(raiz, 'CodigoPais').text = ''
+        """
+        1 – Exigível;
+        2 – Não incidência;
+        3 – Isenção;
+        4 – Exportação;
+        5 – Imunidade;
+        6 – Exigibilidade Suspensa por Decisão Judicial;
+        7 – Exigibilidade Suspensa por ProcessoAdministrativo
+        """
         etree.SubElement(raiz, 'ExigibilidadeISS').text = str(servico.exigibilidade)
         etree.SubElement(raiz, 'MunicipioIncidencia').text = servico.codigo_municipio
         #etree.SubElement(raiz, 'NumeroProcesso').text = ''
@@ -645,7 +654,7 @@ class SerializacaoNfse(Serializacao):
     def _serializar_gerar(self, nfse, tag_raiz='GerarNfseEnvio', retorna_string=False):
 
         if nfse.autorizador.upper() == 'BETHA':
-            raiz = etree.Element(tag_raiz, xmlns=NAMESPACE_BETHA)
+            raiz = etree.Element(tag_raiz)
         # TODO - implementar outros sistemas autorizadores
         else:
             raiz = etree.Element(tag_raiz)
@@ -654,11 +663,11 @@ class SerializacaoNfse(Serializacao):
         etree.SubElement(info, 'Competencia').text = nfse.data_emissao.strftime('%Y-%m-%d')
 
         # Servico
-        info.append(self._serializar_servico(nfse.servico, retorna_string=False))
+        info.append(self._serializar_servico(nfse.servico))
         # Emitente/Prestador
-        info.append(self._serializar_emitente(nfse.emitente, retorna_string=False))
+        info.append(self._serializar_emitente(nfse.emitente))
         # Cliente/Tomador
-        info.append(self._serializar_cliente(nfse.cliente, retorna_string=False))
+        info.append(self._serializar_cliente(nfse.cliente))
 
         etree.SubElement(info, 'OptanteSimplesNacional').text = str(nfse.simples)   # 1-Sim; 2-Não
         etree.SubElement(info, 'IncentivoFiscal').text = str(nfse.incentivo)        # 1-Sim; 2-Não

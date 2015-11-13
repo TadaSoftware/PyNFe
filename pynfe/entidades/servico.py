@@ -13,8 +13,19 @@ class Servico(Entidade):
         Lista com códigos dos serviços
     """
     item_lista = str()
+    # descrição da atividade
     discriminacao = str()
+    """
+        1 – Exigível;
+        2 – Não incidência;
+        3 – Isenção;
+        4 – Exportação;
+        5 – Imunidade;
+        6 – Exigibilidade Suspensa por Decisão Judicial;
+        7 – Exigibilidade Suspensa por ProcessoAdministrativo
+    """
     exigibilidade = int()
+    # Lista com todos os codigos divididos por estados na pasta data/MunIBGE
     codigo_municipio = str()
 
     def __str__(self):

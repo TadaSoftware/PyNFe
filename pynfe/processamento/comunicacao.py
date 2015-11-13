@@ -357,38 +357,39 @@ class ComunicacaoNfse(Comunicacao):
     """ Classe de comunicação que segue o padrão definido para as SEFAZ dos Municípios. """
 
     _versao = ''
+    _namespace = ''
 
     def autorizacao(self, autorizador, nota):
+        if autorizador.upper() == 'BETHA':
+            self._namespace = NAMESPACE_BETHA
+            self._versao = '2.02'
         # url do serviço
         url = self._get_url(autorizador) + NFSE[autorizador.upper()]['AUTORIZACAO']
         # gerar
         raiz = etree.Element('GerarNfse')
         # cabecalho
-        raiz.append(self._cabecalho_soap(autorizador))
+        raiz.append(self._cabecalho_soap())
         dados = etree.SubElement(raiz, 'nfseDadosMsg')
         dados.append(nota)
         # xml soap
         xml = self._construir_xml(raiz)
 
-        print (url)
-        print (etree.tostring(xml, encoding='unicode').replace(':ns0','').replace('ns0:',''))
+        retorno = self._post(url, xml)
+        return retorno
 
 
-    def _cabecalho_soap(self, autorizador):
+    def _cabecalho_soap(self):
         u"""Monta o XML do cabeçalho da requisição SOAP"""
-        if autorizador.upper() == 'BETHA':
-            namespace = NAMESPACE_BETHA
-            versao = '2.02'
 
         raiz = etree.Element('nfseCabecMsg')
-        cabecalho = etree.SubElement(raiz, 'cabecalho', xmlns=namespace, versao=versao)
-        etree.SubElement(cabecalho, 'versaoDados').text = versao
+        cabecalho = etree.SubElement(raiz, 'cabecalho', xmlns=self._namespace, versao=self._versao)
+        etree.SubElement(cabecalho, 'versaoDados').text = self._versao
         return raiz
 
     def _construir_xml(self, dados):
         """Mota o XML para o envio via SOAP"""
 
-        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'soapenv': NAMESPACE_SOAP_NFSE})
+        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'e': self._namespace})
         etree.SubElement(raiz, '{%s}Header'%NAMESPACE_SOAP)
         body = etree.SubElement(raiz, '{%s}Body'%NAMESPACE_SOAP)
         body.append(dados)
@@ -407,5 +408,23 @@ class ComunicacaoNfse(Comunicacao):
             raise Exception('Autorizador nao encontrado!')
         return self.url
 
-    def _post(self, url):
-        pass
+    def _post(self, url, xml):
+        certificadoA1 = CertificadoA1(self.certificado)
+        chave, cert = certificadoA1.separar_arquivo(self.certificado_senha, caminho=True)
+        chave_cert = (cert, chave)
+        # Abre a conexão HTTPS
+        try:
+            xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
+            #xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('\n','').replace('ns0:','soapenv:').replace(':ns0',':soapenv')
+            xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('\n','').replace('ns0:','').replace(':ns0','')
+            xml = xml_declaration + xml
+
+            print (xml)
+            # Faz o request com o servidor
+            #result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False)
+            #result.encoding='utf-8'
+            #return result
+        except requests.exceptions.ConnectionError as e:
+            raise e
+        finally:
+            certificadoA1.excluir()
