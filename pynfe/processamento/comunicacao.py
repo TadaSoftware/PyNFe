@@ -378,8 +378,7 @@ class ComunicacaoNfse(Comunicacao):
         # xml soap
         xml = self._construir_xml(raiz)
 
-        retorno = self._post(url, xml)
-        return retorno
+        return self._post(url, xml)
 
     def consulta_nota(self, autorizador, nota):
         if autorizador.upper() == 'BETHA':
@@ -399,6 +398,8 @@ class ComunicacaoNfse(Comunicacao):
         retorno = self._post(url, xml)
         return retorno
 
+    def cancelar(self, autorizador):
+        pass
 
     def _cabecalho_soap(self):
         u"""Monta o XML do cabeçalho da requisição SOAP"""
@@ -417,7 +418,6 @@ class ComunicacaoNfse(Comunicacao):
         body.append(dados)
         return raiz
 
-
     def _get_url(self, autorizador):
         """ Retorna a url para comunicação com o webservice """
         if self._ambiente == 1:
@@ -430,6 +430,13 @@ class ComunicacaoNfse(Comunicacao):
             raise Exception('Autorizador nao encontrado!')
         return self.url
 
+    def _post_header(self):
+        u"""Retorna um dicionário com os atributos para o cabeçalho da requisição HTTP"""
+        return {
+            u'content-type': u'application/soap+xml; charset=utf-8;',
+            u'Accept': u'application/soap+xml; charset=utf-8;',
+            }
+
     def _post(self, url, xml):
         certificadoA1 = CertificadoA1(self.certificado)
         chave, cert = certificadoA1.separar_arquivo(self.certificado_senha, caminho=True)
@@ -441,11 +448,10 @@ class ComunicacaoNfse(Comunicacao):
             xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('\n','').replace('ns0:','').replace(':ns0','')
             xml = xml_declaration + xml
 
-            print (xml)
             # Faz o request com o servidor
-            #result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False)
-            #result.encoding='utf-8'
-            #return result
+            result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False)
+            result.encoding='utf-8'
+            return result
         except requests.exceptions.ConnectionError as e:
             raise e
         finally:
