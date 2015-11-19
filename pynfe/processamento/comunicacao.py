@@ -381,6 +381,24 @@ class ComunicacaoNfse(Comunicacao):
         retorno = self._post(url, xml)
         return retorno
 
+    def consulta_nota(self, autorizador, nota):
+        if autorizador.upper() == 'BETHA':
+            self._namespace = NAMESPACE_BETHA
+            self._versao = '2.02'
+        # url do serviço
+        url = self._get_url(autorizador) + NFSE[autorizador.upper()]['CONSULTA_RPS']
+        # consulta
+        raiz = etree.Element('ConsultarNfsePorRps')
+        # cabecalho
+        raiz.append(self._cabecalho_soap())
+        dados = etree.SubElement(raiz, 'nfseDadosMsg')
+        dados.append(nota)
+        # xml soap
+        xml = self._construir_xml(raiz)
+
+        retorno = self._post(url, xml)
+        return retorno
+
 
     def _cabecalho_soap(self):
         u"""Monta o XML do cabeçalho da requisição SOAP"""

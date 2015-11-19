@@ -923,6 +923,10 @@ class NotaFiscalServico(Entidade):
     simples = int()     # 1-Sim; 2-Não
     # Incentivo Fiscal
     incentivo = int()   # 1-Sim; 2-Não
+    # Serie
+    serie = str()
+    # Tipo
+    tipo = str()
 
     def __init__(self, *args, **kwargs):
 

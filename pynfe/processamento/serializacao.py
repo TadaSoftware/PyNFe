@@ -677,6 +677,23 @@ class SerializacaoNfse(Serializacao):
         else:
             return raiz
 
+    def _serializar_consulta(self, nfse, tag_raiz='ConsultarNfseRpsEnvio', retorna_string=False):
+        if nfse.autorizador.upper() == 'BETHA':
+           namespace = NAMESPACE_BETHA
+           #versao = '2.02'
+        raiz = etree.Element(tag_raiz, xmlns=namespace)
+        identificacao = etree.SubElement(raiz, 'IdentificacaoRps')
+        etree.SubElement(identificacao, 'Numero').text = str(nfse.identificador)
+        etree.SubElement(identificacao, 'Serie').text = nfse.serie
+        etree.SubElement(identificacao, 'Tipo').text = nfse.tipo
+        raiz.append(self._serializar_emitente(nfse.emitente))
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+
 class SerializacaoPipes(Serializacao):
     """Serialização utilizada pela SEFAZ-SP para a importação de notas."""
 
