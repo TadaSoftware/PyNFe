@@ -429,14 +429,14 @@ NFSE = {
 		'STATUS':'',
 		'AUTORIZACAO':'GerarNfse',
 		'CANCELAR':'CancelarNfse',
-		'CONSULTA_RPS':'ConsultarNfsePorRps',
+		'CONSULTA_RPS':'consultarNfsePorRps',
 		'CONSULTA_FAIXA':'ConsultarNfseFaixa',
 		'CONSULTA_SERVICO':'ConsultarNfseServicoPrestado',
 		'CONSULTA_SERVICO_TOMADO':'ConsultarNfseServicoTomado',
 		'SUBSTITUIR':'SubstituirNfse',
 		'HTTPS':'http://e-gov.betha.com.br/e-nota-contribuinte-ws/nfseWS?wsdl',
-		'HOMOLOGACAO':'http://e-gov.betha.com.br/e-nota-contribuinte-test-ws/nfseWS?'
-		#'HOMOLOGACAO':'http://e-gov.betha.com.br/e-nota-contribuinte-test-ws/nfseWS?wsdl'
+		'HOMOLOGACAO':'http://e-gov.betha.com.br/e-nota-contribuinte-test-ws/'
+		#'HOMOLOGACAO':'http://e-gov.betha.com.br/e-nota-contribuinte-test-ws/nfseWS?wsdl/'
 	},
 	#
 	'GINFES':{

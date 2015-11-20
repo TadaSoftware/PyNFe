@@ -370,7 +370,7 @@ class ComunicacaoNfse(Comunicacao):
         # url do serviço
         url = self._get_url(autorizador) + NFSE[autorizador.upper()]['AUTORIZACAO']
         # gerar
-        raiz = etree.Element('GerarNfse')
+        raiz = etree.Element('{}GerarNfse')
         # cabecalho
         raiz.append(self._cabecalho_soap())
         dados = etree.SubElement(raiz, 'nfseDadosMsg')
@@ -441,12 +441,18 @@ class ComunicacaoNfse(Comunicacao):
         certificadoA1 = CertificadoA1(self.certificado)
         chave, cert = certificadoA1.separar_arquivo(self.certificado_senha, caminho=True)
         chave_cert = (cert, chave)
+
         # Abre a conexão HTTPS
         try:
             xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
             #xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('\n','').replace('ns0:','soapenv:').replace(':ns0',':soapenv')
             xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('\n','').replace('ns0:','').replace(':ns0','')
             xml = xml_declaration + xml
+
+            print (url)
+            print (xml)
+            import ipdb
+            ipdb.set_trace()
 
             # Faz o request com o servidor
             result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False)
