@@ -370,7 +370,7 @@ class ComunicacaoNfse(Comunicacao):
         # url do serviço
         url = self._get_url(autorizador) + NFSE[autorizador.upper()]['AUTORIZACAO']
         # gerar
-        raiz = etree.Element('{}GerarNfse')
+        raiz = etree.Element('GerarNfse')
         # cabecalho
         raiz.append(self._cabecalho_soap())
         dados = etree.SubElement(raiz, 'nfseDadosMsg')
