@@ -5,23 +5,7 @@ from os import path
 try:
     from lxml import etree
 except ImportError:
-    try:
-        # Python 2.5 - cElementTree
-        import xml.etree.cElementTree as etree
-    except ImportError:
-        try:
-            # Python 2.5 - ElementTree
-            import xml.etree.ElementTree as etree
-        except ImportError:
-            try:
-                # Instalacao normal do cElementTree
-                import cElementTree as etree
-            except ImportError:
-                try:
-                    # Instalacao normal do ElementTree
-                    import elementtree.ElementTree as etree
-                except ImportError:
-                    raise Exception('Falhou ao importar lxml/ElementTree')
+    raise Exception('Falhou ao importar modulo lxml')
 
 XSD_FOLDER = "pynfe/data/XSDs/"
 
@@ -39,13 +23,13 @@ def get_xsd(xsd_file):
 
 class Validacao(object):
     '''Valida documentos xml a partir do xsd informado.'''
-    
+
     def __init__(self):
         self.clear_cache()
-    
+
     def clear_cache(self):
         self.MEM_CACHE = {}
-    
+
     def validar_xml(self, xml_path, xsd_file, use_assert=False):
         '''Valida um arquivo xml.
         Argumentos:
@@ -54,7 +38,7 @@ class Validacao(object):
             use_assert - levantar exceção caso documento não valide?
         '''
         return self.validar_etree(etree.parse(xml_path), xsd_file, use_assert)
-    
+
     def validar_etree(self, xml_doc, xsd_file, use_assert=False):
         '''Valida um documento lxml diretamente.
         Argumentos:
@@ -63,7 +47,7 @@ class Validacao(object):
             use_assert - levantar exceção caso documento não valide?
         '''
         #xsd_filepath = get_xsd(xsd_file)
-        
+
         try:
             # checa se o schema ja existe no cache
             #xsd_schema = self.MEM_CACHE[xsd_filepath]

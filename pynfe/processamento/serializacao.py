@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import time
-
 from pynfe.entidades import NotaFiscal
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
-                        obter_pais_por_codigo, obter_municipio_e_codigo, \
-                        formatar_decimal, remover_acentos, obter_uf_por_codigo, obter_codigo_por_municipio
+    obter_pais_por_codigo, obter_municipio_e_codigo, formatar_decimal, \
+    remover_acentos, obter_uf_por_codigo, obter_codigo_por_municipio
 from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE, NAMESPACE_BETHA
+from pynfe.utils import nfse_v202 as nfse_schema
+
 
 class Serializacao(object):
     """Classe abstrata responsavel por fornecer as funcionalidades basicas para
@@ -43,6 +44,7 @@ class Serializacao(object):
         da PyNFe"""
 
         raise NotImplementedError
+
 
 class SerializacaoXML(Serializacao):
     _versao = VERSAO_PADRAO
@@ -575,6 +577,7 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
+
 class SerializacaoNfse(Serializacao):
 
     def exportar(self):
@@ -582,6 +585,75 @@ class SerializacaoNfse(Serializacao):
 
     def importar(self):
         pass
+
+    def _serializarGerar(self, nfse):
+        """Retorna string de um XML gerado a partir do
+        XML Schema (XSD). Binding gerado pelo modulo PyXB."""
+
+        servico = nfse_schema.tcDadosServico()
+        valores_servico = nfse_schema.tcValoresDeclaracaoServico()
+        valores_servico.ValorServicos = nfse.servico.valor_servico
+
+        servico.IssRetido = nfse.servico.iss_retido
+        servico.ItemListaServico = nfse.servico.item_lista
+        servico.Discriminacao = nfse.servico.discriminacao
+        servico.CodigoMunicipio = nfse.servico.codigo_municipio
+        servico.ExigibilidadeISS = nfse.servico.exigibilidade
+        servico.MunicipioIncidencia = nfse.servico.municipio_incidencia
+        servico.Valores = valores_servico
+
+        # Prestador
+        id_prestador = nfse_schema.tcIdentificacaoPrestador()
+        id_prestador.CpfCnpj = nfse.emitente.cnpj
+        id_prestador.InscricaoMunicipal = nfse.emitente.inscricao_municipal
+
+        # Cliente
+        id_tomador = nfse_schema.tcIdentificacaoTomador()
+        id_tomador.CpfCnpj = nfse.cliente.numero_documento
+        if nfse.cliente.inscricao_municipal:
+            id_tomador.InscricaoMunicipal = nfse.cliente.inscricao_municipal
+
+        endereco_tomador = nfse_schema.tcEndereco()
+        endereco_tomador.Endereco = nfse.cliente.endereco_logradouro
+        endereco_tomador.Numero = nfse.cliente.endereco_numero
+        endereco_tomador.Bairro = nfse.cliente.endereco_bairro
+        endereco_tomador.CodigoMunicipio = nfse.cliente.endereco_cod_municipio
+        endereco_tomador.Uf = nfse.cliente.endereco_uf
+        endereco_tomador.CodigoPais = nfse.cliente.endereco_pais
+        endereco_tomador.Cep = nfse.cliente.endereco_cep
+
+        tomador = nfse_schema.tcDadosTomador()
+        tomador.IdentificacaoPrestador = id_tomador
+        tomador.RazaoSocial = nfse.cliente.razao_social
+        tomador.Endereco = endereco_tomador
+
+        id_rps = nfse_schema.tcIdentificacaoRps()
+        id_rps.Numero = nfse.identificador
+        id_rps.Serie = nfse.serie
+        id_rps.Tipo = nfse.tipo
+
+        rps = nfse_schema.tcInfRps()
+        rps.IdentificacaoRps = id_rps
+        rps.DataEmissao = nfse.data_emissao.strftime('%Y-%m-%d')
+        rps.Status = 1
+
+        inf_declaracao_servico = nfse_schema.tcInfDeclaracaoPrestacaoServico()
+        inf_declaracao_servico.Competencia = nfse.data_emissao.strftime('%Y-%m-%d')
+        inf_declaracao_servico.Servico = servico
+        inf_declaracao_servico.Prestador = id_prestador
+        inf_declaracao_servico.Tomador = tomador
+        inf_declaracao_servico.OptanteSimplesNacional = nfse.simples
+        inf_declaracao_servico.IncentivoFiscal = nfse.incentivo
+        inf_declaracao_servico.Id = nfse.identificador
+        inf_declaracao_servico.Rps = rps
+
+        declaracao_servico = nfse_schema.tcDeclaracaoPrestacaoServico()
+        declaracao_servico.InfDeclaracaoPrestacaoServico = inf_declaracao_servico
+
+        gnfse = nfse_schema.GerarNfseEnvio()
+        gnfse.Rps = declaracao_servico
+
+        return gnfse.toxml(element_name='GerarNfseEnvio').replace('ns1:', '').replace(':ns1', '')
 
     def _serializar_emitente(self, emitente, tag_raiz='Prestador', retorna_string=False):
         raiz = etree.Element(tag_raiz)
@@ -608,7 +680,7 @@ class SerializacaoNfse(Serializacao):
             etree.SubElement(endereco, 'Complemento').text = cliente.endereco_complemento
         etree.SubElement(endereco, 'Bairro').text = cliente.endereco_bairro
         etree.SubElement(endereco, 'CodigoMunicipio').text = obter_codigo_por_municipio(
-                cliente.endereco_municipio, cliente.endereco_uf)
+            cliente.endereco_municipio, cliente.endereco_uf)
         etree.SubElement(endereco, 'Uf').text = cliente.endereco_uf
         etree.SubElement(endereco, 'CodigoPais').text = cliente.endereco_pais
         etree.SubElement(endereco, 'Cep').text = so_numeros(cliente.endereco_cep)
@@ -704,7 +776,7 @@ class SerializacaoPipes(Serializacao):
 
         cod_municipio, municipio = obter_municipio_e_codigo(
             dict(codigo=emitente.endereco_cod_municipio,
-                municipio=emitente.endereco_municipio),
+                 municipio=emitente.endereco_municipio),
             emitente.endereco_uf
         )
 

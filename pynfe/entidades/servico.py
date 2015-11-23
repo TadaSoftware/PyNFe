@@ -9,7 +9,7 @@ class Servico(Entidade):
 
     valor_servico = Decimal()
     iss_retido = int()
-    """ http://www1.receita.fazenda.gov.br/sistemas/nfse/tabelas-de-codigos.htm 
+    """ http://www1.receita.fazenda.gov.br/sistemas/nfse/tabelas-de-codigos.htm
         Lista com códigos dos serviços
     """
     item_lista = str()
@@ -27,6 +27,7 @@ class Servico(Entidade):
     exigibilidade = int()
     # Lista com todos os codigos divididos por estados na pasta data/MunIBGE
     codigo_municipio = str()
+    municipio_incidencia = str()
 
     def __str__(self):
         return self.discriminacao

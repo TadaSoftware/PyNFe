@@ -19,6 +19,7 @@ class Assinatura(object):
         """Efetua a assinatura da nota"""
         pass
 
+
 class AssinaturaA1(Assinatura):
     """Classe responsavel por efetuar a assinatura do certificado
     digital no XML informado."""
@@ -26,7 +27,7 @@ class AssinaturaA1(Assinatura):
     def assinar(self, xml, retorna_string=False):
         try:
             # No raiz do XML de saida
-            tag = 'infNFe'; # tag que será assinada
+            tag = 'infNFe'  # tag que será assinada
             raiz = etree.Element('Signature', xmlns='http://www.w3.org/2000/09/xmldsig#')
             siginfo = etree.SubElement(raiz, 'SignedInfo')
             etree.SubElement(siginfo, 'CanonicalizationMethod', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
@@ -52,7 +53,7 @@ class AssinaturaA1(Assinatura):
             # Escreve no arquivo depois de remover caracteres especiais e parse string
             with open('testes.xml', 'w') as arquivo:
                 arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False)))
-            
+
             subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'testes.xml'])
             xml = etree.parse('funfa.xml').getroot()
 
@@ -65,16 +66,17 @@ class AssinaturaA1(Assinatura):
 
     def assinarNfse(self, xml, retorna_string=False):
         try:
+            xml = etree.fromstring(xml)
             # No raiz do XML de saida
-            tag = 'InfDeclaracaoPrestacaoServico'; # tag que será assinada
+            tag = 'InfDeclaracaoPrestacaoServico'  # tag que será assinada
             raiz = etree.Element('Signature', xmlns='http://www.w3.org/2000/09/xmldsig#')
             siginfo = etree.SubElement(raiz, 'SignedInfo')
             etree.SubElement(siginfo, 'CanonicalizationMethod', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
             etree.SubElement(siginfo, 'SignatureMethod', Algorithm='http://www.w3.org/2000/09/xmldsig#rsa-sha1')
             # Tenta achar a tag infNFe
-            
-            ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.xpath('Rps/InfDeclaracaoPrestacaoServico')[0].attrib['Id'])
-            
+            # TODO a proxima linha nao eh encontrada pq precisa colocar o namespace, GerarNfseEnvio.
+            ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.xpath('GerarNfseEnvio/Rps/InfDeclaracaoPrestacaoServico')[0].attrib['Id'])
+
             trans = etree.SubElement(ref, 'Transforms')
             etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/2000/09/xmldsig#enveloped-signature')
             etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
@@ -90,7 +92,7 @@ class AssinaturaA1(Assinatura):
             # Escreve no arquivo depois de remover caracteres especiais e parse string
             with open('nfse.xml', 'w') as arquivo:
                 arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False)))
-            
+
             subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'nfse.xml'])
             xml = etree.parse('funfa.xml').getroot()
 
@@ -100,4 +102,3 @@ class AssinaturaA1(Assinatura):
                 return xml
         except Exception as e:
             raise e
-        
