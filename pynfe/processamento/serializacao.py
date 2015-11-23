@@ -625,7 +625,7 @@ class SerializacaoNfse(Serializacao):
         raiz = etree.Element(tag_raiz)
         valores = etree.SubElement(raiz, 'Valores')
         etree.SubElement(valores, 'ValorServicos').text = str('{:.2f}').format(servico.valor_servico)
-        etree.SubElement(raiz, 'IssRetido').text = str('{:.2f}').format(servico.iss_retido)
+        etree.SubElement(raiz, 'IssRetido').text = str(servico.iss_retido)
         #etree.SubElement(raiz, 'ResponsavelRetencao').text = ''
         etree.SubElement(raiz, 'ItemListaServico').text = servico.item_lista
         #etree.SubElement(raiz, 'CodigoCnae').text = ''
@@ -654,7 +654,7 @@ class SerializacaoNfse(Serializacao):
     def _serializar_gerar(self, nfse, tag_raiz='GerarNfseEnvio', retorna_string=False):
 
         if nfse.autorizador.upper() == 'BETHA':
-            raiz = etree.Element(tag_raiz)
+            raiz = etree.Element(tag_raiz, xmlns=NAMESPACE_BETHA)
         # TODO - implementar outros sistemas autorizadores
         else:
             raiz = etree.Element(tag_raiz)
