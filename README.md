@@ -45,16 +45,7 @@ Referências
   - http://www.javac.com.br/jc/downloads.javac?cat=3
 
 - Schemas para validação dos arquivos
-  - http://www.nfe.fazenda.gov.br/portal/schemas.aspx
-
-- Validao de XML via XSD no lxml
- - http://codespeak.net/lxml/validation.html#xmlschema
-
-- Lista de codigos para campo EX TIPI
- - http://www.fisconet.com.br/ipi/tipi/04.htm
-
-- Certificado para testes
- - http://nf-eletronica.com/blog/?p=133
+  - http://www.nfe.fazenda.gov.br/portal/listaConteudo.aspx?tipoConteudo=/fwLvLUSmU8=
 
 Instalação
 -----------
@@ -62,9 +53,9 @@ Instalação
  sudo pip3 install https://github.com/leotada/PyNFe/archive/master.zip
 ```
 
-- Exemplos de uso
-
-- Consulta Status
+Exemplos de uso
+-----------
+  - Consulta Status
 
 ```python
 from pynfe.processamento.comunicacao import ComunicacaoSefaz
