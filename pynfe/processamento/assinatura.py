@@ -75,7 +75,9 @@ class AssinaturaA1(Assinatura):
             etree.SubElement(siginfo, 'SignatureMethod', Algorithm='http://www.w3.org/2000/09/xmldsig#rsa-sha1')
             # Tenta achar a tag infNFe
             # TODO a proxima linha nao eh encontrada pq precisa colocar o namespace, GerarNfseEnvio.
-            ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.xpath('GerarNfseEnvio/Rps/InfDeclaracaoPrestacaoServico')[0].attrib['Id'])
+            ref = etree.SubElement(siginfo, 'Reference', URI='#' +
+                                   xml.xpath('/GerarNfseEnvio/ns1:Rps/ns1:InfDeclaracaoPrestacaoServico',
+                                             namespaces={'ns1': 'http://www.betha.com.br/e-nota-contribuinte-ws'})[0].attrib['Id'])
 
             trans = etree.SubElement(ref, 'Transforms')
             etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/2000/09/xmldsig#enveloped-signature')
@@ -86,12 +88,12 @@ class AssinaturaA1(Assinatura):
             keyinfo = etree.SubElement(raiz, 'KeyInfo')
             etree.SubElement(keyinfo, 'X509Data')
 
-            rps = xml.xpath('Rps')[0]
+            rps = xml.xpath('ns1:Rps', namespaces={'ns1': 'http://www.betha.com.br/e-nota-contribuinte-ws'})[0]
             rps.append(raiz)
 
             # Escreve no arquivo depois de remover caracteres especiais e parse string
             with open('nfse.xml', 'w') as arquivo:
-                arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False)))
+                arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False).replace('ns1:', '').replace(':ns1', '')))
 
             subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'nfse.xml'])
             xml = etree.parse('funfa.xml').getroot()

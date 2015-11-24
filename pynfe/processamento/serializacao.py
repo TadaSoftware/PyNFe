@@ -653,7 +653,7 @@ class SerializacaoNfse(Serializacao):
         gnfse = nfse_schema.GerarNfseEnvio()
         gnfse.Rps = declaracao_servico
 
-        return gnfse.toxml(element_name='GerarNfseEnvio').replace('ns1:', '').replace(':ns1', '')
+        return gnfse.toxml(element_name='GerarNfseEnvio')
 
     def _serializar_emitente(self, emitente, tag_raiz='Prestador', retorna_string=False):
         raiz = etree.Element(tag_raiz)
