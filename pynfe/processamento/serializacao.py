@@ -6,7 +6,10 @@ from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
     obter_pais_por_codigo, obter_municipio_e_codigo, formatar_decimal, \
     remover_acentos, obter_uf_por_codigo, obter_codigo_por_municipio
 from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE, NAMESPACE_BETHA
-from pynfe.utils import nfse_v202 as nfse_schema
+try:
+    from pynfe.utils import nfse_v202 as nfse_schema
+except:
+    pass  # modulo necessario apenas para NFS-e.
 
 
 class Serializacao(object):
@@ -42,7 +45,6 @@ class Serializacao(object):
     def importar(self, origem):
         """Fabrica que recebe o caminho ou objeto de origem e instancia os objetos
         da PyNFe"""
-
         raise NotImplementedError
 
 
@@ -579,6 +581,10 @@ class SerializacaoXML(Serializacao):
 
 
 class SerializacaoNfse(Serializacao):
+    def __init__(self, fonte_dados, homologacao=False, contingencia=None, so_cpf=False):
+        if 'nfse_schema' not in globals():
+            raise ImportError('No module named nfse_v202 or PyXB')
+        super().__init__(fonte_dados, homologacao, contingencia, so_cpf)
 
     def exportar(self):
         pass
