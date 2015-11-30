@@ -368,17 +368,12 @@ class ComunicacaoNfse(Comunicacao):
             self._namespace = NAMESPACE_BETHA
             self._versao = '2.02'
         # url do serviço
-        url = self._get_url(autorizador) + NFSE[autorizador.upper()]['AUTORIZACAO']
-        # gerar
-        raiz = etree.Element('GerarNfse')
-        # cabecalho
-        raiz.append(self._cabecalho_soap())
-        dados = etree.SubElement(raiz, 'nfseDadosMsg')
-        dados.append(nota)
-        # xml soap
-        xml = self._construir_xml(raiz)
+        url = self._get_url(autorizador)
+        # dados
+        raiz = etree.Element('nfseDadosMsg')
+        raiz.append(nota)
 
-        return self._post(url, xml)
+        return self._post2(url, raiz)
 
     def consulta_nota(self, autorizador, nota):
         if autorizador.upper() == 'BETHA':
@@ -401,13 +396,16 @@ class ComunicacaoNfse(Comunicacao):
     def cancelar(self, autorizador):
         pass
 
-    def _cabecalho_soap(self):
+    def _cabecalho(self, retorna_string=False):
         u"""Monta o XML do cabeçalho da requisição SOAP"""
 
         raiz = etree.Element('nfseCabecMsg')
         cabecalho = etree.SubElement(raiz, 'cabecalho', xmlns=self._namespace, versao=self._versao)
         etree.SubElement(cabecalho, 'versaoDados').text = self._versao
-        return raiz
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=False)
+        else:
+            return raiz
 
     def _construir_xml(self, dados):
         """Mota o XML para o envio via SOAP"""
@@ -462,3 +460,17 @@ class ComunicacaoNfse(Comunicacao):
             raise e
         finally:
             certificadoA1.excluir()
+
+    def _post2(self, url, xml):
+        # declaraçao xml
+        xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
+        # cabecalho
+        cabecalho = self._cabecalho(retorna_string=True)
+        # comunicacao wsdl
+        from suds.client import Client
+        cliente = Client(url)
+
+        import ipdb
+        ipdb.set_trace()
+
+

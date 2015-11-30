@@ -8,6 +8,7 @@ from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
 from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE, NAMESPACE_BETHA
 try:
     from pynfe.utils import nfse_v202 as nfse_schema
+    from pyxb import BIND
 except:
     pass  # modulo necessario apenas para NFS-e.
 
@@ -68,6 +69,12 @@ class SerializacaoXML(Serializacao):
 
             for nf in notas_fiscais:
                 raiz.append(self._serializar_nota_fiscal(nf, retorna_string=False))
+                # Grupo de informaçoes suplementares NT2015.002
+                # Somente para NFC-e
+                # if nf.modelo == 65:
+                #     info = etree.Element('infNFeSupl')
+                #     etree.SubElement(info, 'qrCode').text = ''
+                #     raiz.append(info)
 
             if retorna_string:
                 return etree.tostring(raiz, encoding="unicode", pretty_print=False)
@@ -525,6 +532,7 @@ class SerializacaoXML(Serializacao):
                         etree.SubElement(lacres, 'nLacre').text = lacre.numero_lacre
 
         # Somente NFC-e
+        """ Grupo obrigatório para a NFC-e, a critério da UF. Não informar para a NF-e (modelo 55). """
         if nota_fiscal.modelo == 65:
             # Transporte
             transp = etree.SubElement(raiz, 'transp')
@@ -533,10 +541,16 @@ class SerializacaoXML(Serializacao):
             pag = etree.SubElement(raiz, 'pag')
             etree.SubElement(pag, 'tPag').text = str(nota_fiscal.tipo_pagamento).zfill(2) # 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
             etree.SubElement(pag, 'vPag').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_nota)
-            #etree.SubElement(pag, 'card').text = ''
-            #etree.SubElement(pag, 'CNPJ').text = '' # Informar o CNPJ da Credenciadora de cartão de crédito / débito
-            #etree.SubElement(pag, 'tBand').text = '' # 01=Visa 02=Mastercard 03=American Express 04=Sorocred 99=Outros
-            #etree.SubElement(pag, 'cAut').text = '' # Identifica o número da autorização da transação da operação com cartão de crédito e/ou débito
+            # Cartão NT2015.002
+            #cartao = etree.SubElement(pag, 'card')
+            """ Tipo de Integração do processo de pagamento com o sistema de automação da empresa: 
+                1=Pagamento integrado com o sistema de automação da empresa (Ex.: equipamento TEF, Comércio Eletrônico);
+                2= Pagamento não integrado com o sistema de automação da empresa (Ex.: equipamento POS);
+            """
+            #etree.SubElement(cartao, 'tpIntegra').text = '2' 
+            #etree.SubElement(cartao, 'CNPJ').text = '' # Informar o CNPJ da Credenciadora de cartão de crédito / débito
+            #etree.SubElement(cartao, 'tBand').text = '' # 01=Visa 02=Mastercard 03=American Express 04=Sorocred 99=Outros
+            #etree.SubElement(cartao, 'cAut').text = '' # Identifica o número da autorização da transação da operação com cartão de crédito e/ou débito
 
         # Informações adicionais
         if nota_fiscal.informacoes_adicionais_interesse_fisco or nota_fiscal.informacoes_complementares_interesse_contribuinte:
@@ -660,6 +674,85 @@ class SerializacaoNfse(Serializacao):
         gnfse.Rps = declaracao_servico
 
         return gnfse.toxml(element_name='GerarNfseEnvio')
+
+    def _serializar_lote_sincrono(self, nfse):
+        """Retorna string de um XML gerado a partir do
+        XML Schema (XSD). Binding gerado pelo modulo PyXB."""
+
+        servico = nfse_schema.tcDadosServico()
+        valores_servico = nfse_schema.tcValoresDeclaracaoServico()
+        valores_servico.ValorServicos = nfse.servico.valor_servico
+
+        servico.IssRetido = nfse.servico.iss_retido
+        servico.ItemListaServico = nfse.servico.item_lista
+        servico.Discriminacao = nfse.servico.discriminacao
+        servico.CodigoMunicipio = nfse.servico.codigo_municipio
+        servico.ExigibilidadeISS = nfse.servico.exigibilidade
+        servico.MunicipioIncidencia = nfse.servico.municipio_incidencia
+        servico.Valores = valores_servico
+
+        # Prestador
+        id_prestador = nfse_schema.tcIdentificacaoPrestador()
+        id_prestador.CpfCnpj = nfse.emitente.cnpj
+        id_prestador.InscricaoMunicipal = nfse.emitente.inscricao_municipal
+
+        # Cliente
+        id_tomador = nfse_schema.tcIdentificacaoTomador()
+        id_tomador.CpfCnpj = nfse.cliente.numero_documento
+        if nfse.cliente.inscricao_municipal:
+            id_tomador.InscricaoMunicipal = nfse.cliente.inscricao_municipal
+
+        endereco_tomador = nfse_schema.tcEndereco()
+        endereco_tomador.Endereco = nfse.cliente.endereco_logradouro
+        endereco_tomador.Numero = nfse.cliente.endereco_numero
+        endereco_tomador.Bairro = nfse.cliente.endereco_bairro
+        endereco_tomador.CodigoMunicipio = nfse.cliente.endereco_cod_municipio
+        endereco_tomador.Uf = nfse.cliente.endereco_uf
+        endereco_tomador.CodigoPais = nfse.cliente.endereco_pais
+        endereco_tomador.Cep = nfse.cliente.endereco_cep
+
+        tomador = nfse_schema.tcDadosTomador()
+        tomador.IdentificacaoPrestador = id_tomador
+        tomador.RazaoSocial = nfse.cliente.razao_social
+        tomador.Endereco = endereco_tomador
+
+        id_rps = nfse_schema.tcIdentificacaoRps()
+        id_rps.Numero = nfse.identificador
+        id_rps.Serie = nfse.serie
+        id_rps.Tipo = nfse.tipo
+
+        rps = nfse_schema.tcInfRps()
+        rps.IdentificacaoRps = id_rps
+        rps.DataEmissao = nfse.data_emissao.strftime('%Y-%m-%d')
+        rps.Status = 1
+
+        inf_declaracao_servico = nfse_schema.tcInfDeclaracaoPrestacaoServico()
+        inf_declaracao_servico.Competencia = nfse.data_emissao.strftime('%Y-%m-%d')
+        inf_declaracao_servico.Servico = servico
+        inf_declaracao_servico.Prestador = id_prestador
+        inf_declaracao_servico.Tomador = tomador
+        inf_declaracao_servico.OptanteSimplesNacional = nfse.simples
+        inf_declaracao_servico.IncentivoFiscal = nfse.incentivo
+        inf_declaracao_servico.Id = nfse.identificador
+        inf_declaracao_servico.Rps = rps
+
+        declaracao_servico = nfse_schema.tcDeclaracaoPrestacaoServico()
+        declaracao_servico.InfDeclaracaoPrestacaoServico = inf_declaracao_servico
+
+        lote = nfse_schema.tcLoteRps()
+        lote.NumeroLote = 1
+        lote.Id = 1
+        lote.CpfCnpj = nfse.emitente.cnpj
+        lote.InscricaoMunicipal = nfse.emitente.inscricao_municipal
+        lote.QuantidadeRps = 1
+        if nfse.autorizador.upper() == 'BETHA':
+            lote.versao = '2.02'
+        lote.ListaRps = BIND(declaracao_servico)
+
+        gnfse = nfse_schema.EnviarLoteRpsSincronoEnvio()
+        gnfse.LoteRps = lote
+
+        return gnfse.toxml(element_name='EnviarLoteRpsSincronoEnvio')
 
     def _serializar_emitente(self, emitente, tag_raiz='Prestador', retorna_string=False):
         raiz = etree.Element(tag_raiz)
