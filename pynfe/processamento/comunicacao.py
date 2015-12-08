@@ -385,8 +385,16 @@ class ComunicacaoNfse(Comunicacao):
         # comunica via wsdl
         return self._post2(url, xml, 'consultaRps')
 
-    def cancelar(self, autorizador):
-        pass
+    def cancelar(self, autorizador, nota):
+        if autorizador.upper() == 'BETHA':
+            self._namespace = NAMESPACE_BETHA
+            self._versao = '2.02'
+        # url do serviço
+        url = self._get_url(autorizador)
+        # xml
+        xml = etree.tostring(nota, encoding='unicode', pretty_print=False)
+        # comunica via wsdl
+        return self._post2(url, xml, 'cancelar')
 
     def _cabecalho(self, retorna_string=True):
         u"""Monta o XML do cabeçalho da requisição wsdl"""
@@ -394,7 +402,7 @@ class ComunicacaoNfse(Comunicacao):
         xml_declaration='<?xml version="1.0" encoding="UTF-8"?>'
 
         # cabecalho
-        raiz = etree.Element('cabecalho', xmlns='http://www.betha.com.br/e-nota-contribuinte-ws', versao='2.02')
+        raiz = etree.Element('cabecalho', xmlns=self._namespace, versao=self._versao)
         etree.SubElement(raiz, 'versaoDados').text = '2.02'
         
         if retorna_string:
@@ -471,7 +479,7 @@ class ComunicacaoNfse(Comunicacao):
             elif metodo == 'consultaRps':
                 return cliente.service.ConsultarNfsePorRps(cabecalho, xml)
             elif metodo == 'cancelar':
-                pass
+                return cliente.service.CancelarNfse(cabecalho, xml)
             # TODO outros metodos
             else:
                 pass

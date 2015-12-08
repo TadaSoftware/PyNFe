@@ -696,9 +696,32 @@ class SerializacaoNfse(Serializacao):
 
         return consulta.toxml(element_name='ConsultarNfseRpsEnvio')
 
-    def cancelar(self, dados):
-        pass
+    def cancelar(self, nfse):
+        """Retorna string de um XML gerado a partir do
+        XML Schema (XSD). Binding gerado pelo modulo PyXB."""
 
+        # id nfse
+        id_nfse = nfse_schema.tcIdentificacaoNfse()
+        id_nfse.Numero = nfse.identificador
+        id_nfse.CpfCnpj = nfse.emitente.cnpj
+        id_nfse.InscricaoMunicipal = nfse.emitente.inscricao_municipal
+        id_nfse.CodigoMunicipio = nfse.emitente.endereco_cod_municipio
+
+        # Info Pedido de cancelamento
+        info_pedido = nfse_schema.tcInfPedidoCancelamento()
+        info_pedido.Id = '1'
+        info_pedido.IdentificacaoNfse = id_nfse
+        #pedido.CodigoCancelamento = 
+
+        # Pedido
+        pedido = nfse_schema.tcPedidoCancelamento()
+        pedido.InfPedidoCancelamento = info_pedido
+
+        # Cancelamento 
+        cancelar = nfse_schema.CancelarNfseEnvio()
+        cancelar.Pedido = pedido
+
+        return cancelar.toxml(element_name='CancelarNfseEnvio')
 
     def _serializar_lote_sincrono(self, nfse):
         """Retorna string de um XML gerado a partir do
