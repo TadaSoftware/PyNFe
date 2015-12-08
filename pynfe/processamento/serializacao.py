@@ -675,8 +675,26 @@ class SerializacaoNfse(Serializacao):
 
         return gnfse.toxml(element_name='GerarNfseEnvio')
 
-    def consultar(self, numero):
-        pass
+    def consultar(self, nfse):
+        """Retorna string de um XML gerado a partir do
+        XML Schema (XSD). Binding gerado pelo modulo PyXB."""
+
+        # Rps
+        id_rps = nfse_schema.tcIdentificacaoRps()
+        id_rps.Numero = nfse.identificador
+        id_rps.Serie = nfse.serie
+        id_rps.Tipo = nfse.tipo
+
+        # Prestador
+        id_prestador = nfse_schema.tcIdentificacaoPrestador()
+        id_prestador.CpfCnpj = nfse.emitente.cnpj
+        id_prestador.InscricaoMunicipal = nfse.emitente.inscricao_municipal
+
+        consulta = nfse_schema.ConsultarNfseRpsEnvio()
+        consulta.IdentificacaoRps = id_rps
+        consulta.Prestador = id_prestador
+
+        return consulta.toxml(element_name='ConsultarNfseRpsEnvio')
 
     def cancelar(self, dados):
         pass

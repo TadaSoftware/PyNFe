@@ -374,23 +374,16 @@ class ComunicacaoNfse(Comunicacao):
         # comunica via wsdl
         return self._post2(url, xml, 'gerar')
 
-    def consulta_nota(self, autorizador, nota):
+    def consulta_rps(self, autorizador, xml):
         if autorizador.upper() == 'BETHA':
             self._namespace = NAMESPACE_BETHA
             self._versao = '2.02'
         # url do serviço
-        url = self._get_url(autorizador) + NFSE[autorizador.upper()]['CONSULTA_RPS']
-        # consulta
-        raiz = etree.Element('ConsultarNfsePorRps')
-        # cabecalho
-        raiz.append(self._cabecalho_soap())
-        dados = etree.SubElement(raiz, 'nfseDadosMsg')
-        dados.append(nota)
-        # xml soap
-        xml = self._construir_xml(raiz)
-
-        retorno = self._post(url, xml)
-        return retorno
+        url = self._get_url(autorizador)
+        # xml
+        xml = xml.replace('ns1:','').replace(':ns1','').replace('<?xml version="1.0" ?>','')
+        # comunica via wsdl
+        return self._post2(url, xml, 'consultaRps')
 
     def cancelar(self, autorizador):
         pass
@@ -475,8 +468,11 @@ class ComunicacaoNfse(Comunicacao):
             # gerar nfse
             if metodo == 'gerar':
                 return cliente.service.GerarNfse(cabecalho, xml)
+            elif metodo == 'consultaRps':
+                return cliente.service.ConsultarNfsePorRps(cabecalho, xml)
             elif metodo == 'cancelar':
                 pass
+            # TODO outros metodos
             else:
                 pass
         except Exception as e:
