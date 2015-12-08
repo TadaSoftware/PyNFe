@@ -369,11 +369,10 @@ class ComunicacaoNfse(Comunicacao):
             self._versao = '2.02'
         # url do serviço
         url = self._get_url(autorizador)
-        # dados
-        raiz = etree.Element('nfseDadosMsg')
-        raiz.append(nota)
-
-        return self._post2(url, raiz)
+        # xml
+        xml = etree.tostring(nota, encoding='unicode', pretty_print=False)
+        # comunica via wsdl
+        return self._post2(url, xml, 'gerar')
 
     def consulta_nota(self, autorizador, nota):
         if autorizador.upper() == 'BETHA':
@@ -396,14 +395,19 @@ class ComunicacaoNfse(Comunicacao):
     def cancelar(self, autorizador):
         pass
 
-    def _cabecalho(self, retorna_string=False):
-        u"""Monta o XML do cabeçalho da requisição SOAP"""
+    def _cabecalho(self, retorna_string=True):
+        u"""Monta o XML do cabeçalho da requisição wsdl"""
 
-        raiz = etree.Element('nfseCabecMsg')
-        cabecalho = etree.SubElement(raiz, 'cabecalho', xmlns=self._namespace, versao=self._versao)
-        etree.SubElement(cabecalho, 'versaoDados').text = self._versao
+        xml_declaration='<?xml version="1.0" encoding="UTF-8"?>'
+
+        # cabecalho
+        raiz = etree.Element('cabecalho', xmlns='http://www.betha.com.br/e-nota-contribuinte-ws', versao='2.02')
+        etree.SubElement(raiz, 'versaoDados').text = '2.02'
+        
         if retorna_string:
-            return etree.tostring(raiz, encoding="unicode", pretty_print=False)
+            cabecalho = etree.tostring(raiz, encoding='unicode', pretty_print=False).replace('\n','')
+            cabecalho = xml_declaration + cabecalho
+            return cabecalho
         else:
             return raiz
 
@@ -461,16 +465,19 @@ class ComunicacaoNfse(Comunicacao):
         finally:
             certificadoA1.excluir()
 
-    def _post2(self, url, xml):
-        # declaraçao xml
-        xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
+    def _post2(self, url, xml, metodo):
         # cabecalho
-        cabecalho = self._cabecalho(retorna_string=True)
+        cabecalho = self._cabecalho()
         # comunicacao wsdl
-        from suds.client import Client
-        cliente = Client(url)
-
-        import ipdb
-        ipdb.set_trace()
-
-
+        try:
+            from suds.client import Client
+            cliente = Client(url)
+            # gerar nfse
+            if metodo == 'gerar':
+                return cliente.service.GerarNfse(cabecalho, xml)
+            elif metodo == 'cancelar':
+                pass
+            else:
+                pass
+        except Exception as e:
+            raise e
