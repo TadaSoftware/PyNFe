@@ -385,6 +385,17 @@ class ComunicacaoNfse(Comunicacao):
         # comunica via wsdl
         return self._post2(url, xml, 'consultaRps')
 
+    def consulta_faixa(self, autorizador, xml):
+        if autorizador.upper() == 'BETHA':
+            self._namespace = NAMESPACE_BETHA
+            self._versao = '2.02'
+        # url do serviço
+        url = self._get_url(autorizador)
+        # xml
+        xml = xml.replace('ns1:','').replace(':ns1','').replace('<?xml version="1.0" ?>','')
+        # comunica via wsdl
+        return self._post2(url, xml, 'consultaFaixa')
+
     def cancelar(self, autorizador, nota):
         if autorizador.upper() == 'BETHA':
             self._namespace = NAMESPACE_BETHA
@@ -412,15 +423,6 @@ class ComunicacaoNfse(Comunicacao):
         else:
             return raiz
 
-    def _construir_xml(self, dados):
-        """Mota o XML para o envio via SOAP"""
-
-        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'e': self._namespace})
-        etree.SubElement(raiz, '{%s}Header'%NAMESPACE_SOAP)
-        body = etree.SubElement(raiz, '{%s}Body'%NAMESPACE_SOAP)
-        body.append(dados)
-        return raiz
-
     def _get_url(self, autorizador):
         """ Retorna a url para comunicação com o webservice """
         if self._ambiente == 1:
@@ -432,13 +434,6 @@ class ComunicacaoNfse(Comunicacao):
         else:
             raise Exception('Autorizador nao encontrado!')
         return self.url
-
-    def _post_header(self):
-        u"""Retorna um dicionário com os atributos para o cabeçalho da requisição HTTP"""
-        return {
-            u'content-type': u'application/soap+xml; charset=utf-8;',
-            u'Accept': u'application/soap+xml; charset=utf-8;',
-            }
 
     def _post(self, url, xml):
         certificadoA1 = CertificadoA1(self.certificado)
@@ -478,6 +473,8 @@ class ComunicacaoNfse(Comunicacao):
                 return cliente.service.GerarNfse(cabecalho, xml)
             elif metodo == 'consultaRps':
                 return cliente.service.ConsultarNfsePorRps(cabecalho, xml)
+            elif metodo == 'consultaFaixa':
+                return cliente.service.ConsultarNfseFaixa(cabecalho, xml)
             elif metodo == 'cancelar':
                 return cliente.service.CancelarNfse(cabecalho, xml)
             # TODO outros metodos

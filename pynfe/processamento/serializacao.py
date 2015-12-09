@@ -696,6 +696,25 @@ class SerializacaoNfse(Serializacao):
 
         return consulta.toxml(element_name='ConsultarNfseRpsEnvio')
 
+    def consultarFaixa(self, emitente, inicio, fim, pagina):
+        """Retorna string de um XML gerado a partir do
+        XML Schema (XSD). Binding gerado pelo modulo PyXB."""
+
+        # Prestador
+        id_prestador = nfse_schema.tcIdentificacaoPrestador()
+        id_prestador.CpfCnpj = emitente.cnpj
+        id_prestador.InscricaoMunicipal = emitente.inscricao_municipal
+
+        consulta = nfse_schema.ConsultarNfseFaixaEnvio()
+        consulta.Prestador = id_prestador
+        consulta.Pagina = pagina
+        # É necessário BIND antes de atribuir numero final e numero inicial
+        consulta.Faixa = BIND()
+        consulta.Faixa.NumeroNfseInicial = inicio
+        consulta.Faixa.NumeroNfseFinal = fim
+
+        return consulta.toxml(element_name='ConsultarNfseFaixaEnvio')
+
     def cancelar(self, nfse):
         """Retorna string de um XML gerado a partir do
         XML Schema (XSD). Binding gerado pelo modulo PyXB."""
