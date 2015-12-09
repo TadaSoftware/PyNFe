@@ -380,8 +380,6 @@ class ComunicacaoNfse(Comunicacao):
             self._versao = '2.02'
         # url do serviço
         url = self._get_url(autorizador)
-        # xml
-        xml = xml.replace('ns1:','').replace(':ns1','').replace('<?xml version="1.0" ?>','')
         # comunica via wsdl
         return self._post2(url, xml, 'consultaRps')
 
@@ -391,8 +389,6 @@ class ComunicacaoNfse(Comunicacao):
             self._versao = '2.02'
         # url do serviço
         url = self._get_url(autorizador)
-        # xml
-        xml = xml.replace('ns1:','').replace(':ns1','').replace('<?xml version="1.0" ?>','')
         # comunica via wsdl
         return self._post2(url, xml, 'consultaFaixa')
 

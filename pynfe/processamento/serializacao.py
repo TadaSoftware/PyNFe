@@ -5,7 +5,7 @@ from pynfe.entidades import NotaFiscal
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
     obter_pais_por_codigo, obter_municipio_e_codigo, formatar_decimal, \
     remover_acentos, obter_uf_por_codigo, obter_codigo_por_municipio
-from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE, NAMESPACE_BETHA
+from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE
 try:
     from pynfe.utils import nfse_v202 as nfse_schema
     from pyxb import BIND
@@ -694,7 +694,9 @@ class SerializacaoNfse(Serializacao):
         consulta.IdentificacaoRps = id_rps
         consulta.Prestador = id_prestador
 
-        return consulta.toxml(element_name='ConsultarNfseRpsEnvio')
+        consulta = consulta.toxml(element_name='ConsultarNfseRpsEnvio').replace('ns1:','').replace(':ns1','').replace('<?xml version="1.0" ?>','')
+        
+        return consulta
 
     def consultarFaixa(self, emitente, inicio, fim, pagina):
         """Retorna string de um XML gerado a partir do
@@ -713,7 +715,9 @@ class SerializacaoNfse(Serializacao):
         consulta.Faixa.NumeroNfseInicial = inicio
         consulta.Faixa.NumeroNfseFinal = fim
 
-        return consulta.toxml(element_name='ConsultarNfseFaixaEnvio')
+        consulta = consulta.toxml(element_name='ConsultarNfseFaixaEnvio').replace('ns1:','').replace(':ns1','').replace('<?xml version="1.0" ?>','')
+        
+        return consulta
 
     def cancelar(self, nfse):
         """Retorna string de um XML gerado a partir do
@@ -820,118 +824,6 @@ class SerializacaoNfse(Serializacao):
         gnfse.LoteRps = lote
 
         return gnfse.toxml(element_name='EnviarLoteRpsSincronoEnvio')
-
-    #### Forma antiga ######
-
-    # def _serializar_emitente(self, emitente, tag_raiz='Prestador', retorna_string=False):
-    #     raiz = etree.Element(tag_raiz)
-    #     documento = etree.SubElement(raiz, 'CpfCnpj')
-    #     etree.SubElement(documento, 'Cnpj').text = emitente.cnpj
-    #     etree.SubElement(raiz, 'InscricaoMunicipal').text = emitente.inscricao_municipal
-
-    #     if retorna_string:
-    #         return etree.tostring(raiz, encoding="unicode", pretty_print=True)
-    #     else:
-    #         return raiz
-
-    # def _serializar_cliente(self, cliente, tag_raiz='Tomador', retorna_string=False):
-    #     raiz = etree.Element(tag_raiz)
-    #     identificacao = etree.SubElement(raiz, 'IdentificacaoTomador')
-    #     documento = etree.SubElement(identificacao, 'CpfCnpj')
-    #     etree.SubElement(documento, cliente.tipo_documento).text = cliente.numero_documento         # Apenas Cnpj ??
-    #     etree.SubElement(identificacao, 'InscricaoMunicipal').text = cliente.inscricao_municipal    # obrigatório??
-    #     etree.SubElement(raiz, 'RazaoSocial').text = cliente.razao_social
-    #     endereco = etree.SubElement(raiz, 'Endereco')
-    #     etree.SubElement(endereco, 'Endereco').text = cliente.endereco_logradouro
-    #     etree.SubElement(endereco, 'Numero').text = cliente.endereco_numero
-    #     if cliente.endereco_complemento:
-    #         etree.SubElement(endereco, 'Complemento').text = cliente.endereco_complemento
-    #     etree.SubElement(endereco, 'Bairro').text = cliente.endereco_bairro
-    #     etree.SubElement(endereco, 'CodigoMunicipio').text = obter_codigo_por_municipio(
-    #         cliente.endereco_municipio, cliente.endereco_uf)
-    #     etree.SubElement(endereco, 'Uf').text = cliente.endereco_uf
-    #     etree.SubElement(endereco, 'CodigoPais').text = cliente.endereco_pais
-    #     etree.SubElement(endereco, 'Cep').text = so_numeros(cliente.endereco_cep)
-    #     contato = etree.SubElement(raiz, 'Contato')
-    #     etree.SubElement(contato, 'Telefone').text = cliente.endereco_telefone
-    #     etree.SubElement(contato, 'Email').text = cliente.email
-
-    #     if retorna_string:
-    #         return etree.tostring(raiz, encoding="unicode", pretty_print=True)
-    #     else:
-    #         return raiz
-
-    # def _serializar_servico(self, servico, tag_raiz='Servico', retorna_string=False):
-    #     raiz = etree.Element(tag_raiz)
-    #     valores = etree.SubElement(raiz, 'Valores')
-    #     etree.SubElement(valores, 'ValorServicos').text = str('{:.2f}').format(servico.valor_servico)
-    #     etree.SubElement(raiz, 'IssRetido').text = str(servico.iss_retido)
-    #     #etree.SubElement(raiz, 'ResponsavelRetencao').text = ''
-    #     etree.SubElement(raiz, 'ItemListaServico').text = servico.item_lista
-    #     #etree.SubElement(raiz, 'CodigoCnae').text = ''
-    #     #etree.SubElement(raiz, 'CodigoTributacaoMunicipio').text = ''
-    #     etree.SubElement(raiz, 'Discriminacao').text = servico.discriminacao
-    #     etree.SubElement(raiz, 'CodigoMunicipio').text = servico.codigo_municipio
-    #     #etree.SubElement(raiz, 'CodigoPais').text = ''
-    #     """
-    #     1 – Exigível;
-    #     2 – Não incidência;
-    #     3 – Isenção;
-    #     4 – Exportação;
-    #     5 – Imunidade;
-    #     6 – Exigibilidade Suspensa por Decisão Judicial;
-    #     7 – Exigibilidade Suspensa por ProcessoAdministrativo
-    #     """
-    #     etree.SubElement(raiz, 'ExigibilidadeISS').text = str(servico.exigibilidade)
-    #     etree.SubElement(raiz, 'MunicipioIncidencia').text = servico.codigo_municipio
-    #     #etree.SubElement(raiz, 'NumeroProcesso').text = ''
-
-    #     if retorna_string:
-    #         return etree.tostring(raiz, encoding="unicode", pretty_print=True)
-    #     else:
-    #         return raiz
-
-    # def _serializar_gerar(self, nfse, tag_raiz='GerarNfseEnvio', retorna_string=False):
-
-    #     if nfse.autorizador.upper() == 'BETHA':
-    #         raiz = etree.Element(tag_raiz, xmlns=NAMESPACE_BETHA)
-    #     # TODO - implementar outros sistemas autorizadores
-    #     else:
-    #         raiz = etree.Element(tag_raiz)
-    #     rps = etree.SubElement(raiz, 'Rps')
-    #     info = etree.SubElement(rps, 'InfDeclaracaoPrestacaoServico', Id=nfse.identificador)
-    #     etree.SubElement(info, 'Competencia').text = nfse.data_emissao.strftime('%Y-%m-%d')
-
-    #     # Servico
-    #     info.append(self._serializar_servico(nfse.servico))
-    #     # Emitente/Prestador
-    #     info.append(self._serializar_emitente(nfse.emitente))
-    #     # Cliente/Tomador
-    #     info.append(self._serializar_cliente(nfse.cliente))
-
-    #     etree.SubElement(info, 'OptanteSimplesNacional').text = str(nfse.simples)   # 1-Sim; 2-Não
-    #     etree.SubElement(info, 'IncentivoFiscal').text = str(nfse.incentivo)        # 1-Sim; 2-Não
-
-    #     if retorna_string:
-    #         return etree.tostring(raiz, encoding="unicode", pretty_print=True)
-    #     else:
-    #         return raiz
-
-    # def _serializar_consulta(self, nfse, tag_raiz='ConsultarNfseRpsEnvio', retorna_string=False):
-    #     if nfse.autorizador.upper() == 'BETHA':
-    #        namespace = NAMESPACE_BETHA
-    #        #versao = '2.02'
-    #     raiz = etree.Element(tag_raiz, xmlns=namespace)
-    #     identificacao = etree.SubElement(raiz, 'IdentificacaoRps')
-    #     etree.SubElement(identificacao, 'Numero').text = str(nfse.identificador)
-    #     etree.SubElement(identificacao, 'Serie').text = nfse.serie
-    #     etree.SubElement(identificacao, 'Tipo').text = nfse.tipo
-    #     raiz.append(self._serializar_emitente(nfse.emitente))
-
-    #     if retorna_string:
-    #         return etree.tostring(raiz, encoding="unicode", pretty_print=True)
-    #     else:
-    #         return raiz
 
 
 class SerializacaoPipes(Serializacao):
