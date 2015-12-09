@@ -369,52 +369,55 @@ class ComunicacaoNfse(Comunicacao):
             self._versao = '2.02'
         # url do serviço
         url = self._get_url(autorizador)
-        # dados
-        raiz = etree.Element('nfseDadosMsg')
-        raiz.append(nota)
+        # xml
+        xml = etree.tostring(nota, encoding='unicode', pretty_print=False)
+        # comunica via wsdl
+        return self._post2(url, xml, 'gerar')
 
-        return self._post2(url, raiz)
-
-    def consulta_nota(self, autorizador, nota):
+    def consulta_rps(self, autorizador, xml):
         if autorizador.upper() == 'BETHA':
             self._namespace = NAMESPACE_BETHA
             self._versao = '2.02'
         # url do serviço
-        url = self._get_url(autorizador) + NFSE[autorizador.upper()]['CONSULTA_RPS']
-        # consulta
-        raiz = etree.Element('ConsultarNfsePorRps')
+        url = self._get_url(autorizador)
+        # comunica via wsdl
+        return self._post2(url, xml, 'consultaRps')
+
+    def consulta_faixa(self, autorizador, xml):
+        if autorizador.upper() == 'BETHA':
+            self._namespace = NAMESPACE_BETHA
+            self._versao = '2.02'
+        # url do serviço
+        url = self._get_url(autorizador)
+        # comunica via wsdl
+        return self._post2(url, xml, 'consultaFaixa')
+
+    def cancelar(self, autorizador, nota):
+        if autorizador.upper() == 'BETHA':
+            self._namespace = NAMESPACE_BETHA
+            self._versao = '2.02'
+        # url do serviço
+        url = self._get_url(autorizador)
+        # xml
+        xml = etree.tostring(nota, encoding='unicode', pretty_print=False)
+        # comunica via wsdl
+        return self._post2(url, xml, 'cancelar')
+
+    def _cabecalho(self, retorna_string=True):
+        u"""Monta o XML do cabeçalho da requisição wsdl"""
+
+        xml_declaration='<?xml version="1.0" encoding="UTF-8"?>'
+
         # cabecalho
-        raiz.append(self._cabecalho_soap())
-        dados = etree.SubElement(raiz, 'nfseDadosMsg')
-        dados.append(nota)
-        # xml soap
-        xml = self._construir_xml(raiz)
-
-        retorno = self._post(url, xml)
-        return retorno
-
-    def cancelar(self, autorizador):
-        pass
-
-    def _cabecalho(self, retorna_string=False):
-        u"""Monta o XML do cabeçalho da requisição SOAP"""
-
-        raiz = etree.Element('nfseCabecMsg')
-        cabecalho = etree.SubElement(raiz, 'cabecalho', xmlns=self._namespace, versao=self._versao)
-        etree.SubElement(cabecalho, 'versaoDados').text = self._versao
+        raiz = etree.Element('cabecalho', xmlns=self._namespace, versao=self._versao)
+        etree.SubElement(raiz, 'versaoDados').text = '2.02'
+        
         if retorna_string:
-            return etree.tostring(raiz, encoding="unicode", pretty_print=False)
+            cabecalho = etree.tostring(raiz, encoding='unicode', pretty_print=False).replace('\n','')
+            cabecalho = xml_declaration + cabecalho
+            return cabecalho
         else:
             return raiz
-
-    def _construir_xml(self, dados):
-        """Mota o XML para o envio via SOAP"""
-
-        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'e': self._namespace})
-        etree.SubElement(raiz, '{%s}Header'%NAMESPACE_SOAP)
-        body = etree.SubElement(raiz, '{%s}Body'%NAMESPACE_SOAP)
-        body.append(dados)
-        return raiz
 
     def _get_url(self, autorizador):
         """ Retorna a url para comunicação com o webservice """
@@ -427,13 +430,6 @@ class ComunicacaoNfse(Comunicacao):
         else:
             raise Exception('Autorizador nao encontrado!')
         return self.url
-
-    def _post_header(self):
-        u"""Retorna um dicionário com os atributos para o cabeçalho da requisição HTTP"""
-        return {
-            u'content-type': u'application/soap+xml; charset=utf-8;',
-            u'Accept': u'application/soap+xml; charset=utf-8;',
-            }
 
     def _post(self, url, xml):
         certificadoA1 = CertificadoA1(self.certificado)
@@ -461,16 +457,24 @@ class ComunicacaoNfse(Comunicacao):
         finally:
             certificadoA1.excluir()
 
-    def _post2(self, url, xml):
-        # declaraçao xml
-        xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
+    def _post2(self, url, xml, metodo):
         # cabecalho
-        cabecalho = self._cabecalho(retorna_string=True)
+        cabecalho = self._cabecalho()
         # comunicacao wsdl
-        from suds.client import Client
-        cliente = Client(url)
-
-        import ipdb
-        ipdb.set_trace()
-
-
+        try:
+            from suds.client import Client
+            cliente = Client(url)
+            # gerar nfse
+            if metodo == 'gerar':
+                return cliente.service.GerarNfse(cabecalho, xml)
+            elif metodo == 'consultaRps':
+                return cliente.service.ConsultarNfsePorRps(cabecalho, xml)
+            elif metodo == 'consultaFaixa':
+                return cliente.service.ConsultarNfseFaixa(cabecalho, xml)
+            elif metodo == 'cancelar':
+                return cliente.service.CancelarNfse(cabecalho, xml)
+            # TODO outros metodos
+            else:
+                pass
+        except Exception as e:
+            raise e

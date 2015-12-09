@@ -5,7 +5,7 @@ from pynfe.entidades import NotaFiscal
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
     obter_pais_por_codigo, obter_municipio_e_codigo, formatar_decimal, \
     remover_acentos, obter_uf_por_codigo, obter_codigo_por_municipio
-from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE, NAMESPACE_BETHA
+from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE
 
 
 class Serializacao(object):
@@ -593,6 +593,13 @@ class SerializacaoNfse(object):
     def __init__(self, autorizador):
         "Recebe uma string com o nome do autorizador."
         self.autorizador = autorizador
+
+    def gerar(self, nfse):
+        if self.autorizador.lower() == 'betha':
+            from pynfe.processamento.autorizador_nfse import SerializacaoBetha
+            return SerializacaoBetha().gerar(nfse)
+        else:
+            raise Exception('Este método só esta implementado no autorizador Betha.')
 
 
 class SerializacaoPipes(Serializacao):
