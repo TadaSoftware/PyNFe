@@ -4,11 +4,25 @@ PLANEJAMENTO
 Este documento tem como propósito estabelecer as metas para as versões da biblioteca,
 uma vez que algumas funcionalidades são mais urgentes em relação a outras
 
-Versão 1.0
+Versão 0.1
 ----------
 
 - Serialização para versões 1.00 e 2.00 da NF-e
 - Assinatura com certificados A1
+- Suporte a diferenças entre webservices (produção e homologação)
+
+Versão 0.2
+----------
+
+- Emissão de NFC-e
+- Suporte a diferenças entre webservices (produção e homologação)
+
+Versão 0.3
+----------
+
+- Emissão de NFS-e versão 2.02 (Betha)
+- Emissão de NFS-e versão 3.00 (Ginfes)
+- Comunicação com webservices de NFS-e por wsdl
 - Suporte a diferenças entre webservices (produção e homologação)
 
 Versões Posteriores
@@ -16,6 +30,8 @@ Versões Posteriores
 
 - Certificados A3
 - Validação
+- Ct-e
 - Fontes de Dados
 - Servidor SOAP para testes
+- Outras formas de impressão do Danfe
 
