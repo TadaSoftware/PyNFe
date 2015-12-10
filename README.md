@@ -2,13 +2,14 @@ Visão Geral
 -----------
 
 Biblioteca de interface com o webservice de Nota Fiscal Eletronica,
-(NF-e/NFC-e) da SEFAZ, oficializada pelo Ministerio da Fazendo do 
+(NF-e/NFC-e/NFS-e) da SEFAZ, oficializada pelo Ministerio da Fazendo do 
 Governo do Brasil.  
 Desenvolvido e testado com Python 3 no GNU/Linux.
 
 A NF-e visa substituir as notas fiscais séries 1 e 1A.  
 A NFC-e visa substituir as notas fiscais modelo 2 e
 cupom fiscal emitido por ECF.
+NFS-e padrão Abrasf para autorizadores Ginfes e Betha.
 
 
 Dependências
@@ -23,6 +24,8 @@ Dependências
   - assinatura e validação do XML
 - requests
   - biblioteca para a comunicação com os webservices da SEFAZ
+- suds-jurko (* apenas para NFS-e)
+  - biblioteca para a comunicação com os webservices via wsdl
 
 Referências
 -----------
