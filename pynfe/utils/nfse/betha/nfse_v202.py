@@ -25,7 +25,7 @@ if pyxb.__version__ != _PyXBVersion:
 
 # Import bindings for namespaces imported into schema
 import pyxb.binding.datatypes
-import pynfe.utils._dsig as _ImportedBinding__dsig
+from pynfe.utils.nfse.betha import _dsig as _ImportedBinding__dsig
 
 # NOTE: All namespace declarations are reserved within the binding
 Namespace = pyxb.namespace.NamespaceForURI('http://www.betha.com.br/e-nota-contribuinte-ws', create_if_missing=True)

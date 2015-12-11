@@ -24,7 +24,7 @@ if pyxb.__version__ != _PyXBVersion:
     raise pyxb.PyXBVersionError(_PyXBVersion)
 
 # Import bindings for namespaces imported into schema
-import _dsig as _ImportedBinding__dsig
+from pynfe.utils.nfse.ginfes import _dsig as _ImportedBinding__dsig
 import pyxb.binding.datatypes
 
 # NOTE: All namespace declarations are reserved within the binding
@@ -746,18 +746,18 @@ class tcCpfCnpj (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Cpf uses Python identifier Cpf
     __Cpf = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Cpf'), 'Cpf', '__httpwww_ginfes_com_brtipos_v03_xsd_tcCpfCnpj_httpwww_ginfes_com_brtipos_v03_xsdCpf', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 289, 3), )
 
-    
+
     Cpf = property(__Cpf.value, __Cpf.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Cnpj uses Python identifier Cnpj
     __Cnpj = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Cnpj'), 'Cnpj', '__httpwww_ginfes_com_brtipos_v03_xsd_tcCpfCnpj_httpwww_ginfes_com_brtipos_v03_xsdCnpj', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 290, 3), )
 
-    
+
     Cnpj = property(__Cnpj.value, __Cnpj.set, None, None)
 
     _ElementMap.update({
@@ -765,7 +765,7 @@ class tcCpfCnpj (pyxb.binding.basis.complexTypeDefinition):
         __Cnpj.name() : __Cnpj
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcCpfCnpj', tcCpfCnpj)
 
@@ -781,53 +781,53 @@ class tcEndereco (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Endereco uses Python identifier Endereco
     __Endereco = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Endereco'), 'Endereco', '__httpwww_ginfes_com_brtipos_v03_xsd_tcEndereco_httpwww_ginfes_com_brtipos_v03_xsdEndereco', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 295, 3), )
 
-    
+
     Endereco = property(__Endereco.value, __Endereco.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Numero uses Python identifier Numero
     __Numero = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Numero'), 'Numero', '__httpwww_ginfes_com_brtipos_v03_xsd_tcEndereco_httpwww_ginfes_com_brtipos_v03_xsdNumero', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 296, 3), )
 
-    
+
     Numero = property(__Numero.value, __Numero.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Complemento uses Python identifier Complemento
     __Complemento = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Complemento'), 'Complemento', '__httpwww_ginfes_com_brtipos_v03_xsd_tcEndereco_httpwww_ginfes_com_brtipos_v03_xsdComplemento', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 297, 3), )
 
-    
+
     Complemento = property(__Complemento.value, __Complemento.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Bairro uses Python identifier Bairro
     __Bairro = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Bairro'), 'Bairro', '__httpwww_ginfes_com_brtipos_v03_xsd_tcEndereco_httpwww_ginfes_com_brtipos_v03_xsdBairro', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 298, 3), )
 
-    
+
     Bairro = property(__Bairro.value, __Bairro.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}CodigoMunicipio uses Python identifier CodigoMunicipio
     __CodigoMunicipio = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'CodigoMunicipio'), 'CodigoMunicipio', '__httpwww_ginfes_com_brtipos_v03_xsd_tcEndereco_httpwww_ginfes_com_brtipos_v03_xsdCodigoMunicipio', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 299, 3), )
 
-    
+
     CodigoMunicipio = property(__CodigoMunicipio.value, __CodigoMunicipio.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Uf uses Python identifier Uf
     __Uf = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Uf'), 'Uf', '__httpwww_ginfes_com_brtipos_v03_xsd_tcEndereco_httpwww_ginfes_com_brtipos_v03_xsdUf', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 300, 3), )
 
-    
+
     Uf = property(__Uf.value, __Uf.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Cep uses Python identifier Cep
     __Cep = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Cep'), 'Cep', '__httpwww_ginfes_com_brtipos_v03_xsd_tcEndereco_httpwww_ginfes_com_brtipos_v03_xsdCep', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 301, 3), )
 
-    
+
     Cep = property(__Cep.value, __Cep.set, None, None)
 
     _ElementMap.update({
@@ -840,7 +840,7 @@ class tcEndereco (pyxb.binding.basis.complexTypeDefinition):
         __Cep.name() : __Cep
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcEndereco', tcEndereco)
 
@@ -856,18 +856,18 @@ class tcContato (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Telefone uses Python identifier Telefone
     __Telefone = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Telefone'), 'Telefone', '__httpwww_ginfes_com_brtipos_v03_xsd_tcContato_httpwww_ginfes_com_brtipos_v03_xsdTelefone', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 306, 3), )
 
-    
+
     Telefone = property(__Telefone.value, __Telefone.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Email uses Python identifier Email
     __Email = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Email'), 'Email', '__httpwww_ginfes_com_brtipos_v03_xsd_tcContato_httpwww_ginfes_com_brtipos_v03_xsdEmail', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 307, 3), )
 
-    
+
     Email = property(__Email.value, __Email.set, None, None)
 
     _ElementMap.update({
@@ -875,7 +875,7 @@ class tcContato (pyxb.binding.basis.complexTypeDefinition):
         __Email.name() : __Email
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcContato', tcContato)
 
@@ -891,18 +891,18 @@ class tcIdentificacaoOrgaoGerador (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}CodigoMunicipio uses Python identifier CodigoMunicipio
     __CodigoMunicipio = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'CodigoMunicipio'), 'CodigoMunicipio', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoOrgaoGerador_httpwww_ginfes_com_brtipos_v03_xsdCodigoMunicipio', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 312, 3), )
 
-    
+
     CodigoMunicipio = property(__CodigoMunicipio.value, __CodigoMunicipio.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Uf uses Python identifier Uf
     __Uf = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Uf'), 'Uf', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoOrgaoGerador_httpwww_ginfes_com_brtipos_v03_xsdUf', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 313, 3), )
 
-    
+
     Uf = property(__Uf.value, __Uf.set, None, None)
 
     _ElementMap.update({
@@ -910,7 +910,7 @@ class tcIdentificacaoOrgaoGerador (pyxb.binding.basis.complexTypeDefinition):
         __Uf.name() : __Uf
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcIdentificacaoOrgaoGerador', tcIdentificacaoOrgaoGerador)
 
@@ -926,25 +926,25 @@ class tcIdentificacaoRps (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Numero uses Python identifier Numero
     __Numero = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Numero'), 'Numero', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoRps_httpwww_ginfes_com_brtipos_v03_xsdNumero', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 318, 3), )
 
-    
+
     Numero = property(__Numero.value, __Numero.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Serie uses Python identifier Serie
     __Serie = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Serie'), 'Serie', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoRps_httpwww_ginfes_com_brtipos_v03_xsdSerie', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 319, 3), )
 
-    
+
     Serie = property(__Serie.value, __Serie.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Tipo uses Python identifier Tipo
     __Tipo = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Tipo'), 'Tipo', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoRps_httpwww_ginfes_com_brtipos_v03_xsdTipo', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 320, 3), )
 
-    
+
     Tipo = property(__Tipo.value, __Tipo.set, None, None)
 
     _ElementMap.update({
@@ -953,7 +953,7 @@ class tcIdentificacaoRps (pyxb.binding.basis.complexTypeDefinition):
         __Tipo.name() : __Tipo
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcIdentificacaoRps', tcIdentificacaoRps)
 
@@ -969,18 +969,18 @@ class tcIdentificacaoPrestador (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Cnpj uses Python identifier Cnpj
     __Cnpj = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Cnpj'), 'Cnpj', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoPrestador_httpwww_ginfes_com_brtipos_v03_xsdCnpj', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 325, 3), )
 
-    
+
     Cnpj = property(__Cnpj.value, __Cnpj.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}InscricaoMunicipal uses Python identifier InscricaoMunicipal
     __InscricaoMunicipal = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'InscricaoMunicipal'), 'InscricaoMunicipal', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoPrestador_httpwww_ginfes_com_brtipos_v03_xsdInscricaoMunicipal', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 326, 3), )
 
-    
+
     InscricaoMunicipal = property(__InscricaoMunicipal.value, __InscricaoMunicipal.set, None, None)
 
     _ElementMap.update({
@@ -988,7 +988,7 @@ class tcIdentificacaoPrestador (pyxb.binding.basis.complexTypeDefinition):
         __InscricaoMunicipal.name() : __InscricaoMunicipal
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcIdentificacaoPrestador', tcIdentificacaoPrestador)
 
@@ -1004,18 +1004,18 @@ class tcIdentificacaoTomador (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}CpfCnpj uses Python identifier CpfCnpj
     __CpfCnpj = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'CpfCnpj'), 'CpfCnpj', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoTomador_httpwww_ginfes_com_brtipos_v03_xsdCpfCnpj', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 331, 3), )
 
-    
+
     CpfCnpj = property(__CpfCnpj.value, __CpfCnpj.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}InscricaoMunicipal uses Python identifier InscricaoMunicipal
     __InscricaoMunicipal = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'InscricaoMunicipal'), 'InscricaoMunicipal', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoTomador_httpwww_ginfes_com_brtipos_v03_xsdInscricaoMunicipal', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 332, 3), )
 
-    
+
     InscricaoMunicipal = property(__InscricaoMunicipal.value, __InscricaoMunicipal.set, None, None)
 
     _ElementMap.update({
@@ -1023,7 +1023,7 @@ class tcIdentificacaoTomador (pyxb.binding.basis.complexTypeDefinition):
         __InscricaoMunicipal.name() : __InscricaoMunicipal
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcIdentificacaoTomador', tcIdentificacaoTomador)
 
@@ -1039,32 +1039,32 @@ class tcDadosTomador (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}IdentificacaoTomador uses Python identifier IdentificacaoTomador
     __IdentificacaoTomador = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'IdentificacaoTomador'), 'IdentificacaoTomador', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosTomador_httpwww_ginfes_com_brtipos_v03_xsdIdentificacaoTomador', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 337, 3), )
 
-    
+
     IdentificacaoTomador = property(__IdentificacaoTomador.value, __IdentificacaoTomador.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}RazaoSocial uses Python identifier RazaoSocial
     __RazaoSocial = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'RazaoSocial'), 'RazaoSocial', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosTomador_httpwww_ginfes_com_brtipos_v03_xsdRazaoSocial', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 338, 3), )
 
-    
+
     RazaoSocial = property(__RazaoSocial.value, __RazaoSocial.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Endereco uses Python identifier Endereco
     __Endereco = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Endereco'), 'Endereco', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosTomador_httpwww_ginfes_com_brtipos_v03_xsdEndereco', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 339, 3), )
 
-    
+
     Endereco = property(__Endereco.value, __Endereco.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Contato uses Python identifier Contato
     __Contato = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Contato'), 'Contato', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosTomador_httpwww_ginfes_com_brtipos_v03_xsdContato', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 340, 3), )
 
-    
+
     Contato = property(__Contato.value, __Contato.set, None, None)
 
     _ElementMap.update({
@@ -1074,7 +1074,7 @@ class tcDadosTomador (pyxb.binding.basis.complexTypeDefinition):
         __Contato.name() : __Contato
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcDadosTomador', tcDadosTomador)
 
@@ -1090,25 +1090,25 @@ class tcIdentificacaoIntermediarioServico (pyxb.binding.basis.complexTypeDefinit
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}RazaoSocial uses Python identifier RazaoSocial
     __RazaoSocial = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'RazaoSocial'), 'RazaoSocial', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoIntermediarioServico_httpwww_ginfes_com_brtipos_v03_xsdRazaoSocial', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 345, 3), )
 
-    
+
     RazaoSocial = property(__RazaoSocial.value, __RazaoSocial.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}CpfCnpj uses Python identifier CpfCnpj
     __CpfCnpj = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'CpfCnpj'), 'CpfCnpj', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoIntermediarioServico_httpwww_ginfes_com_brtipos_v03_xsdCpfCnpj', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 346, 3), )
 
-    
+
     CpfCnpj = property(__CpfCnpj.value, __CpfCnpj.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}InscricaoMunicipal uses Python identifier InscricaoMunicipal
     __InscricaoMunicipal = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'InscricaoMunicipal'), 'InscricaoMunicipal', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoIntermediarioServico_httpwww_ginfes_com_brtipos_v03_xsdInscricaoMunicipal', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 347, 3), )
 
-    
+
     InscricaoMunicipal = property(__InscricaoMunicipal.value, __InscricaoMunicipal.set, None, None)
 
     _ElementMap.update({
@@ -1117,7 +1117,7 @@ class tcIdentificacaoIntermediarioServico (pyxb.binding.basis.complexTypeDefinit
         __InscricaoMunicipal.name() : __InscricaoMunicipal
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcIdentificacaoIntermediarioServico', tcIdentificacaoIntermediarioServico)
 
@@ -1133,116 +1133,116 @@ class tcValores (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ValorServicos uses Python identifier ValorServicos
     __ValorServicos = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ValorServicos'), 'ValorServicos', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdValorServicos', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 352, 3), )
 
-    
+
     ValorServicos = property(__ValorServicos.value, __ValorServicos.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ValorDeducoes uses Python identifier ValorDeducoes
     __ValorDeducoes = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ValorDeducoes'), 'ValorDeducoes', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdValorDeducoes', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 353, 3), )
 
-    
+
     ValorDeducoes = property(__ValorDeducoes.value, __ValorDeducoes.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ValorPis uses Python identifier ValorPis
     __ValorPis = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ValorPis'), 'ValorPis', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdValorPis', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 354, 3), )
 
-    
+
     ValorPis = property(__ValorPis.value, __ValorPis.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ValorCofins uses Python identifier ValorCofins
     __ValorCofins = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ValorCofins'), 'ValorCofins', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdValorCofins', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 355, 3), )
 
-    
+
     ValorCofins = property(__ValorCofins.value, __ValorCofins.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ValorInss uses Python identifier ValorInss
     __ValorInss = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ValorInss'), 'ValorInss', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdValorInss', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 356, 3), )
 
-    
+
     ValorInss = property(__ValorInss.value, __ValorInss.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ValorIr uses Python identifier ValorIr
     __ValorIr = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ValorIr'), 'ValorIr', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdValorIr', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 357, 3), )
 
-    
+
     ValorIr = property(__ValorIr.value, __ValorIr.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ValorCsll uses Python identifier ValorCsll
     __ValorCsll = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ValorCsll'), 'ValorCsll', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdValorCsll', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 358, 3), )
 
-    
+
     ValorCsll = property(__ValorCsll.value, __ValorCsll.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}IssRetido uses Python identifier IssRetido
     __IssRetido = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'IssRetido'), 'IssRetido', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdIssRetido', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 359, 3), )
 
-    
+
     IssRetido = property(__IssRetido.value, __IssRetido.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ValorIss uses Python identifier ValorIss
     __ValorIss = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ValorIss'), 'ValorIss', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdValorIss', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 360, 3), )
 
-    
+
     ValorIss = property(__ValorIss.value, __ValorIss.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ValorIssRetido uses Python identifier ValorIssRetido
     __ValorIssRetido = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ValorIssRetido'), 'ValorIssRetido', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdValorIssRetido', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 361, 3), )
 
-    
+
     ValorIssRetido = property(__ValorIssRetido.value, __ValorIssRetido.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}OutrasRetencoes uses Python identifier OutrasRetencoes
     __OutrasRetencoes = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'OutrasRetencoes'), 'OutrasRetencoes', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdOutrasRetencoes', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 362, 3), )
 
-    
+
     OutrasRetencoes = property(__OutrasRetencoes.value, __OutrasRetencoes.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}BaseCalculo uses Python identifier BaseCalculo
     __BaseCalculo = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'BaseCalculo'), 'BaseCalculo', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdBaseCalculo', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 363, 3), )
 
-    
+
     BaseCalculo = property(__BaseCalculo.value, __BaseCalculo.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Aliquota uses Python identifier Aliquota
     __Aliquota = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Aliquota'), 'Aliquota', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdAliquota', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 364, 3), )
 
-    
+
     Aliquota = property(__Aliquota.value, __Aliquota.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ValorLiquidoNfse uses Python identifier ValorLiquidoNfse
     __ValorLiquidoNfse = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ValorLiquidoNfse'), 'ValorLiquidoNfse', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdValorLiquidoNfse', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 365, 3), )
 
-    
+
     ValorLiquidoNfse = property(__ValorLiquidoNfse.value, __ValorLiquidoNfse.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}DescontoIncondicionado uses Python identifier DescontoIncondicionado
     __DescontoIncondicionado = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'DescontoIncondicionado'), 'DescontoIncondicionado', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdDescontoIncondicionado', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 366, 3), )
 
-    
+
     DescontoIncondicionado = property(__DescontoIncondicionado.value, __DescontoIncondicionado.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}DescontoCondicionado uses Python identifier DescontoCondicionado
     __DescontoCondicionado = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'DescontoCondicionado'), 'DescontoCondicionado', '__httpwww_ginfes_com_brtipos_v03_xsd_tcValores_httpwww_ginfes_com_brtipos_v03_xsdDescontoCondicionado', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 367, 3), )
 
-    
+
     DescontoCondicionado = property(__DescontoCondicionado.value, __DescontoCondicionado.set, None, None)
 
     _ElementMap.update({
@@ -1264,7 +1264,7 @@ class tcValores (pyxb.binding.basis.complexTypeDefinition):
         __DescontoCondicionado.name() : __DescontoCondicionado
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcValores', tcValores)
 
@@ -1280,46 +1280,46 @@ class tcDadosServico (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Valores uses Python identifier Valores
     __Valores = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Valores'), 'Valores', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosServico_httpwww_ginfes_com_brtipos_v03_xsdValores', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 372, 3), )
 
-    
+
     Valores = property(__Valores.value, __Valores.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ItemListaServico uses Python identifier ItemListaServico
     __ItemListaServico = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ItemListaServico'), 'ItemListaServico', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosServico_httpwww_ginfes_com_brtipos_v03_xsdItemListaServico', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 373, 3), )
 
-    
+
     ItemListaServico = property(__ItemListaServico.value, __ItemListaServico.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}CodigoCnae uses Python identifier CodigoCnae
     __CodigoCnae = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'CodigoCnae'), 'CodigoCnae', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosServico_httpwww_ginfes_com_brtipos_v03_xsdCodigoCnae', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 374, 3), )
 
-    
+
     CodigoCnae = property(__CodigoCnae.value, __CodigoCnae.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}CodigoTributacaoMunicipio uses Python identifier CodigoTributacaoMunicipio
     __CodigoTributacaoMunicipio = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'CodigoTributacaoMunicipio'), 'CodigoTributacaoMunicipio', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosServico_httpwww_ginfes_com_brtipos_v03_xsdCodigoTributacaoMunicipio', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 375, 3), )
 
-    
+
     CodigoTributacaoMunicipio = property(__CodigoTributacaoMunicipio.value, __CodigoTributacaoMunicipio.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Discriminacao uses Python identifier Discriminacao
     __Discriminacao = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Discriminacao'), 'Discriminacao', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosServico_httpwww_ginfes_com_brtipos_v03_xsdDiscriminacao', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 376, 3), )
 
-    
+
     Discriminacao = property(__Discriminacao.value, __Discriminacao.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}CodigoMunicipio uses Python identifier CodigoMunicipio
     __CodigoMunicipio = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'CodigoMunicipio'), 'CodigoMunicipio', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosServico_httpwww_ginfes_com_brtipos_v03_xsdCodigoMunicipio', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 377, 3), )
 
-    
+
     CodigoMunicipio = property(__CodigoMunicipio.value, __CodigoMunicipio.set, None, None)
 
     _ElementMap.update({
@@ -1331,7 +1331,7 @@ class tcDadosServico (pyxb.binding.basis.complexTypeDefinition):
         __CodigoMunicipio.name() : __CodigoMunicipio
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcDadosServico', tcDadosServico)
 
@@ -1347,18 +1347,18 @@ class tcDadosConstrucaoCivil (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}CodigoObra uses Python identifier CodigoObra
     __CodigoObra = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'CodigoObra'), 'CodigoObra', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosConstrucaoCivil_httpwww_ginfes_com_brtipos_v03_xsdCodigoObra', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 382, 3), )
 
-    
+
     CodigoObra = property(__CodigoObra.value, __CodigoObra.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Art uses Python identifier Art
     __Art = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Art'), 'Art', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosConstrucaoCivil_httpwww_ginfes_com_brtipos_v03_xsdArt', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 383, 3), )
 
-    
+
     Art = property(__Art.value, __Art.set, None, None)
 
     _ElementMap.update({
@@ -1366,7 +1366,7 @@ class tcDadosConstrucaoCivil (pyxb.binding.basis.complexTypeDefinition):
         __Art.name() : __Art
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcDadosConstrucaoCivil', tcDadosConstrucaoCivil)
 
@@ -1382,39 +1382,39 @@ class tcDadosPrestador (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}IdentificacaoPrestador uses Python identifier IdentificacaoPrestador
     __IdentificacaoPrestador = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'IdentificacaoPrestador'), 'IdentificacaoPrestador', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosPrestador_httpwww_ginfes_com_brtipos_v03_xsdIdentificacaoPrestador', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 388, 3), )
 
-    
+
     IdentificacaoPrestador = property(__IdentificacaoPrestador.value, __IdentificacaoPrestador.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}RazaoSocial uses Python identifier RazaoSocial
     __RazaoSocial = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'RazaoSocial'), 'RazaoSocial', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosPrestador_httpwww_ginfes_com_brtipos_v03_xsdRazaoSocial', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 389, 3), )
 
-    
+
     RazaoSocial = property(__RazaoSocial.value, __RazaoSocial.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}NomeFantasia uses Python identifier NomeFantasia
     __NomeFantasia = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'NomeFantasia'), 'NomeFantasia', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosPrestador_httpwww_ginfes_com_brtipos_v03_xsdNomeFantasia', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 390, 3), )
 
-    
+
     NomeFantasia = property(__NomeFantasia.value, __NomeFantasia.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Endereco uses Python identifier Endereco
     __Endereco = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Endereco'), 'Endereco', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosPrestador_httpwww_ginfes_com_brtipos_v03_xsdEndereco', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 391, 3), )
 
-    
+
     Endereco = property(__Endereco.value, __Endereco.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Contato uses Python identifier Contato
     __Contato = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Contato'), 'Contato', '__httpwww_ginfes_com_brtipos_v03_xsd_tcDadosPrestador_httpwww_ginfes_com_brtipos_v03_xsdContato', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 392, 3), )
 
-    
+
     Contato = property(__Contato.value, __Contato.set, None, None)
 
     _ElementMap.update({
@@ -1425,7 +1425,7 @@ class tcDadosPrestador (pyxb.binding.basis.complexTypeDefinition):
         __Contato.name() : __Contato
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcDadosPrestador', tcDadosPrestador)
 
@@ -1441,18 +1441,18 @@ class tcRps (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}InfRps uses Python identifier InfRps
     __InfRps = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'InfRps'), 'InfRps', '__httpwww_ginfes_com_brtipos_v03_xsd_tcRps_httpwww_ginfes_com_brtipos_v03_xsdInfRps', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 415, 3), )
 
-    
+
     InfRps = property(__InfRps.value, __InfRps.set, None, None)
 
-    
+
     # Element {http://www.w3.org/2000/09/xmldsig#}Signature uses Python identifier Signature
     __Signature = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(_Namespace_dsig, 'Signature'), 'Signature', '__httpwww_ginfes_com_brtipos_v03_xsd_tcRps_httpwww_w3_org200009xmldsigSignature', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/xmldsig-core-schema20020212_v03.xsd', 41, 0), )
 
-    
+
     Signature = property(__Signature.value, __Signature.set, None, None)
 
     _ElementMap.update({
@@ -1460,7 +1460,7 @@ class tcRps (pyxb.binding.basis.complexTypeDefinition):
         __Signature.name() : __Signature
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcRps', tcRps)
 
@@ -1476,32 +1476,32 @@ class tcIdentificacaoNfse (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Numero uses Python identifier Numero
     __Numero = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Numero'), 'Numero', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoNfse_httpwww_ginfes_com_brtipos_v03_xsdNumero', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 421, 3), )
 
-    
+
     Numero = property(__Numero.value, __Numero.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Cnpj uses Python identifier Cnpj
     __Cnpj = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Cnpj'), 'Cnpj', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoNfse_httpwww_ginfes_com_brtipos_v03_xsdCnpj', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 422, 3), )
 
-    
+
     Cnpj = property(__Cnpj.value, __Cnpj.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}InscricaoMunicipal uses Python identifier InscricaoMunicipal
     __InscricaoMunicipal = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'InscricaoMunicipal'), 'InscricaoMunicipal', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoNfse_httpwww_ginfes_com_brtipos_v03_xsdInscricaoMunicipal', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 423, 3), )
 
-    
+
     InscricaoMunicipal = property(__InscricaoMunicipal.value, __InscricaoMunicipal.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}CodigoMunicipio uses Python identifier CodigoMunicipio
     __CodigoMunicipio = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'CodigoMunicipio'), 'CodigoMunicipio', '__httpwww_ginfes_com_brtipos_v03_xsd_tcIdentificacaoNfse_httpwww_ginfes_com_brtipos_v03_xsdCodigoMunicipio', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 424, 3), )
 
-    
+
     CodigoMunicipio = property(__CodigoMunicipio.value, __CodigoMunicipio.set, None, None)
 
     _ElementMap.update({
@@ -1511,7 +1511,7 @@ class tcIdentificacaoNfse (pyxb.binding.basis.complexTypeDefinition):
         __CodigoMunicipio.name() : __CodigoMunicipio
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcIdentificacaoNfse', tcIdentificacaoNfse)
 
@@ -1527,18 +1527,18 @@ class tcNfse (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}InfNfse uses Python identifier InfNfse
     __InfNfse = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'InfNfse'), 'InfNfse', '__httpwww_ginfes_com_brtipos_v03_xsd_tcNfse_httpwww_ginfes_com_brtipos_v03_xsdInfNfse', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 453, 3), )
 
-    
+
     InfNfse = property(__InfNfse.value, __InfNfse.set, None, None)
 
-    
+
     # Element {http://www.w3.org/2000/09/xmldsig#}Signature uses Python identifier Signature
     __Signature = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(_Namespace_dsig, 'Signature'), 'Signature', '__httpwww_ginfes_com_brtipos_v03_xsd_tcNfse_httpwww_w3_org200009xmldsigSignature', True, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/xmldsig-core-schema20020212_v03.xsd', 41, 0), )
 
-    
+
     Signature = property(__Signature.value, __Signature.set, None, None)
 
     _ElementMap.update({
@@ -1546,7 +1546,7 @@ class tcNfse (pyxb.binding.basis.complexTypeDefinition):
         __Signature.name() : __Signature
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcNfse', tcNfse)
 
@@ -1562,18 +1562,18 @@ class tcPedidoCancelamento (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}InfPedidoCancelamento uses Python identifier InfPedidoCancelamento
     __InfPedidoCancelamento = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'InfPedidoCancelamento'), 'InfPedidoCancelamento', '__httpwww_ginfes_com_brtipos_v03_xsd_tcPedidoCancelamento_httpwww_ginfes_com_brtipos_v03_xsdInfPedidoCancelamento', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 466, 3), )
 
-    
+
     InfPedidoCancelamento = property(__InfPedidoCancelamento.value, __InfPedidoCancelamento.set, None, None)
 
-    
+
     # Element {http://www.w3.org/2000/09/xmldsig#}Signature uses Python identifier Signature
     __Signature = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(_Namespace_dsig, 'Signature'), 'Signature', '__httpwww_ginfes_com_brtipos_v03_xsd_tcPedidoCancelamento_httpwww_w3_org200009xmldsigSignature', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/xmldsig-core-schema20020212_v03.xsd', 41, 0), )
 
-    
+
     Signature = property(__Signature.value, __Signature.set, None, None)
 
     _ElementMap.update({
@@ -1581,7 +1581,7 @@ class tcPedidoCancelamento (pyxb.binding.basis.complexTypeDefinition):
         __Signature.name() : __Signature
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcPedidoCancelamento', tcPedidoCancelamento)
 
@@ -1597,18 +1597,18 @@ class tcInfConfirmacaoCancelamento (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Sucesso uses Python identifier Sucesso
     __Sucesso = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Sucesso'), 'Sucesso', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfConfirmacaoCancelamento_httpwww_ginfes_com_brtipos_v03_xsdSucesso', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 472, 3), )
 
-    
+
     Sucesso = property(__Sucesso.value, __Sucesso.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}DataHora uses Python identifier DataHora
     __DataHora = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'DataHora'), 'DataHora', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfConfirmacaoCancelamento_httpwww_ginfes_com_brtipos_v03_xsdDataHora', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 473, 3), )
 
-    
+
     DataHora = property(__DataHora.value, __DataHora.set, None, None)
 
     _ElementMap.update({
@@ -1616,7 +1616,7 @@ class tcInfConfirmacaoCancelamento (pyxb.binding.basis.complexTypeDefinition):
         __DataHora.name() : __DataHora
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcInfConfirmacaoCancelamento', tcInfConfirmacaoCancelamento)
 
@@ -1632,18 +1632,18 @@ class tcCancelamentoNfse (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Confirmacao uses Python identifier Confirmacao
     __Confirmacao = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Confirmacao'), 'Confirmacao', '__httpwww_ginfes_com_brtipos_v03_xsd_tcCancelamentoNfse_httpwww_ginfes_com_brtipos_v03_xsdConfirmacao', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 485, 3), )
 
-    
+
     Confirmacao = property(__Confirmacao.value, __Confirmacao.set, None, None)
 
-    
+
     # Element {http://www.w3.org/2000/09/xmldsig#}Signature uses Python identifier Signature
     __Signature = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(_Namespace_dsig, 'Signature'), 'Signature', '__httpwww_ginfes_com_brtipos_v03_xsd_tcCancelamentoNfse_httpwww_w3_org200009xmldsigSignature', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/xmldsig-core-schema20020212_v03.xsd', 41, 0), )
 
-    
+
     Signature = property(__Signature.value, __Signature.set, None, None)
 
     _ElementMap.update({
@@ -1651,7 +1651,7 @@ class tcCancelamentoNfse (pyxb.binding.basis.complexTypeDefinition):
         __Signature.name() : __Signature
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcCancelamentoNfse', tcCancelamentoNfse)
 
@@ -1667,18 +1667,18 @@ class tcSubstituicaoNfse (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}SubstituicaoNfse uses Python identifier SubstituicaoNfse
     __SubstituicaoNfse = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'SubstituicaoNfse'), 'SubstituicaoNfse', '__httpwww_ginfes_com_brtipos_v03_xsd_tcSubstituicaoNfse_httpwww_ginfes_com_brtipos_v03_xsdSubstituicaoNfse', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 497, 3), )
 
-    
+
     SubstituicaoNfse = property(__SubstituicaoNfse.value, __SubstituicaoNfse.set, None, None)
 
-    
+
     # Element {http://www.w3.org/2000/09/xmldsig#}Signature uses Python identifier Signature
     __Signature = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(_Namespace_dsig, 'Signature'), 'Signature', '__httpwww_ginfes_com_brtipos_v03_xsd_tcSubstituicaoNfse_httpwww_w3_org200009xmldsigSignature', True, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/xmldsig-core-schema20020212_v03.xsd', 41, 0), )
 
-    
+
     Signature = property(__Signature.value, __Signature.set, None, None)
 
     _ElementMap.update({
@@ -1686,7 +1686,7 @@ class tcSubstituicaoNfse (pyxb.binding.basis.complexTypeDefinition):
         __Signature.name() : __Signature
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcSubstituicaoNfse', tcSubstituicaoNfse)
 
@@ -1702,25 +1702,25 @@ class tcCompNfse (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Nfse uses Python identifier Nfse
     __Nfse = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Nfse'), 'Nfse', '__httpwww_ginfes_com_brtipos_v03_xsd_tcCompNfse_httpwww_ginfes_com_brtipos_v03_xsdNfse', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 503, 3), )
 
-    
+
     Nfse = property(__Nfse.value, __Nfse.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}NfseCancelamento uses Python identifier NfseCancelamento
     __NfseCancelamento = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'NfseCancelamento'), 'NfseCancelamento', '__httpwww_ginfes_com_brtipos_v03_xsd_tcCompNfse_httpwww_ginfes_com_brtipos_v03_xsdNfseCancelamento', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 504, 3), )
 
-    
+
     NfseCancelamento = property(__NfseCancelamento.value, __NfseCancelamento.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}NfseSubstituicao uses Python identifier NfseSubstituicao
     __NfseSubstituicao = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'NfseSubstituicao'), 'NfseSubstituicao', '__httpwww_ginfes_com_brtipos_v03_xsd_tcCompNfse_httpwww_ginfes_com_brtipos_v03_xsdNfseSubstituicao', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 505, 3), )
 
-    
+
     NfseSubstituicao = property(__NfseSubstituicao.value, __NfseSubstituicao.set, None, None)
 
     _ElementMap.update({
@@ -1729,7 +1729,7 @@ class tcCompNfse (pyxb.binding.basis.complexTypeDefinition):
         __NfseSubstituicao.name() : __NfseSubstituicao
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcCompNfse', tcCompNfse)
 
@@ -1745,18 +1745,18 @@ class CTD_ANON (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}MensagemRetorno uses Python identifier MensagemRetorno
     __MensagemRetorno = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'MensagemRetorno'), 'MensagemRetorno', '__httpwww_ginfes_com_brtipos_v03_xsd_CTD_ANON_httpwww_ginfes_com_brtipos_v03_xsdMensagemRetorno', True, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 511, 4), )
 
-    
+
     MensagemRetorno = property(__MensagemRetorno.value, __MensagemRetorno.set, None, None)
 
     _ElementMap.update({
         __MensagemRetorno.name() : __MensagemRetorno
     })
     _AttributeMap.update({
-        
+
     })
 
 
@@ -1772,25 +1772,25 @@ class tcMensagemRetorno (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Codigo uses Python identifier Codigo
     __Codigo = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Codigo'), 'Codigo', '__httpwww_ginfes_com_brtipos_v03_xsd_tcMensagemRetorno_httpwww_ginfes_com_brtipos_v03_xsdCodigo', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 517, 3), )
 
-    
+
     Codigo = property(__Codigo.value, __Codigo.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Mensagem uses Python identifier Mensagem
     __Mensagem = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Mensagem'), 'Mensagem', '__httpwww_ginfes_com_brtipos_v03_xsd_tcMensagemRetorno_httpwww_ginfes_com_brtipos_v03_xsdMensagem', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 518, 3), )
 
-    
+
     Mensagem = property(__Mensagem.value, __Mensagem.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Correcao uses Python identifier Correcao
     __Correcao = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Correcao'), 'Correcao', '__httpwww_ginfes_com_brtipos_v03_xsd_tcMensagemRetorno_httpwww_ginfes_com_brtipos_v03_xsdCorrecao', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 519, 3), )
 
-    
+
     Correcao = property(__Correcao.value, __Correcao.set, None, None)
 
     _ElementMap.update({
@@ -1799,7 +1799,7 @@ class tcMensagemRetorno (pyxb.binding.basis.complexTypeDefinition):
         __Correcao.name() : __Correcao
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcMensagemRetorno', tcMensagemRetorno)
 
@@ -1815,25 +1815,25 @@ class tcMensagemRetornoLote (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}IdentificacaoRps uses Python identifier IdentificacaoRps
     __IdentificacaoRps = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'IdentificacaoRps'), 'IdentificacaoRps', '__httpwww_ginfes_com_brtipos_v03_xsd_tcMensagemRetornoLote_httpwww_ginfes_com_brtipos_v03_xsdIdentificacaoRps', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 524, 3), )
 
-    
+
     IdentificacaoRps = property(__IdentificacaoRps.value, __IdentificacaoRps.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Codigo uses Python identifier Codigo
     __Codigo = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Codigo'), 'Codigo', '__httpwww_ginfes_com_brtipos_v03_xsd_tcMensagemRetornoLote_httpwww_ginfes_com_brtipos_v03_xsdCodigo', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 525, 3), )
 
-    
+
     Codigo = property(__Codigo.value, __Codigo.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Mensagem uses Python identifier Mensagem
     __Mensagem = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Mensagem'), 'Mensagem', '__httpwww_ginfes_com_brtipos_v03_xsd_tcMensagemRetornoLote_httpwww_ginfes_com_brtipos_v03_xsdMensagem', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 526, 3), )
 
-    
+
     Mensagem = property(__Mensagem.value, __Mensagem.set, None, None)
 
     _ElementMap.update({
@@ -1842,7 +1842,7 @@ class tcMensagemRetornoLote (pyxb.binding.basis.complexTypeDefinition):
         __Mensagem.name() : __Mensagem
     })
     _AttributeMap.update({
-        
+
     })
 Namespace.addCategoryObject('typeBinding', 'tcMensagemRetornoLote', tcMensagemRetornoLote)
 
@@ -1858,18 +1858,18 @@ class CTD_ANON_ (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Rps uses Python identifier Rps
     __Rps = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Rps'), 'Rps', '__httpwww_ginfes_com_brtipos_v03_xsd_CTD_ANON__httpwww_ginfes_com_brtipos_v03_xsdRps', True, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 538, 6), )
 
-    
+
     Rps = property(__Rps.value, __Rps.set, None, None)
 
     _ElementMap.update({
         __Rps.name() : __Rps
     })
     _AttributeMap.update({
-        
+
     })
 
 
@@ -1885,103 +1885,103 @@ class tcInfRps (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}IdentificacaoRps uses Python identifier IdentificacaoRps
     __IdentificacaoRps = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'IdentificacaoRps'), 'IdentificacaoRps', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfRps_httpwww_ginfes_com_brtipos_v03_xsdIdentificacaoRps', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 397, 3), )
 
-    
+
     IdentificacaoRps = property(__IdentificacaoRps.value, __IdentificacaoRps.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}DataEmissao uses Python identifier DataEmissao
     __DataEmissao = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'DataEmissao'), 'DataEmissao', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfRps_httpwww_ginfes_com_brtipos_v03_xsdDataEmissao', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 398, 3), )
 
-    
+
     DataEmissao = property(__DataEmissao.value, __DataEmissao.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}NaturezaOperacao uses Python identifier NaturezaOperacao
     __NaturezaOperacao = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'NaturezaOperacao'), 'NaturezaOperacao', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfRps_httpwww_ginfes_com_brtipos_v03_xsdNaturezaOperacao', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 399, 3), )
 
-    
+
     NaturezaOperacao = property(__NaturezaOperacao.value, __NaturezaOperacao.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}RegimeEspecialTributacao uses Python identifier RegimeEspecialTributacao
     __RegimeEspecialTributacao = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'RegimeEspecialTributacao'), 'RegimeEspecialTributacao', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfRps_httpwww_ginfes_com_brtipos_v03_xsdRegimeEspecialTributacao', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 400, 3), )
 
-    
+
     RegimeEspecialTributacao = property(__RegimeEspecialTributacao.value, __RegimeEspecialTributacao.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}OptanteSimplesNacional uses Python identifier OptanteSimplesNacional
     __OptanteSimplesNacional = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'OptanteSimplesNacional'), 'OptanteSimplesNacional', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfRps_httpwww_ginfes_com_brtipos_v03_xsdOptanteSimplesNacional', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 401, 3), )
 
-    
+
     OptanteSimplesNacional = property(__OptanteSimplesNacional.value, __OptanteSimplesNacional.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}IncentivadorCultural uses Python identifier IncentivadorCultural
     __IncentivadorCultural = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'IncentivadorCultural'), 'IncentivadorCultural', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfRps_httpwww_ginfes_com_brtipos_v03_xsdIncentivadorCultural', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 402, 3), )
 
-    
+
     IncentivadorCultural = property(__IncentivadorCultural.value, __IncentivadorCultural.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Status uses Python identifier Status
     __Status = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Status'), 'Status', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfRps_httpwww_ginfes_com_brtipos_v03_xsdStatus', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 403, 3), )
 
-    
+
     Status = property(__Status.value, __Status.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}RpsSubstituido uses Python identifier RpsSubstituido
     __RpsSubstituido = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'RpsSubstituido'), 'RpsSubstituido', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfRps_httpwww_ginfes_com_brtipos_v03_xsdRpsSubstituido', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 404, 3), )
 
-    
+
     RpsSubstituido = property(__RpsSubstituido.value, __RpsSubstituido.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Servico uses Python identifier Servico
     __Servico = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Servico'), 'Servico', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfRps_httpwww_ginfes_com_brtipos_v03_xsdServico', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 405, 3), )
 
-    
+
     Servico = property(__Servico.value, __Servico.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Prestador uses Python identifier Prestador
     __Prestador = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Prestador'), 'Prestador', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfRps_httpwww_ginfes_com_brtipos_v03_xsdPrestador', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 406, 3), )
 
-    
+
     Prestador = property(__Prestador.value, __Prestador.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Tomador uses Python identifier Tomador
     __Tomador = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Tomador'), 'Tomador', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfRps_httpwww_ginfes_com_brtipos_v03_xsdTomador', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 407, 3), )
 
-    
+
     Tomador = property(__Tomador.value, __Tomador.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}IntermediarioServico uses Python identifier IntermediarioServico
     __IntermediarioServico = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'IntermediarioServico'), 'IntermediarioServico', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfRps_httpwww_ginfes_com_brtipos_v03_xsdIntermediarioServico', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 408, 3), )
 
-    
+
     IntermediarioServico = property(__IntermediarioServico.value, __IntermediarioServico.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ConstrucaoCivil uses Python identifier ConstrucaoCivil
     __ConstrucaoCivil = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ConstrucaoCivil'), 'ConstrucaoCivil', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfRps_httpwww_ginfes_com_brtipos_v03_xsdConstrucaoCivil', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 409, 3), )
 
-    
+
     ConstrucaoCivil = property(__ConstrucaoCivil.value, __ConstrucaoCivil.set, None, None)
 
-    
+
     # Attribute Id uses Python identifier Id
     __Id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'Id'), 'Id', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfRps_Id', tsIdTag)
     __Id._DeclarationLocation = pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 411, 2)
     __Id._UseLocation = pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 411, 2)
-    
+
     Id = property(__Id.value, __Id.set, None, None)
 
     _ElementMap.update({
@@ -2016,145 +2016,145 @@ class tcInfNfse (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Numero uses Python identifier Numero
     __Numero = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Numero'), 'Numero', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdNumero', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 429, 3), )
 
-    
+
     Numero = property(__Numero.value, __Numero.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}CodigoVerificacao uses Python identifier CodigoVerificacao
     __CodigoVerificacao = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'CodigoVerificacao'), 'CodigoVerificacao', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdCodigoVerificacao', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 430, 3), )
 
-    
+
     CodigoVerificacao = property(__CodigoVerificacao.value, __CodigoVerificacao.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}DataEmissao uses Python identifier DataEmissao
     __DataEmissao = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'DataEmissao'), 'DataEmissao', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdDataEmissao', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 431, 3), )
 
-    
+
     DataEmissao = property(__DataEmissao.value, __DataEmissao.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}IdentificacaoRps uses Python identifier IdentificacaoRps
     __IdentificacaoRps = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'IdentificacaoRps'), 'IdentificacaoRps', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdIdentificacaoRps', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 432, 3), )
 
-    
+
     IdentificacaoRps = property(__IdentificacaoRps.value, __IdentificacaoRps.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}DataEmissaoRps uses Python identifier DataEmissaoRps
     __DataEmissaoRps = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'DataEmissaoRps'), 'DataEmissaoRps', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdDataEmissaoRps', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 433, 3), )
 
-    
+
     DataEmissaoRps = property(__DataEmissaoRps.value, __DataEmissaoRps.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}NaturezaOperacao uses Python identifier NaturezaOperacao
     __NaturezaOperacao = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'NaturezaOperacao'), 'NaturezaOperacao', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdNaturezaOperacao', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 434, 3), )
 
-    
+
     NaturezaOperacao = property(__NaturezaOperacao.value, __NaturezaOperacao.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}RegimeEspecialTributacao uses Python identifier RegimeEspecialTributacao
     __RegimeEspecialTributacao = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'RegimeEspecialTributacao'), 'RegimeEspecialTributacao', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdRegimeEspecialTributacao', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 435, 3), )
 
-    
+
     RegimeEspecialTributacao = property(__RegimeEspecialTributacao.value, __RegimeEspecialTributacao.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}OptanteSimplesNacional uses Python identifier OptanteSimplesNacional
     __OptanteSimplesNacional = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'OptanteSimplesNacional'), 'OptanteSimplesNacional', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdOptanteSimplesNacional', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 436, 3), )
 
-    
+
     OptanteSimplesNacional = property(__OptanteSimplesNacional.value, __OptanteSimplesNacional.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}IncentivadorCultural uses Python identifier IncentivadorCultural
     __IncentivadorCultural = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'IncentivadorCultural'), 'IncentivadorCultural', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdIncentivadorCultural', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 437, 3), )
 
-    
+
     IncentivadorCultural = property(__IncentivadorCultural.value, __IncentivadorCultural.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Competencia uses Python identifier Competencia
     __Competencia = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Competencia'), 'Competencia', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdCompetencia', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 438, 3), )
 
-    
+
     Competencia = property(__Competencia.value, __Competencia.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}NfseSubstituida uses Python identifier NfseSubstituida
     __NfseSubstituida = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'NfseSubstituida'), 'NfseSubstituida', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdNfseSubstituida', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 439, 3), )
 
-    
+
     NfseSubstituida = property(__NfseSubstituida.value, __NfseSubstituida.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}OutrasInformacoes uses Python identifier OutrasInformacoes
     __OutrasInformacoes = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'OutrasInformacoes'), 'OutrasInformacoes', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdOutrasInformacoes', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 440, 3), )
 
-    
+
     OutrasInformacoes = property(__OutrasInformacoes.value, __OutrasInformacoes.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Servico uses Python identifier Servico
     __Servico = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Servico'), 'Servico', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdServico', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 441, 3), )
 
-    
+
     Servico = property(__Servico.value, __Servico.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ValorCredito uses Python identifier ValorCredito
     __ValorCredito = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ValorCredito'), 'ValorCredito', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdValorCredito', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 442, 3), )
 
-    
+
     ValorCredito = property(__ValorCredito.value, __ValorCredito.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}PrestadorServico uses Python identifier PrestadorServico
     __PrestadorServico = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'PrestadorServico'), 'PrestadorServico', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdPrestadorServico', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 443, 3), )
 
-    
+
     PrestadorServico = property(__PrestadorServico.value, __PrestadorServico.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}TomadorServico uses Python identifier TomadorServico
     __TomadorServico = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'TomadorServico'), 'TomadorServico', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdTomadorServico', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 444, 3), )
 
-    
+
     TomadorServico = property(__TomadorServico.value, __TomadorServico.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}IntermediarioServico uses Python identifier IntermediarioServico
     __IntermediarioServico = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'IntermediarioServico'), 'IntermediarioServico', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdIntermediarioServico', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 445, 3), )
 
-    
+
     IntermediarioServico = property(__IntermediarioServico.value, __IntermediarioServico.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}OrgaoGerador uses Python identifier OrgaoGerador
     __OrgaoGerador = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'OrgaoGerador'), 'OrgaoGerador', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdOrgaoGerador', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 446, 3), )
 
-    
+
     OrgaoGerador = property(__OrgaoGerador.value, __OrgaoGerador.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ConstrucaoCivil uses Python identifier ConstrucaoCivil
     __ConstrucaoCivil = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ConstrucaoCivil'), 'ConstrucaoCivil', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_httpwww_ginfes_com_brtipos_v03_xsdConstrucaoCivil', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 447, 3), )
 
-    
+
     ConstrucaoCivil = property(__ConstrucaoCivil.value, __ConstrucaoCivil.set, None, None)
 
-    
+
     # Attribute Id uses Python identifier Id
     __Id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'Id'), 'Id', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfNfse_Id', tsIdTag)
     __Id._DeclarationLocation = pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 449, 2)
     __Id._UseLocation = pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 449, 2)
-    
+
     Id = property(__Id.value, __Id.set, None, None)
 
     _ElementMap.update({
@@ -2195,26 +2195,26 @@ class tcInfPedidoCancelamento (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}IdentificacaoNfse uses Python identifier IdentificacaoNfse
     __IdentificacaoNfse = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'IdentificacaoNfse'), 'IdentificacaoNfse', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfPedidoCancelamento_httpwww_ginfes_com_brtipos_v03_xsdIdentificacaoNfse', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 459, 3), )
 
-    
+
     IdentificacaoNfse = property(__IdentificacaoNfse.value, __IdentificacaoNfse.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}CodigoCancelamento uses Python identifier CodigoCancelamento
     __CodigoCancelamento = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'CodigoCancelamento'), 'CodigoCancelamento', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfPedidoCancelamento_httpwww_ginfes_com_brtipos_v03_xsdCodigoCancelamento', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 460, 3), )
 
-    
+
     CodigoCancelamento = property(__CodigoCancelamento.value, __CodigoCancelamento.set, None, None)
 
-    
+
     # Attribute Id uses Python identifier Id
     __Id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'Id'), 'Id', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfPedidoCancelamento_Id', tsIdTag)
     __Id._DeclarationLocation = pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 462, 2)
     __Id._UseLocation = pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 462, 2)
-    
+
     Id = property(__Id.value, __Id.set, None, None)
 
     _ElementMap.update({
@@ -2238,26 +2238,26 @@ class tcConfirmacaoCancelamento (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Pedido uses Python identifier Pedido
     __Pedido = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Pedido'), 'Pedido', '__httpwww_ginfes_com_brtipos_v03_xsd_tcConfirmacaoCancelamento_httpwww_ginfes_com_brtipos_v03_xsdPedido', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 478, 3), )
 
-    
+
     Pedido = property(__Pedido.value, __Pedido.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}InfConfirmacaoCancelamento uses Python identifier InfConfirmacaoCancelamento
     __InfConfirmacaoCancelamento = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'InfConfirmacaoCancelamento'), 'InfConfirmacaoCancelamento', '__httpwww_ginfes_com_brtipos_v03_xsd_tcConfirmacaoCancelamento_httpwww_ginfes_com_brtipos_v03_xsdInfConfirmacaoCancelamento', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 479, 3), )
 
-    
+
     InfConfirmacaoCancelamento = property(__InfConfirmacaoCancelamento.value, __InfConfirmacaoCancelamento.set, None, None)
 
-    
+
     # Attribute Id uses Python identifier Id
     __Id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'Id'), 'Id', '__httpwww_ginfes_com_brtipos_v03_xsd_tcConfirmacaoCancelamento_Id', tsIdTag)
     __Id._DeclarationLocation = pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 481, 2)
     __Id._UseLocation = pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 481, 2)
-    
+
     Id = property(__Id.value, __Id.set, None, None)
 
     _ElementMap.update({
@@ -2281,19 +2281,19 @@ class tcInfSubstituicaoNfse (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}NfseSubstituidora uses Python identifier NfseSubstituidora
     __NfseSubstituidora = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'NfseSubstituidora'), 'NfseSubstituidora', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfSubstituicaoNfse_httpwww_ginfes_com_brtipos_v03_xsdNfseSubstituidora', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 491, 3), )
 
-    
+
     NfseSubstituidora = property(__NfseSubstituidora.value, __NfseSubstituidora.set, None, None)
 
-    
+
     # Attribute Id uses Python identifier Id
     __Id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'Id'), 'Id', '__httpwww_ginfes_com_brtipos_v03_xsd_tcInfSubstituicaoNfse_Id', tsIdTag)
     __Id._DeclarationLocation = pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 493, 2)
     __Id._UseLocation = pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 493, 2)
-    
+
     Id = property(__Id.value, __Id.set, None, None)
 
     _ElementMap.update({
@@ -2316,47 +2316,47 @@ class tcLoteRps (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}NumeroLote uses Python identifier NumeroLote
     __NumeroLote = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'NumeroLote'), 'NumeroLote', '__httpwww_ginfes_com_brtipos_v03_xsd_tcLoteRps_httpwww_ginfes_com_brtipos_v03_xsdNumeroLote', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 531, 3), )
 
-    
+
     NumeroLote = property(__NumeroLote.value, __NumeroLote.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}Cnpj uses Python identifier Cnpj
     __Cnpj = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Cnpj'), 'Cnpj', '__httpwww_ginfes_com_brtipos_v03_xsd_tcLoteRps_httpwww_ginfes_com_brtipos_v03_xsdCnpj', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 532, 3), )
 
-    
+
     Cnpj = property(__Cnpj.value, __Cnpj.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}InscricaoMunicipal uses Python identifier InscricaoMunicipal
     __InscricaoMunicipal = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'InscricaoMunicipal'), 'InscricaoMunicipal', '__httpwww_ginfes_com_brtipos_v03_xsd_tcLoteRps_httpwww_ginfes_com_brtipos_v03_xsdInscricaoMunicipal', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 533, 3), )
 
-    
+
     InscricaoMunicipal = property(__InscricaoMunicipal.value, __InscricaoMunicipal.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}QuantidadeRps uses Python identifier QuantidadeRps
     __QuantidadeRps = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'QuantidadeRps'), 'QuantidadeRps', '__httpwww_ginfes_com_brtipos_v03_xsd_tcLoteRps_httpwww_ginfes_com_brtipos_v03_xsdQuantidadeRps', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 534, 3), )
 
-    
+
     QuantidadeRps = property(__QuantidadeRps.value, __QuantidadeRps.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ListaRps uses Python identifier ListaRps
     __ListaRps = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'ListaRps'), 'ListaRps', '__httpwww_ginfes_com_brtipos_v03_xsd_tcLoteRps_httpwww_ginfes_com_brtipos_v03_xsdListaRps', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 535, 3), )
 
-    
+
     ListaRps = property(__ListaRps.value, __ListaRps.set, None, None)
 
-    
+
     # Attribute Id uses Python identifier Id
     __Id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'Id'), 'Id', '__httpwww_ginfes_com_brtipos_v03_xsd_tcLoteRps_Id', tsIdTag)
     __Id._DeclarationLocation = pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 543, 2)
     __Id._UseLocation = pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/tipos_v03.xsd', 543, 2)
-    
+
     Id = property(__Id.value, __Id.set, None, None)
 
     _ElementMap.update({
@@ -4423,4 +4423,3 @@ def _BuildAutomaton_30 ():
     st_4._set_transitionSet(transitions)
     return fac.Automaton(states, counters, False, containing_state=None)
 tcLoteRps._Automaton = _BuildAutomaton_30()
-

@@ -24,8 +24,8 @@ if pyxb.__version__ != _PyXBVersion:
     raise pyxb.PyXBVersionError(_PyXBVersion)
 
 # Import bindings for namespaces imported into schema
-import _tipos as _ImportedBinding__tipos
-import _dsig as _ImportedBinding__dsig
+from pynfe.utils.nfse.ginfes import _tipos as _ImportedBinding__tipos
+from pynfe.utils.nfse.ginfes import _dsig as _ImportedBinding__dsig
 import pyxb.binding.datatypes
 
 # NOTE: All namespace declarations are reserved within the binding
@@ -88,46 +88,46 @@ class CTD_ANON (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/servico_consultar_nfse_envio_v03.xsd}Prestador uses Python identifier Prestador
     __Prestador = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Prestador'), 'Prestador', '__httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsd_CTD_ANON_httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsdPrestador', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/servico_consultar_nfse_envio_v03.xsd', 9, 4), )
 
-    
+
     Prestador = property(__Prestador.value, __Prestador.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/servico_consultar_nfse_envio_v03.xsd}NumeroNfse uses Python identifier NumeroNfse
     __NumeroNfse = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'NumeroNfse'), 'NumeroNfse', '__httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsd_CTD_ANON_httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsdNumeroNfse', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/servico_consultar_nfse_envio_v03.xsd', 10, 4), )
 
-    
+
     NumeroNfse = property(__NumeroNfse.value, __NumeroNfse.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/servico_consultar_nfse_envio_v03.xsd}PeriodoEmissao uses Python identifier PeriodoEmissao
     __PeriodoEmissao = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'PeriodoEmissao'), 'PeriodoEmissao', '__httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsd_CTD_ANON_httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsdPeriodoEmissao', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/servico_consultar_nfse_envio_v03.xsd', 11, 4), )
 
-    
+
     PeriodoEmissao = property(__PeriodoEmissao.value, __PeriodoEmissao.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/servico_consultar_nfse_envio_v03.xsd}Tomador uses Python identifier Tomador
     __Tomador = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Tomador'), 'Tomador', '__httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsd_CTD_ANON_httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsdTomador', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/servico_consultar_nfse_envio_v03.xsd', 19, 4), )
 
-    
+
     Tomador = property(__Tomador.value, __Tomador.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/servico_consultar_nfse_envio_v03.xsd}IntermediarioServico uses Python identifier IntermediarioServico
     __IntermediarioServico = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'IntermediarioServico'), 'IntermediarioServico', '__httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsd_CTD_ANON_httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsdIntermediarioServico', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/servico_consultar_nfse_envio_v03.xsd', 20, 4), )
 
-    
+
     IntermediarioServico = property(__IntermediarioServico.value, __IntermediarioServico.set, None, None)
 
-    
+
     # Element {http://www.w3.org/2000/09/xmldsig#}Signature uses Python identifier Signature
     __Signature = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(_Namespace_dsig, 'Signature'), 'Signature', '__httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsd_CTD_ANON_httpwww_w3_org200009xmldsigSignature', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/xmldsig-core-schema20020212_v03.xsd', 41, 0), )
 
-    
+
     Signature = property(__Signature.value, __Signature.set, None, None)
 
     _ElementMap.update({
@@ -139,7 +139,7 @@ class CTD_ANON (pyxb.binding.basis.complexTypeDefinition):
         __Signature.name() : __Signature
     })
     _AttributeMap.update({
-        
+
     })
 
 
@@ -155,18 +155,18 @@ class CTD_ANON_ (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/servico_consultar_nfse_envio_v03.xsd}DataInicial uses Python identifier DataInicial
     __DataInicial = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'DataInicial'), 'DataInicial', '__httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsd_CTD_ANON__httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsdDataInicial', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/servico_consultar_nfse_envio_v03.xsd', 14, 7), )
 
-    
+
     DataInicial = property(__DataInicial.value, __DataInicial.set, None, None)
 
-    
+
     # Element {http://www.ginfes.com.br/servico_consultar_nfse_envio_v03.xsd}DataFinal uses Python identifier DataFinal
     __DataFinal = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'DataFinal'), 'DataFinal', '__httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsd_CTD_ANON__httpwww_ginfes_com_brservico_consultar_nfse_envio_v03_xsdDataFinal', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/servico_consultar_nfse_envio_v03.xsd', 15, 7), )
 
-    
+
     DataFinal = property(__DataFinal.value, __DataFinal.set, None, None)
 
     _ElementMap.update({
@@ -174,7 +174,7 @@ class CTD_ANON_ (pyxb.binding.basis.complexTypeDefinition):
         __DataFinal.name() : __DataFinal
     })
     _AttributeMap.update({
-        
+
     })
 
 
@@ -329,4 +329,3 @@ def _BuildAutomaton_ ():
     st_1._set_transitionSet(transitions)
     return fac.Automaton(states, counters, False, containing_state=None)
 CTD_ANON_._Automaton = _BuildAutomaton_()
-

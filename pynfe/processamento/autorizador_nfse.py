@@ -1,17 +1,10 @@
-try:
-    from pynfe.utils.nfse.betha import nfse_v202 as nfse_schema
-    from pynfe.utils.nfse.ginfes import servico_enviar_lote_rps_envio_v03, servico_consultar_nfse_rps_envio_v03, _tipos
-    from pyxb import BIND
-except:
-    pass  # modulo necessario apenas para NFS-e.
+from pyxb import BIND
+from importlib import import_module
 
 
 class InterfaceAutorizador():
     #TODO Colocar raise Exception Not Implemented nos metodos
     def consultar(self):
-        pass
-
-    def consultar_faixa(self):
         pass
 
     def cancelar(self):
@@ -23,8 +16,9 @@ class InterfaceAutorizador():
 
 class SerializacaoBetha(InterfaceAutorizador):
     def __init__(self):
-        if 'nfse_schema' not in globals():
-            raise ImportError('No module named nfse_v202 or PyXB')
+        # importa
+        global nfse_schema
+        nfse_schema = import_module('pynfe.utils.nfse.betha.nfse_v202')
 
     def gerar(self, nfse):
         """Retorna string de um XML gerado a partir do
@@ -248,8 +242,10 @@ class SerializacaoBetha(InterfaceAutorizador):
 
 class SerializacaoGinfes(InterfaceAutorizador):
     def __init__(self):
-        if 'nfse_ginfes' not in globals():
-            raise ImportError('No module named nfse_ginfes or PyXB')
+        # importa
+        global _tipos, servico_consultar_nfse_envio_v03
+        _tipos = import_module('pynfe.utils.nfse.ginfes._tipos')
+        servico_consultar_nfse_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_consultar_nfse_envio_v03')
 
     def consultar(self, nfse):
         """Retorna string de um XML de consulta por Rps gerado a partir do
@@ -273,3 +269,22 @@ class SerializacaoGinfes(InterfaceAutorizador):
         consulta = consulta.toxml(element_name='ConsultarNfseRpsEnvio')
 
         return consulta
+
+    def consultar_nfse(self, emitente, numero=None, inicio=None, fim=None):
+        # Prestador
+        id_prestador = _tipos.tcIdentificacaoPrestador()
+        id_prestador.Cnpj = emitente.cnpj
+        id_prestador.InscricaoMunicipal = emitente.inscricao_municipal
+
+        consulta = servico_consultar_nfse_envio_v03.ConsultarNfseEnvio()
+        consulta.Prestador = id_prestador
+        # Consulta por Numero
+        if numero is not None:
+            consulta.NumeroNfse = numero
+        else:
+            # consulta por Data
+            consulta.PeriodoEmissao = BIND()
+            consulta.PeriodoEmissao.DataInicial = inicio
+            consulta.PeriodoEmissao.DataFinal = fim
+
+        return consulta.toxml(element_name='ConsultarNfseEnvio')
