@@ -363,6 +363,11 @@ class ComunicacaoNfse(Comunicacao):
     _versao = ''
     _namespace = ''
 
+    def __init__(self, certificado, certificado_senha, homologacao=False):
+        self.certificado = certificado
+        self.certificado_senha = certificado_senha
+        self._ambiente = 2 if homologacao else 1
+
     def autorizacao(self, autorizador, nota):
         if autorizador.upper() == 'BETHA':
             self._namespace = NAMESPACE_BETHA
@@ -373,6 +378,15 @@ class ComunicacaoNfse(Comunicacao):
         xml = etree.tostring(nota, encoding='unicode', pretty_print=False)
         # comunica via wsdl
         return self._post2(url, xml, 'gerar')
+
+    def consulta(self, autorizador, xml):
+        if autorizador.upper() == 'GINFES':
+            self._namespace = 'http://www.ginfes.com.br/servico_consultar_nfse_envio_v03.xsd'
+            self._versao = '3.00'
+        # url do serviço
+        url = self._get_url(autorizador)
+        # comunica via wsdl
+        return self._post2(url, xml, 'consulta')
 
     def consulta_rps(self, autorizador, xml):
         if autorizador.upper() == 'BETHA':
@@ -410,7 +424,7 @@ class ComunicacaoNfse(Comunicacao):
 
         # cabecalho
         raiz = etree.Element('cabecalho', xmlns=self._namespace, versao=self._versao)
-        etree.SubElement(raiz, 'versaoDados').text = '2.02'
+        etree.SubElement(raiz, 'versaoDados').text = self._versao
         
         if retorna_string:
             cabecalho = etree.tostring(raiz, encoding='unicode', pretty_print=False).replace('\n','')
@@ -467,6 +481,10 @@ class ComunicacaoNfse(Comunicacao):
             # gerar nfse
             if metodo == 'gerar':
                 return cliente.service.GerarNfse(cabecalho, xml)
+            elif metodo == 'consulta':
+                import ipdb
+                ipdb.set_trace()
+                return cliente.service.ConsultarNfsePorRps(cabecalho, xml)
             elif metodo == 'consultaRps':
                 return cliente.service.ConsultarNfsePorRps(cabecalho, xml)
             elif metodo == 'consultaFaixa':
