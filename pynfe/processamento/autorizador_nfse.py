@@ -1,5 +1,6 @@
 try:
     from pynfe.utils.nfse.betha import nfse_v202 as nfse_schema
+    from pynfe.utils.nfse.ginfes import servico_enviar_lote_rps_envio_v03, servico_consultar_nfse_rps_envio_v03, _tipos
     from pyxb import BIND
 except:
     pass  # modulo necessario apenas para NFS-e.
@@ -243,3 +244,32 @@ class SerializacaoBetha(InterfaceAutorizador):
         gnfse.LoteRps = lote
 
         return gnfse.toxml(element_name='EnviarLoteRpsSincronoEnvio')
+
+
+class SerializacaoGinfes(InterfaceAutorizador):
+    def __init__(self):
+        if 'nfse_ginfes' not in globals():
+            raise ImportError('No module named nfse_ginfes or PyXB')
+
+    def consultar(self, nfse):
+        """Retorna string de um XML de consulta por Rps gerado a partir do
+        XML Schema (XSD). Binding gerado pelo modulo PyXB."""
+
+        # Rps
+        id_rps = _tipos.tcIdentificacaoRps()
+        id_rps.Numero = nfse.identificador
+        id_rps.Serie = nfse.serie
+        id_rps.Tipo = nfse.tipo
+
+        # Prestador
+        id_prestador = _tipos.tcIdentificacaoPrestador()
+        id_prestador.CpfCnpj = nfse.emitente.cnpj
+        id_prestador.InscricaoMunicipal = nfse.emitente.inscricao_municipal
+
+        consulta = servico_consultar_nfse_rps_envio_v03.ConsultarNfseRpsEnvio()
+        consulta.IdentificacaoRps = id_rps
+        consulta.Prestador = id_prestador
+
+        consulta = consulta.toxml(element_name='ConsultarNfseRpsEnvio')
+
+        return consulta
