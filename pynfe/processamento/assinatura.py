@@ -182,3 +182,41 @@ class AssinaturaA1(Assinatura):
                 return xml
         except Exception as e:
             raise e
+
+    def assinarConsulta(self, xml, retorna_string=False):
+        try:
+            xml = etree.fromstring(xml)
+            # No raiz do XML de saida
+            tag = 'ConsultarNfseEnvio'  # tag que será assinada
+            raiz = etree.Element('Signature', xmlns='http://www.w3.org/2000/09/xmldsig#')
+            siginfo = etree.SubElement(raiz, 'SignedInfo')
+            etree.SubElement(siginfo, 'CanonicalizationMethod', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
+            etree.SubElement(siginfo, 'SignatureMethod', Algorithm='http://www.w3.org/2000/09/xmldsig#rsa-sha1')
+            # Consulta nao tem id
+            ref = etree.SubElement(siginfo, 'Reference', URI='')
+
+            trans = etree.SubElement(ref, 'Transforms')
+            etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/2000/09/xmldsig#enveloped-signature')
+            etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
+            etree.SubElement(ref, 'DigestMethod', Algorithm='http://www.w3.org/2000/09/xmldsig#sha1')
+            etree.SubElement(ref, 'DigestValue')
+            etree.SubElement(raiz, 'SignatureValue')
+            keyinfo = etree.SubElement(raiz, 'KeyInfo')
+            etree.SubElement(keyinfo, 'X509Data')
+
+            consulta = xml.xpath('/ConsultarNfseEnvio', namespaces={'ns1': 'http://www.ginfes.com.br/servico_consultar_nfse_envio_v03.xsd', 'ns2':'http://www.ginfes.com.br/tipos_v03.xsd'})[0]
+            consulta.append(raiz)
+
+            # Escreve no arquivo depois de remover caracteres especiais e parse string
+            with open('nfse.xml', 'w') as arquivo:
+                arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False)))
+
+            subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'nfse.xml'])
+            xml = etree.parse('funfa.xml').getroot()
+
+            if retorna_string:
+                return etree.tostring(xml, encoding="unicode", pretty_print=False)
+            else:
+                return xml
+        except Exception as e:
+            raise e

@@ -474,7 +474,7 @@ class ComunicacaoNfse(Comunicacao):
         try:
             from suds.client import Client
             from pynfe.utils.https_nfse import HttpAuthenticated
-            
+
             certificadoA1 = CertificadoA1(self.certificado)
             chave, cert = certificadoA1.separar_arquivo(self.certificado_senha, caminho=True)
 
@@ -484,9 +484,11 @@ class ComunicacaoNfse(Comunicacao):
             if metodo == 'gerar':
                 return cliente.service.GerarNfse(cabecalho, xml)
             elif metodo == 'consulta':
-                return cliente.service.ConsultarNfsePorRps(cabecalho, xml)
+                import ipdb
+                ipdb.set_trace()
+                return cliente.service.ConsultarNfseV3(cabecalho, xml)
             elif metodo == 'consultaRps':
-                return cliente.service.ConsultarNfsePorRps(cabecalho, xml)
+                return cliente.service.ConsultarNfsePorRpsV3(cabecalho, xml)
             elif metodo == 'consultaFaixa':
                 return cliente.service.ConsultarNfseFaixa(cabecalho, xml)
             elif metodo == 'cancelar':

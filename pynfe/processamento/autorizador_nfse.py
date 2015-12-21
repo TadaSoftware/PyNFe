@@ -4,7 +4,7 @@ from importlib import import_module
 
 class InterfaceAutorizador():
     #TODO Colocar raise Exception Not Implemented nos metodos
-    def consultar(self):
+    def consultar_rps(self):
         pass
 
     def cancelar(self):
@@ -89,7 +89,7 @@ class SerializacaoBetha(InterfaceAutorizador):
 
         return gnfse.toxml(element_name='GerarNfseEnvio')
 
-    def consultar(self, nfse):
+    def consultar_rps(self, nfse):
         """Retorna string de um XML gerado a partir do
         XML Schema (XSD). Binding gerado pelo modulo PyXB."""
 
@@ -247,7 +247,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
         _tipos = import_module('pynfe.utils.nfse.ginfes._tipos')
         servico_consultar_nfse_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_consultar_nfse_envio_v03')
 
-    def consultar(self, nfse):
+    def consultar_rps(self, nfse):
         """Retorna string de um XML de consulta por Rps gerado a partir do
         XML Schema (XSD). Binding gerado pelo modulo PyXB."""
 
