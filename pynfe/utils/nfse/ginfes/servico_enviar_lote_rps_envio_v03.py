@@ -24,8 +24,8 @@ if pyxb.__version__ != _PyXBVersion:
     raise pyxb.PyXBVersionError(_PyXBVersion)
 
 # Import bindings for namespaces imported into schema
-import _tipos as _ImportedBinding__tipos
-import _dsig as _ImportedBinding__dsig
+from pynfe.utils.nfse.ginfes import _tipos as _ImportedBinding__tipos
+from pynfe.utils.nfse.ginfes import _dsig as _ImportedBinding__dsig
 import pyxb.binding.datatypes
 
 # NOTE: All namespace declarations are reserved within the binding
@@ -88,18 +88,18 @@ class CTD_ANON (pyxb.binding.basis.complexTypeDefinition):
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
+
     # Element {http://www.ginfes.com.br/servico_enviar_lote_rps_envio_v03.xsd}LoteRps uses Python identifier LoteRps
     __LoteRps = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'LoteRps'), 'LoteRps', '__httpwww_ginfes_com_brservico_enviar_lote_rps_envio_v03_xsd_CTD_ANON_httpwww_ginfes_com_brservico_enviar_lote_rps_envio_v03_xsdLoteRps', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/servico_enviar_lote_rps_envio_v03.xsd', 9, 4), )
 
-    
+
     LoteRps = property(__LoteRps.value, __LoteRps.set, None, None)
 
-    
+
     # Element {http://www.w3.org/2000/09/xmldsig#}Signature uses Python identifier Signature
     __Signature = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(_Namespace_dsig, 'Signature'), 'Signature', '__httpwww_ginfes_com_brservico_enviar_lote_rps_envio_v03_xsd_CTD_ANON_httpwww_w3_org200009xmldsigSignature', False, pyxb.utils.utility.Location('/home/leonardo/Downloads/xsd ginfes/xmldsig-core-schema20020212_v03.xsd', 41, 0), )
 
-    
+
     Signature = property(__Signature.value, __Signature.set, None, None)
 
     _ElementMap.update({
@@ -107,7 +107,7 @@ class CTD_ANON (pyxb.binding.basis.complexTypeDefinition):
         __Signature.name() : __Signature
     })
     _AttributeMap.update({
-        
+
     })
 
 
@@ -150,4 +150,3 @@ def _BuildAutomaton ():
     st_1._set_transitionSet(transitions)
     return fac.Automaton(states, counters, False, containing_state=None)
 CTD_ANON._Automaton = _BuildAutomaton()
-
