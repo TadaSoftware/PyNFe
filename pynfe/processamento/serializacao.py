@@ -601,6 +601,13 @@ class SerializacaoNfse(object):
         else:
             raise Exception('Este método só esta implementado no autorizador Betha.')
 
+    def gerar_lote(self, nfse):
+        if self.autorizador.lower() == 'ginfes':
+            from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
+            return SerializacaoGinfes().serializar_lote_assincrono(nfse)
+        else:
+            raise Exception('Este método só esta implementado no autorizador ginfes.')
+
     def consultar_nfse(self, emitente, numero=None, inicio=None, fim=None):
         if self.autorizador.lower() == 'ginfes':
             from pynfe.processamento.autorizador_nfse import SerializacaoGinfes

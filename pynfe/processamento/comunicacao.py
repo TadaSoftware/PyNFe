@@ -474,7 +474,7 @@ class ComunicacaoNfse(Comunicacao):
         try:
             from suds.client import Client
             from pynfe.utils.https_nfse import HttpAuthenticated
-            
+
             certificadoA1 = CertificadoA1(self.certificado)
             chave, cert = certificadoA1.separar_arquivo(self.certificado_senha, caminho=True)
 

@@ -1,6 +1,8 @@
+import ipdb
 from pyxb import BIND
 from importlib import import_module
-
+import pynfe.utils.nfse.ginfes.servico_enviar_lote_rps_envio_v03 as servico_enviar_lote_rps_envio_v03
+import pynfe.utils.nfse.ginfes._tipos as _tipos
 
 class InterfaceAutorizador():
     #TODO Colocar raise Exception Not Implemented nos metodos
@@ -8,9 +10,6 @@ class InterfaceAutorizador():
         pass
 
     def cancelar(self):
-        pass
-
-    def serializar_lote_sincrono(self):
         pass
 
 
@@ -246,6 +245,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
         global _tipos, servico_consultar_nfse_envio_v03
         _tipos = import_module('pynfe.utils.nfse.ginfes._tipos')
         servico_consultar_nfse_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_consultar_nfse_envio_v03')
+        servico_enviar_lote_rps_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_enviar_lote_rps_envio_v03')
 
     def consultar(self, nfse):
         """Retorna string de um XML de consulta por Rps gerado a partir do
@@ -288,3 +288,79 @@ class SerializacaoGinfes(InterfaceAutorizador):
             consulta.PeriodoEmissao.DataFinal = fim
 
         return consulta.toxml(element_name='ConsultarNfseEnvio')
+
+    def serializar_lote_assincrono(self, nfse):
+        "Serializa lote de envio, baseado no servico_enviar_lote_rps_envio_v03.xsd"
+
+        servico = _tipos.tcDadosServico()
+        valores_servico = _tipos.tcValores()
+        valores_servico.ValorServicos = nfse.servico.valor_servico
+        valores_servico.IssRetido = nfse.servico.iss_retido
+
+        servico.Valores = valores_servico
+        servico.ItemListaServico = nfse.servico.item_lista
+        ## dois campos opcionais aqui no meio se der errado # TODO retirar
+        servico.Discriminacao = nfse.servico.discriminacao
+        servico.CodigoMunicipio = nfse.servico.codigo_municipio
+
+        # endereco tomador
+        endereco_tomador = _tipos.tcEndereco()
+        endereco_tomador.Endereco = nfse.cliente.endereco_logradouro
+        endereco_tomador.Numero = nfse.cliente.endereco_numero
+        endereco_tomador.Bairro = nfse.cliente.endereco_bairro
+        endereco_tomador.CodigoMunicipio = nfse.cliente.endereco_cod_municipio
+        endereco_tomador.Uf = nfse.cliente.endereco_uf
+        endereco_tomador.Cep = nfse.cliente.endereco_cep
+        # identificacao Tomador
+        id_tomador = _tipos.tcIdentificacaoTomador()
+        id_tomador.CpfCnpj = nfse.cliente.numero_documento
+        if nfse.cliente.inscricao_municipal:
+            id_tomador.InscricaoMunicipal = nfse.cliente.inscricao_municipal
+        # Tomador
+        tomador = _tipos.tcDadosTomador()
+        tomador.IdentificacaoTomador = id_tomador
+        tomador.RazaoSocial = nfse.cliente.razao_social
+        tomador.Endereco = endereco_tomador
+
+        # Prestador
+        id_prestador = _tipos.tcIdentificacaoPrestador()
+        id_prestador.Cnpj = nfse.emitente.cnpj
+        id_prestador.InscricaoMunicipal = nfse.emitente.inscricao_municipal
+
+        # identificacao rps
+        id_rps = _tipos.tcIdentificacaoRps()
+        id_rps.Numero = nfse.identificador
+        id_rps.Serie = nfse.serie
+        id_rps.Tipo = nfse.tipo
+        # inf rps
+        inf_rps = _tipos.tcInfRps()
+        inf_rps.IdentificacaoRps = id_rps
+        inf_rps.DataEmissao = nfse.data_emissao.strftime('%Y-%m-%d')
+        inf_rps.NaturezaOperacao = 'venda'  # TODO
+        inf_rps.RegimeEspecialTributacao = None  # opcional
+        inf_rps.OptanteSimplesNacional = nfse.simples
+        inf_rps.IncentivadorCultural = 2  # TODO
+        inf_rps.Status = 1
+        inf_rps.RpsSubstituido = None  # opcional
+        inf_rps.Servico = servico
+        inf_rps.Prestador = id_prestador
+        inf_rps.Tomador = tomador
+        inf_rps.IntermediarioServico = None  # opcional
+        inf_rps.ConstrucaoCivil = None  # opcional
+        inf_rps.Id = nfse.identificador
+
+        rps = _tipos.tcRps()
+        rps.InfRps = inf_rps
+
+        lote = _tipos.tcLoteRps()
+        lote.NumeroLote = 1
+        lote.Id = 1
+        lote.Cnpj = nfse.emitente.cnpj
+        lote.InscricaoMunicipal = nfse.emitente.inscricao_municipal
+        lote.QuantidadeRps = 1
+        lote.ListaRps = BIND()
+        lote.ListaRps.append(rps)
+
+        enviarLote = servico_enviar_lote_rps_envio_v03.EnviarLoteRpsEnvio()
+        enviarLote.LoteRps = lote
+        return enviarLote.toxml(element_name='EnviarLoteRpsEnvio')
