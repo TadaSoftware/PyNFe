@@ -243,9 +243,10 @@ class SerializacaoBetha(InterfaceAutorizador):
 class SerializacaoGinfes(InterfaceAutorizador):
     def __init__(self):
         # importa
-        global _tipos, servico_consultar_nfse_envio_v03
+        global _tipos, servico_consultar_nfse_envio_v03, cabecalho_v03
         _tipos = import_module('pynfe.utils.nfse.ginfes._tipos')
         servico_consultar_nfse_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_consultar_nfse_envio_v03')
+        cabecalho_v03 = import_module('pynfe.utils.nfse.ginfes.cabecalho_v03')
 
     def consultar_rps(self, nfse):
         """Retorna string de um XML de consulta por Rps gerado a partir do
@@ -288,3 +289,10 @@ class SerializacaoGinfes(InterfaceAutorizador):
             consulta.PeriodoEmissao.DataFinal = fim
 
         return consulta.toxml(element_name='ConsultarNfseEnvio')
+
+    def cabecalho(self):
+        # info
+        cabecalho = cabecalho_v03.cabecalho()
+        cabecalho.versao = '3'
+        cabecalho.versaoDados = '3'
+        return cabecalho.toxml(element_name='cabecalho')

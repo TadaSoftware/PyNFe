@@ -171,7 +171,7 @@ class AssinaturaA1(Assinatura):
 
             # Escreve no arquivo depois de remover caracteres especiais e parse string
             with open('nfse.xml', 'w') as arquivo:
-                arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False).replace('ns1:', '').replace(':ns1', '')))
+                arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False).replace('ns1:', '').replace(':ns1', '').replace('\n','')))
 
             subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'nfse.xml'])
             xml = etree.parse('funfa.xml').getroot()
@@ -209,7 +209,7 @@ class AssinaturaA1(Assinatura):
 
             # Escreve no arquivo depois de remover caracteres especiais e parse string
             with open('nfse.xml', 'w') as arquivo:
-                arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False)))
+                arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False).replace('\n','')))
 
             subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'nfse.xml'])
             xml = etree.parse('funfa.xml').getroot()
