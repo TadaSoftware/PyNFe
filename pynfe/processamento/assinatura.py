@@ -187,7 +187,7 @@ class AssinaturaA1(Assinatura):
         try:
             xml = etree.fromstring(xml)
             # No raiz do XML de saida
-            tag = 'ConsultarNfseEnvio'  # tag que será assinada
+            tag = 'ns1:ConsultarNfseEnvio'  # tag que será assinada
             raiz = etree.Element('Signature', xmlns='http://www.w3.org/2000/09/xmldsig#')
             siginfo = etree.SubElement(raiz, 'SignedInfo')
             etree.SubElement(siginfo, 'CanonicalizationMethod', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
@@ -204,7 +204,7 @@ class AssinaturaA1(Assinatura):
             keyinfo = etree.SubElement(raiz, 'KeyInfo')
             etree.SubElement(keyinfo, 'X509Data')
 
-            consulta = xml.xpath('/ConsultarNfseEnvio', namespaces={'ns1': 'http://www.ginfes.com.br/servico_consultar_nfse_envio_v03.xsd', 'ns2':'http://www.ginfes.com.br/tipos_v03.xsd'})[0]
+            consulta = xml.xpath('/ns1:ConsultarNfseEnvio', namespaces={'ns1': 'http://www.ginfes.com.br/servico_consultar_nfse_envio_v03.xsd', 'ns2':'http://www.ginfes.com.br/tipos_v03.xsd'})[0]
             consulta.append(raiz)
 
             # Escreve no arquivo depois de remover caracteres especiais e parse string

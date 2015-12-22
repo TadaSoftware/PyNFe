@@ -441,7 +441,7 @@ class ComunicacaoNfse(Comunicacao):
     def _cabecalho(self, retorna_string=True):
         u"""Monta o XML do cabeçalho da requisição wsdl"""
 
-        xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
+        xml_declaration='<?xml version="1.0" encoding="UTF-8"?>'
 
         # cabecalho
         raiz = etree.Element('cabecalho', xmlns=self._namespace, versao=self._versao)
@@ -495,8 +495,8 @@ class ComunicacaoNfse(Comunicacao):
 
     def _post_https(self, url, xml, metodo):
         # cabecalho
-        #cabecalho = self._cabecalho()
-        cabecalho = self._cabecalho_ginfes()
+        cabecalho = self._cabecalho()
+        #cabecalho = self._cabecalho_ginfes()
         # comunicacao wsdl
         try:
             from suds.client import Client
@@ -511,8 +511,6 @@ class ComunicacaoNfse(Comunicacao):
             if metodo == 'gerar':
                 return cliente.service.GerarNfse(cabecalho, xml)
             elif metodo == 'consulta':
-                import ipdb
-                ipdb.set_trace()
                 return cliente.service.ConsultarNfseV3(cabecalho, xml)
             elif metodo == 'consultaRps':
                 return cliente.service.ConsultarNfsePorRpsV3(cabecalho, xml)

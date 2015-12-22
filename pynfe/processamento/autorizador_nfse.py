@@ -288,7 +288,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
             consulta.PeriodoEmissao.DataInicial = inicio
             consulta.PeriodoEmissao.DataFinal = fim
 
-        return consulta.toxml(element_name='ConsultarNfseEnvio')
+        return consulta.toxml(element_name='ns1:ConsultarNfseEnvio')
 
     def cabecalho(self):
         # info
