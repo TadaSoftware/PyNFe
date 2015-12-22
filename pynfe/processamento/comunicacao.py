@@ -197,6 +197,23 @@ class ComunicacaoSefaz(Comunicacao):
         # Chama método que efetua a requisição POST no servidor SOAP
         return self._post(url, xml)
 
+    def download(self, cnpj, chave):
+        # url do serviço
+        url = self._get_url_AN(consulta='DOWNLOAD')
+        # Monta XML do corpo da requisição
+        raiz = etree.Element('downloadNFe', versao='1.00', xmlns=NAMESPACE_NFE)
+        etree.SubElement(raiz, 'versao').text = '1.00'
+        etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
+        etree.SubElement(raiz, 'xServ').text = 'DOWNLOAD NFE'
+        etree.SubElement(raiz, 'CNPJ').text = str(cnpj)
+        etree.SubElement(raiz, 'chNFe').text = str(chave)
+
+         # Monta XML para envio da requisição
+        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeDownloadNF'), metodo='NfeDownloadNF', dados=raiz)
+        print (url)
+        #return xml
+        return self._post(url, xml)
+
     def inutilizar_faixa_numeracao(self, numero_inicial, numero_final, emitente, certificado, senha, ano=None, serie='1', justificativa=''):
         post = '/nfeweb/services/nfestatusservico.asmx'
         metodo = 'NfeInutilizacao2'
@@ -303,6 +320,8 @@ class ComunicacaoSefaz(Comunicacao):
             etree.SubElement(raiz, 'versaoDados').text = '1.00'
         elif metodo == 'NfeConsultaDest':
             etree.SubElement(raiz, 'versaoDados').text = '1.01'
+        elif metodo == 'NfeDownloadNF':
+            etree.SubElement(raiz, 'versaoDados').text = '1.00'
         else:
             etree.SubElement(raiz, 'versaoDados').text = VERSAO_PADRAO
         etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
@@ -381,10 +400,12 @@ class ComunicacaoNfse(Comunicacao):
 
     def consulta(self, autorizador, xml):
         if autorizador.upper() == 'GINFES':
-            self._namespace = 'http://www.ginfes.com.br/servico_consultar_nfse_envio_v03.xsd'
-            self._versao = '3.00'
+            self._namespace = 'http://www.ginfes.com.br/cabecalho_v03.xsd'
+            self._versao = '3'
         # url do serviço
         url = self._get_url(autorizador)
+        # xml
+        xml = '<?xml version="1.0" encoding="UTF-8"?>' + xml
         # comunica via wsdl
         return self._post_https(url, xml, 'consulta')
 
@@ -420,7 +441,7 @@ class ComunicacaoNfse(Comunicacao):
     def _cabecalho(self, retorna_string=True):
         u"""Monta o XML do cabeçalho da requisição wsdl"""
 
-        xml_declaration='<?xml version="1.0" encoding="UTF-8"?>'
+        xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
 
         # cabecalho
         raiz = etree.Element('cabecalho', xmlns=self._namespace, versao=self._versao)
@@ -432,6 +453,11 @@ class ComunicacaoNfse(Comunicacao):
             return cabecalho
         else:
             return raiz
+
+    def _cabecalho_ginfes(self):
+        """ Retorna o XML do cabeçalho gerado pelo xsd"""
+        from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
+        return SerializacaoGinfes().cabecalho()
 
     def _get_url(self, autorizador):
         """ Retorna a url para comunicação com o webservice """
@@ -469,7 +495,8 @@ class ComunicacaoNfse(Comunicacao):
 
     def _post_https(self, url, xml, metodo):
         # cabecalho
-        cabecalho = self._cabecalho()
+        #cabecalho = self._cabecalho()
+        cabecalho = self._cabecalho_ginfes()
         # comunicacao wsdl
         try:
             from suds.client import Client
@@ -484,9 +511,11 @@ class ComunicacaoNfse(Comunicacao):
             if metodo == 'gerar':
                 return cliente.service.GerarNfse(cabecalho, xml)
             elif metodo == 'consulta':
-                return cliente.service.ConsultarNfsePorRps(cabecalho, xml)
+                import ipdb
+                ipdb.set_trace()
+                return cliente.service.ConsultarNfseV3(cabecalho, xml)
             elif metodo == 'consultaRps':
-                return cliente.service.ConsultarNfsePorRps(cabecalho, xml)
+                return cliente.service.ConsultarNfsePorRpsV3(cabecalho, xml)
             elif metodo == 'consultaFaixa':
                 return cliente.service.ConsultarNfseFaixa(cabecalho, xml)
             elif metodo == 'cancelar':

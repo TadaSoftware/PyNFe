@@ -58,8 +58,8 @@ class NotaFiscal(Entidade):
     # - Forma de pagamento  (obrigatorio - seleciona de lista) - NF_FORMAS_PAGAMENTO
     forma_pagamento = int()
 
-    # - Tipo de pagamento 
-    # 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros 
+    # - Tipo de pagamento
+    # 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
     tipo_pagamento = int()
 
     # - Forma de emissao (obrigatorio - seleciona de lista) - NF_FORMAS_EMISSAO
@@ -398,7 +398,7 @@ class NotaFiscal(Entidade):
             self.dv_codigo_numerico_aleatorio = '0'
             return '0'
         self.dv_codigo_numerico_aleatorio = str(11 - remainder)
-        return str(self.dv_codigo_numerico_aleatorio) 
+        return str(self.dv_codigo_numerico_aleatorio)
 
     @property
     # @memoize
@@ -906,9 +906,7 @@ class NotaFiscalEntregaRetirada(Entidade):
     endereco_telefone = str()
 
 class NotaFiscalServico(Entidade):
-
-    # Empresa que implementa o webservice
-    autorizador = str()     # betha
+    
     # id do rps
     identificador = str()
     # tag competencia
@@ -934,4 +932,3 @@ class NotaFiscalServico(Entidade):
 
     def __str__(self):
         return ' '.join([str(self.identificador)])
-

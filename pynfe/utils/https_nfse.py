@@ -33,6 +33,9 @@ class HttpAuthenticated(HttpTransport):
         self.cert = cert
         self.endereco = endereco
 
-    def open(self, request):
-        opener = urllib.request.build_opener(HTTPSClientAuthHandler(self.key, self.cert))
-        return opener.open(self.endereco)
+    # def open(self, request):
+    #     opener = urllib.request.build_opener(HTTPSClientAuthHandler(self.key, self.cert))
+    #     return opener.open(self.endereco)
+
+    def u2handlers(self):
+        return [HTTPSClientAuthHandler(self.key, self.cert)]

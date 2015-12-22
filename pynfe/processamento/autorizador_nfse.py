@@ -1,12 +1,12 @@
 import ipdb
 from pyxb import BIND
 from importlib import import_module
-import pynfe.utils.nfse.ginfes.servico_enviar_lote_rps_envio_v03 as servico_enviar_lote_rps_envio_v03
-import pynfe.utils.nfse.ginfes._tipos as _tipos
+# import pynfe.utils.nfse.ginfes.servico_enviar_lote_rps_envio_v03 as servico_enviar_lote_rps_envio_v03
+# import pynfe.utils.nfse.ginfes._tipos as _tipos
 
 class InterfaceAutorizador():
     #TODO Colocar raise Exception Not Implemented nos metodos
-    def consultar(self):
+    def consultar_rps(self):
         pass
 
     def cancelar(self):
@@ -88,7 +88,7 @@ class SerializacaoBetha(InterfaceAutorizador):
 
         return gnfse.toxml(element_name='GerarNfseEnvio')
 
-    def consultar(self, nfse):
+    def consultar_rps(self, nfse):
         """Retorna string de um XML gerado a partir do
         XML Schema (XSD). Binding gerado pelo modulo PyXB."""
 
@@ -243,11 +243,13 @@ class SerializacaoGinfes(InterfaceAutorizador):
     def __init__(self):
         # importa
         global _tipos, servico_consultar_nfse_envio_v03
+        global servico_enviar_lote_rps_envio_v03, cabecalho_v03
         _tipos = import_module('pynfe.utils.nfse.ginfes._tipos')
         servico_consultar_nfse_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_consultar_nfse_envio_v03')
         servico_enviar_lote_rps_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_enviar_lote_rps_envio_v03')
+        cabecalho_v03 = import_module('pynfe.utils.nfse.ginfes.cabecalho_v03')
 
-    def consultar(self, nfse):
+    def consultar_rps(self, nfse):
         """Retorna string de um XML de consulta por Rps gerado a partir do
         XML Schema (XSD). Binding gerado pelo modulo PyXB."""
 
@@ -335,11 +337,11 @@ class SerializacaoGinfes(InterfaceAutorizador):
         # inf rps
         inf_rps = _tipos.tcInfRps()
         inf_rps.IdentificacaoRps = id_rps
-        inf_rps.DataEmissao = nfse.data_emissao.strftime('%Y-%m-%d')
-        inf_rps.NaturezaOperacao = 'venda'  # TODO
+        inf_rps.DataEmissao = nfse.data_emissao.strftime('%Y-%m-%dT%H:%M:%S')
+        inf_rps.NaturezaOperacao = 1  # tributacao no municipio
         inf_rps.RegimeEspecialTributacao = None  # opcional
         inf_rps.OptanteSimplesNacional = nfse.simples
-        inf_rps.IncentivadorCultural = 2  # TODO
+        inf_rps.IncentivadorCultural = 2  # Nao
         inf_rps.Status = 1
         inf_rps.RpsSubstituido = None  # opcional
         inf_rps.Servico = servico
@@ -363,4 +365,11 @@ class SerializacaoGinfes(InterfaceAutorizador):
 
         enviarLote = servico_enviar_lote_rps_envio_v03.EnviarLoteRpsEnvio()
         enviarLote.LoteRps = lote
-        return enviarLote.toxml(element_name='EnviarLoteRpsEnvio')
+        return enviarLote.toxml("UTF-8", element_name='ns1:EnviarLoteRpsEnvio')
+
+    def cabecalho(self):
+        # info
+        cabecalho = cabecalho_v03.cabecalho()
+        cabecalho.versao = '3'
+        cabecalho.versaoDados = '3'
+        return cabecalho.toxml(element_name='cabecalho')
