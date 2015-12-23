@@ -242,8 +242,10 @@ class SerializacaoGinfes(InterfaceAutorizador):
         # importa
         global _tipos, servico_consultar_nfse_envio_v03
         global servico_enviar_lote_rps_envio_v03, cabecalho_v03
+        global servico_cancelar_nfse_envio_v03
         _tipos = import_module('pynfe.utils.nfse.ginfes._tipos')
         servico_consultar_nfse_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_consultar_nfse_envio_v03')
+        servico_cancelar_nfse_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_cancelar_nfse_envio_v03')
         servico_enviar_lote_rps_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_enviar_lote_rps_envio_v03')
         cabecalho_v03 = import_module('pynfe.utils.nfse.ginfes.cabecalho_v03')
 
@@ -364,6 +366,33 @@ class SerializacaoGinfes(InterfaceAutorizador):
         enviarLote = servico_enviar_lote_rps_envio_v03.EnviarLoteRpsEnvio()
         enviarLote.LoteRps = lote
         return enviarLote.toxml(element_name='ns1:EnviarLoteRpsEnvio')
+
+    def cancelar(self, nfse):
+        """Retorna string de um XML gerado a partir do
+        XML Schema (XSD). Binding gerado pelo modulo PyXB."""
+        # id nfse
+        id_nfse = _tipos.tcIdentificacaoNfse()
+        id_nfse.Numero = nfse.identificador
+        id_nfse.Cnpj = nfse.emitente.cnpj
+        id_nfse.InscricaoMunicipal = nfse.emitente.inscricao_municipal
+        id_nfse.CodigoMunicipio = nfse.emitente.endereco_cod_municipio
+
+        # Info Pedido de cancelamento
+        info_pedido = _tipos.tcInfPedidoCancelamento()
+        info_pedido.Id = '1'
+        info_pedido.IdentificacaoNfse = id_nfse
+        info_pedido.CodigoCancelamento = 'C001'
+
+        # Pedido
+        pedido = _tipos.tcPedidoCancelamento()
+        pedido.InfPedidoCancelamento = info_pedido
+
+        # Cancelamento
+        cancelar = servico_cancelar_nfse_envio_v03.CancelarNfseEnvio()
+        cancelar.Pedido = pedido
+
+        return cancelar.toxml(element_name='CancelarNfseEnvio')
+
 
     def cabecalho(self):
         # info
