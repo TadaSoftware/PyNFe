@@ -427,16 +427,28 @@ class ComunicacaoNfse(Comunicacao):
         # comunica via wsdl
         return self._post2(url, xml, 'consultaFaixa')
 
-    def cancelar(self, autorizador, nota):
+    def cancelar(self, autorizador, xml):
+        # url do serviço
+        url = self._get_url(autorizador)
+        # Betha
         if autorizador.upper() == 'BETHA':
             self._namespace = NAMESPACE_BETHA
             self._versao = '2.02'
-        # url do serviço
-        url = self._get_url(autorizador)
-        # xml
-        xml = etree.tostring(nota, encoding='unicode', pretty_print=False)
-        # comunica via wsdl
-        return self._post2(url, xml, 'cancelar')
+            # comunica via wsdl
+            return self._post(url, xml, 'cancelar')
+        # Ginfes
+        elif autorizador.upper() == 'GINFES':
+            self._namespace = 'http://www.ginfes.com.br/cabecalho_v03.xsd'
+            self._versao = '3'
+            # xml
+            xml = '<?xml version="1.0" encoding="UTF-8"?>' + xml
+            # comunica via wsdl
+            return xml
+            #return self._post_https(url, xml, 'consulta')
+        # TODO outros autorizadres
+        else:
+            raise Exception('Autorizador não suportado!')
+        
 
     def _cabecalho(self, retorna_string=True):
         u"""Monta o XML do cabeçalho da requisição wsdl"""
