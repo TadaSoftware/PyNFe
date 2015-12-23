@@ -1,7 +1,6 @@
 from pyxb import BIND
 from importlib import import_module
-# import pynfe.utils.nfse.ginfes.servico_enviar_lote_rps_envio_v03 as servico_enviar_lote_rps_envio_v03
-# import pynfe.utils.nfse.ginfes._tipos as _tipos
+
 
 class InterfaceAutorizador():
     #TODO Colocar raise Exception Not Implemented nos metodos
@@ -366,7 +365,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
 
         enviarLote = servico_enviar_lote_rps_envio_v03.EnviarLoteRpsEnvio()
         enviarLote.LoteRps = lote
-        return enviarLote.toxml("UTF-8", element_name='ns1:EnviarLoteRpsEnvio')
+        return enviarLote.toxml(element_name='ns1:EnviarLoteRpsEnvio')
 
     def cancelar(self, nfse, codigo):
         """Retorna string de um XML gerado a partir do
