@@ -367,7 +367,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
         enviarLote.LoteRps = lote
         return enviarLote.toxml(element_name='ns1:EnviarLoteRpsEnvio')
 
-    def cancelar(self, nfse):
+    def cancelar(self, nfse, codigo):
         """Retorna string de um XML gerado a partir do
         XML Schema (XSD). Binding gerado pelo modulo PyXB."""
         # id nfse
@@ -381,7 +381,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
         info_pedido = _tipos.tcInfPedidoCancelamento()
         info_pedido.Id = '1'
         info_pedido.IdentificacaoNfse = id_nfse
-        info_pedido.CodigoCancelamento = 'C001'
+        info_pedido.CodigoCancelamento = codigo
 
         # Pedido
         pedido = _tipos.tcPedidoCancelamento()
@@ -391,8 +391,19 @@ class SerializacaoGinfes(InterfaceAutorizador):
         cancelar = servico_cancelar_nfse_envio_v03.CancelarNfseEnvio()
         cancelar.Pedido = pedido
 
-        return cancelar.toxml(element_name='CancelarNfseEnvio')
+        return cancelar.toxml(element_name='ns1:CancelarNfseEnvio')
 
+    def cancelar_v2(self, nfse):
+        ## serialização utilizando lxml
+        from lxml import etree
+        ns1 = 'http://www.ginfes.com.br/servico_cancelar_nfse_envio'
+        ns2 = 'http://www.ginfes.com.br/tipos'
+        raiz = etree.Element('{%s}CancelarNfseEnvio'%ns1, nsmap={'ns1': ns1, 'ns2':ns2})
+        prestador = etree.SubElement(raiz, '{%s}Prestador'%ns1)
+        etree.SubElement(prestador, '{%s}Cnpj'%ns2).text = nfse.emitente.cnpj
+        etree.SubElement(prestador, '{%s}InscricaoMunicipal'%ns2).text = nfse.emitente.inscricao_municipal
+        etree.SubElement(raiz, '{%s}NumeroNfse'%ns1).text = nfse.identificador
+        return etree.tostring(raiz, encoding='unicode')
 
     def cabecalho(self):
         # info
