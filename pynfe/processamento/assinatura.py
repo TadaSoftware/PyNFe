@@ -11,9 +11,10 @@ class Assinatura(object):
     certificado = None
     senha = None
 
-    def __init__(self, certificado, senha):
+    def __init__(self, certificado, senha, autorizador=None):
         self.certificado = certificado
         self.senha = senha
+        self.autorizador = autorizador
 
     def assinar(self, xml):
         """Efetua a assinatura da nota"""
@@ -64,12 +65,22 @@ class AssinaturaA1(Assinatura):
         except Exception as e:
             raise e
 
-    def assinarNfse(self, xml, xpath='.//ns1:InfDeclaracaoPrestacaoServico',
-                    tag='InfDeclaracaoPrestacaoServico', retorna_string=False,
-                    namespaces=None):
+    def assinarNfse(self, xml, lote=False, retorna_string=True):
         try:
+            # define variaveis de acordo com autorizador
+            if self.autorizador == 'ginfes' and not lote:
+                xpath = './/ns2:InfRps'
+                tag = 'InfRps'
+            elif self.autorizador == 'ginfes' and lote:
+                xpath = './/ns1:LoteRps'
+                tag = 'LoteRps'
+            elif self.autorizador == 'betha':
+                xpath = './/ns1:InfDeclaracaoPrestacaoServico'
+                tag = 'InfDeclaracaoPrestacaoServico'
+
             xml = etree.fromstring(xml)
-            namespaces = xml.nsmap if namespaces is None else namespaces
+            # define namespaces, pega do proprio xml
+            namespaces = xml.nsmap
             # No raiz do XML de saida
             raiz = etree.Element('Signature', xmlns='http://www.w3.org/2000/09/xmldsig#')
             siginfo = etree.SubElement(raiz, 'SignedInfo')
@@ -98,10 +109,9 @@ class AssinaturaA1(Assinatura):
                     texto = texto.replace('ns1:', '').replace(':ns1', '')
                 arquivo.write(texto)
 
-
             subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado,
                             '--pwd', self.senha, '--crypto', 'openssl', '--output',
-                            'nfse.xml', '--id-attr:Id', tag, '--trusted-pem', 'cert.pem', 'nfse.xml'])
+                            'nfse.xml', '--id-attr:Id', tag, 'nfse.xml'])
 
             if retorna_string:
                 return open('nfse.xml', 'r').read()
