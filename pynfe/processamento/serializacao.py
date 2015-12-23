@@ -616,7 +616,10 @@ class SerializacaoNfse(object):
     def cancelar(self, nfse):
         if self.autorizador.lower() == 'ginfes':
             from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
-            return SerializacaoGinfes().cancelar(nfse)
+            ## versao 3
+            #return SerializacaoGinfes().cancelar(nfse)
+            ## versao 2
+            return SerializacaoGinfes().cancelar_v2(nfse)
         elif self.autorizador.lower() == 'betha':
             from pynfe.processamento.autorizador_nfse import SerializacaoBetha
             return SerializacaoBetha().cancelar(nfse)
