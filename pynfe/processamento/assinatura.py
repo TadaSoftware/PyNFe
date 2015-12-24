@@ -77,6 +77,8 @@ class AssinaturaA1(Assinatura):
             elif self.autorizador == 'betha':
                 xpath = './/ns1:InfDeclaracaoPrestacaoServico'
                 tag = 'InfDeclaracaoPrestacaoServico'
+            else:
+                raise Exception('Autorizador não encontrado!')
 
             xml = etree.fromstring(xml)
             # define namespaces, pega do proprio xml
@@ -120,10 +122,20 @@ class AssinaturaA1(Assinatura):
         except Exception as e:
             raise e
 
-    def assinarCancelar(self, xml, tag='InfPedidoCancelamento', xpath='/CancelarNfseEnvio/ns1:Pedido', 
-                        namespaces={'ns1': 'http://www.betha.com.br/e-nota-contribuinte-ws'}, retorna_string=True):
-        """ Default para assinar Betha """
+    def assinarCancelar(self, xml, retorna_string=True):
+        """ Método que assina o xml para cancelamento de NFS-e """
         try:
+            if self.autorizador == 'ginfes':
+                xpath = 'CancelarNfseEnvio'
+                tag = 'CancelarNfseEnvio'
+                namespaces = {'ns1': 'http://www.ginfes.com.br/servico_cancelar_nfse_envio', 'ns2':'http://www.ginfes.com.br/tipos'}
+            elif self.autorizador == 'betha':
+                xpath = '/CancelarNfseEnvio/ns1:Pedido'
+                tag = 'InfPedidoCancelamento'
+                namespaces = {'ns1': 'http://www.betha.com.br/e-nota-contribuinte-ws'}
+            else:
+                raise Exception('Autorizador não encontrado!')
+
             xml = etree.fromstring(xml)
             # No raiz do XML de saida
             raiz = etree.Element('Signature', xmlns='http://www.w3.org/2000/09/xmldsig#')
@@ -153,7 +165,7 @@ class AssinaturaA1(Assinatura):
 
             # Escreve no arquivo depois de remover caracteres especiais e parse string
             with open('nfse.xml', 'w') as arquivo:
-                arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False).replace('ns1:', '').replace(':ns1', '').replace('\n','')))
+                arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False).replace('\n','')))
 
             subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'nfse.xml'])
             

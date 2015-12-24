@@ -440,14 +440,10 @@ class ComunicacaoNfse(Comunicacao):
         elif autorizador.upper() == 'GINFES':
             self._namespace = 'http://www.ginfes.com.br/cabecalho_v03.xsd'
             self._versao = '3'
-            # xml
-            xml = '<?xml version="1.0" encoding="UTF-8"?>' + xml
-            # comunica via wsdl
-            return xml
-            #return self._post_https(url, xml, 'consulta')
+            return self._post_https(url, xml, 'cancelar')
         # TODO outros autorizadres
         else:
-            raise Exception('Autorizador não suportado!')
+            raise Exception('Autorizador não encontrado!')
         
 
     def _cabecalho(self, retorna_string=True):
@@ -529,7 +525,10 @@ class ComunicacaoNfse(Comunicacao):
             elif metodo == 'consultaFaixa':
                 return cliente.service.ConsultarNfseFaixa(cabecalho, xml)
             elif metodo == 'cancelar':
-                return cliente.service.CancelarNfse(cabecalho, xml)
+                # versão 3
+                #return cliente.service.CancelarNfseV3(cabecalho, xml)
+                # versão 2
+                return cliente.service.CancelarNfse(xml)
             # TODO outros metodos
             else:
                 pass
