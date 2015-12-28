@@ -9,5 +9,5 @@
 #  
 # The directory will now have a file cert.pem and a key.pem.
 
-openssl pkcs12 -in JC.pfx -nocerts -nodes -out key.pem -passin pass:12345678
-openssl pkcs12 -in JC.pfx -clcerts -nokeys -out cert.pem -passin pass:12345678
+openssl pkcs12 -in C.pfx -nocerts -nodes -out key.pem -passin pass:1234
+openssl pkcs12 -in C.pfx -clcerts -nokeys -out cert.pem -passin pass:1234

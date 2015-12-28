@@ -612,7 +612,23 @@ class SerializacaoNfse(object):
         if self.autorizador.lower() == 'ginfes':
             from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
             return SerializacaoGinfes().consultar_nfse(emitente, numero, inicio, fim)
-    
+        else:
+            raise Exception('Este método só esta implementado no autorizador ginfes.')
+
+    def consultar_lote(self, emitente, numero):
+        if self.autorizador.lower() == 'ginfes':
+            from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
+            return SerializacaoGinfes().consultar_lote(emitente, numero)
+        else:
+            raise Exception('Este método só esta implementado no autorizador ginfes.')
+
+    def consultar_situacao_lote(self, emitente, numero):
+        if self.autorizador.lower() == 'ginfes':
+            from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
+            return SerializacaoGinfes().consultar_situacao_lote(emitente, numero)
+        else:
+            raise Exception('Este método só esta implementado no autorizador ginfes.')
+
     def cancelar(self, nfse):
         if self.autorizador.lower() == 'ginfes':
             from pynfe.processamento.autorizador_nfse import SerializacaoGinfes

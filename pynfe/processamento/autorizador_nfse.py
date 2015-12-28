@@ -243,11 +243,15 @@ class SerializacaoGinfes(InterfaceAutorizador):
         global _tipos, servico_consultar_nfse_envio_v03
         global servico_enviar_lote_rps_envio_v03, cabecalho_v03
         global servico_cancelar_nfse_envio_v03
+        global servico_consultar_lote_rps_envio_v03
+        global servico_consultar_situacao_lote_rps_envio_v03
         _tipos = import_module('pynfe.utils.nfse.ginfes._tipos')
         servico_consultar_nfse_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_consultar_nfse_envio_v03')
         servico_cancelar_nfse_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_cancelar_nfse_envio_v03')
         servico_enviar_lote_rps_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_enviar_lote_rps_envio_v03')
         cabecalho_v03 = import_module('pynfe.utils.nfse.ginfes.cabecalho_v03')
+        servico_consultar_lote_rps_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_consultar_lote_rps_envio_v03')
+        servico_consultar_situacao_lote_rps_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_consultar_situacao_lote_rps_envio_v03')
 
     def consultar_rps(self, nfse):
         """Retorna string de um XML de consulta por Rps gerado a partir do
@@ -290,6 +294,30 @@ class SerializacaoGinfes(InterfaceAutorizador):
             consulta.PeriodoEmissao.DataFinal = fim
 
         return consulta.toxml(element_name='ns1:ConsultarNfseEnvio')
+
+    def consultar_lote(self, emitente, numero):
+        # Prestador
+        id_prestador = _tipos.tcIdentificacaoPrestador()
+        id_prestador.Cnpj = emitente.cnpj
+        id_prestador.InscricaoMunicipal = emitente.inscricao_municipal
+
+        consulta = servico_consultar_lote_rps_envio_v03.ConsultarLoteRpsEnvio()
+        consulta.Prestador = id_prestador
+        consulta.Protocolo = numero
+
+        return consulta.toxml(element_name='ns1:ConsultarLoteRps')
+
+    def consultar_situacao_lote(self, emitente, numero):
+        # Prestador
+        id_prestador = _tipos.tcIdentificacaoPrestador()
+        id_prestador.Cnpj = emitente.cnpj
+        id_prestador.InscricaoMunicipal = emitente.inscricao_municipal
+
+        consulta = servico_consultar_situacao_lote_rps_envio_v03.ConsultarSituacaoLoteRpsEnvio()
+        consulta.Prestador = id_prestador
+        consulta.Protocolo = numero
+
+        return consulta.toxml(element_name='ns1:ConsultarSituacaoLoteRps')
 
     def serializar_lote_assincrono(self, nfse):
         "Serializa lote de envio, baseado no servico_enviar_lote_rps_envio_v03.xsd"
