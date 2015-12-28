@@ -110,13 +110,63 @@ class AssinaturaA1(Assinatura):
                 arquivo.write(texto)
 
             subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado,
-                            '--pwd', self.senha, '--crypto', 'openssl', '--output',
-                            'nfse.xml', '--id-attr:Id', tag, 'nfse.xml'])
+                             '--pwd', self.senha, '--crypto', 'openssl', '--output',
+                             'nfse.xml', '--id-attr:Id', tag, 'nfse.xml'])
 
             if retorna_string:
                 return open('nfse.xml', 'r').read()
             else:
                 return etree.parse('nfse.xml').getroot()
+        except Exception as e:
+            raise e
+
+    def assinarLote(self, xml, retorna_string=True):
+        try:
+            xpath = './/ns1:LoteRps'
+            tag = 'LoteRps'
+            # define namespaces, pega do proprio xml
+            namespaces = xml.nsmap
+            # No raiz do XML de saida
+            raiz = etree.Element('Signature', xmlns='http://www.w3.org/2000/09/xmldsig#')
+            siginfo = etree.SubElement(raiz, 'SignedInfo')
+            etree.SubElement(siginfo, 'CanonicalizationMethod', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
+            etree.SubElement(siginfo, 'SignatureMethod', Algorithm='http://www.w3.org/2000/09/xmldsig#rsa-sha1')
+            # Tenta achar a tag
+            ref = etree.SubElement(siginfo, 'Reference', URI='#' +
+                                   xml.xpath(xpath, namespaces=namespaces)[0].attrib['Id'])
+            trans = etree.SubElement(ref, 'Transforms')
+            etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/2000/09/xmldsig#enveloped-signature')
+            etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
+            etree.SubElement(ref, 'DigestMethod', Algorithm='http://www.w3.org/2000/09/xmldsig#sha1')
+            etree.SubElement(ref, 'DigestValue')
+            etree.SubElement(raiz, 'SignatureValue')
+            keyinfo = etree.SubElement(raiz, 'KeyInfo')
+            etree.SubElement(keyinfo, 'X509Data')
+
+            # posiciona tag Signature antes do LoteRps para assinar
+            base = xml.xpath(xpath+'/..', namespaces=namespaces)[0]
+            base.insert(0, raiz)
+
+            # Escreve no arquivo depois de remover caracteres especiais
+            with open('nfse.xml', 'w') as arquivo:
+                texto = remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False))
+                arquivo.write(texto)
+            # assina lote
+            subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado,
+                             '--pwd', self.senha, '--crypto', 'openssl', '--output',
+                             'nfse.xml', '--id-attr:Id', tag, 'nfse.xml'])
+
+            # Reposiciona tag Signature apos LoteRps
+            xml = etree.fromstring(open('nfse.xml', 'r').read())
+            namespaces = xml.nsmap
+            sig = xml.find('{http://www.w3.org/2000/09/xmldsig#}Signature')
+            sig.getparent().remove(sig)
+            xml.append(sig)
+
+            if retorna_string:
+                return etree.tostring(xml, encoding="unicode", pretty_print=False)
+            else:
+                return xml
         except Exception as e:
             raise e
 
