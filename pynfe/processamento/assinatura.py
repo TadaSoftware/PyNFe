@@ -77,6 +77,8 @@ class AssinaturaA1(Assinatura):
             elif self.autorizador == 'betha':
                 xpath = './/ns1:InfDeclaracaoPrestacaoServico'
                 tag = 'InfDeclaracaoPrestacaoServico'
+            else:
+                raise Exception('Autorizador não encontrado!')
 
             xml = etree.fromstring(xml)
             # define namespaces, pega do proprio xml
@@ -170,20 +172,32 @@ class AssinaturaA1(Assinatura):
         except Exception as e:
             raise e
 
-    def assinarCancelar(self, xml, retorna_string=False):
+    def assinarCancelar(self, xml, retorna_string=True):
+        """ Método que assina o xml para cancelamento de NFS-e """
         try:
+            if self.autorizador == 'ginfes':
+                xpath = 'CancelarNfseEnvio'
+                tag = 'CancelarNfseEnvio'
+                namespaces = {'ns1': 'http://www.ginfes.com.br/servico_cancelar_nfse_envio', 'ns2':'http://www.ginfes.com.br/tipos'}
+            elif self.autorizador == 'betha':
+                xpath = '/CancelarNfseEnvio/ns1:Pedido'
+                tag = 'InfPedidoCancelamento'
+                namespaces = {'ns1': 'http://www.betha.com.br/e-nota-contribuinte-ws'}
+            else:
+                raise Exception('Autorizador não encontrado!')
+
             xml = etree.fromstring(xml)
             # No raiz do XML de saida
-            tag = 'InfPedidoCancelamento'  # tag que será assinada
             raiz = etree.Element('Signature', xmlns='http://www.w3.org/2000/09/xmldsig#')
             siginfo = etree.SubElement(raiz, 'SignedInfo')
             etree.SubElement(siginfo, 'CanonicalizationMethod', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
             etree.SubElement(siginfo, 'SignatureMethod', Algorithm='http://www.w3.org/2000/09/xmldsig#rsa-sha1')
-            # Tenta achar a tag infNFe
-            # TODO a proxima linha nao eh encontrada pq precisa colocar o namespace, GerarNfseEnvio.
-            ref = etree.SubElement(siginfo, 'Reference', URI='#' +
-                                   xml.xpath('/CancelarNfseEnvio/ns1:Pedido/ns1:InfPedidoCancelamento', namespaces={'ns1': 'http://www.betha.com.br/e-nota-contribuinte-ws'})[0].attrib['Id'])
-
+            # Tenta achar a tag informada no xpath
+            if tag == 'InfPedidoCancelamento':
+                ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.xpath('.//ns1:'+tag, namespaces=namespaces)[0].attrib['Id'])
+            # ginfes não tem id no cancelamento v2
+            else:
+                ref = etree.SubElement(siginfo, 'Reference', URI='')
             trans = etree.SubElement(ref, 'Transforms')
             etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/2000/09/xmldsig#enveloped-signature')
             etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
@@ -193,20 +207,22 @@ class AssinaturaA1(Assinatura):
             keyinfo = etree.SubElement(raiz, 'KeyInfo')
             etree.SubElement(keyinfo, 'X509Data')
 
-            rps = xml.xpath('/CancelarNfseEnvio/ns1:Pedido', namespaces={'ns1': 'http://www.betha.com.br/e-nota-contribuinte-ws'})[0]
-            rps.append(raiz)
+            if tag == 'InfPedidoCancelamento':
+                xml = xml.xpath(xpath, namespaces=namespaces)[0]
+            # ginfes só possui a tag root
+            else:
+               xml.append(raiz)
 
             # Escreve no arquivo depois de remover caracteres especiais e parse string
             with open('nfse.xml', 'w') as arquivo:
-                arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False).replace('ns1:', '').replace(':ns1', '').replace('\n','')))
+                arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False).replace('\n','')))
 
             subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'nfse.xml'])
-            xml = etree.parse('funfa.xml').getroot()
 
             if retorna_string:
-                return etree.tostring(xml, encoding="unicode", pretty_print=False)
+                return open('funfa.xml', 'r').read()
             else:
-                return xml
+                return etree.parse('funfa.xml').getroot()
         except Exception as e:
             raise e
 
