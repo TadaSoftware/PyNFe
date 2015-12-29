@@ -303,7 +303,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
 
         consulta = servico_consultar_lote_rps_envio_v03.ConsultarLoteRpsEnvio()
         consulta.Prestador = id_prestador
-        consulta.Protocolo = numero
+        consulta.Protocolo = str(numero)
 
         return consulta.toxml(element_name='ns1:ConsultarLoteRps')
 
@@ -315,7 +315,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
 
         consulta = servico_consultar_situacao_lote_rps_envio_v03.ConsultarSituacaoLoteRpsEnvio()
         consulta.Prestador = id_prestador
-        consulta.Protocolo = numero
+        consulta.Protocolo = str(numero)
 
         return consulta.toxml(element_name='ns1:ConsultarSituacaoLoteRps')
 

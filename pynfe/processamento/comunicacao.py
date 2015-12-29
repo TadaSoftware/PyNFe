@@ -382,26 +382,27 @@ class ComunicacaoNfse(Comunicacao):
     _versao = ''
     _namespace = ''
 
-    def __init__(self, certificado, certificado_senha, homologacao=False):
+    def __init__(self, certificado, certificado_senha, autorizador, homologacao=False):
         self.certificado = certificado
         self.certificado_senha = certificado_senha
         self._ambiente = 2 if homologacao else 1
+        self.autorizador = autorizador.upper()
 
-    def autorizacao(self, autorizador, nota):
-        if autorizador.upper() == 'BETHA':
+    def autorizacao(self, nota):
+        if self.autorizador == 'BETHA':
             self._namespace = NAMESPACE_BETHA
             self._versao = '2.02'
         # url do serviço
-        url = self._get_url(autorizador)
+        url = self._get_url()
         # xml
         xml = etree.tostring(nota, encoding='unicode', pretty_print=False)
         # comunica via wsdl
         return self._post2(url, xml, 'gerar')
 
-    def enviar_lote(self, autorizador, xml):
+    def enviar_lote(self, xml):
         # url do serviço
-        url = self._get_url(autorizador)
-        if autorizador.upper() == 'GINFES':
+        url = self._get_url()
+        if self.autorizador == 'GINFES':
             self._namespace = 'http://www.ginfes.com.br/cabecalho_v03.xsd'
             self._versao = '3'
             # comunica via wsdl
@@ -409,10 +410,10 @@ class ComunicacaoNfse(Comunicacao):
         else:
             raise Exception('Este método só esta implementado no autorizador ginfes.')
 
-    def consulta(self, autorizador, xml):
+    def consultar(self, xml):
         # url do serviço
-        url = self._get_url(autorizador)
-        if autorizador.upper() == 'GINFES':
+        url = self._get_url()
+        if self.autorizador == 'GINFES':
             self._namespace = 'http://www.ginfes.com.br/cabecalho_v03.xsd'
             self._versao = '3'
             # xml
@@ -422,28 +423,28 @@ class ComunicacaoNfse(Comunicacao):
         else:
             raise Exception('Este método só esta implementado no autorizador ginfes.')
 
-    def consulta_rps(self, autorizador, xml):
-        if autorizador.upper() == 'BETHA':
+    def consultar_rps(self, xml):
+        if self.autorizador == 'BETHA':
             self._namespace = NAMESPACE_BETHA
             self._versao = '2.02'
         # url do serviço
-        url = self._get_url(autorizador)
+        url = self._get_url()
         # comunica via wsdl
         return self._post2(url, xml, 'consultaRps')
 
-    def consulta_faixa(self, autorizador, xml):
-        if autorizador.upper() == 'BETHA':
+    def consultar_faixa(self, xml):
+        if self.autorizador == 'BETHA':
             self._namespace = NAMESPACE_BETHA
             self._versao = '2.02'
         # url do serviço
-        url = self._get_url(autorizador)
+        url = self._get_url()
         # comunica via wsdl
         return self._post2(url, xml, 'consultaFaixa')
 
-    def consulta_lote(self, autorizador, xml):
+    def consultar_lote(self, xml):
         # url do serviço
-        url = self._get_url(autorizador)
-        if autorizador.upper() == 'GINFES':
+        url = self._get_url()
+        if self.autorizador == 'GINFES':
             self._namespace = 'http://www.ginfes.com.br/cabecalho_v03.xsd'
             self._versao = '3'
             # comunica via wsdl
@@ -451,10 +452,10 @@ class ComunicacaoNfse(Comunicacao):
         else:
             raise Exception('Este método só esta implementado no autorizador ginfes.')
 
-    def consulta_situacao_lote(self, autorizador, xml):
+    def consultar_situacao_lote(self, xml):
         # url do serviço
-        url = self._get_url(autorizador)
-        if autorizador.upper() == 'GINFES':
+        url = self._get_url()
+        if self.autorizador == 'GINFES':
             self._namespace = 'http://www.ginfes.com.br/cabecalho_v03.xsd'
             self._versao = '3'
             # comunica via wsdl
@@ -462,24 +463,24 @@ class ComunicacaoNfse(Comunicacao):
         else:
             raise Exception('Este método só esta implementado no autorizador ginfes.')
 
-    def cancelar(self, autorizador, xml):
+    def cancelar(self, xml):
         # url do serviço
-        url = self._get_url(autorizador)
+        url = self._get_url()
         # Betha
-        if autorizador.upper() == 'BETHA':
+        if self.autorizador == 'BETHA':
             self._namespace = NAMESPACE_BETHA
             self._versao = '2.02'
             # comunica via wsdl
             return self._post(url, xml, 'cancelar')
         # Ginfes
-        elif autorizador.upper() == 'GINFES':
+        elif self.autorizador == 'GINFES':
             self._namespace = 'http://www.ginfes.com.br/cabecalho_v03.xsd'
             self._versao = '3'
             return self._post_https(url, xml, 'cancelar')
         # TODO outros autorizadres
         else:
             raise Exception('Autorizador não encontrado!')
-        
+
     def _cabecalho(self, retorna_string=True):
         u"""Monta o XML do cabeçalho da requisição wsdl"""
 
@@ -501,14 +502,14 @@ class ComunicacaoNfse(Comunicacao):
         from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
         return SerializacaoGinfes().cabecalho()
 
-    def _get_url(self, autorizador):
+    def _get_url(self):
         """ Retorna a url para comunicação com o webservice """
         if self._ambiente == 1:
             ambiente = 'HTTPS'
         else:
             ambiente = 'HOMOLOGACAO'
-        if autorizador.upper() in NFSE:
-            self.url = NFSE[autorizador.upper()][ambiente]
+        if self.autorizador in NFSE:
+            self.url = NFSE[self.autorizador][ambiente]
         else:
             raise Exception('Autorizador nao encontrado!')
         return self.url
@@ -571,6 +572,6 @@ class ComunicacaoNfse(Comunicacao):
                 return cliente.service.CancelarNfse(xml)
             # TODO outros metodos
             else:
-                pass
+                raise Exception('Método não implementado no autorizador.')
         except Exception as e:
             raise e
