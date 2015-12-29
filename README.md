@@ -8,7 +8,7 @@ Desenvolvido e testado com Python 3 no GNU/Linux.
 
 A NF-e visa substituir as notas fiscais séries 1 e 1A.  
 A NFC-e visa substituir as notas fiscais modelo 2 e
-cupom fiscal emitido por ECF.
+cupom fiscal emitido por ECF.  
 NFS-e padrão Abrasf para autorizadores Ginfes e Betha.
 
 
@@ -20,35 +20,34 @@ Dependências
 - lxml
   - biblioteca de leitura e gravação de arquivos XML, de alta
     performance e fácil de implementar.
-- xmlsec1 e openssl
+- xmlsec1 e openssl (instalado no SO)
   - assinatura e validação do XML
 - requests
   - biblioteca para a comunicação com os webservices da SEFAZ
-- suds-jurko (* apenas para NFS-e)
+- suds-jurko (*apenas para NFS-e)
   - biblioteca para a comunicação com os webservices via wsdl
+- pyxb (*apenas para NFS-e)
+  - biblioteca para geração de bindings a partir de XML Schema(xsd) 
 
 Referências
 -----------
 
 - Site oficial da Nota Fiscal eletrônica
-  - http://www.nfe.fazenda.gov.br/portal/
+  - http://www.nfe.fazenda.gov.br/
 
 - lxml
   - http://lxml.de/
-
-- Tutorial de lxml
- - http://codespeak.net/lxml/tutorial.html
 
 - requests
   - http://docs.python-requests.org/en/latest/
   - https://github.com/kennethreitz/requests
   - https://pypi.python.org/pypi/requests
 
-- Exemplos de arquivos XML
-  - http://www.javac.com.br/jc/downloads.javac?cat=3
-
 - Schemas para validação dos arquivos
   - http://www.nfe.fazenda.gov.br/portal/listaConteudo.aspx?tipoConteudo=/fwLvLUSmU8=
+
+- Validador de assinaturas
+  - https://www.receita.fazenda.gov.br/Aplicacoes/SSL/ATBHE/Assinadoc/ValidadorAssinaturas.app/valida.aspx 
 
 Instalação
 -----------
