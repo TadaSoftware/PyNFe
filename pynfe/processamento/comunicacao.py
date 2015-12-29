@@ -398,16 +398,29 @@ class ComunicacaoNfse(Comunicacao):
         # comunica via wsdl
         return self._post2(url, xml, 'gerar')
 
-    def consulta(self, autorizador, xml):
+    def enviar_lote(self, autorizador, xml):
+        # url do serviço
+        url = self._get_url(autorizador)
         if autorizador.upper() == 'GINFES':
             self._namespace = 'http://www.ginfes.com.br/cabecalho_v03.xsd'
             self._versao = '3'
+            # comunica via wsdl
+            return self._post_https(url, xml, 'enviar_lote')
+        else:
+            raise Exception('Este método só esta implementado no autorizador ginfes.')
+
+    def consulta(self, autorizador, xml):
         # url do serviço
         url = self._get_url(autorizador)
-        # xml
-        xml = '<?xml version="1.0" encoding="UTF-8"?>' + xml
-        # comunica via wsdl
-        return self._post_https(url, xml, 'consulta')
+        if autorizador.upper() == 'GINFES':
+            self._namespace = 'http://www.ginfes.com.br/cabecalho_v03.xsd'
+            self._versao = '3'
+            # xml
+            xml = '<?xml version="1.0" encoding="UTF-8"?>' + xml
+            # comunica via wsdl
+            return self._post_https(url, xml, 'consulta')
+        else:
+            raise Exception('Este método só esta implementado no autorizador ginfes.')
 
     def consulta_rps(self, autorizador, xml):
         if autorizador.upper() == 'BETHA':
@@ -427,6 +440,28 @@ class ComunicacaoNfse(Comunicacao):
         # comunica via wsdl
         return self._post2(url, xml, 'consultaFaixa')
 
+    def consulta_lote(self, autorizador, xml):
+        # url do serviço
+        url = self._get_url(autorizador)
+        if autorizador.upper() == 'GINFES':
+            self._namespace = 'http://www.ginfes.com.br/cabecalho_v03.xsd'
+            self._versao = '3'
+            # comunica via wsdl
+            return self._post_https(url, xml, 'consulta_lote')
+        else:
+            raise Exception('Este método só esta implementado no autorizador ginfes.')
+
+    def consulta_situacao_lote(self, autorizador, xml):
+        # url do serviço
+        url = self._get_url(autorizador)
+        if autorizador.upper() == 'GINFES':
+            self._namespace = 'http://www.ginfes.com.br/cabecalho_v03.xsd'
+            self._versao = '3'
+            # comunica via wsdl
+            return self._post_https(url, xml, 'consulta_situacao_lote')
+        else:
+            raise Exception('Este método só esta implementado no autorizador ginfes.')
+
     def cancelar(self, autorizador, xml):
         # url do serviço
         url = self._get_url(autorizador)
@@ -445,7 +480,6 @@ class ComunicacaoNfse(Comunicacao):
         else:
             raise Exception('Autorizador não encontrado!')
         
-
     def _cabecalho(self, retorna_string=True):
         u"""Monta o XML do cabeçalho da requisição wsdl"""
 
@@ -518,8 +552,14 @@ class ComunicacaoNfse(Comunicacao):
             # gerar nfse
             if metodo == 'gerar':
                 return cliente.service.GerarNfse(cabecalho, xml)
+            elif metodo == 'enviar_lote':
+                return cliente.service.RecepcionarLoteRpsV3(cabecalho, xml)
             elif metodo == 'consulta':
                 return cliente.service.ConsultarNfseV3(cabecalho, xml)
+            elif metodo == 'consulta_lote':
+                return cliente.service.ConsultarLoteRpsV3(cabecalho, xml)
+            elif metodo == 'consulta_situacao_lote':
+                return cliente.service.ConsultarSituacaoLoteRpsV3(cabecalho, xml)
             elif metodo == 'consultaRps':
                 return cliente.service.ConsultarNfsePorRpsV3(cabecalho, xml)
             elif metodo == 'consultaFaixa':
