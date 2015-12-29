@@ -65,15 +65,13 @@ class AssinaturaA1(Assinatura):
         except Exception as e:
             raise e
 
-    def assinarNfse(self, xml, lote=False, retorna_string=True):
+    def assinarNfse(self, xml, retorna_string=True):
+        "Assina NFS-e"
         try:
             # define variaveis de acordo com autorizador
-            if self.autorizador == 'ginfes' and not lote:
+            if self.autorizador == 'ginfes':
                 xpath = './/ns2:InfRps'
                 tag = 'InfRps'
-            elif self.autorizador == 'ginfes' and lote:
-                xpath = './/ns1:LoteRps'
-                tag = 'LoteRps'
             elif self.autorizador == 'betha':
                 xpath = './/ns1:InfDeclaracaoPrestacaoServico'
                 tag = 'InfDeclaracaoPrestacaoServico'
@@ -123,7 +121,9 @@ class AssinaturaA1(Assinatura):
             raise e
 
     def assinarLote(self, xml, retorna_string=True):
+        "Assina nfse e lote"
         try:
+            xml = self.assinarNfse(xml, retorna_string=False)
             xpath = './/ns1:LoteRps'
             tag = 'LoteRps'
             # define namespaces, pega do proprio xml
