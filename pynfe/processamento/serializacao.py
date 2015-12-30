@@ -177,16 +177,12 @@ class SerializacaoXML(Serializacao):
         raiz = etree.Element(tag_raiz)
 
         # Dados da transportadora
-        etree.SubElement(raiz, transportadora.tipo_documento).text = so_numeros(transportadora.numero_documento)
+        etree.SubElement(raiz, transportadora.tipo_documento.upper()).text = so_numeros(transportadora.numero_documento)
         etree.SubElement(raiz, 'xNome').text = transportadora.razao_social
         etree.SubElement(raiz, 'IE').text = transportadora.inscricao_estadual
-
         # Endereço
         etree.SubElement(raiz, 'xEnder').text = transportadora.endereco_logradouro
-        etree.SubElement(raiz, 'cMun').text = transportadora.endereco_municipio
-        etree.SubElement(raiz, 'xMun').text = obter_municipio_por_codigo(
-                transportadora.endereco_municipio, transportadora.endereco_uf,
-                )
+        etree.SubElement(raiz, 'xMun').text = transportadora.endereco_municipio
         etree.SubElement(raiz, 'UF').text = transportadora.endereco_uf
 
         if retorna_string:
@@ -499,19 +495,27 @@ class SerializacaoXML(Serializacao):
                     nota_fiscal.transporte_transportadora,
                     retorna_string=False,
                     ))
-                # Veículo
+                
+            # Veículo
+            if nota_fiscal.transporte_veiculo_placa and nota_fiscal.transporte_veiculo_uf:
                 veiculo = etree.SubElement(transp, 'veicTransp')
                 etree.SubElement(veiculo, 'placa').text = nota_fiscal.transporte_veiculo_placa # Obrigatório EX: XXX9999
                 etree.SubElement(veiculo, 'UF').text = nota_fiscal.transporte_veiculo_uf
-                etree.SubElement(veiculo, 'RNTC').text = nota_fiscal.transporte_veiculo_rntc
+                # Registro Nacional de Transportador de Carga (ANTT)
+                if nota_fiscal.transporte_veiculo_rntc:
+                    etree.SubElement(veiculo, 'RNTC').text = nota_fiscal.transporte_veiculo_rntc
 
-                # Reboque
+            # Reboque
+            if nota_fiscal.transporte_reboque_placa and nota_fiscal.transporte_reboque_uf:
                 reboque = etree.SubElement(transp, 'reboque')
                 etree.SubElement(reboque, 'placa').text = nota_fiscal.transporte_reboque_placa
                 etree.SubElement(reboque, 'UF').text = nota_fiscal.transporte_reboque_uf
-                etree.SubElement(reboque, 'RNTC').text = nota_fiscal.transporte_reboque_rntc
+                # Registro Nacional de Transportador de Carga (ANTT)
+                if nota_fiscal.transporte_reboque_rntc:
+                    etree.SubElement(reboque, 'RNTC').text = nota_fiscal.transporte_reboque_rntc
 
-                # Volumes
+            # Volumes
+            if nota_fiscal.transporte_volumes:
                 for volume in nota_fiscal.transporte_volumes:
                     vol = etree.SubElement(transp, 'vol')
                     etree.SubElement(vol, 'qVol').text = str(volume.quantidade)
@@ -522,9 +526,10 @@ class SerializacaoXML(Serializacao):
                     etree.SubElement(vol, 'pesoB').text = str(volume.peso_bruto)
 
                     # Lacres
-                    lacres = etree.SubElement(vol, 'lacres')
-                    for lacre in volume.lacres:
-                        etree.SubElement(lacres, 'nLacre').text = lacre.numero_lacre
+                    if volume.lacres:
+                        lacres = etree.SubElement(vol, 'lacres')
+                        for lacre in volume.lacres:
+                            etree.SubElement(lacres, 'nLacre').text = lacre.numero_lacre
 
         # Somente NFC-e
         """ Grupo obrigatório para a NFC-e, a critério da UF. Não informar para a NF-e (modelo 55). """
