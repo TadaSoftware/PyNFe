@@ -226,7 +226,7 @@ class AssinaturaA1(Assinatura):
         except Exception as e:
             raise e
 
-    def assinarConsulta(self, xml, retorna_string=False):
+    def assinarConsulta(self, xml, retorna_string=True):
         try:
             xml = etree.fromstring(xml)
             # No raiz do XML de saida
