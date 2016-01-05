@@ -2,8 +2,8 @@
 import datetime
 import requests
 from pynfe.utils import etree, so_numeros
-from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, NAMESPACE_XSI, NAMESPACE_XSD, NAMESPACE_METODO, VERSAO_PADRAO, CODIGOS_ESTADOS, \
-NAMESPACE_SOAP_NFSE, NAMESPACE_BETHA
+from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, NAMESPACE_XSI, NAMESPACE_XSD, NAMESPACE_METODO, \
+VERSAO_PADRAO, CODIGOS_ESTADOS, NAMESPACE_BETHA
 from pynfe.utils.webservices import NFCE, NFE, NFSE
 from .assinatura import AssinaturaA1
 from pynfe.entidades.certificado import CertificadoA1
@@ -403,7 +403,7 @@ class ComunicacaoNfse(Comunicacao):
             # xml
             xml = etree.tostring(nota, encoding='unicode', pretty_print=False)
             # comunica via wsdl
-            return self._post2(url, xml, 'gerar')
+            return self._post(url, xml, 'gerar')
         else:
             raise Exception('Este método só esta implementado no autorizador betha.')
 
@@ -432,7 +432,7 @@ class ComunicacaoNfse(Comunicacao):
         url = self._get_url()
         if self.autorizador == 'BETHA':
             # comunica via wsdl
-            return self._post2(url, xml, 'consultaRps')
+            return self._post(url, xml, 'consultaRps')
         else:
             raise Exception('Este método só esta implementado no autorizador betha.')
 
@@ -441,7 +441,7 @@ class ComunicacaoNfse(Comunicacao):
         url = self._get_url()
         if self.autorizador == 'BETHA':
             # comunica via wsdl
-            return self._post2(url, xml, 'consultaFaixa')
+            return self._post(url, xml, 'consultaFaixa')
         else:
             raise Exception('Este método só esta implementado no autorizador betha.')
 

@@ -426,7 +426,6 @@ NFE = {
 NFSE = {
 	# 
 	'BETHA': {
-		'STATUS':'',
 		'AUTORIZACAO':'GerarNfse',
 		'CANCELAR':'CancelarNfse',
 		'CONSULTA_RPS':'consultarNfsePorRps',
@@ -439,7 +438,6 @@ NFSE = {
 	},
 	#
 	'GINFES':{
-		'STATUS':'',
 		'AUTORIZACAO':'GerarNfse',
 		'CANCELAR':'CancelarNfse',
 		'CONSULTA_RPS':'ConsultarNfsePorRps',
