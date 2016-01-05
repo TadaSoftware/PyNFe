@@ -46,6 +46,9 @@ Referências
 - Schemas para validação dos arquivos
   - http://www.nfe.fazenda.gov.br/portal/listaConteudo.aspx?tipoConteudo=/fwLvLUSmU8=
 
+- Validador de xml
+  - https://www.sefaz.rs.gov.br/NFE/NFE-VAL.aspx
+  
 - Validador de assinaturas
   - https://www.receita.fazenda.gov.br/Aplicacoes/SSL/ATBHE/Assinadoc/ValidadorAssinaturas.app/valida.aspx 
 
