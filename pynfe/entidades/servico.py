@@ -28,6 +28,23 @@ class Servico(Entidade):
     # Lista com todos os codigos divididos por estados na pasta data/MunIBGE
     codigo_municipio = str()
     municipio_incidencia = str()
+    codigo_cnae = int()
+    codigo_tributacao_municipio = str()
+    # Dados opcionais
+    valor_deducoes = Decimal()
+    valor_pis = Decimal()
+    valor_confins = Decimal()
+    valor_inss = Decimal()
+    valor_ir = Decimal()
+    valor_csll = Decimal()
+    valor_iss = Decimal()
+    valor_iss_retido = Decimal()
+    valor_liquido = Decimal()
+    outras_retencoes = Decimal()
+    base_calculo = Decimal()
+    aliquota = Decimal()
+    desconto_incondicionado = Decimal()
+    desconto_condicionado = Decimal()
 
     def __str__(self):
         return self.discriminacao

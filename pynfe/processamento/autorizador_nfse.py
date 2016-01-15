@@ -326,10 +326,44 @@ class SerializacaoGinfes(InterfaceAutorizador):
         valores_servico = _tipos.tcValores()
         valores_servico.ValorServicos = nfse.servico.valor_servico
         valores_servico.IssRetido = nfse.servico.iss_retido
+        # Dados opcionais
+        if nfse.servico.valor_deducoes:
+            valores_servico.ValorDeducoes = nfse.servico.valor_deducoes
+        if nfse.servico.valor_pis:
+            valores_servico.ValorPis = nfse.servico.valor_pis
+        if nfse.servico.valor_confins:
+            valores_servico.ValorCofins = nfse.servico.valor_confins
+        if nfse.servico.valor_inss:
+            valores_servico.ValorInss = nfse.servico.valor_inss
+        if nfse.servico.valor_ir:
+            valores_servico.ValorIr = nfse.servico.valor_ir
+        if nfse.servico.valor_csll:
+            valores_servico.ValorCsll = nfse.servico.valor_csll
+        if nfse.servico.valor_iss:
+            valores_servico.ValorIss = nfse.servico.valor_iss
+        if nfse.servico.valor_iss_retido:
+            valores_servico.ValorIssRetido = nfse.servico.valor_iss_retido
+        if nfse.servico.valor_liquido:
+            valores_servico.ValorLiquidoNfse = nfse.servico.valor_liquido
+        if nfse.servico.outras_retencoes:
+            valores_servico.OutrasRetencoes = nfse.servico.outras_retencoes
+        if nfse.servico.base_calculo:
+            valores_servico.BaseCalculo = nfse.servico.base_calculo
+        if nfse.servico.aliquota:
+            valores_servico.Aliquota = nfse.servico.aliquota
+        if nfse.servico.desconto_incondicionado:
+            valores_servico.DescontoIncondicionado = nfse.servico.desconto_incondicionado
+        if nfse.servico.desconto_condicionado:
+            valores_servico.DescontoCondicionado = nfse.servico.desconto_condicionado
 
         servico.Valores = valores_servico
         servico.ItemListaServico = nfse.servico.item_lista
-        ## dois campos opcionais aqui no meio se der errado # TODO retirar
+        # opcionais
+        if nfse.servico.codigo_cnae:
+            servico.CodigoCnae = nfse.servico.codigo_cnae
+        if nfse.servico.codigo_tributacao_municipio:
+            servico.CodigoTributacaoMunicipio = nfse.servico.codigo_tributacao_municipio
+        # obrigatórios
         servico.Discriminacao = nfse.servico.discriminacao
         servico.CodigoMunicipio = nfse.servico.codigo_municipio
 
@@ -351,6 +385,13 @@ class SerializacaoGinfes(InterfaceAutorizador):
         tomador.IdentificacaoTomador = id_tomador
         tomador.RazaoSocial = nfse.cliente.razao_social
         tomador.Endereco = endereco_tomador
+        # opcional
+        if nfse.cliente.endereco_telefone or nfse.cliente.email:
+            tomador.Contato = _tipos.tcContato()
+            if nfse.cliente.endereco_telefone:
+                tomador.Contato.Telefone = nfse.cliente.endereco_telefone
+            if nfse.cliente.email:
+                tomador.Contato.Email = nfse.cliente.email
 
         # Prestador
         id_prestador = _tipos.tcIdentificacaoPrestador()
