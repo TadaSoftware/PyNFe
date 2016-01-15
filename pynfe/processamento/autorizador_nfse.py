@@ -372,7 +372,8 @@ class SerializacaoGinfes(InterfaceAutorizador):
         endereco_tomador.Endereco = nfse.cliente.endereco_logradouro
         endereco_tomador.Numero = nfse.cliente.endereco_numero
         endereco_tomador.Bairro = nfse.cliente.endereco_bairro
-        endereco_tomador.CodigoMunicipio = nfse.cliente.endereco_cod_municipio
+        if nfse.cliente.endereco_cod_municipio:
+            endereco_tomador.CodigoMunicipio = nfse.cliente.endereco_cod_municipio
         endereco_tomador.Uf = nfse.cliente.endereco_uf
         endereco_tomador.Cep = nfse.cliente.endereco_cep
         # identificacao Tomador
