@@ -925,6 +925,10 @@ class NotaFiscalServico(Entidade):
     serie = str()
     # Tipo
     tipo = str()
+    # Natureza de operação
+    natureza_operacao = int()
+    # Regime especial de tributação
+    regime_especial = int()
 
     def __init__(self, *args, **kwargs):
 
