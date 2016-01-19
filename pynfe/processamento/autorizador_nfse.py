@@ -272,7 +272,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
         consulta.IdentificacaoRps = id_rps
         consulta.Prestador = id_prestador
 
-        consulta = consulta.toxml(element_name='ConsultarNfseRpsEnvio')
+        consulta = consulta.toxml(element_name='ns1:ConsultarNfseRpsEnvio')
 
         return consulta
 
