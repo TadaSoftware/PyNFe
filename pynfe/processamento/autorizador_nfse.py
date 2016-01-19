@@ -370,6 +370,8 @@ class SerializacaoGinfes(InterfaceAutorizador):
         # endereco tomador
         endereco_tomador = _tipos.tcEndereco()
         endereco_tomador.Endereco = nfse.cliente.endereco_logradouro
+        if nfse.cliente.endereco_complemento:
+            endereco_tomador.Complemento = nfse.cliente.endereco_complemento
         endereco_tomador.Numero = nfse.cliente.endereco_numero
         endereco_tomador.Bairro = nfse.cliente.endereco_bairro
         if nfse.cliente.endereco_cod_municipio:
