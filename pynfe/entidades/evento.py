@@ -25,7 +25,7 @@ class EventoCancelarNota(Evento):
     # - Código do evento = 110111
     tp_evento = '110111'
     # - Sequencial do evento para o mesmo tipo de evento. Para maioria dos eventos nSeqEvento=1, nos casos em quepossa existir mais de um evento, como é o caso da Carta de Correção, o autor do evento deve numerar de forma sequencial.
-    n_seq_evento = 1
+    n_seq_evento = int()
     # - descEvento
     descricao = 'Cancelamento'
     # - Informar o número do Protocolo de Autorização da NF-e a ser Cancelada. (vide item 5.8).
