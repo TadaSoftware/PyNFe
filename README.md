@@ -22,6 +22,8 @@ Dependências
     performance e fácil de implementar.
 - xmlsec1 e openssl (instalado no SO)
   - assinatura e validação do XML
+- pyopenssl
+  - biblioteca para manuseio do certificado digital
 - requests
   - biblioteca para a comunicação com os webservices da SEFAZ
 - suds-jurko (*apenas para NFS-e)

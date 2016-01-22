@@ -1,1 +1,6 @@
-sphinx_rtd_theme
+pyopenssl
+requests
+lxml
+# opcional para NFS-e
+#sudo-jurko
+#pyxb
