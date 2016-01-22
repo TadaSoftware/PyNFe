@@ -272,7 +272,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
         consulta.IdentificacaoRps = id_rps
         consulta.Prestador = id_prestador
 
-        consulta = consulta.toxml(element_name='ConsultarNfseRpsEnvio')
+        consulta = consulta.toxml(element_name='ns1:ConsultarNfseRpsEnvio')
 
         return consulta
 
@@ -370,6 +370,8 @@ class SerializacaoGinfes(InterfaceAutorizador):
         # endereco tomador
         endereco_tomador = _tipos.tcEndereco()
         endereco_tomador.Endereco = nfse.cliente.endereco_logradouro
+        if nfse.cliente.endereco_complemento:
+            endereco_tomador.Complemento = nfse.cliente.endereco_complemento
         endereco_tomador.Numero = nfse.cliente.endereco_numero
         endereco_tomador.Bairro = nfse.cliente.endereco_bairro
         if nfse.cliente.endereco_cod_municipio:
@@ -408,12 +410,28 @@ class SerializacaoGinfes(InterfaceAutorizador):
         inf_rps = _tipos.tcInfRps()
         inf_rps.IdentificacaoRps = id_rps
         inf_rps.DataEmissao = nfse.data_emissao.strftime('%Y-%m-%dT%H:%M:%S')
-        inf_rps.NaturezaOperacao = 1  # tributacao no municipio
-        inf_rps.RegimeEspecialTributacao = None  # opcional
-        inf_rps.OptanteSimplesNacional = nfse.simples
-        inf_rps.IncentivadorCultural = 2  # Nao
-        inf_rps.Status = 1
-        inf_rps.RpsSubstituido = None  # opcional
+        # Natureza da Operação
+        # 1 – Tributação no município
+        # 2 - Tributação fora do município
+        # 3 - Isenção
+        # 4 - Imune
+        # 5 –Exigibilidade suspensa por decisão judicial
+        # 6 – Exigibilidade suspensa por procedimento administrativo
+        inf_rps.NaturezaOperacao = nfse.natureza_operacao
+        # Regime Especial de Tributação
+        # 1 – Microempresa municipal
+        # 2 - Estimativa
+        # 3 – Sociedade de profissionais
+        # 4 – Cooperativa
+        # 5 - Microempresário Individual (MEI)
+        # 6 - Microempresário e Empresa de Pequeno Porte (ME EPP)
+        if nfse.regime_especial:
+            inf_rps.RegimeEspecialTributacao = nfse.regime_especial
+        inf_rps.OptanteSimplesNacional = nfse.simples # 1-sim 2-nao
+        inf_rps.IncentivadorCultural = nfse.incentivo # 1-sim 2-nao
+        # Código de status da NFS-e
+        inf_rps.Status = 1    # 1 – Normal 2 – Cancelado (sempre 1, pois a nota não pode ser enviada como cancelada)
+        inf_rps.RpsSubstituido = None  # opcional 
         inf_rps.Servico = servico
         inf_rps.Prestador = id_prestador
         inf_rps.Tomador = tomador

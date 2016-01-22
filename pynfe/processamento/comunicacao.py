@@ -411,6 +411,8 @@ class ComunicacaoNfse(Comunicacao):
         # url do serviço
         url = self._get_url()
         if self.autorizador == 'GINFES':
+            # xml
+            xml = '<?xml version="1.0" encoding="UTF-8"?>' + xml
             # comunica via wsdl
             return self._post_https(url, xml, 'enviar_lote')
         else:
@@ -449,6 +451,8 @@ class ComunicacaoNfse(Comunicacao):
         # url do serviço
         url = self._get_url()
         if self.autorizador == 'GINFES':
+            # xml
+            xml = '<?xml version="1.0" encoding="UTF-8"?>' + xml
             # comunica via wsdl
             return self._post_https(url, xml, 'consulta_lote')
         else:
