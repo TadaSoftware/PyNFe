@@ -198,11 +198,15 @@ class ComunicacaoSefaz(Comunicacao):
         return self._post(url, xml)
 
     def download(self, cnpj, chave):
+        """ 
+            Metodo para download de NFe por parte de destinatário.
+            O certificado digital deve ser o mesmo do destinatário da Nfe.
+            NT 2012/002
+        """
         # url do serviço
         url = self._get_url_AN(consulta='DOWNLOAD')
         # Monta XML do corpo da requisição
         raiz = etree.Element('downloadNFe', versao='1.00', xmlns=NAMESPACE_NFE)
-        etree.SubElement(raiz, 'versao').text = '1.00'
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(raiz, 'xServ').text = 'DOWNLOAD NFE'
         etree.SubElement(raiz, 'CNPJ').text = str(cnpj)
@@ -210,8 +214,7 @@ class ComunicacaoSefaz(Comunicacao):
 
          # Monta XML para envio da requisição
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeDownloadNF'), metodo='NfeDownloadNF', dados=raiz)
-        print (url)
-        #return xml
+        
         return self._post(url, xml)
 
     def inutilizar_faixa_numeracao(self, numero_inicial, numero_final, emitente, certificado, senha, ano=None, serie='1', justificativa=''):
