@@ -305,7 +305,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
         consulta.Prestador = id_prestador
         consulta.Protocolo = str(numero)
 
-        return consulta.toxml(element_name='ns1:ConsultarLoteRps')
+        return consulta.toxml(element_name='ns1:ConsultarLoteRpsEnvio')
 
     def consultar_situacao_lote(self, emitente, numero):
         # Prestador
@@ -498,4 +498,4 @@ class SerializacaoGinfes(InterfaceAutorizador):
         cabecalho = cabecalho_v03.cabecalho()
         cabecalho.versao = '3'
         cabecalho.versaoDados = '3'
-        return cabecalho.toxml(element_name='cabecalho')
+        return cabecalho.toxml(element_name='ns2:cabecalho')

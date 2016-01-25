@@ -486,7 +486,25 @@ class ComunicacaoNfse(Comunicacao):
             raise Exception('Autorizador não encontrado!')
 
     def _cabecalho(self, retorna_string=True):
-        u"""Monta o XML do cabeçalho da requisição wsdl"""
+        """ Monta o XML do cabeçalho da requisição wsdl
+            Namespaces padrão homologação (Ginfes) """
+
+        xml_declaration='<?xml version="1.0" encoding="UTF-8"?>'
+        # cabecalho = '<ns2:cabecalho versao="3" xmlns:ns2="http://www.ginfes.com.br/cabecalho_v03.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><versaoDados>3</versaoDados></ns2:cabecalho>'
+         # cabecalho
+        raiz = etree.Element('{%s}cabecalho'%self._namespace, nsmap={'ns2':self._namespace, 'xsi':NAMESPACE_XSI}, versao=self._versao)
+        etree.SubElement(raiz, 'versaoDados').text = self._versao
+
+        if retorna_string:
+            cabecalho = etree.tostring(raiz, encoding='unicode', pretty_print=False).replace('\n','')
+            cabecalho = xml_declaration + cabecalho
+            return cabecalho
+        else:
+            return raiz
+
+    def _cabecalho2(self, retorna_string=True):
+        """ Monta o XML do cabeçalho da requisição wsdl
+            Namespaces que funcionaram em produção (Ginfes)"""
 
         xml_declaration='<?xml version="1.0" encoding="UTF-8"?>'
 
