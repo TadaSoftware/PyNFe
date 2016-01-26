@@ -264,8 +264,11 @@ class AssinaturaA1(Assinatura):
         except Exception as e:
             raise e
 
-    def assinarConsultaLote(self, xml, retorna_string=True):
-        tag = 'ns1:ConsultarLoteRpsEnvio'
+    def assinarConsultaLote(self, xml, retorna_string=True, situacao=False):
+        if situacao:
+            tag = 'ns1:ConsultarSituacaoLoteRpsEnvio'
+        else:
+            tag = 'ns1:ConsultarLoteRpsEnvio'
         return self._assinar(xml, tag, retorna_string)
 
     def assinarConsultaRps(self, xml, retorna_string=True):
