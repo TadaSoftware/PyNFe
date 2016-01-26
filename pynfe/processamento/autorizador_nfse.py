@@ -1,5 +1,6 @@
 from pyxb import BIND
 from importlib import import_module
+from decimal import Decimal, ROUND_HALF_UP
 
 
 class InterfaceAutorizador():
@@ -245,6 +246,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
         global servico_cancelar_nfse_envio_v03
         global servico_consultar_lote_rps_envio_v03
         global servico_consultar_situacao_lote_rps_envio_v03
+        global servico_consultar_nfse_rps_envio_v03
         _tipos = import_module('pynfe.utils.nfse.ginfes._tipos')
         servico_consultar_nfse_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_consultar_nfse_envio_v03')
         servico_cancelar_nfse_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_cancelar_nfse_envio_v03')
@@ -252,29 +254,29 @@ class SerializacaoGinfes(InterfaceAutorizador):
         cabecalho_v03 = import_module('pynfe.utils.nfse.ginfes.cabecalho_v03')
         servico_consultar_lote_rps_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_consultar_lote_rps_envio_v03')
         servico_consultar_situacao_lote_rps_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_consultar_situacao_lote_rps_envio_v03')
+        servico_consultar_nfse_rps_envio_v03 = import_module('pynfe.utils.nfse.ginfes.servico_consultar_nfse_rps_envio_v03')
 
-    def consultar_rps(self, nfse):
-        """Retorna string de um XML de consulta por Rps gerado a partir do
-        XML Schema (XSD). Binding gerado pelo modulo PyXB."""
-
+    def consultar_rps(self, emitente, numero, serie, tipo):
+        """ Retorna string de um XML de consulta por Rps gerado a partir do
+            XML Schema (XSD). Binding gerado pelo modulo PyXB.
+            servico_consultar_nfse_rps_envio_v03.xsd
+        """
         # Rps
         id_rps = _tipos.tcIdentificacaoRps()
-        id_rps.Numero = nfse.identificador
-        id_rps.Serie = nfse.serie
-        id_rps.Tipo = nfse.tipo
+        id_rps.Numero = numero
+        id_rps.Serie = serie
+        id_rps.Tipo = tipo
 
         # Prestador
         id_prestador = _tipos.tcIdentificacaoPrestador()
-        id_prestador.CpfCnpj = nfse.emitente.cnpj
-        id_prestador.InscricaoMunicipal = nfse.emitente.inscricao_municipal
+        id_prestador.Cnpj = emitente.cnpj
+        id_prestador.InscricaoMunicipal = emitente.inscricao_municipal
 
         consulta = servico_consultar_nfse_rps_envio_v03.ConsultarNfseRpsEnvio()
         consulta.IdentificacaoRps = id_rps
         consulta.Prestador = id_prestador
 
-        consulta = consulta.toxml(element_name='ns1:ConsultarNfseRpsEnvio')
-
-        return consulta
+        return consulta.toxml(element_name='ns1:ConsultarNfseRpsEnvio')
 
     def consultar_nfse(self, emitente, numero=None, inicio=None, fim=None):
         # Prestador
@@ -308,6 +310,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
         return consulta.toxml(element_name='ns1:ConsultarLoteRpsEnvio')
 
     def consultar_situacao_lote(self, emitente, numero):
+        "Serializa lote de envio, baseado no servico_consultar_situacao_lote_rps_envio_v03.xsd"
         # Prestador
         id_prestador = _tipos.tcIdentificacaoPrestador()
         id_prestador.Cnpj = emitente.cnpj
@@ -317,7 +320,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
         consulta.Prestador = id_prestador
         consulta.Protocolo = str(numero)
 
-        return consulta.toxml(element_name='ns1:ConsultarSituacaoLoteRps')
+        return consulta.toxml(element_name='ns1:ConsultarSituacaoLoteRpsEnvio')
 
     def serializar_lote_assincrono(self, nfse):
         "Serializa lote de envio, baseado no servico_enviar_lote_rps_envio_v03.xsd"
@@ -325,6 +328,7 @@ class SerializacaoGinfes(InterfaceAutorizador):
         servico = _tipos.tcDadosServico()
         valores_servico = _tipos.tcValores()
         valores_servico.ValorServicos = nfse.servico.valor_servico
+        #valores_servico.ValorServicos = str(Decimal(nfse.servico.valor_servico.quantize(Decimal('.01'), rounding=ROUND_HALF_UP)))
         valores_servico.IssRetido = nfse.servico.iss_retido
         # Dados opcionais
         if nfse.servico.valor_deducoes:

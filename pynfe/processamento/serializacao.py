@@ -627,6 +627,13 @@ class SerializacaoNfse(object):
         else:
             raise Exception('Este método só esta implementado no autorizador ginfes.')
 
+    def consultar_rps(self, emitente, numero, serie, tipo):
+        if self.autorizador.lower() == 'ginfes':
+            from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
+            return SerializacaoGinfes().consultar_rps(emitente, numero, serie, tipo)
+        else:
+            raise Exception('Este método só esta implementado no autorizador ginfes.')
+
     def consultar_situacao_lote(self, emitente, numero):
         if self.autorizador.lower() == 'ginfes':
             from pynfe.processamento.autorizador_nfse import SerializacaoGinfes

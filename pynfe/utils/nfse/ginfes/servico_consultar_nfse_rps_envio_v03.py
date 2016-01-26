@@ -24,8 +24,8 @@ if pyxb.__version__ != _PyXBVersion:
     raise pyxb.PyXBVersionError(_PyXBVersion)
 
 # Import bindings for namespaces imported into schema
-import _tipos as _ImportedBinding__tipos
-import _dsig as _ImportedBinding__dsig
+from pynfe.utils.nfse.ginfes import _tipos as _ImportedBinding__tipos
+from pynfe.utils.nfse.ginfes import _dsig as _ImportedBinding__dsig
 import pyxb.binding.datatypes
 
 # NOTE: All namespace declarations are reserved within the binding

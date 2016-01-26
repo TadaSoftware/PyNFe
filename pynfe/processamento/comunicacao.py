@@ -438,8 +438,11 @@ class ComunicacaoNfse(Comunicacao):
         if self.autorizador == 'BETHA':
             # comunica via wsdl
             return self._post(url, xml, 'consultaRps')
+        elif self.autorizador == 'GINFES':
+            return self._post_https(url, xml, 'consultaRps')
+        # TODO outros autorizadres
         else:
-            raise Exception('Este método só esta implementado no autorizador betha.')
+            raise Exception('Autorizador não encontrado!')
 
     def consultar_faixa(self, xml):
         # url do serviço

@@ -265,8 +265,19 @@ class AssinaturaA1(Assinatura):
             raise e
 
     def assinarConsultaLote(self, xml, retorna_string=True):
+        tag = 'ns1:ConsultarLoteRpsEnvio'
+        return self._assinar(xml, tag, retorna_string)
+
+    def assinarConsultaRps(self, xml, retorna_string=True):
+        tag = 'ns1:ConsultarNfseRpsEnvio'
+        return self._assinar(xml, tag, retorna_string)
+
+    def _assinar(self, xml, tag, retorna_string=True):
+        """ Método para assinar xml de NFS-e com tags sem ID
+            Consulta de Lote e Consulta por RPS
+            @param tag - raiz do xml que será assinado
+        """
         try:
-            tag = 'ns1:ConsultarLoteRpsEnvio'
             xml = etree.fromstring(xml)
             # No raiz do XML de saida
             raiz = etree.Element('Signature', xmlns='http://www.w3.org/2000/09/xmldsig#')
