@@ -466,7 +466,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_total, 'vICMSDeson').text = str('{:.2f}').format(nota_fiscal.totais_icms_desonerado)  # Valor Total do ICMS desonerado
         etree.SubElement(icms_total, 'vBCST').text = str('{:.2f}').format(nota_fiscal.totais_icms_st_base_calculo)
         etree.SubElement(icms_total, 'vST').text = str('{:.2f}').format(nota_fiscal.totais_icms_st_total)
-        etree.SubElement(icms_total, 'vProd').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_produtos_e_servicos)
+        etree.SubElement(icms_total, 'vProd').text = str(nota_fiscal.totais_icms_total_produtos_e_servicos.quantize(Decimal('.001')).quantize(Decimal('.01')))
         etree.SubElement(icms_total, 'vFrete').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_frete)
         etree.SubElement(icms_total, 'vSeg').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_seguro)
         etree.SubElement(icms_total, 'vDesc').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_desconto)
@@ -478,7 +478,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_total, 'vCOFINS').text = str('{:.2f}').format(nota_fiscal.totais_icms_cofins)
 
         etree.SubElement(icms_total, 'vOutro').text = str('{:.2f}').format(nota_fiscal.totais_icms_outras_despesas_acessorias)
-        etree.SubElement(icms_total, 'vNF').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_nota)
+        etree.SubElement(icms_total, 'vNF').text = str(nota_fiscal.totais_icms_total_nota.quantize(Decimal('.001')).quantize(Decimal('.01')))
         if nota_fiscal.totais_tributos_aproximado:
             etree.SubElement(icms_total, 'vTotTrib').text = str('{:.2f}').format(nota_fiscal.totais_tributos_aproximado)
 
