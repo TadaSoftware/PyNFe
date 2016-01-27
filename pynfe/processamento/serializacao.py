@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import time
+from decimal import Decimal
 from pynfe.entidades import NotaFiscal
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
     obter_pais_por_codigo, obter_municipio_e_codigo, formatar_decimal, \
