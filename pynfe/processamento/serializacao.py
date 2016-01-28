@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import time
-from decimal import Decimal
 from pynfe.entidades import NotaFiscal
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
     obter_pais_por_codigo, obter_municipio_e_codigo, formatar_decimal, \
@@ -227,12 +226,12 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'CFOP').text = produto_servico.cfop
         etree.SubElement(prod, 'uCom').text = produto_servico.unidade_comercial
         etree.SubElement(prod, 'qCom').text = str(produto_servico.quantidade_comercial or 0)
-        etree.SubElement(prod, 'vUnCom').text = str('{:.2f}').format(produto_servico.valor_unitario_comercial or 0)
-        etree.SubElement(prod, 'vProd').text = str('{:.2f}').format(produto_servico.valor_total_bruto or 0)
+        etree.SubElement(prod, 'vUnCom').text = '{:.2f}'.format(produto_servico.valor_unitario_comercial or 0)
+        etree.SubElement(prod, 'vProd').text = '{:.2f}'.format(produto_servico.valor_total_bruto or 0)
         etree.SubElement(prod, 'cEANTrib').text = produto_servico.ean_tributavel
         etree.SubElement(prod, 'uTrib').text = produto_servico.unidade_tributavel
         etree.SubElement(prod, 'qTrib').text = str(produto_servico.quantidade_tributavel)
-        etree.SubElement(prod, 'vUnTrib').text = str('{:.2f}').format(produto_servico.valor_unitario_tributavel)
+        etree.SubElement(prod, 'vUnTrib').text = '{:.2f}'.format(produto_servico.valor_unitario_tributavel)
         """ Indica se valor do Item (vProd) entra no valor total da NF-e (vProd)
             0=Valor do item (vProd) não compõe o valor total da NF-e
             1=Valor do item (vProd) compõe o valor total da NF-e (vProd) (v2.0)
@@ -462,26 +461,26 @@ class SerializacaoXML(Serializacao):
         total = etree.SubElement(raiz, 'total')
         icms_total = etree.SubElement(total, 'ICMSTot')
         #etree.SubElement(icms_total, 'vBC').text = str(nota_fiscal.totais_icms_base_calculo)
-        etree.SubElement(icms_total, 'vBC').text = str('{:.2f}').format(nota_fiscal.totais_icms_base_calculo)
-        etree.SubElement(icms_total, 'vICMS').text = str('{:.2f}').format(nota_fiscal.totais_icms_total)
-        etree.SubElement(icms_total, 'vICMSDeson').text = str('{:.2f}').format(nota_fiscal.totais_icms_desonerado)  # Valor Total do ICMS desonerado
-        etree.SubElement(icms_total, 'vBCST').text = str('{:.2f}').format(nota_fiscal.totais_icms_st_base_calculo)
-        etree.SubElement(icms_total, 'vST').text = str('{:.2f}').format(nota_fiscal.totais_icms_st_total)
-        etree.SubElement(icms_total, 'vProd').text = str(nota_fiscal.totais_icms_total_produtos_e_servicos.quantize(Decimal('.001')).quantize(Decimal('.01')))
-        etree.SubElement(icms_total, 'vFrete').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_frete)
-        etree.SubElement(icms_total, 'vSeg').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_seguro)
-        etree.SubElement(icms_total, 'vDesc').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_desconto)
+        etree.SubElement(icms_total, 'vBC').text = '{:.2f}'.format(nota_fiscal.totais_icms_base_calculo)
+        etree.SubElement(icms_total, 'vICMS').text = '{:.2f}'.format(nota_fiscal.totais_icms_total)
+        etree.SubElement(icms_total, 'vICMSDeson').text = '{:.2f}'.format(nota_fiscal.totais_icms_desonerado)  # Valor Total do ICMS desonerado
+        etree.SubElement(icms_total, 'vBCST').text = '{:.2f}'.format(nota_fiscal.totais_icms_st_base_calculo)
+        etree.SubElement(icms_total, 'vST').text = '{:.2f}'.format(nota_fiscal.totais_icms_st_total)
+        etree.SubElement(icms_total, 'vProd').text = str(nota_fiscal.totais_icms_total_produtos_e_servicos)
+        etree.SubElement(icms_total, 'vFrete').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_frete)
+        etree.SubElement(icms_total, 'vSeg').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_seguro)
+        etree.SubElement(icms_total, 'vDesc').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_desconto)
 
         # Tributos
-        etree.SubElement(icms_total, 'vII').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_ii)
-        etree.SubElement(icms_total, 'vIPI').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_ipi)
-        etree.SubElement(icms_total, 'vPIS').text = str('{:.2f}').format(nota_fiscal.totais_icms_pis)
-        etree.SubElement(icms_total, 'vCOFINS').text = str('{:.2f}').format(nota_fiscal.totais_icms_cofins)
+        etree.SubElement(icms_total, 'vII').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_ii)
+        etree.SubElement(icms_total, 'vIPI').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_ipi)
+        etree.SubElement(icms_total, 'vPIS').text = '{:.2f}'.format(nota_fiscal.totais_icms_pis)
+        etree.SubElement(icms_total, 'vCOFINS').text = '{:.2f}'.format(nota_fiscal.totais_icms_cofins)
 
-        etree.SubElement(icms_total, 'vOutro').text = str('{:.2f}').format(nota_fiscal.totais_icms_outras_despesas_acessorias)
-        etree.SubElement(icms_total, 'vNF').text = str(nota_fiscal.totais_icms_total_nota.quantize(Decimal('.001')).quantize(Decimal('.01')))
+        etree.SubElement(icms_total, 'vOutro').text = '{:.2f}'.format(nota_fiscal.totais_icms_outras_despesas_acessorias)
+        etree.SubElement(icms_total, 'vNF').text = str(nota_fiscal.totais_icms_total_nota)
         if nota_fiscal.totais_tributos_aproximado:
-            etree.SubElement(icms_total, 'vTotTrib').text = str('{:.2f}').format(nota_fiscal.totais_tributos_aproximado)
+            etree.SubElement(icms_total, 'vTotTrib').text = '{:.2f}'.format(nota_fiscal.totais_tributos_aproximado)
 
         # Apenas NF-e
         if nota_fiscal.modelo == 55:
@@ -496,7 +495,7 @@ class SerializacaoXML(Serializacao):
                     nota_fiscal.transporte_transportadora,
                     retorna_string=False,
                     ))
-                
+
             # Veículo
             if nota_fiscal.transporte_veiculo_placa and nota_fiscal.transporte_veiculo_uf:
                 veiculo = etree.SubElement(transp, 'veicTransp')
@@ -541,7 +540,7 @@ class SerializacaoXML(Serializacao):
             # Pagamento
             pag = etree.SubElement(raiz, 'pag')
             etree.SubElement(pag, 'tPag').text = str(nota_fiscal.tipo_pagamento).zfill(2) # 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
-            etree.SubElement(pag, 'vPag').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_nota)
+            etree.SubElement(pag, 'vPag').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_nota)
             # Cartão NT2015.002
             #cartao = etree.SubElement(pag, 'card')
             """ Tipo de Integração do processo de pagamento com o sistema de automação da empresa:
