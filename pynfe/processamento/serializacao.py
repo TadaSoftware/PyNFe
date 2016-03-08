@@ -226,12 +226,12 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'CFOP').text = produto_servico.cfop
         etree.SubElement(prod, 'uCom').text = produto_servico.unidade_comercial
         etree.SubElement(prod, 'qCom').text = str(produto_servico.quantidade_comercial or 0)
-        etree.SubElement(prod, 'vUnCom').text = '{:.2f}'.format(produto_servico.valor_unitario_comercial or 0)
+        etree.SubElement(prod, 'vUnCom').text = '{:.4f}'.format(produto_servico.valor_unitario_comercial or 0)
         etree.SubElement(prod, 'vProd').text = '{:.2f}'.format(produto_servico.valor_total_bruto or 0)
         etree.SubElement(prod, 'cEANTrib').text = produto_servico.ean_tributavel
         etree.SubElement(prod, 'uTrib').text = produto_servico.unidade_tributavel
         etree.SubElement(prod, 'qTrib').text = str(produto_servico.quantidade_tributavel)
-        etree.SubElement(prod, 'vUnTrib').text = '{:.2f}'.format(produto_servico.valor_unitario_tributavel)
+        etree.SubElement(prod, 'vUnTrib').text = '{:.4f}'.format(produto_servico.valor_unitario_tributavel or 0)
         """ Indica se valor do Item (vProd) entra no valor total da NF-e (vProd)
             0=Valor do item (vProd) não compõe o valor total da NF-e
             1=Valor do item (vProd) compõe o valor total da NF-e (vProd) (v2.0)
