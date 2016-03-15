@@ -180,7 +180,7 @@ NFCE = {
 	    	'CHAVE': 'nfce.fazenda.pr.gov.br/nfce/NFeConsulta3',
 	    	'INUTILIZACAO': 'nfce.fazenda.pr.gov.br/nfce/NFeInutilizacao3',
 	    	'EVENTOS': 'nfce.fazenda.pr.gov.br/nfce/NFeRecepcaoEvento',
-	    	'QR': ' http://www.dfeportal.fazenda.pr.gov.br/dfe-portal/rest/servico/consultaNFCe?',
+	    	'QR': 'http://www.dfeportal.fazenda.pr.gov.br/dfe-portal/rest/servico/consultaNFCe?',
 	    	'HTTPS': 'https://',
 	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
@@ -248,7 +248,7 @@ NFE = {
 	    	'EVENTOS': 'nfe.fazenda.gov.br/RecepcaoEvento/RecepcaoEvento.asmx',	# versao: 1.00
 	    	'DISTRIBUICAO': 'nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx',
 	    	'DOWNLOAD': 'nfe.fazenda.gov.br/NfeDownloadNF/NfeDownloadNF.asmx', 				# versao: 2.00/3.10
-	    	'DESTINADAS': '.nfe.fazenda.gov.br/NFeConsultaDest/NFeConsultaDest.asmx',		# versao: 2.00/3.10
+	    	'DESTINADAS': 'nfe.fazenda.gov.br/NFeConsultaDest/NFeConsultaDest.asmx',		# versao: 2.00/3.10
 	    	'HTTPS': 'https://www.',
 	    	'HOMOLOGACAO': 'https://hom.'
 	    },
