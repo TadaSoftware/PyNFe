@@ -55,7 +55,7 @@ class AssinaturaA1(Assinatura):
             with open('testes.xml', 'w') as arquivo:
                 arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False)))
 
-            subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'testes.xml'])
+            subprocess.check_call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'testes.xml'])
             xml = etree.parse('funfa.xml').getroot()
 
             if retorna_string:
@@ -109,7 +109,7 @@ class AssinaturaA1(Assinatura):
                     texto = texto.replace('ns1:', '').replace(':ns1', '')
                 arquivo.write(texto)
 
-            subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado,
+            subprocess.check_call(['xmlsec1', '--sign', '--pkcs12', self.certificado,
                              '--pwd', self.senha, '--crypto', 'openssl', '--output',
                              'nfse.xml', '--id-attr:Id', tag, 'nfse.xml'])
 
@@ -154,7 +154,7 @@ class AssinaturaA1(Assinatura):
                 texto = remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False))
                 arquivo.write(texto)
             # assina lote
-            subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado,
+            subprocess.check_call(['xmlsec1', '--sign', '--pkcs12', self.certificado,
                              '--pwd', self.senha, '--crypto', 'openssl', '--output',
                              'nfse.xml', '--id-attr:Id', tag, 'nfse.xml'])
 
@@ -217,7 +217,7 @@ class AssinaturaA1(Assinatura):
             with open('nfse.xml', 'w') as arquivo:
                 arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False).replace('\n','')))
 
-            subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'nfse.xml'])
+            subprocess.check_call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'nfse.xml'])
 
             if retorna_string:
                 return open('funfa.xml', 'r').read()
@@ -254,7 +254,7 @@ class AssinaturaA1(Assinatura):
             with open('nfse.xml', 'w') as arquivo:
                 arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False).replace('\n','')))
 
-            subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'nfse.xml'])
+            subprocess.check_call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'nfse.xml'])
             xml = etree.parse('funfa.xml').getroot()
 
             if retorna_string:
@@ -305,7 +305,7 @@ class AssinaturaA1(Assinatura):
             with open('nfse.xml', 'w') as arquivo:
                 arquivo.write(remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False).replace('\n','')))
 
-            subprocess.call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'nfse.xml'])
+            subprocess.check_call(['xmlsec1', '--sign', '--pkcs12', self.certificado, '--pwd', self.senha, '--crypto', 'openssl', '--output', 'funfa.xml', '--id-attr:Id', tag, 'nfse.xml'])
             xml = etree.parse('funfa.xml').getroot()
 
             if retorna_string:

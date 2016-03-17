@@ -346,10 +346,10 @@ class ComunicacaoSefaz(Comunicacao):
     def _construir_xml_status_pr(self, cabecalho, metodo, dados):
         u"""Mota o XML para o envio via SOAP"""
 
-        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'xsi': NAMESPACE_XSI, 'xsd': NAMESPACE_XSD,'soap': NAMESPACE_SOAP})
-        c = etree.SubElement(raiz, '{%s}Header'%NAMESPACE_SOAP)
+        raiz = etree.Element('{%s}Envelope' % NAMESPACE_SOAP, nsmap={'xsi': NAMESPACE_XSI, 'xsd': NAMESPACE_XSD,'soap': NAMESPACE_SOAP})
+        c = etree.SubElement(raiz, '{%s}Header' % NAMESPACE_SOAP)
         c.append(cabecalho)
-        body = etree.SubElement(raiz, '{%s}Body'%NAMESPACE_SOAP)
+        body = etree.SubElement(raiz, '{%s}Body' % NAMESPACE_SOAP)
         a = etree.SubElement(body, 'nfeDadosMsg', xmlns=NAMESPACE_METODO+metodo)
         a.append(dados)
         return raiz
@@ -373,10 +373,10 @@ class ComunicacaoSefaz(Comunicacao):
             xml = xml_declaration + xml
 
             # Faz o request com o servidor
-            result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False)
-            result.encoding='utf-8'
+            result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False, timeout=120)
+            result.encoding = 'utf-8'
             return result
-        except requests.exceptions.ConnectionError as e:
+        except requests.exceptions.RequestException as e:
             raise e
         finally:
             certificadoA1.excluir()
