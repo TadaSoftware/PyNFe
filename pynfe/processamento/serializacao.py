@@ -5,7 +5,10 @@ from pynfe.entidades import NotaFiscal
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
     obter_pais_por_codigo, obter_municipio_e_codigo, formatar_decimal, \
     remover_acentos, obter_uf_por_codigo, obter_codigo_por_municipio
-from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE
+from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE, VERSAO_QRCODE
+from pynfe.utils.webservices import NFCE
+import base64
+import hashlib
 
 
 class Serializacao(object):
@@ -64,12 +67,6 @@ class SerializacaoXML(Serializacao):
 
             for nf in notas_fiscais:
                 raiz.append(self._serializar_nota_fiscal(nf, retorna_string=False))
-                # Grupo de informaçoes suplementares NT2015.002
-                # Somente para NFC-e
-                # if nf.modelo == 65:
-                #     info = etree.Element('infNFeSupl')
-                #     etree.SubElement(info, 'qrCode').text = ''
-                #     raiz.append(info)
 
             if retorna_string:
                 return etree.tostring(raiz, encoding="unicode", pretty_print=False)
@@ -221,12 +218,17 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'cEAN').text = produto_servico.ean
         etree.SubElement(prod, 'xProd').text = produto_servico.descricao
         etree.SubElement(prod, 'NCM').text = produto_servico.ncm
-        # Codificação opcional que detalha alguns NCM. Formato: duas letras maiúsculas e 4 algarismos. Se a mercadoria se enquadrar em mais de uma codificação, informar até 8 codificações principais.
+        # Codificação opcional que detalha alguns NCM. Formato: duas letras maiúsculas e 4 algarismos. 
+        # Se a mercadoria se enquadrar em mais de uma codificação, informar até 8 codificações principais.
         #etree.SubElement(prod, 'NVE').text = ''
         etree.SubElement(prod, 'CFOP').text = produto_servico.cfop
         etree.SubElement(prod, 'uCom').text = produto_servico.unidade_comercial
         etree.SubElement(prod, 'qCom').text = str(produto_servico.quantidade_comercial or 0)
         etree.SubElement(prod, 'vUnCom').text = str('{:.2f}').format(produto_servico.valor_unitario_comercial or 0)
+        """ Código Especificador da Substituição Tributária – CEST, que estabelece a sistemática de uniformização e identificação das mercadorias e bens passíveis de
+        sujeição aos regimes de substituição tributária e de antecipação de recolhimento do ICMS. """
+        #if produto_servico.cest:
+        #    etree.SubElement(prod, 'CEST').text = produto_servico.cest
         etree.SubElement(prod, 'vProd').text = str('{:.2f}').format(produto_servico.valor_total_bruto or 0)
         etree.SubElement(prod, 'cEANTrib').text = produto_servico.ean_tributavel
         etree.SubElement(prod, 'uTrib').text = produto_servico.unidade_tributavel
@@ -594,6 +596,76 @@ class SerializacaoXML(Serializacao):
             return raiz
 
 
+class SerializacaoQrcode(object):
+    """ Classe que gera e serializa o qrcode de NFC-e no xml """
+
+    def gerar_qrcode(self, token, csc, xml, return_qr=False):
+        """ Classe para gerar url do qrcode da NFC-e """
+        try:
+            # Procura atributos no xml
+            ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}
+            sig = {'sig':'http://www.w3.org/2000/09/xmldsig#'}
+            # Tag Raiz NFe Ex: <NFe>
+            nfe = xml
+            chave = nfe[0].attrib['Id'].replace('NFe','')
+            data = nfe.xpath('ns:infNFe/ns:ide/ns:dhEmi/text()', namespaces=ns)[0].encode()
+            tpamb = nfe.xpath('ns:infNFe/ns:ide/ns:tpAmb/text()', namespaces=ns)[0]
+            cuf = nfe.xpath('ns:infNFe/ns:ide/ns:cUF/text()', namespaces=ns)[0]
+            uf = [key for key, value in CODIGOS_ESTADOS.items() if value == cuf][0]
+
+            # tenta encontrar a tag cpf
+            try:
+                cpf = nfe.xpath('ns:infNFe/ns:dest/ns:CPF/text()', namespaces=ns)[0]
+            except IndexError:
+                # em caso de erro tenta procurar a tag cnpj
+                try:
+                    cpf = nfe.xpath('ns:infNFe/ns:dest/ns:CNPJ/text()', namespaces=ns)[0]
+                except IndexError:
+                    cpf = None
+                cpf = None
+            total = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vNF/text()', namespaces=ns)[0]
+            icms = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vICMS/text()', namespaces=ns)[0]
+            digest = nfe.xpath('sig:Signature/sig:SignedInfo/sig:Reference/sig:DigestValue/text()', namespaces=sig)[0].encode()
+
+            data = base64.b16encode(data).decode()
+            digest = base64.b16encode(digest).decode()
+
+            if cpf is None:
+                url = 'chNFe={}&nVersao={}&tpAmb={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
+                       chave, VERSAO_QRCODE, tpamb, data.lower(), total, icms, digest.lower(), token)           
+            else:
+                url = 'chNFe={}&nVersao={}&tpAmb={}&cDest={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
+                       chave, VERSAO_QRCODE, tpamb, cpf, data.lower(), total, icms, digest.lower(), token)
+
+            url_hash = hashlib.sha1(url.encode()+csc.encode()).digest()
+            url_hash = base64.b16encode(url_hash).decode()
+
+            url = url + '&cHashQRCode=' + url_hash.upper()
+
+            if uf.upper() == 'PR':
+                qrcode = NFCE[uf.upper()]['QR'] + url
+            else:
+                if tpamb == '1':
+                    qrcode = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['QR'] + url
+                else:
+                    qrcode = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['QR'] + url
+
+            # adicionta tag infNFeSupl com qrcode 
+            info = etree.Element('infNFeSupl')
+            etree.SubElement(info, 'qrCode').text = '<![CDATA['+ qrcode.strip() + ']]>'
+            nfe.insert(1, info)
+
+            # retorna nfe com o qrcode incluido NT2015/002 e qrcode
+            if return_qr:
+                return nfe, qrcode.strip()
+            # retorna apenas nfe com o qrcode incluido NT2015/002
+            else:
+                return nfe
+
+        except Exception as e:
+            raise e
+
+
 class SerializacaoNfse(object):
     def __init__(self, autorizador):
         "Recebe uma string com o nome do autorizador."
@@ -653,6 +725,7 @@ class SerializacaoNfse(object):
             return SerializacaoBetha().cancelar(nfse)
         else:
             raise Exception('Autorizador não suportado para cancelamento!')
+
 
 class SerializacaoPipes(Serializacao):
     """Serialização utilizada pela SEFAZ-SP para a importação de notas."""

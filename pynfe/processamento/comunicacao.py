@@ -290,7 +290,6 @@ class ComunicacaoSefaz(Comunicacao):
         self.url = ambiente + NFE['AN'][consulta]
         return self.url
 
-
     def _get_url(self, modelo, consulta):
         """ Retorna a url para comunicação com o webservice """
         # estado que implementam webservices proprios
@@ -369,7 +368,8 @@ class ComunicacaoSefaz(Comunicacao):
         # Abre a conexão HTTPS
         try:
             xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
-            xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('\n','')
+            # limpa xml com caracteres bugados para infNFeSupl em NFC-e
+            xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('\n','').replace('&lt;','<').replace('&gt;','>').replace('amp;','')
             xml = xml_declaration + xml
 
             # Faz o request com o servidor
