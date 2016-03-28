@@ -68,7 +68,7 @@ Referências
 
    pip3 install --user https://github.com/leotada/PyNFe/archive/master.zip
 
- - Instalação opcional para NFS-e::
+- Instalação opcional para NFS-e::
 
     pip3 install --user -r https://github.com/leotada/PyNFe/raw/master/requirements-nfse.txt
 
