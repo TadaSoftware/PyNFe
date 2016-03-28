@@ -1,6 +1,8 @@
-pyopenssl
-requests
-lxml
-# opcional para NFS-e
-#sudo-jurko
-#pyxb
+# Dependencias basicas
+pyopenssl==16.0.0
+requests==2.9.1
+lxml==3.6.0
+
+# Opcional para NFS-e
+#suds-jurko==0.6
+#pyxb==1.2.4
