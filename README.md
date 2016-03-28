@@ -56,9 +56,15 @@ Referências
 
 Instalação
 -----------
-```
-pip3 install --user -r https://github.com/leotada/PyNFe/raw/master/requirements-nfse.txt # opcional: apenas para NFS-e
+
+```sh
 pip3 install --user https://github.com/leotada/PyNFe/archive/master.zip
+```
+
+Opcional para NFS-e:
+
+```sh
+pip3 install --user -r https://github.com/leotada/PyNFe/raw/master/requirements-nfse.txt
 ```
 
 Exemplos de uso
