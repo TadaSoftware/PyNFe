@@ -2,7 +2,7 @@ Visão Geral
 -----------
 
 Biblioteca de interface com o webservice de Nota Fiscal Eletronica,
-(NF-e/NFC-e/NFS-e) da SEFAZ, oficializada pelo Ministerio da Fazendo do 
+(NF-e/NFC-e/NFS-e) da SEFAZ, oficializada pelo Ministerio da Fazendo do
 Governo do Brasil.  
 Desenvolvido e testado com Python 3 no GNU/Linux.
 
@@ -29,7 +29,7 @@ Dependências
 - suds-jurko (*apenas para NFS-e)
   - biblioteca para a comunicação com os webservices via wsdl
 - pyxb (*apenas para NFS-e)
-  - biblioteca para geração de bindings a partir de XML Schema(xsd) 
+  - biblioteca para geração de bindings a partir de XML Schema(xsd)
 
 Referências
 -----------
@@ -50,14 +50,21 @@ Referências
 
 - Validador de xml
   - https://www.sefaz.rs.gov.br/NFE/NFE-VAL.aspx
-  
+
 - Validador de assinaturas
-  - https://www.receita.fazenda.gov.br/Aplicacoes/SSL/ATBHE/Assinadoc/ValidadorAssinaturas.app/valida.aspx 
+  - https://www.receita.fazenda.gov.br/Aplicacoes/SSL/ATBHE/Assinadoc/ValidadorAssinaturas.app/valida.aspx
 
 Instalação
 -----------
+
+```sh
+pip3 install --user https://github.com/leotada/PyNFe/archive/master.zip
 ```
- sudo pip3 install https://github.com/leotada/PyNFe/archive/master.zip
+
+Opcional para NFS-e:
+
+```sh
+pip3 install --user -r https://github.com/leotada/PyNFe/raw/master/requirements-nfse.txt
 ```
 
 Exemplos de uso
@@ -77,7 +84,7 @@ xml = con.status_servico('nfe')
 print (xml.text)
 ```
 
-Documentação 
+Documentação
 -----------
 - https://github.com/leotada/PyNFe/wiki
 - http://pynfe.readthedocs.org/pt/latest/
