@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import requests
+import re
 from pynfe.utils import etree, so_numeros
 from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, NAMESPACE_XSI, NAMESPACE_XSD, NAMESPACE_METODO, \
 VERSAO_PADRAO, CODIGOS_ESTADOS, NAMESPACE_BETHA
@@ -369,7 +370,9 @@ class ComunicacaoSefaz(Comunicacao):
         try:
             xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
             # limpa xml com caracteres bugados para infNFeSupl em NFC-e
-            xml = etree.tostring(xml, encoding='unicode', pretty_print=False).replace('\n','').replace('&lt;','<').replace('&gt;','>').replace('amp;','')
+            xml = re.sub('<qrCode>(.*?)</qrCode>', 
+                lambda x:x.group(0).replace('&lt;','<').replace('&gt;','>').replace('amp;',''),
+                etree.tostring(xml, encoding='unicode').replace('\n',''))
             xml = xml_declaration + xml
 
             # Faz o request com o servidor
