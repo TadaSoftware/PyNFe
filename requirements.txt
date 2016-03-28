@@ -4,5 +4,4 @@ requests==2.9.1
 lxml==3.6.0
 
 # Opcional para NFS-e
-#suds-jurko==0.6
-#pyxb==1.2.4
+#-r requirements-nfse.txt
