@@ -66,7 +66,8 @@ Referências
 
 - Instalação::
 
-   sudo pip3 install https://github.com/leotada/PyNFe/archive/master.zip
+   pip3 install --user suds-jurko pyxb  # opcional: apenas para NFS-e
+   pip3 install --user https://github.com/leotada/PyNFe/archive/master.zip
 
 Exemplos de uso
 ---------------
