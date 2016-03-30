@@ -218,7 +218,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'cEAN').text = produto_servico.ean
         etree.SubElement(prod, 'xProd').text = produto_servico.descricao
         etree.SubElement(prod, 'NCM').text = produto_servico.ncm
-        # Codificação opcional que detalha alguns NCM. Formato: duas letras maiúsculas e 4 algarismos. 
+        # Codificação opcional que detalha alguns NCM. Formato: duas letras maiúsculas e 4 algarismos.
         # Se a mercadoria se enquadrar em mais de uma codificação, informar até 8 codificações principais.
         #etree.SubElement(prod, 'NVE').text = ''
         etree.SubElement(prod, 'CFOP').text = produto_servico.cfop
@@ -598,72 +598,71 @@ class SerializacaoXML(Serializacao):
 
 class SerializacaoQrcode(object):
     """ Classe que gera e serializa o qrcode de NFC-e no xml """
-
     def gerar_qrcode(self, token, csc, xml, return_qr=False):
         """ Classe para gerar url do qrcode da NFC-e """
+        # Procura atributos no xml
+        ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}
+        sig = {'sig':'http://www.w3.org/2000/09/xmldsig#'}
+        # Tag Raiz NFe Ex: <NFe>
+        nfe = xml
+        chave = nfe[0].attrib['Id'].replace('NFe','')
+        data = nfe.xpath('ns:infNFe/ns:ide/ns:dhEmi/text()', namespaces=ns)[0].encode()
+        tpamb = nfe.xpath('ns:infNFe/ns:ide/ns:tpAmb/text()', namespaces=ns)[0]
+        cuf = nfe.xpath('ns:infNFe/ns:ide/ns:cUF/text()', namespaces=ns)[0]
+        uf = [key for key, value in CODIGOS_ESTADOS.items() if value == cuf][0]
+
+        # tenta encontrar a tag cpf
         try:
-            # Procura atributos no xml
-            ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}
-            sig = {'sig':'http://www.w3.org/2000/09/xmldsig#'}
-            # Tag Raiz NFe Ex: <NFe>
-            nfe = xml
-            chave = nfe[0].attrib['Id'].replace('NFe','')
-            data = nfe.xpath('ns:infNFe/ns:ide/ns:dhEmi/text()', namespaces=ns)[0].encode()
-            tpamb = nfe.xpath('ns:infNFe/ns:ide/ns:tpAmb/text()', namespaces=ns)[0]
-            cuf = nfe.xpath('ns:infNFe/ns:ide/ns:cUF/text()', namespaces=ns)[0]
-            uf = [key for key, value in CODIGOS_ESTADOS.items() if value == cuf][0]
-
-            # tenta encontrar a tag cpf
+            cpf = nfe.xpath('ns:infNFe/ns:dest/ns:CPF/text()', namespaces=ns)[0]
+        except IndexError:
+            # em caso de erro tenta procurar a tag cnpj
             try:
-                cpf = nfe.xpath('ns:infNFe/ns:dest/ns:CPF/text()', namespaces=ns)[0]
+                cpf = nfe.xpath('ns:infNFe/ns:dest/ns:CNPJ/text()', namespaces=ns)[0]
             except IndexError:
-                # em caso de erro tenta procurar a tag cnpj
-                try:
-                    cpf = nfe.xpath('ns:infNFe/ns:dest/ns:CNPJ/text()', namespaces=ns)[0]
-                except IndexError:
-                    cpf = None
                 cpf = None
-            total = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vNF/text()', namespaces=ns)[0]
-            icms = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vICMS/text()', namespaces=ns)[0]
-            digest = nfe.xpath('sig:Signature/sig:SignedInfo/sig:Reference/sig:DigestValue/text()', namespaces=sig)[0].encode()
+            cpf = None
+        total = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vNF/text()', namespaces=ns)[0]
+        icms = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vICMS/text()', namespaces=ns)[0]
+        digest = nfe.xpath('sig:Signature/sig:SignedInfo/sig:Reference/sig:DigestValue/text()', namespaces=sig)[0].encode()
 
-            data = base64.b16encode(data).decode()
-            digest = base64.b16encode(digest).decode()
+        data = base64.b16encode(data).decode()
+        digest = base64.b16encode(digest).decode()
 
-            if cpf is None:
-                url = 'chNFe={}&nVersao={}&tpAmb={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
-                       chave, VERSAO_QRCODE, tpamb, data.lower(), total, icms, digest.lower(), token)           
+        if cpf is None:
+            url = 'chNFe={}&nVersao={}&tpAmb={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
+                   chave, VERSAO_QRCODE, tpamb, data.lower(), total, icms, digest.lower(), token)
+        else:
+            url = 'chNFe={}&nVersao={}&tpAmb={}&cDest={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
+                   chave, VERSAO_QRCODE, tpamb, cpf, data.lower(), total, icms, digest.lower(), token)
+
+        url_hash = hashlib.sha1(url.encode()+csc.encode()).digest()
+        url_hash = base64.b16encode(url_hash).decode()
+
+        url = url + '&cHashQRCode=' + url_hash.upper()
+
+        if uf.upper() == 'PR':
+            qrcode = NFCE[uf.upper()]['QR'] + url
+        else:
+            if tpamb == '1':
+                qrcode = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['QR'] + url
             else:
-                url = 'chNFe={}&nVersao={}&tpAmb={}&cDest={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
-                       chave, VERSAO_QRCODE, tpamb, cpf, data.lower(), total, icms, digest.lower(), token)
+                qrcode = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['QR'] + url
 
-            url_hash = hashlib.sha1(url.encode()+csc.encode()).digest()
-            url_hash = base64.b16encode(url_hash).decode()
-
-            url = url + '&cHashQRCode=' + url_hash.upper()
-
-            if uf.upper() == 'PR':
-                qrcode = NFCE[uf.upper()]['QR'] + url
-            else:
-                if tpamb == '1':
-                    qrcode = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['QR'] + url
-                else:
-                    qrcode = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['QR'] + url
-
-            # adicionta tag infNFeSupl com qrcode 
-            info = etree.Element('infNFeSupl')
-            etree.SubElement(info, 'qrCode').text = '<![CDATA['+ qrcode.strip() + ']]>'
-            nfe.insert(1, info)
-
-            # retorna nfe com o qrcode incluido NT2015/002 e qrcode
-            if return_qr:
-                return nfe, qrcode.strip()
-            # retorna apenas nfe com o qrcode incluido NT2015/002
-            else:
-                return nfe
-
-        except Exception as e:
-            raise e
+        # adicionta tag infNFeSupl com qrcode
+        info = etree.Element('infNFeSupl')
+        etree.SubElement(info, 'qrCode').text = '<![CDATA['+ qrcode.strip() + ']]>'
+        nfe.insert(1, info)
+        # correção da tag qrCode, retira caracteres pois e CDATA
+        tnfe = etree.tostring(nfe, encoding='unicode')
+        etree.tostring(nfe.find(".//qrCode"), encoding='unicode') \
+            .replace('\n','').replace('&lt;','<').replace('&gt;','>').replace('amp;','')
+        nfe = etree.fromstring(tnfe)
+        # retorna nfe com o qrcode incluido NT2015/002 e qrcode
+        if return_qr:
+            return nfe, qrcode.strip()
+        # retorna apenas nfe com o qrcode incluido NT2015/002
+        else:
+            return nfe
 
 
 class SerializacaoNfse(object):
