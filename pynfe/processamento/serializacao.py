@@ -544,12 +544,12 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(pag, 'tPag').text = str(nota_fiscal.tipo_pagamento).zfill(2) # 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
             etree.SubElement(pag, 'vPag').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_nota)
             # Cartão NT2015.002
-            #cartao = etree.SubElement(pag, 'card')
+            cartao = etree.SubElement(pag, 'card')
             """ Tipo de Integração do processo de pagamento com o sistema de automação da empresa:
                 1=Pagamento integrado com o sistema de automação da empresa (Ex.: equipamento TEF, Comércio Eletrônico);
                 2= Pagamento não integrado com o sistema de automação da empresa (Ex.: equipamento POS);
             """
-            #etree.SubElement(cartao, 'tpIntegra').text = '2'
+            etree.SubElement(cartao, 'tpIntegra').text = '2'
             #etree.SubElement(cartao, 'CNPJ').text = '' # Informar o CNPJ da Credenciadora de cartão de crédito / débito
             #etree.SubElement(cartao, 'tBand').text = '' # 01=Visa 02=Mastercard 03=American Express 04=Sorocred 99=Outros
             #etree.SubElement(cartao, 'cAut').text = '' # Identifica o número da autorização da transação da operação com cartão de crédito e/ou débito
