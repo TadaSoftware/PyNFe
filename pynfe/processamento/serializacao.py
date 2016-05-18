@@ -364,7 +364,13 @@ class SerializacaoXML(Serializacao):
         raiz.attrib['Id'] = nota_fiscal.identificador_unico
 
         # timezone Brasília -03:00
-        tz = time.strftime("%z")
+        # bug no python < 3.5 no windows
+        # http://bugs.python.org/issue20010
+        # TODO utilizar assim quando python superior a 3.5
+        # tz = time.strftime("%z")
+        from datetime import datetime
+        from dateutil import tz
+        tz = datetime.now(tz.tzlocal()).strftime('%z')
         tz = "{}:{}".format(tz[:-2], tz[-2:])
 
         # Dados da Nota Fiscal
