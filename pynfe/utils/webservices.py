@@ -219,13 +219,16 @@ NFCE = {
 	    	'HOMOLOGACAO': 'http://homologacao.'
 	    },
 	    'GO': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'STATUS': 'sefaz.go.gov.br/nfe/services/v2/NfeStatusServico2',
+	    	'AUTORIZACAO': 'sefaz.go.gov.br/nfe/services/v2/NfeAutorizacao',
+	    	'RECIBO': 'sefaz.go.gov.br/nfe/services/v2/NfeRetAutorizacao',
+	    	'CHAVE': 'sefaz.go.gov.br/nfe/services/v2/NfeConsulta2',
+	    	'INUTILIZACAO': 'sefaz.go.gov.br/nfe/services/v2/NfeInutilizacao2',
+	    	'EVENTOS': 'sefaz.go.gov.br/nfe/services/v2/RecepcaoEvento',
+	    	'QR': 'sefaz.go.gov.br/nfeweb/sites/nfce/danfeNFCe?',
+	    	'CADASTRO': 'sefaz.go.gov.br/nfe/services/v2/CadConsultaCadastro2',
+	    	'HTTPS': 'http://nfe.',
+	    	'HOMOLOGACAO': 'http://homolog.'
 	    },
 	    # RO, AC, RR, PA, AP, TO, MA, PI, RN, PB, AL, SE, BA, ES, RJ, GO, DF
 	    'SVRS': {
