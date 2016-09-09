@@ -316,7 +316,44 @@ class ComunicacaoSefaz(Comunicacao):
 
     def _get_url_uf(self, modelo, consulta):
         """ Estados que implementam url diferente do padrão nacional"""
-        pass
+        # estados que implementam webservice SVRS
+        svrs = ['AC','AL','AP','DF','ES','PB','RJ','RN','RO','RR','SC','SE','TO']
+        svan = ['MA','PA','PI']
+        # SVRS
+        if self.uf.upper() in svrs:
+            if self._ambiente == 1:
+                ambiente = 'HTTPS'
+            else:
+                ambiente = 'HOMOLOGACAO'
+            if modelo == 'nfe':
+                # nfe Ex: https://nfe.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
+                #         https://nfe-homologacao.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
+                self.url = NFE['SVRS'][ambiente] + NFE['SVRS'][consulta]
+            elif modelo == 'nfce':
+                # nfce Ex: https://nfce.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
+                #          https://nfce-homologacao.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
+                self.url = NFCE['SVRS'][ambiente] + NFCE['SVRS'][consulta]
+            else:
+                # TODO implementar outros tipos de notas como NFS-e
+                pass
+        # SVAN
+        else:
+            if self.uf.upper() in svan:
+                if self._ambiente == 1:
+                    ambiente = 'HTTPS'
+                else:
+                    ambiente = 'HOMOLOGACAO'
+                if modelo == 'nfe':
+                    # nfe Ex: https://nfe.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
+                    #         https://nfe-homologacao.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
+                    self.url = NFE['SVAN'][ambiente] + NFE['SVAN'][consulta]
+                elif modelo == 'nfce':
+                    # TODO não existe SVAN para nfce
+                    pass
+                else:
+                    # TODO implementar outros tipos de notas como NFS-e
+                    pass
+        return self.url
 
     def _cabecalho_soap(self, metodo):
         u"""Monta o XML do cabeçalho da requisição SOAP"""
