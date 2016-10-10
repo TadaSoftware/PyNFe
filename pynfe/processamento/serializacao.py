@@ -224,7 +224,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'CFOP').text = produto_servico.cfop
         etree.SubElement(prod, 'uCom').text = produto_servico.unidade_comercial
         etree.SubElement(prod, 'qCom').text = str(produto_servico.quantidade_comercial or 0)
-        etree.SubElement(prod, 'vUnCom').text = str('{:.2f}').format(produto_servico.valor_unitario_comercial or 0)
+        etree.SubElement(prod, 'vUnCom').text = str('{:.4f}').format(produto_servico.valor_unitario_comercial or 0)
         """ Código Especificador da Substituição Tributária – CEST, que estabelece a sistemática de uniformização e identificação das mercadorias e bens passíveis de
         sujeição aos regimes de substituição tributária e de antecipação de recolhimento do ICMS. """
         #if produto_servico.cest:
