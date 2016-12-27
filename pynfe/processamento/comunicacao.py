@@ -121,10 +121,7 @@ class ComunicacaoSefaz(Comunicacao):
             “Serviço de Consulta da Relação de Documentos Destinados” para um determinado CNPJ de destinatário informado na NF-e.
         """
         # url do serviço
-        if self.uf.upper() == 'RS':
-            url = self._get_url(modelo='nfe', consulta='DESTINADAS')
-        else:
-            url = self._get_url_AN(consulta='DESTINADAS')
+        url = self._get_url_AN(consulta='DESTINADAS')
         # Monta XML do corpo da requisição
         raiz = etree.Element('consNFeDest', versao='1.01', xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
