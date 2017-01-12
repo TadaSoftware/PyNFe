@@ -425,6 +425,11 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(ide, 'indPres').text = str(nota_fiscal.indicador_presencial)
         etree.SubElement(ide, 'procEmi').text = str(nota_fiscal.processo_emissao)
         etree.SubElement(ide, 'verProc').text = '%s %s'%(self._nome_aplicacao, nota_fiscal.versao_processo_emissao)
+        ### NF-e referenciada (utilizado em casos de devolução/garantia) ###
+        # if nota_fiscal.notas_fiscais_referenciadas != None:
+        #     nfref = etree.SubElement(ide, 'NFref')
+        #     etree.SubElement(nfref, 'refNFe').text = nota_fiscal.notas_fiscais_referenciadas[0].chave_acesso
+
         ### CONTINGENCIA ###
         if self._contingencia != None:
             etree.SubElement(ide, 'dhCont').text = nota_fiscal.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz # Data e Hora da entrada em contingência AAAA-MM-DDThh:mm:ssTZD
