@@ -456,7 +456,6 @@ class NotaFiscalReferenciada(Entidade):
     #   - Modelo
     modelo = str()
 
-
 class NotaFiscalProduto(Entidade):
     # - Dados
     #  - Codigo (obrigatorio)
