@@ -362,6 +362,8 @@ class ComunicacaoSefaz(Comunicacao):
             etree.SubElement(raiz, 'versaoDados').text = '1.01'
         elif metodo == 'NfeDownloadNF':
             etree.SubElement(raiz, 'versaoDados').text = '1.00'
+        elif metodo == 'CadConsultaCadastro2':    
+            etree.SubElement(raiz, 'versaoDados').text = '2.00'
         else:
             etree.SubElement(raiz, 'versaoDados').text = VERSAO_PADRAO
         etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
