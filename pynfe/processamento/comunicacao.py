@@ -175,7 +175,7 @@ class ComunicacaoSefaz(Comunicacao):
         # Chama método que efetua a requisição POST no servidor SOAP
         return self._post(url, xml)
 
-    def consultar_cadastro(self, modelo, ie, cnpj):
+    def consultar_cadastro(self, modelo, cnpj):
         # RS implementa um método diferente na consulta de cadastro
         if self.uf.upper() == 'RS':
             url = NFE['RS']['CADASTRO']
@@ -190,7 +190,6 @@ class ComunicacaoSefaz(Comunicacao):
         info = etree.SubElement(raiz, 'infCons')
         etree.SubElement(info, 'xServ').text = 'CONS-CAD'
         etree.SubElement(info, 'UF').text = self.uf.upper()
-        #etree.SubElement(info, 'IE').text = ie
         etree.SubElement(info, 'CNPJ').text = cnpj
         #etree.SubElement(info, 'CPF').text = cpf
         # Monta XML para envio da requisição
