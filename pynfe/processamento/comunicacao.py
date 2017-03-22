@@ -186,11 +186,11 @@ class ComunicacaoSefaz(Comunicacao):
         else:
             url = self._get_url(modelo=modelo, consulta='CADASTRO')
 
-        raiz = etree.Element('ConsCad', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
+        raiz = etree.Element('ConsCad', versao='2.00', xmlns=NAMESPACE_NFE)
         info = etree.SubElement(raiz, 'infCons')
         etree.SubElement(info, 'xServ').text = 'CONS-CAD'
         etree.SubElement(info, 'UF').text = self.uf.upper()
-        etree.SubElement(info, 'IE').text = ie
+        #etree.SubElement(info, 'IE').text = ie
         etree.SubElement(info, 'CNPJ').text = cnpj
         #etree.SubElement(info, 'CPF').text = cpf
         # Monta XML para envio da requisição
@@ -362,6 +362,8 @@ class ComunicacaoSefaz(Comunicacao):
             etree.SubElement(raiz, 'versaoDados').text = '1.01'
         elif metodo == 'NfeDownloadNF':
             etree.SubElement(raiz, 'versaoDados').text = '1.00'
+        elif metodo == 'CadConsultaCadastro2':    
+            etree.SubElement(raiz, 'versaoDados').text = '2.00'
         else:
             etree.SubElement(raiz, 'versaoDados').text = VERSAO_PADRAO
         etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
