@@ -582,7 +582,7 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
-    def _serializar_evento(self, evento, tag_raiz='evento', retorna_string=False):
+    def serializar_evento(self, evento, tag_raiz='evento', retorna_string=False):
 
         # timezone Brasília -03:00
         tz = time.strftime("%z")
@@ -602,8 +602,12 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(e, 'verEvento').text = '1.00'
         det = etree.SubElement(e, 'detEvento', versao='1.00')
         etree.SubElement(det, 'descEvento').text = evento.descricao
-        etree.SubElement(det, 'nProt').text = evento.protocolo
-        etree.SubElement(det, 'xJust').text = evento.justificativa
+        if evento.descricao == 'Cancelamento':
+            etree.SubElement(det, 'nProt').text = evento.protocolo
+            etree.SubElement(det, 'xJust').text = evento.justificativa
+        elif evento.descricao == 'Carta de Correcao':
+            etree.SubElement(det, 'xCorrecao').text = evento.correcao
+            etree.SubElement(det, 'xCondUso').text = evento.cond_uso
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)

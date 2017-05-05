@@ -147,8 +147,30 @@ class ComunicacaoSefaz(Comunicacao):
     def consulta_distribuicao(self, cnpj, nsu=0):
         pass
 
-    def cancelar(self, modelo, evento, idlote=1):
-        """ Envia um evento de cancelamento de nota fiscal """
+    def consulta_cadastro(self, modelo, cnpj):
+        # RS implementa um método diferente na consulta de cadastro
+        if self.uf.upper() == 'RS':
+            url = NFE['RS']['CADASTRO']
+        elif self.uf.upper() == 'SVRS':
+            url = NFE['SVRS']['CADASTRO']
+        elif self.uf.upper() == 'SVC-RS':
+            url = NFE['SVC-RS']['CADASTRO']
+        else:
+            url = self._get_url(modelo=modelo, consulta='CADASTRO')
+
+        raiz = etree.Element('ConsCad', versao='2.00', xmlns=NAMESPACE_NFE)
+        info = etree.SubElement(raiz, 'infCons')
+        etree.SubElement(info, 'xServ').text = 'CONS-CAD'
+        etree.SubElement(info, 'UF').text = self.uf.upper()
+        etree.SubElement(info, 'CNPJ').text = cnpj
+        #etree.SubElement(info, 'CPF').text = cpf
+        # Monta XML para envio da requisição
+        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='CadConsultaCadastro2'), metodo='CadConsultaCadastro2', dados=raiz)
+        # Chama método que efetua a requisição POST no servidor SOAP
+        return self._post(url, xml)
+
+    def evento(self, modelo, evento, idlote=1):
+        """ Envia um evento de nota fiscal (cancelamento e carta de correção)"""
         # url do serviço
         url = self._get_url(modelo=modelo, consulta='EVENTOS')
         # Monta XML do corpo da requisição
@@ -172,28 +194,6 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(raiz, 'xServ').text = 'STATUS'
         # Monta XML para envio da requisição
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeStatusServico2'), metodo='NfeStatusServico2', dados=raiz)
-        # Chama método que efetua a requisição POST no servidor SOAP
-        return self._post(url, xml)
-
-    def consultar_cadastro(self, modelo, cnpj):
-        # RS implementa um método diferente na consulta de cadastro
-        if self.uf.upper() == 'RS':
-            url = NFE['RS']['CADASTRO']
-        elif self.uf.upper() == 'SVRS':
-            url = NFE['SVRS']['CADASTRO']
-        elif self.uf.upper() == 'SVC-RS':
-            url = NFE['SVC-RS']['CADASTRO']
-        else:
-            url = self._get_url(modelo=modelo, consulta='CADASTRO')
-
-        raiz = etree.Element('ConsCad', versao='2.00', xmlns=NAMESPACE_NFE)
-        info = etree.SubElement(raiz, 'infCons')
-        etree.SubElement(info, 'xServ').text = 'CONS-CAD'
-        etree.SubElement(info, 'UF').text = self.uf.upper()
-        etree.SubElement(info, 'CNPJ').text = cnpj
-        #etree.SubElement(info, 'CPF').text = cpf
-        # Monta XML para envio da requisição
-        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='CadConsultaCadastro2'), metodo='CadConsultaCadastro2', dados=raiz)
         # Chama método que efetua a requisição POST no servidor SOAP
         return self._post(url, xml)
 
@@ -303,8 +303,7 @@ class ComunicacaoSefaz(Comunicacao):
                 # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
                 self.url = NFCE[self.uf.upper()][ambiente] + NFCE[self.uf.upper()][consulta]
             else:
-                # TODO implementar outros tipos de notas como NFS-e
-                pass
+                raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
         # Estados que utilizam outros ambientes
         else:
             self._get_url_uf(modelo, consulta)

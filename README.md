@@ -92,3 +92,8 @@ Documentação
 -----------
 - https://github.com/leotada/PyNFe/wiki
 - http://pynfe.readthedocs.org/pt/latest/
+
+backlog:
+- renomeado metodo serializar_evento (_serializar_evento)
+- removido metoco con.cancelar (utilizar con.evento)
+- add evento carta de correção (con.evento)
