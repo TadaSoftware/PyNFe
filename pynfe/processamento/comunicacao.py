@@ -217,14 +217,14 @@ class ComunicacaoSefaz(Comunicacao):
         
         return self._post(url, xml)
 
-    def inutilizar_faixa_numeracao(self, numero_inicial, numero_final, emitente, certificado, senha, ano=None, serie='1', justificativa=''):
-        post = '/nfeweb/services/nfestatusservico.asmx'
-        metodo = 'NfeInutilizacao2'
-
+    def inutilizacao(self, modelo, cnpj, numero_inicial, numero_final, justificativa='', ano=None, serie='1'):
+        """ Serviço destinado ao atendimento de solicitações de inutilização de numeração. """
+        # url do servico
+        url = self._get_url(modelo=modelo, consulta='INUTILIZACAO')
         # Valores default
         ano = str(ano or datetime.date.today().year)[-2:]
-        uf = CODIGOS_ESTADOS[emitente.endereco_uf]
-        cnpj = so_numeros(emitente.cnpj)
+        uf = CODIGOS_ESTADOS[self.uf.upper()]
+        cnpj = so_numeros(cnpj)
 
         # Identificador da TAG a ser assinada formada com Código da UF + Ano (2 posições) +
         #  CNPJ + modelo + série + nro inicial e nro final precedida do literal “ID”
@@ -239,39 +239,27 @@ class ComunicacaoSefaz(Comunicacao):
                 }
 
         # Monta XML do corpo da requisição # FIXME
-        raiz = etree.Element('inutNFe', xmlns="http://www.portalfiscal.inf.br/nfe", versao="1.07")
+        raiz = etree.Element('inutNFe', xmlns="http://www.portalfiscal.inf.br/nfe", versao=VERSAO_PADRAO)
         inf_inut = etree.SubElement(raiz, 'infInut', Id=id_unico)
         etree.SubElement(inf_inut, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(inf_inut, 'xServ').text = 'INUTILIZAR'
         etree.SubElement(inf_inut, 'cUF').text = uf
         etree.SubElement(inf_inut, 'ano').text = ano
-        etree.SubElement(inf_inut, 'CNPJ').text = emitente.cnpj
-        etree.SubElement(inf_inut, 'mod').text = '55'
+        etree.SubElement(inf_inut, 'CNPJ').text = cnpj
+        etree.SubElement(inf_inut, 'mod').text = '55' if modelo == 'nfe' else '65'  # 55=NF-e; 65=NFC-e
         etree.SubElement(inf_inut, 'serie').text = serie
         etree.SubElement(inf_inut, 'nNFIni').text = str(numero_inicial)
         etree.SubElement(inf_inut, 'nNFFin').text = str(numero_final)
         etree.SubElement(inf_inut, 'xJust').text = justificativa
-        #dados = etree.tostring(raiz, encoding='utf-8', xml_declaration=True)
 
-        # Efetua assinatura
-        assinatura = self._assinatura(certificado, senha)
-        dados = assinatura.assinar_etree(etree.ElementTree(raiz), retorna_xml=True)
+        # assinatura
+        a1 = AssinaturaA1(self.certificado, self.certificado_senha)
+        xml = a1.assinar(raiz)
 
         # Monta XML para envio da requisição
-        xml = self._construir_xml_soap(
-                metodo='nfeRecepcao2', # XXX
-                tag_metodo='nfeInutilizacaoNF', # XXX
-                cabecalho=self._cabecalho_soap(),
-                dados=dados,
-                )
-
-        # Chama método que efetua a requisição POST no servidor SOAP
-        retorno = self._post(post, xml, self._post_header())
-
-        # Transforma o retorno em etree # TODO
-        #retorno = etree.parse(StringIO(retorno))
-
-        return retorno
+        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='nfeInutilizacao'), metodo='nfeInutilizacao', dados=xml)
+        # Faz request no Servidor da Sefaz e retorna resposta
+        return self._post(url, xml)
 
     def _get_url_AN(self, consulta):
         # producao

@@ -38,8 +38,13 @@ class AssinaturaA1(Assinatura):
                 ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.findall('infNFe')[0].attrib['Id'])
             # Caso nao tenha a tag infNFe, procura a tag infEvento
             except IndexError:
-                tag = 'infEvento'
-                ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.findall('infEvento')[0].attrib['Id'])
+                try:
+                    tag = 'infEvento'
+                    ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.findall('infEvento')[0].attrib['Id'])
+                # Caso nao tenha a tag infNFe, procura a tag inutNFe
+                except IndexError:
+                    tag = 'infInut'
+                    ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.findall('infInut')[0].attrib['Id'])
             trans = etree.SubElement(ref, 'Transforms')
             etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/2000/09/xmldsig#enveloped-signature')
             etree.SubElement(trans, 'Transform', Algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
