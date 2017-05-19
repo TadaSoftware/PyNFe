@@ -587,8 +587,6 @@ class SerializacaoXML(Serializacao):
         # timezone Brasília -03:00
         tz = time.strftime("%z")
         tz = "{}:{}".format(tz[:-2], tz[-2:])
-        #import ipdb
-        #ipdb.set_trace()
         raiz = etree.Element(tag_raiz, versao='1.00', xmlns=NAMESPACE_NFE)
         e = etree.SubElement(raiz, 'infEvento', Id=evento.identificador)
         etree.SubElement(e, 'cOrgao').text = CODIGOS_ESTADOS[evento.uf.upper()]
@@ -608,6 +606,8 @@ class SerializacaoXML(Serializacao):
         elif evento.descricao == 'Carta de Correcao':
             etree.SubElement(det, 'xCorrecao').text = evento.correcao
             etree.SubElement(det, 'xCondUso').text = evento.cond_uso
+        elif evento.descricao == 'Operacao nao Realizada':
+            etree.SubElement(det, 'xJust').text = evento.justificativa
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
