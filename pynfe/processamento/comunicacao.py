@@ -239,7 +239,7 @@ class ComunicacaoSefaz(Comunicacao):
                 }
 
         # Monta XML do corpo da requisição # FIXME
-        raiz = etree.Element('inutNFe', xmlns="http://www.portalfiscal.inf.br/nfe", versao=VERSAO_PADRAO)
+        raiz = etree.Element('inutNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
         inf_inut = etree.SubElement(raiz, 'infInut', Id=id_unico)
         etree.SubElement(inf_inut, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(inf_inut, 'xServ').text = 'INUTILIZAR'
@@ -257,7 +257,7 @@ class ComunicacaoSefaz(Comunicacao):
         xml = a1.assinar(raiz)
 
         # Monta XML para envio da requisição
-        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='nfeInutilizacao'), metodo='nfeInutilizacao', dados=xml)
+        xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeInutilizacao2'), metodo='NfeInutilizacao2', dados=xml)
         # Faz request no Servidor da Sefaz e retorna resposta
         return self._post(url, xml)
 
@@ -339,7 +339,7 @@ class ComunicacaoSefaz(Comunicacao):
         return self.url
 
     def _cabecalho_soap(self, metodo):
-        u"""Monta o XML do cabeçalho da requisição SOAP"""
+        """Monta o XML do cabeçalho da requisição SOAP"""
 
         raiz = etree.Element('nfeCabecMsg', xmlns=NAMESPACE_METODO+metodo)
         if metodo == 'RecepcaoEvento':
