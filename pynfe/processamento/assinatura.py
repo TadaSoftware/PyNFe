@@ -35,7 +35,11 @@ class AssinaturaA1(Assinatura):
             etree.SubElement(siginfo, 'SignatureMethod', Algorithm='http://www.w3.org/2000/09/xmldsig#rsa-sha1')
             # Tenta achar a tag infNFe
             try:
-                ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.findall('infNFe')[0].attrib['Id'])
+                if len(xml.nsmap.items()) == 0:  # não tem namespace
+                    ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.findall('infNFe')[0].attrib['Id'])
+                else:
+                    ns = {'ns': 'http://www.portalfiscal.inf.br/nfe'}
+                    ref = etree.SubElement(siginfo, 'Reference', URI='#'+xml.findall('ns:infNFe', namespaces=ns)[0].attrib['Id'])
             # Caso nao tenha a tag infNFe, procura a tag infEvento
             except IndexError:
                 try:
