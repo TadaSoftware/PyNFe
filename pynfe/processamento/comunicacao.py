@@ -172,7 +172,14 @@ class ComunicacaoSefaz(Comunicacao):
     def evento(self, modelo, evento, idlote=1):
         """ Envia um evento de nota fiscal (cancelamento e carta de correção)"""
         # url do serviço
-        url = self._get_url(modelo=modelo, consulta='EVENTOS')
+        try:
+            # manifestacao url é do AN
+            if evento[0][5].text.startswith('2'):
+                url = self._get_url_AN(consulta='EVENTOS')
+            else:
+                url = self._get_url(modelo=modelo, consulta='EVENTOS')
+        except Exception:
+            url = self._get_url(modelo=modelo, consulta='EVENTOS')
         # Monta XML do corpo da requisição
         raiz = etree.Element('envEvento', versao='1.00', xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, 'idLote').text = str(idlote) # numero autoincremental gerado pelo sistema
