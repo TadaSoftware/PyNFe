@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from pynfe.utils import etree, remover_acentos
+from pynfe.utils.flags import NAMESPACE_SIG
 import subprocess
+import signxml
+from signxml import XMLSigner
+from pynfe.entidades import CertificadoA1
 
 
 class Assinatura(object):
@@ -323,3 +327,49 @@ class AssinaturaA1(Assinatura):
                 return xml
         except Exception as e:
             raise e
+
+
+class AssinaturaA1SignXML(Assinatura):
+
+    def __init__(self, certificado, senha):
+        self.key, self.cert = CertificadoA1(certificado).separar_arquivo(senha)
+
+    def assinar(self, xml, retorna_string=False):
+        if len(xml.nsmap.items()) == 0:  # não tem namespace
+            reference = xml.find('infNFe').attrib['Id']
+        else:
+            ns = {'ns': 'http://www.portalfiscal.inf.br/nfe'}
+            reference = xml.find('ns:infNFe', namespaces=ns).attrib['Id']
+
+        # retira acentos
+        xml_str = remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False))
+        xml = etree.fromstring(xml_str)
+
+        signer = XMLSigner(
+            method=signxml.methods.enveloped, signature_algorithm="rsa-sha1",
+            digest_algorithm='sha1',
+            c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
+
+        ns = {None: signer.namespaces['ds']}
+        signer.namespaces = ns
+
+        ref_uri = ('#%s' % reference) if reference else None
+        signed_root = signer.sign(
+            xml, key=self.key, cert=self.cert, reference_uri=ref_uri)
+
+        ns = {'ns': NAMESPACE_SIG}
+        if reference:
+            element_signed = signed_root.find(".//*[@Id='%s']" % reference)
+            signature = signed_root.find(".//ns:Signature", namespaces=ns)
+
+            if element_signed is not None and signature is not None:
+                parent = element_signed.getparent()
+                parent.append(signature)
+
+        # coloca o certificado na tag X509Data/X509Certificate
+        tagX509Data = signed_root.find('.//ns:X509Data', namespaces=ns)
+        etree.SubElement(tagX509Data, 'X509Certificate').text = self.cert
+        if retorna_string:
+            return etree.tostring(signed_root, encoding="unicode", pretty_print=False)
+        else:
+            return signed_root
