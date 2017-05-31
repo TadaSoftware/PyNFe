@@ -335,11 +335,8 @@ class AssinaturaA1SignXML(Assinatura):
         self.key, self.cert = CertificadoA1(certificado).separar_arquivo(senha)
 
     def assinar(self, xml, retorna_string=False):
-        if len(xml.nsmap.items()) == 0:  # não tem namespace
-            reference = xml.find('infNFe').attrib['Id']
-        else:
-            ns = {'ns': 'http://www.portalfiscal.inf.br/nfe'}
-            reference = xml.find('ns:infNFe', namespaces=ns).attrib['Id']
+        # busca tag que tem id(reference_uri), logo nao importa se tem namespace
+        reference = xml.find(".//*[@Id]").attrib['Id']
 
         # retira acentos
         xml_str = remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False))
@@ -358,14 +355,6 @@ class AssinaturaA1SignXML(Assinatura):
             xml, key=self.key, cert=self.cert, reference_uri=ref_uri)
 
         ns = {'ns': NAMESPACE_SIG}
-        if reference:
-            element_signed = signed_root.find(".//*[@Id='%s']" % reference)
-            signature = signed_root.find(".//ns:Signature", namespaces=ns)
-
-            if element_signed is not None and signature is not None:
-                parent = element_signed.getparent()
-                parent.append(signature)
-
         # coloca o certificado na tag X509Data/X509Certificate
         tagX509Data = signed_root.find('.//ns:X509Data', namespaces=ns)
         etree.SubElement(tagX509Data, 'X509Certificate').text = self.cert
