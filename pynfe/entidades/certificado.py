@@ -9,7 +9,7 @@ import os
 class Certificado(Entidade):
     """Classe abstrata responsavel por definir o modelo padrao para as demais
     classes de certificados digitais.
-    
+
     Caso va implementar um novo formato de certificado, crie uma classe que
     herde desta."""
 
@@ -29,15 +29,15 @@ class CertificadoA1(Certificado):
     def __init__(self, caminho_arquivo=None):
         self.caminho_arquivo = caminho_arquivo
         self.arquivos_temp = []
-    
+
     def separar_arquivo(self, senha, caminho=False):
         """Separa o arquivo de certificado em dois: de chave e de certificado,
         e retorna a string. Se caminho for True grava na pasta temporaria e retorna
-        o caminho dos arquivos, apos o uso devem ser excluidos com o metodo excluir."""
-        
+        o caminho dos arquivos, senao retorna o objeto. Apos o uso devem ser excluidos com o metodo excluir."""
+
         # Carrega o arquivo .pfx, erro pode ocorrer se a senha estiver errada ou formato invalido.
         pkcs12 = crypto.load_pkcs12(open(self.caminho_arquivo, "rb").read(), senha)
-        
+
         if caminho:
             cert = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate())
             chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
@@ -55,12 +55,12 @@ class CertificadoA1(Certificado):
             cert = cert.replace('\n', '')
             cert = cert.replace('-----BEGIN CERTIFICATE-----', '')
             cert = cert.replace('-----END CERTIFICATE-----', '')
-            
+
             # Chave, string decodificada da chave privada
             chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
-            
+
             return chave, cert
-        
+
     def excluir(self):
         """Exclui os arquivos temporarios utilizados para o request."""
         try:
@@ -69,4 +69,3 @@ class CertificadoA1(Certificado):
             self.arquivos_temp.clear()
         except:
             pass
-

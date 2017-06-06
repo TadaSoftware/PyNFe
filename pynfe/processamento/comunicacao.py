@@ -6,7 +6,7 @@ from pynfe.utils import etree, so_numeros
 from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, NAMESPACE_XSI, NAMESPACE_XSD, NAMESPACE_METODO, \
 VERSAO_PADRAO, CODIGOS_ESTADOS, NAMESPACE_BETHA
 from pynfe.utils.webservices import NFCE, NFE, NFSE
-from .assinatura import AssinaturaA1
+from .assinatura import AssinaturaA1, AssinaturaA1SignXML
 from pynfe.entidades.certificado import CertificadoA1
 
 
@@ -205,7 +205,7 @@ class ComunicacaoSefaz(Comunicacao):
         return self._post(url, xml)
 
     def download(self, cnpj, chave):
-        """ 
+        """
             Metodo para download de NFe por parte de destinatário.
             O certificado digital deve ser o mesmo do destinatário da Nfe.
             NT 2012/002
@@ -221,7 +221,7 @@ class ComunicacaoSefaz(Comunicacao):
 
          # Monta XML para envio da requisição
         xml = self._construir_xml_status_pr(cabecalho=self._cabecalho_soap(metodo='NfeDownloadNF'), metodo='NfeDownloadNF', dados=raiz)
-        
+
         return self._post(url, xml)
 
     def inutilizacao(self, modelo, cnpj, numero_inicial, numero_final, justificativa='', ano=None, serie='1'):
@@ -260,7 +260,7 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(inf_inut, 'xJust').text = justificativa
 
         # assinatura
-        a1 = AssinaturaA1(self.certificado, self.certificado_senha)
+        a1 = AssinaturaA1SignXML(self.certificado, self.certificado_senha)
         xml = a1.assinar(raiz)
 
         # Monta XML para envio da requisição
@@ -368,7 +368,7 @@ class ComunicacaoSefaz(Comunicacao):
             etree.SubElement(raiz, 'versaoDados').text = '1.01'
         elif metodo == 'NfeDownloadNF':
             etree.SubElement(raiz, 'versaoDados').text = '1.00'
-        elif metodo == 'CadConsultaCadastro2':    
+        elif metodo == 'CadConsultaCadastro2':
             etree.SubElement(raiz, 'versaoDados').text = '2.00'
         else:
             etree.SubElement(raiz, 'versaoDados').text = VERSAO_PADRAO
@@ -412,7 +412,7 @@ class ComunicacaoSefaz(Comunicacao):
         try:
             xml_declaration='<?xml version="1.0" encoding="utf-8"?>'
             # limpa xml com caracteres bugados para infNFeSupl em NFC-e
-            xml = re.sub('<qrCode>(.*?)</qrCode>', 
+            xml = re.sub('<qrCode>(.*?)</qrCode>',
                 lambda x:x.group(0).replace('&lt;','<').replace('&gt;','>').replace('amp;',''),
                 etree.tostring(xml, encoding='unicode').replace('\n',''))
             xml = xml_declaration + xml
@@ -530,7 +530,7 @@ class ComunicacaoNfse(Comunicacao):
             return self._post(url, xml, 'cancelar')
         # Ginfes
         elif self.autorizador == 'GINFES':
-            # comunica via wsdl com certificado 
+            # comunica via wsdl com certificado
             return self._post_https(url, xml, 'cancelar')
         # TODO outros autorizadres
         else:

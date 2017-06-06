@@ -9,10 +9,7 @@ try:
 except ImportError:
     raise Exception('Falhou ao importar lxml/ElementTree')
 
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+from io import StringIO
 
 try:
     from . import flags
