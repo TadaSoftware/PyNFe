@@ -301,7 +301,20 @@ class ComunicacaoSefaz(Comunicacao):
                 raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
         # Estados que utilizam outros ambientes
         else:
-            self._get_url_uf(modelo, consulta)
+            lista_svrs = ['SE']
+            if self.uf.upper() in lista_svrs:
+                if self._ambiente == 1:
+                    ambiente = 'HTTPS'
+                else:
+                    ambiente = 'HOMOLOGACAO'
+                if modelo == 'nfe':
+                    # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
+                    self.url = NFE['SVRS'][ambiente] + NFE['SVRS'][consulta]
+                elif modelo == 'nfce':
+                    # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
+                    self.url = NFCE['SVRS'][ambiente] + NFCE['SVRS'][consulta]
+                else:
+                    raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
         return self.url
 
     def _get_url_uf(self, modelo, consulta):
