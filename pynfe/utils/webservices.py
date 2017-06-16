@@ -170,8 +170,8 @@ NFCE = {
 	    	'INUTILIZACAO': 'nfce.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx',
 	    	'EVENTOS': 'nfce.fazenda.sp.gov.br/ws/recepcaoevento.asmx',
 	    	'QR': 'nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaQRCode.aspx?',
-	    	'HTTPS': 'https://www.',
-	    	'HOMOLOGACAO': 'https://www.homologacao.'
+	    	'HTTPS': 'https://',
+	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
 	    'PR': {
 	    	'STATUS': 'nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3',
@@ -201,8 +201,8 @@ NFCE = {
 	    	'INUTILIZACAO': 'sefazrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao2.asmx',
 	    	'EVENTOS': 'sefazrs.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx',
 	    	'QR': 'https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?',
-	    	'HTTPS': '',
-	    	'HOMOLOGACAO': ''
+	    	'HTTPS': 'https://nfce.',
+	    	'HOMOLOGACAO': 'https://nfce-homologacao.'
 	    },
 	    'MS': {
 	    	'STATUS': '',
