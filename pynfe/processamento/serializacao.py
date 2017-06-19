@@ -660,6 +660,11 @@ class SerializacaoQrcode(object):
 
         if uf.upper() == 'PR':
             qrcode = NFCE[uf.upper()]['QR'] + url
+        elif uf.upper() == 'SP':
+            if tpamb == '1':
+                qrcode = NFCE[uf.upper()]['HTTPS'] + 'www.' + NFCE[uf.upper()]['QR'] + url
+            else:
+                qrcode = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['QR'] + url
         else:
             if tpamb == '1':
                 qrcode = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['QR'] + url
