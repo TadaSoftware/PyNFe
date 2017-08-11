@@ -1,5 +1,5 @@
 
-Atenção este repositório já esta em desenvolvimento para a versão 4.00, para a versão 3.10 utilize a última release, [0.3](https://github.com/leotada/PyNFe/releases/tag/0.3).
+Atenção este repositório já esta em desenvolvimento para a versão 4.00, para a versão 3.10 utilize a última [release](https://github.com/leotada/PyNFe/releases).
 -----------
 
 Visão Geral
