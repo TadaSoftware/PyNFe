@@ -378,7 +378,8 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(ide, 'cUF').text = CODIGOS_ESTADOS[nota_fiscal.uf]
         etree.SubElement(ide, 'cNF').text = nota_fiscal.codigo_numerico_aleatorio
         etree.SubElement(ide, 'natOp').text = nota_fiscal.natureza_operacao
-        etree.SubElement(ide, 'indPag').text = str(nota_fiscal.forma_pagamento)
+        # Removido na NF-e 4.00
+        # etree.SubElement(ide, 'indPag').text = str(nota_fiscal.forma_pagamento)
         etree.SubElement(ide, 'mod').text = str(nota_fiscal.modelo)
         etree.SubElement(ide, 'serie').text = nota_fiscal.serie
         etree.SubElement(ide, 'nNF').text = str(nota_fiscal.numero_nf)
@@ -481,8 +482,17 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_total, 'vBC').text = '{:.2f}'.format(nota_fiscal.totais_icms_base_calculo)
         etree.SubElement(icms_total, 'vICMS').text = '{:.2f}'.format(nota_fiscal.totais_icms_total)
         etree.SubElement(icms_total, 'vICMSDeson').text = '{:.2f}'.format(nota_fiscal.totais_icms_desonerado)  # Valor Total do ICMS desonerado
+        etree.SubElement(icms_total, 'vFCP').text = '{:.2f}'.format(nota_fiscal.totais_fcp)
+        if nota_fiscal.totais_fcp_destino:
+            etree.SubElement(icms_total, 'vFCPUFDest').text = '{:.2f}'.format(nota_fiscal.totais_fcp_destino)
+        if nota_fiscal.totais_icms_inter_destino:
+            etree.SubElement(icms_total, 'vICMSUFDest').text = '{:.2f}'.format(nota_fiscal.totais_icms_inter_destino)
+        if nota_fiscal.totais_icms_inter_remetente:
+            etree.SubElement(icms_total, 'vICMSUFRemet').text = '{:.2f}'.format(nota_fiscal.totais_icms_remetente)
         etree.SubElement(icms_total, 'vBCST').text = '{:.2f}'.format(nota_fiscal.totais_icms_st_base_calculo)
         etree.SubElement(icms_total, 'vST').text = '{:.2f}'.format(nota_fiscal.totais_icms_st_total)
+        etree.SubElement(icms_total, 'vFCPST').text = '{:.2f}'.format(nota_fiscal.totais_fcp_st)
+        etree.SubElement(icms_total, 'vFCPSTRet').text = '{:.2f}'.format(nota_fiscal.totais_fcp_st_ret)
         etree.SubElement(icms_total, 'vProd').text = str(nota_fiscal.totais_icms_total_produtos_e_servicos)
         etree.SubElement(icms_total, 'vFrete').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_frete)
         etree.SubElement(icms_total, 'vSeg').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_seguro)
@@ -491,6 +501,7 @@ class SerializacaoXML(Serializacao):
         # Tributos
         etree.SubElement(icms_total, 'vII').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_ii)
         etree.SubElement(icms_total, 'vIPI').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_ipi)
+        etree.SubElement(icms_total, 'vIPIDevol').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_ipi_dev)
         etree.SubElement(icms_total, 'vPIS').text = '{:.2f}'.format(nota_fiscal.totais_icms_pis)
         etree.SubElement(icms_total, 'vCOFINS').text = '{:.2f}'.format(nota_fiscal.totais_icms_cofins)
 
@@ -499,13 +510,12 @@ class SerializacaoXML(Serializacao):
         if nota_fiscal.totais_tributos_aproximado:
             etree.SubElement(icms_total, 'vTotTrib').text = '{:.2f}'.format(nota_fiscal.totais_tributos_aproximado)
 
+        # Transporte
+        transp = etree.SubElement(raiz, 'transp')
+        etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
+
         # Apenas NF-e
         if nota_fiscal.modelo == 55:
-
-            # Transporte
-            transp = etree.SubElement(raiz, 'transp')
-            etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
-
             # Transportadora
             if nota_fiscal.transporte_transportadora:
                 transp.append(self._serializar_transportadora(
@@ -548,26 +558,25 @@ class SerializacaoXML(Serializacao):
                         for lacre in volume.lacres:
                             etree.SubElement(lacres, 'nLacre').text = lacre.numero_lacre
 
-        # Somente NFC-e
-        """ Grupo obrigatório para a NFC-e, a critério da UF. Não informar para a NF-e (modelo 55). """
-        if nota_fiscal.modelo == 65:
-            # Transporte
-            transp = etree.SubElement(raiz, 'transp')
-            etree.SubElement(transp, 'modFrete').text = str(9)
-            # Pagamento
-            pag = etree.SubElement(raiz, 'pag')
-            etree.SubElement(pag, 'tPag').text = str(nota_fiscal.tipo_pagamento).zfill(2) # 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
-            etree.SubElement(pag, 'vPag').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_nota)
-            # Cartão NT2015.002
-            cartao = etree.SubElement(pag, 'card')
+        # Pagamento
+        """ Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e. Para as notas com finalidade de Ajuste ou Devolução o
+campo Forma de Pagamento deve ser preenchido com 90=Sem Pagamento. """
+        pag = etree.SubElement(raiz, 'pag')
+        detpag = etree.SubElement(pag, 'detPag')
+        etree.SubElement(detpag, 'tPag').text = str(nota_fiscal.tipo_pagamento).zfill(2)
+        etree.SubElement(detpag, 'vPag').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_nota)
+        if nota_fiscal.tipo_pagamento == 3 or nota_fiscal.tipo_pagamento == 4:
+            cartao = etree.SubElement(detpag, 'card')
             """ Tipo de Integração do processo de pagamento com o sistema de automação da empresa:
                 1=Pagamento integrado com o sistema de automação da empresa (Ex.: equipamento TEF, Comércio Eletrônico);
                 2= Pagamento não integrado com o sistema de automação da empresa (Ex.: equipamento POS);
             """
             etree.SubElement(cartao, 'tpIntegra').text = '2'
             #etree.SubElement(cartao, 'CNPJ').text = '' # Informar o CNPJ da Credenciadora de cartão de crédito / débito
-            #etree.SubElement(cartao, 'tBand').text = '' # 01=Visa 02=Mastercard 03=American Express 04=Sorocred 99=Outros
+            #etree.SubElement(cartao, 'tBand').text = '' # 01=Visa 02=Mastercard 03=American Express 04=Sorocred 05=Diners Club 06=Elo 07=Hipercard 08=Aura 09=Caba 99=Outros
             #etree.SubElement(cartao, 'cAut').text = '' # Identifica o número da autorização da transação da operação com cartão de crédito e/ou débito
+        # troco
+        # etree.SubElement(pag, 'vTroco').text = str('')
 
         # Informações adicionais
         if nota_fiscal.informacoes_adicionais_interesse_fisco or nota_fiscal.informacoes_complementares_interesse_contribuinte:
@@ -658,22 +667,32 @@ class SerializacaoQrcode(object):
 
         url = url + '&cHashQRCode=' + url_hash.upper()
 
-        if uf.upper() == 'PR':
+        # url_chave - Texto com a URL de consulta por chave de acesso a ser impressa no DANFE NFC-e.
+        # Informar a URL da “Consulta por chave de acesso da NFC-e”. 
+        # A mesma URL que deve estar informada no DANFE NFC-e para consulta por chave de acesso
+        lista_uf_padrao = ['PR', 'CE', 'RS', 'RJ', 'RO']
+        if uf.upper() in lista_uf_padrao:
             qrcode = NFCE[uf.upper()]['QR'] + url
+            url_chave = NFCE[uf.upper()]['URL']
         elif uf.upper() == 'SP':
             if tpamb == '1':
                 qrcode = NFCE[uf.upper()]['HTTPS'] + 'www.' + NFCE[uf.upper()]['QR'] + url
+                url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.' + NFCE[uf.upper()]['URL'] + url
             else:
                 qrcode = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['QR'] + url
+                url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['URL'] + url
+        # AC, AM, RR, PA, 
         else:
             if tpamb == '1':
                 qrcode = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['QR'] + url
+                url_chave = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['URL'] + url
             else:
                 qrcode = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['QR'] + url
-
+                url_chave = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['URL'] + url
         # adicionta tag infNFeSupl com qrcode
         info = etree.Element('infNFeSupl')
         etree.SubElement(info, 'qrCode').text = '<![CDATA['+ qrcode.strip() + ']]>'
+        etree.SubElement(info, 'urlChave').text = url_chave
         nfe.insert(1, info)
         # correção da tag qrCode, retira caracteres pois e CDATA
         tnfe = etree.tostring(nfe, encoding='unicode')

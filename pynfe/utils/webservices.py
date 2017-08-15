@@ -3,6 +3,8 @@
 	@author: Junior Tada, Leonardo Tada
 """
 
+# http://nfce.encat.org/desenvolvedor/qrcode/
+# http://nfce.encat.org/consumidor/consulte-sua-nota/ 	url consulta por chave
 # Nfc-e
 NFCE = {
 	    'RO': {
@@ -12,10 +14,12 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'QR': 'http://www.nfce.sefin.ro.gov.br/consultanfce/consulta.jsp?',
+	    	'URL': 'http://www.nfce.sefin.ro.gov.br'
 	    },
 	    'AC': {
 	    	'QR': 'sefaznet.ac.gov.br/nfce?',
+	    	'URL': 'sefaznet.ac.gov.br/nfce/consulta',
 	    	'HTTPS': 'http://www.',
 	    	'HOMOLOGACAO': 'http://hml.'
 	    },
@@ -29,6 +33,7 @@ NFCE = {
 	    	'INUTILIZACAO': 'nfce.sefaz.am.gov.br/nfce-services-nac/services/NfeInutilizacao2',
 	    	'EVENTOS': 'nfce.sefaz.am.gov.br/nfce-services-nac/services/RecepcaoEvento',
 	    	'QR': 'sefaz.am.gov.br/nfceweb/consultarNFCe.jsp?',
+	    	'URL': 'sefaz.am.gov.br/nfceweb/formConsulta.do',
 	    	'HTTPS': 'http://sistemas.',
 	    	'HOMOLOGACAO': 'http://homnfce.'
 	    },
@@ -39,7 +44,10 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'QR': '/nfce/servlet/qrcode?',
+	    	'URL': '/nfce/servlet/wp_consulta_nfce',
+	    	'HTTPS': 'https://www.sefaz.rr.gov.br',
+	    	'HOMOLOGACAO': 'http://200.174.88.103:8080'
 	    },
 	    'PA': {
 	    	'STATUS': '',
@@ -48,7 +56,10 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'QR': 'view/consultas/nfce/nfceForm.seam?',
+	    	'URL': 'view/consultas/nfce/consultanfce.seam',
+	    	'HTTPS': 'https://appnfc.sefa.pa.gov.br/portal/',
+	    	'HOMOLOGACAO': 'https://appnfc.sefa.pa.gov.br/portal-homologacao/'
 	    },
 	    'AP': {
 	    	'STATUS': '',
@@ -57,7 +68,10 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'QR': '/nfcep.php?',
+	    	'URL': 'https://www.sefaz.ap.gov.br/sate/seg/SEGf_AcessarFuncao.jsp?cdFuncao=FIS_1261',
+	    	'HTTPS': '	https://www.sefaz.ap.gov.br/nfce',
+	    	'HOMOLOGACAO': 'https://www.sefaz.ap.gov.br/nfcehml'
 	    },
 	    'TO': {
 	    	'STATUS': '',
@@ -85,7 +99,8 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'QR': 'http://nfceh.sefaz.ce.gov.br/pages/ShowNFCe.html?',
+	    	'URL': 'http://nfceh.sefaz.ce.gov.br/pages/consultaNota.jsf'
 	    },
 	    'RN': {
 	    	#'QR': 'http://www.nfe.rn.gov.br/portal/consultarNFCe.jsp?',
@@ -160,7 +175,8 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'QR': 'http://www4.fazenda.rj.gov.br/consultaNFCe/QRCode?', 
+	    	'URL': 'www.nfce.fazenda.rj.gov.br/consulta'
 	    },
 	    # Os Web Services de homologação da NFC-e 4.00 são: 
 		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeAutorizacao4.asmx 
@@ -177,6 +193,7 @@ NFCE = {
 	    	'INUTILIZACAO': 'nfce.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx',
 	    	'EVENTOS': 'nfce.fazenda.sp.gov.br/ws/recepcaoevento.asmx',
 	    	'QR': 'nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaQRCode.aspx?',
+	    	'URL': 'nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaPublica.aspx',
 	    	'HTTPS': 'https://',
 	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
@@ -187,7 +204,8 @@ NFCE = {
 	    	'CHAVE': 'nfce.fazenda.pr.gov.br/nfce/NFeConsulta3',
 	    	'INUTILIZACAO': 'nfce.fazenda.pr.gov.br/nfce/NFeInutilizacao3',
 	    	'EVENTOS': 'nfce.fazenda.pr.gov.br/nfce/NFeRecepcaoEvento',
-	    	'QR': 'http://www.dfeportal.fazenda.pr.gov.br/dfe-portal/rest/servico/consultaNFCe?',
+	    	'QR': 'http://www.fazenda.pr.gov.br/nfce/qrcode?',
+	    	'URL': 'http://www.fazenda.pr.gov.br',
 	    	'HTTPS': 'https://',
 	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
@@ -208,6 +226,7 @@ NFCE = {
 	    	'INUTILIZACAO': 'sefazrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao2.asmx',
 	    	'EVENTOS': 'sefazrs.rs.gov.br/ws/recepcaoevento/recepcaoevento.asmx',
 	    	'QR': 'https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?',
+	    	'URL': 'https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx',
 	    	'HTTPS': 'https://nfce.',
 	    	'HOMOLOGACAO': 'https://nfce-homologacao.'
 	    },
