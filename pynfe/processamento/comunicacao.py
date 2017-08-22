@@ -1,13 +1,27 @@
 # -*- coding: utf-8 -*-
-import datetime
-import requests
 import re
+import ssl
+import datetime
+
+import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.poolmanager import PoolManager
+
 from pynfe.utils import etree, so_numeros
-from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, NAMESPACE_XSI, NAMESPACE_XSD, NAMESPACE_METODO, \
-VERSAO_PADRAO, CODIGOS_ESTADOS, NAMESPACE_BETHA
-from pynfe.utils.webservices import NFCE, NFE, NFSE
-from .assinatura import AssinaturaA1, AssinaturaA1SignXML
+from pynfe.utils.flags import (
+    NAMESPACE_NFE,
+    NAMESPACE_XSD,
+    NAMESPACE_XSI,
+    VERSAO_PADRAO,
+    NAMESPACE_SOAP,
+    CODIGOS_ESTADOS,
+    NAMESPACE_BETHA,
+    NAMESPACE_METODO
+)
+from pynfe.utils.webservices import NFE, NFCE, NFSE
 from pynfe.entidades.certificado import CertificadoA1
+
+from .assinatura import AssinaturaA1, AssinaturaA1SignXML
 
 
 class Comunicacao(object):
@@ -667,9 +681,6 @@ class ComunicacaoNfse(Comunicacao):
             raise e
 
 """ Adapter para conexão tls """
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.poolmanager import PoolManager
-import ssl
 
 class AdapterTLSV1(HTTPAdapter):
     def init_poolmanager(self, connections, maxsize, block=False):
