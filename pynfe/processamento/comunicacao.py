@@ -418,7 +418,7 @@ class ComunicacaoSefaz(Comunicacao):
                 raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
         # Estados que utilizam outros ambientes
         else:
-            lista_svrs = ['AC', 'RN', 'PB', 'SC', 'SE']
+            lista_svrs = ['AC', 'RN', 'PB', 'SC', 'SE', 'PI']
             if self.uf.upper() in lista_svrs:
                 if self._ambiente == 1:
                     ambiente = 'HTTPS'
@@ -437,8 +437,8 @@ class ComunicacaoSefaz(Comunicacao):
     def _get_url_uf(self, modelo, consulta):
         """ Estados que implementam url diferente do padrão nacional"""
         # estados que implementam webservice SVRS
-        svrs = ['AC', 'AL', 'AP', 'DF', 'ES', 'PB', 'RJ', 'RN', 'RO', 'RR', 'SC', 'SE', 'TO']
-        svan = ['MA', 'PA', 'PI']
+        svrs = ['AC', 'AL', 'AP', 'DF', 'ES', 'PB', 'RJ', 'RN', 'RO', 'RR', 'SC', 'SE', 'TO', 'PI']
+        svan = ['MA', 'PA']
         # SVRS
         if self.uf.upper() in svrs:
             if self._ambiente == 1:
