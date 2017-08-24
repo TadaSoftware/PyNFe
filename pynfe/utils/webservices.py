@@ -298,12 +298,12 @@ NFE = {
 	    	'CADASTRO': 'https://sistemas.sefaz.ma.gov.br/wscadastro/CadConsultaCadastro2?wsdl'
 	    },
 	    'CE': {
-	    	'STATUS': 'sefaz.ce.gov.br/nfe2/services/NFeStatusServico2?WSDL',
-	    	'AUTORIZACAO': 'sefaz.ce.gov.br/nfe2/services/NFeAutorizacao2?WSDL',
-	    	'RECIBO': 'sefaz.ce.gov.br/nfe2/services/NFeRetAutorizacao2?WSDL',
-	    	'CHAVE': 'sefaz.ce.gov.br/nfe2/services/NFeConsultaProtocolo2?WSDL',
-	    	'INUTILIZACAO': 'sefaz.ce.gov.br/nfe2/services/NFeInutilizacao2?WSDL',
-	    	'EVENTOS': 'sefaz.ce.gov.br/nfe2/services/NFeRecepcaoEvento2?WSDL',
+	    	'STATUS': 'sefaz.ce.gov.br/nfe4/services/NFeStatusServico4?WSDL',
+	    	'AUTORIZACAO': 'sefaz.ce.gov.br/nfe4/services/NFeAutorizacao4?WSDL',
+	    	'RECIBO': 'sefaz.ce.gov.br/nfe4/services/NFeRetAutorizacao4?WSDL',
+	    	'CHAVE': 'sefaz.ce.gov.br/nfe4/services/NFeConsultaProtocolo4?WSDL',
+	    	'INUTILIZACAO': 'sefaz.ce.gov.br/nfe4/services/NFeInutilizacao4?WSDL',
+	    	'EVENTOS': 'sefaz.ce.gov.br/nfe4/services/NFeRecepcaoEvento4?WSDL',
 	    	'CADASTRO': 'sefaz.ce.gov.br/nfe2/services/CadConsultaCadastro2?wsdl',
 	    	'DOWNLOAD': 'sefaz.ce.gov.br/nfe2/services/NfeDownloadNF?wsdl',
 	    	'HTTPS': 'https://nfe.',
