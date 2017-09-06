@@ -582,7 +582,7 @@ class NotaFiscalProduto(Entidade):
     # - Tributos
     #  - ICMS
     #   - Situacao tributaria (obrigatorio - seleciona de lista) - ICMS_TIPOS_TRIBUTACAO
-    icms_situacao_tributaria = str()
+    icms_modalidade = str()
 
     #   - Origem (obrigatorio - seleciona de lista) - ICMS_ORIGENS
     icms_origem = int()
@@ -611,9 +611,17 @@ class NotaFiscalProduto(Entidade):
     icms_motivo_desoneracao = int()
 
     #   - ICMS ST
-    #    - Modalidade de determinacao da BC ICMS ST (seleciona de lista) - ICMS_MODALIDADES
+    #    - Modalidade de determinacao da BC ICMS ST
+    # 0=Preço tabelado ou máximo sugerido;
+    # 1=Lista Negativa (valor);
+    # 2=Lista Positiva (valor);
+    # 3=Lista Neutra (valor);
+    # 4=Margem Valor Agregado (%);
+    # 5=Pauta (valor);
     icms_st_modalidade_determinacao_bc = str()
 
+    #    - Percentual da margem de valor Adicionado do ICMS ST
+    icms_st_percentual_adicional = Decimal()
     #    - Percentual reducao da BC ICMS ST
     icms_st_percentual_reducao_bc = Decimal()
 
