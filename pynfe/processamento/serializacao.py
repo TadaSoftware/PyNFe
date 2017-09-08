@@ -412,7 +412,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(ide, 'cNF').text = nota_fiscal.codigo_numerico_aleatorio
         etree.SubElement(ide, 'natOp').text = nota_fiscal.natureza_operacao
         # Removido na NF-e 4.00
-        # etree.SubElement(ide, 'indPag').text = str(nota_fiscal.forma_pagamento)
+        etree.SubElement(ide, 'indPag').text = str(nota_fiscal.forma_pagamento)
         etree.SubElement(ide, 'mod').text = str(nota_fiscal.modelo)
         etree.SubElement(ide, 'serie').text = nota_fiscal.serie
         etree.SubElement(ide, 'nNF').text = str(nota_fiscal.numero_nf)
