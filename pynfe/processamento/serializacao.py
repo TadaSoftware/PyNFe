@@ -271,18 +271,23 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(icms_item, 'vICMSSTDest').text = ''    # Informar o valor do ICMS ST da UF destino
         else:
             ### OUTROS TIPOS DE ICMS (00,10,20)
-            icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
-            etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
-            etree.SubElement(icms_item, 'CST').text = str(produto_servico.icms_modalidade)
-            # Modalidade de determinação da BC do ICMS: 0=Margem Valor Agregado (%); 1=Pauta (Valor); 2=Preço Tabelado Máx. (valor); 3=Valor da operação.
-            etree.SubElement(icms_item, 'modBC').text = str(produto_servico.icms_modalidade_determinacao_bc)
             # 00=Tributada integralmente.
             if produto_servico.icms_modalidade == '00':
+                icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
+                etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
+                etree.SubElement(icms_item, 'CST').text = str(produto_servico.icms_modalidade)
+                # Modalidade de determinação da BC do ICMS: 0=Margem Valor Agregado (%); 1=Pauta (Valor); 2=Preço Tabelado Máx. (valor); 3=Valor da operação.
+                etree.SubElement(icms_item, 'modBC').text = str(produto_servico.icms_modalidade_determinacao_bc)
                 etree.SubElement(icms_item, 'vBC').text = str(produto_servico.icms_valor_base_calculo)  # Valor da BC do ICMS 
                 etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)          # Alíquota do imposto
                 etree.SubElement(icms_item, 'vICMS').text = '{:.2f}'.format(produto_servico.icms_valor or 0) # Valor do ICMS 
             # 10=Tributada e com cobrança do ICMS por substituição tributária
             elif produto_servico.icms_modalidade == '10':
+                icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
+                etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
+                etree.SubElement(icms_item, 'CST').text = str(produto_servico.icms_modalidade)
+                # Modalidade de determinação da BC do ICMS: 0=Margem Valor Agregado (%); 1=Pauta (Valor); 2=Preço Tabelado Máx. (valor); 3=Valor da operação.
+                etree.SubElement(icms_item, 'modBC').text = str(produto_servico.icms_modalidade_determinacao_bc)
                 etree.SubElement(icms_item, 'vBC').text = str(produto_servico.icms_valor_base_calculo)  # Valor da BC do ICMS 
                 etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)          # Alíquota do imposto
                 etree.SubElement(icms_item, 'vICMS').text = '{:.2f}'.format(produto_servico.icms_valor or 0) # Valor do ICMS 
@@ -296,6 +301,11 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(icms_item, 'vICMSST ').text = str(produto_servico.icms_st_valor)
             # 20=Com redução de base de cálculo
             elif produto_servico.icms_modalidade == '20':
+                icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
+                etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
+                etree.SubElement(icms_item, 'CST').text = str(produto_servico.icms_modalidade)
+                # Modalidade de determinação da BC do ICMS: 0=Margem Valor Agregado (%); 1=Pauta (Valor); 2=Preço Tabelado Máx. (valor); 3=Valor da operação.
+                etree.SubElement(icms_item, 'modBC').text = str(produto_servico.icms_modalidade_determinacao_bc)
                 etree.SubElement(icms_item, 'pRedBC').text = str(produto_servico.icms_percentual_reducao_bc)  # Percentual da Redução de BC
                 etree.SubElement(icms_item, 'vBC').text = '{:.2f}'.format(produto_servico.icms_valor_base_calculo or 0)  # Valor da BC do ICMS 
                 etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)          # Alíquota do imposto
