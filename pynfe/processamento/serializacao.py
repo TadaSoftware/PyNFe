@@ -592,25 +592,26 @@ class SerializacaoXML(Serializacao):
                         for lacre in volume.lacres:
                             etree.SubElement(lacres, 'nLacre').text = lacre.numero_lacre
 
-        # Pagamento
-        """ Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e. Para as notas com finalidade de Ajuste ou Devolução o
-campo Forma de Pagamento deve ser preenchido com 90=Sem Pagamento. """
-        pag = etree.SubElement(raiz, 'pag')
-        detpag = etree.SubElement(pag, 'detPag')
-        etree.SubElement(detpag, 'tPag').text = str(nota_fiscal.tipo_pagamento).zfill(2)
-        etree.SubElement(detpag, 'vPag').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_nota)
-        if nota_fiscal.tipo_pagamento == 3 or nota_fiscal.tipo_pagamento == 4:
-            cartao = etree.SubElement(detpag, 'card')
+        # Somente NFC-e
+        """ Grupo obrigatório para a NFC-e, a critério da UF. Não informar para a NF-e (modelo 55). """
+        if nota_fiscal.modelo == 65:
+            # Transporte
+            transp = etree.SubElement(raiz, 'transp')
+            etree.SubElement(transp, 'modFrete').text = str(9)
+            # Pagamento
+            pag = etree.SubElement(raiz, 'pag')
+            etree.SubElement(pag, 'tPag').text = str(nota_fiscal.tipo_pagamento).zfill(2) # 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
+            etree.SubElement(pag, 'vPag').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_nota)
+            # Cartão NT2015.002
+            cartao = etree.SubElement(pag, 'card')
             """ Tipo de Integração do processo de pagamento com o sistema de automação da empresa:
                 1=Pagamento integrado com o sistema de automação da empresa (Ex.: equipamento TEF, Comércio Eletrônico);
                 2= Pagamento não integrado com o sistema de automação da empresa (Ex.: equipamento POS);
             """
             etree.SubElement(cartao, 'tpIntegra').text = '2'
             #etree.SubElement(cartao, 'CNPJ').text = '' # Informar o CNPJ da Credenciadora de cartão de crédito / débito
-            #etree.SubElement(cartao, 'tBand').text = '' # 01=Visa 02=Mastercard 03=American Express 04=Sorocred 05=Diners Club 06=Elo 07=Hipercard 08=Aura 09=Caba 99=Outros
+            #etree.SubElement(cartao, 'tBand').text = '' # 01=Visa 02=Mastercard 03=American Express 04=Sorocred 99=Outros
             #etree.SubElement(cartao, 'cAut').text = '' # Identifica o número da autorização da transação da operação com cartão de crédito e/ou débito
-        # troco
-        # etree.SubElement(pag, 'vTroco').text = str('')
 
         # Informações adicionais
         if nota_fiscal.informacoes_adicionais_interesse_fisco or nota_fiscal.informacoes_complementares_interesse_contribuinte:
