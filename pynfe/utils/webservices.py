@@ -321,13 +321,13 @@ NFE = {
 	    	'HOMOLOGACAO': 'https://nfehomolog.'
 	    },
 	    'BA': {
-	    	'STATUS': 'nfe.sefaz.ba.gov.br/webservices/NfeStatusServico/NfeStatusServico.asmx',
-	    	'AUTORIZACAO': 'nfe.sefaz.ba.gov.br/webservices/NfeAutorizacao/NfeAutorizacao.asmx',
-	    	'RECIBO': 'nfe.sefaz.ba.gov.br/webservices/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
-	    	'CHAVE': 'nfe.sefaz.ba.gov.br/webservices/NfeConsulta/NfeConsulta.asmx',
-	    	'INUTILIZACAO': 'nfe.sefaz.ba.gov.br/webservices/NfeInutilizacao/NfeInutilizacao.asmx',
-	    	'EVENTOS': 'nfe.sefaz.ba.gov.br/webservices/sre/recepcaoevento.asmx',
-	    	'CADASTRO': 'nfe.sefaz.ba.gov.br/webservices/nfenw/CadConsultaCadastro2.asmx',
+	    	'STATUS': 'nfe.sefaz.ba.gov.br/webservices/NFeStatusServico4/NFeStatusServico4.asmx',
+	    	'AUTORIZACAO': 'nfe.sefaz.ba.gov.br/webservices/NFeAutorizacao4/NFeAutorizacao4.asmx',
+	    	'RECIBO': 'nfe.sefaz.ba.gov.br/webservices/NFeRetAutorizacao4/NFeRetAutorizacao4.asmx',
+	    	'CHAVE': 'nfe.sefaz.ba.gov.br/webservices/NFeConsultaProtocolo4/NFeConsultaProtocolo4.asmx',
+	    	'INUTILIZACAO': 'nfe.sefaz.ba.gov.br/webservices/NFeInutilizacao4/NFeInutilizacao4.asmx',
+	    	'EVENTOS': 'nfe.sefaz.ba.gov.br/webservices/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx',
+	    	'CADASTRO': 'nfe.sefaz.ba.gov.br/webservices/CadConsultaCadastro4/CadConsultaCadastro4.asmx',
 	    	'HTTPS': 'https://',
 	    	'HOMOLOGACAO': 'https://h'
 	    },	
