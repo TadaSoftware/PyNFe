@@ -544,12 +544,11 @@ class SerializacaoXML(Serializacao):
         if nota_fiscal.totais_tributos_aproximado:
             etree.SubElement(icms_total, 'vTotTrib').text = '{:.2f}'.format(nota_fiscal.totais_tributos_aproximado)
 
-        # Transporte
-        transp = etree.SubElement(raiz, 'transp')
-        etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
-
         # Apenas NF-e
         if nota_fiscal.modelo == 55:
+            # Transporte
+            transp = etree.SubElement(raiz, 'transp')
+            etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
             # Transportadora
             if nota_fiscal.transporte_transportadora:
                 transp.append(self._serializar_transportadora(
