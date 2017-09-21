@@ -716,7 +716,7 @@ class SerializacaoQrcode(object):
             else:
                 qrcode = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['QR'] + url
                 url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['URL'] + url
-        # AC, AM, RR, PA, 
+        # AC, AM, RR, PA, SE
         else:
             if tpamb == '1':
                 qrcode = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['QR'] + url
