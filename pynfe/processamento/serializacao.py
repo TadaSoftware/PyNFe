@@ -544,12 +544,11 @@ class SerializacaoXML(Serializacao):
         if nota_fiscal.totais_tributos_aproximado:
             etree.SubElement(icms_total, 'vTotTrib').text = '{:.2f}'.format(nota_fiscal.totais_tributos_aproximado)
 
-        # Transporte
-        transp = etree.SubElement(raiz, 'transp')
-        etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
-
         # Apenas NF-e
         if nota_fiscal.modelo == 55:
+            # Transporte
+            transp = etree.SubElement(raiz, 'transp')
+            etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
             # Transportadora
             if nota_fiscal.transporte_transportadora:
                 transp.append(self._serializar_transportadora(
@@ -708,26 +707,26 @@ class SerializacaoQrcode(object):
         lista_uf_padrao = ['PR', 'CE', 'RS', 'RJ', 'RO']
         if uf.upper() in lista_uf_padrao:
             qrcode = NFCE[uf.upper()]['QR'] + url
-            url_chave = NFCE[uf.upper()]['URL']
+            # url_chave = NFCE[uf.upper()]['URL']
         elif uf.upper() == 'SP':
             if tpamb == '1':
                 qrcode = NFCE[uf.upper()]['HTTPS'] + 'www.' + NFCE[uf.upper()]['QR'] + url
-                url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.' + NFCE[uf.upper()]['URL'] + url
+                # url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.' + NFCE[uf.upper()]['URL'] + url
             else:
                 qrcode = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['QR'] + url
-                url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['URL'] + url
+                # url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['URL'] + url
         # AC, AM, RR, PA, SE
         else:
             if tpamb == '1':
                 qrcode = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['QR'] + url
-                url_chave = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['URL'] + url
+                # url_chave = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['URL'] + url
             else:
                 qrcode = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['QR'] + url
-                url_chave = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['URL'] + url
+                # url_chave = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['URL'] + url
         # adicionta tag infNFeSupl com qrcode
         info = etree.Element('infNFeSupl')
         etree.SubElement(info, 'qrCode').text = '<![CDATA['+ qrcode.strip() + ']]>'
-        etree.SubElement(info, 'urlChave').text = url_chave
+        # etree.SubElement(info, 'urlChave').text = url_chave
         nfe.insert(1, info)
         # correção da tag qrCode, retira caracteres pois e CDATA
         tnfe = etree.tostring(nfe, encoding='unicode')
