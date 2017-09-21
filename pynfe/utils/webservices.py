@@ -123,7 +123,7 @@ NFCE = {
 	    },
 	    'SE': {
 	    	'QR': 'se.gov.br/portal/consultarNFCe.jsp?',
-	    	'HTTPS': 'https://www.nfce.',
+	    	'HTTPS': 'http://www.nfce.',
 	    	'HOMOLOGACAO': 'http://www.hom.nfe.'
 	    },
 	    'BA': {
