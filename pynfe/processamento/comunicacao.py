@@ -307,7 +307,7 @@ class ComunicacaoSefaz(Comunicacao):
                 raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
         # Estados que utilizam outros ambientes
         else:
-            lista_svrs = ['AC','RN','PB','SC','SE']
+            lista_svrs = ['AC','RN','PB','SC','SE','RJ']
             if self.uf.upper() in lista_svrs:
                 if self._ambiente == 1:
                     ambiente = 'HTTPS'
@@ -321,6 +321,8 @@ class ComunicacaoSefaz(Comunicacao):
                     self.url = NFCE['SVRS'][ambiente] + NFCE['SVRS'][consulta]
                 else:
                     raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
+            else:
+                raise Exception('UF com URL não definida!')
         return self.url
 
     def _get_url_uf(self, modelo, consulta):
