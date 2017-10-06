@@ -160,7 +160,7 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'QR': 'http://www4.fazenda.rj.gov.br/consultaNFCe/QRCode?'
 	    },
 	    'SP': {
 	    	'STATUS': 'nfce.fazenda.sp.gov.br/ws/nfestatusservico2.asmx',
