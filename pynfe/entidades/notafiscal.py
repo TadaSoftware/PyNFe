@@ -56,10 +56,26 @@ class NotaFiscal(Entidade):
     data_saida_entrada = None
 
     # - Forma de pagamento  (obrigatorio - seleciona de lista) - NF_FORMAS_PAGAMENTO
-    forma_pagamento = int()
+    # Removido na NF-e 4.00
+    # forma_pagamento = int()
 
     # - Tipo de pagamento
-    # 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
+    """ 
+    Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e. 
+    Para as notas com finalidade de Ajuste ou Devolução o campo Forma de Pagamento deve ser preenchido com 90=Sem Pagamento.
+    01=Dinheiro
+    02=Cheque
+    03=Cartão de Crédito
+    04=Cartão de Débito
+    05=Crédito Loja
+    10=Vale Alimentação
+    11=Vale Refeição
+    12=Vale Presente
+    13=Vale Combustível
+    14=Duplicata Mercantil
+    90= Sem pagamento
+    99=Outros
+    """
     tipo_pagamento = int()
 
     # - Forma de emissao (obrigatorio - seleciona de lista) - NF_FORMAS_EMISSAO
@@ -78,6 +94,7 @@ class NotaFiscal(Entidade):
         2=Operação não presencial, pela Internet;
         3=Operação não presencial, Teleatendimento;
         4=NFC-e em operação com entrega a domicílio;
+        5=Operação presencial, fora do estabelecimento;
         9=Operação não presencial, outros.
     """
     indicador_presencial = int()
@@ -171,6 +188,11 @@ class NotaFiscal(Entidade):
     #  - Total do IPI (somente leitura)
     totais_icms_total_ipi = Decimal()
 
+    #  - Valor Total do IPI devolvido 
+    # Deve ser informado quando preenchido o Grupo Tributos Devolvidos na emissão de nota finNFe=4 (devolução) nas operações com não contribuintes do IPI. 
+    # Corresponde ao total da soma dos campos id:UA04.
+    totais_icms_total_ipi_dev = Decimal()
+
     #  - PIS (somente leitura)
     totais_icms_pis = Decimal()
 
@@ -224,10 +246,32 @@ class NotaFiscal(Entidade):
     #  - Valor aproximado total de tributos federais, estaduais e municipais.
     totais_tributos_aproximado = Decimal()
 
+    # - Valor Total do FCP (Fundo de Combate à Pobreza)
+    totais_fcp = Decimal()
+
+    # - Valor total do ICMS relativo Fundo de Combate à Pobreza (FCP) da UF de destino 
+    totais_fcp_destino = Decimal()
+
+     # - Valor Total do FCP (Fundo de Combate à Pobreza) retido por substituição tributária
+    totais_fcp_st = Decimal()
+
+     # - Valor Total do FCP retido anteriormente por Substituição Tributária
+    totais_fcp_st_ret = Decimal()
+
+    # - Valor total do ICMS Interestadual para a UF de destino 
+    totais_icms_inter_destino = Decimal()
+
+    # - Valor total do ICMS Interestadual para a UF do remetente
+    totais_icms_inter_remetente = Decimal()
+
     # Transporte
     # - Modalidade do Frete (obrigatorio - seleciona de lista) - MODALIDADES_FRETE
-    #  - 0 - Por conta do emitente
-    #  - 1 - Por conta do destinatario
+    # 0=Contratação do Frete por conta do Remetente (CIF);
+    # 1=Contratação do Frete por conta do Destinatário (FOB);
+    # 2=Contratação do Frete por conta de Terceiros;
+    # 3=Transporte Próprio por conta do Remetente;
+    # 4=Transporte Próprio por conta do Destinatário;
+    # 9=Sem Ocorrência de Transporte.
     transporte_modalidade_frete = int()
 
     # - Transportador (seleciona de Transportadoras)
@@ -343,10 +387,18 @@ class NotaFiscal(Entidade):
         self.totais_icms_total_desconto += obj.desconto
         # self.totais_icms_total_ii += # tem que entender o cálculo
         self.totais_icms_total_ipi += obj.ipi_valor_ipi
+        self.totais_icms_total_ipi_dev += obj.ipi_valor_ipi_dev
         self.totais_icms_pis += obj.pis_valor
         self.totais_icms_cofins += obj.cofins_valor
         self.totais_icms_outras_despesas_acessorias += obj.outras_despesas_acessorias
         self.totais_icms_total_nota += obj.valor_total_bruto
+        # - Valor Total do FCP (Fundo de Combate à Pobreza)
+        self.totais_fcp += obj.fcp_valor
+        self.totais_fcp_destino += obj.fcp_destino_valor
+        self.totais_fcp_st += obj.fcp_st_valor
+        self.totais_fcp_st_ret += obj.fcp_st_ret_valor
+        self.totais_icms_inter_destino += obj.icms_inter_destino_valor
+        self.totais_icms_inter_remetente += obj.icms_inter_remetente_valor
         ## TODO calcular impostos aproximados
         #self.totais_tributos_aproximado += obj.tributos
         return obj
@@ -530,7 +582,7 @@ class NotaFiscalProduto(Entidade):
     # - Tributos
     #  - ICMS
     #   - Situacao tributaria (obrigatorio - seleciona de lista) - ICMS_TIPOS_TRIBUTACAO
-    icms_situacao_tributaria = str()
+    icms_modalidade = str()
 
     #   - Origem (obrigatorio - seleciona de lista) - ICMS_ORIGENS
     icms_origem = int()
@@ -559,9 +611,17 @@ class NotaFiscalProduto(Entidade):
     icms_motivo_desoneracao = int()
 
     #   - ICMS ST
-    #    - Modalidade de determinacao da BC ICMS ST (seleciona de lista) - ICMS_MODALIDADES
+    #    - Modalidade de determinacao da BC ICMS ST
+    # 0=Preço tabelado ou máximo sugerido;
+    # 1=Lista Negativa (valor);
+    # 2=Lista Positiva (valor);
+    # 3=Lista Neutra (valor);
+    # 4=Margem Valor Agregado (%);
+    # 5=Pauta (valor);
     icms_st_modalidade_determinacao_bc = str()
 
+    #    - Percentual da margem de valor Adicionado do ICMS ST
+    icms_st_percentual_adicional = Decimal()
     #    - Percentual reducao da BC ICMS ST
     icms_st_percentual_reducao_bc = Decimal()
 
@@ -573,6 +633,13 @@ class NotaFiscalProduto(Entidade):
 
     #    - Valor do ICMS ST
     icms_st_valor = Decimal()
+
+    fcp_valor = Decimal()
+    fcp_destino_valor = Decimal()
+    fcp_st_valor = Decimal()
+    fcp_st_ret_valor = Decimal()
+    icms_inter_destino_valor = Decimal()
+    icms_inter_remetente_valor = Decimal()
 
     #  - IPI
     #   - Situacao tributaria (seleciona de lista) - IPI_TIPOS_TRIBUTACAO
@@ -618,6 +685,9 @@ class NotaFiscalProduto(Entidade):
 
     #   - Valor do IPI
     ipi_valor_ipi = Decimal()
+
+    #   - Valor do IPI Devolvido
+    ipi_valor_ipi_dev = Decimal()
 
     #  - PIS
     #   - PIS
