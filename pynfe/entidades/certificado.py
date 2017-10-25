@@ -36,7 +36,10 @@ class CertificadoA1(Certificado):
         o caminho dos arquivos, senao retorna o objeto. Apos o uso devem ser excluidos com o metodo excluir."""
 
         # Carrega o arquivo .pfx, erro pode ocorrer se a senha estiver errada ou formato invalido.
-        pkcs12 = crypto.load_pkcs12(open(self.caminho_arquivo, "rb").read(), senha)
+        try:
+            pkcs12 = crypto.load_pkcs12(open(self.caminho_arquivo, "rb").read(), senha)
+        except Exception as e:
+            raise Exception('Falha ao carregar certificado digital A1. Verifique local e senha.')
 
         if caminho:
             cert = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate())
