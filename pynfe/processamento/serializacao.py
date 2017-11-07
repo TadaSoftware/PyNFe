@@ -270,17 +270,51 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(icms_item, 'vBCSTDest').text = ''      # Informar o valor da BC do ICMS ST da UF destino
             etree.SubElement(icms_item, 'vICMSSTDest').text = ''    # Informar o valor do ICMS ST da UF destino
         else:
-            # FIXME
-            ### OUTROS TIPOS DE ICMS
+            ### OUTROS TIPOS DE ICMS (00,10,20)
+            icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
+            etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
+            etree.SubElement(icms_item, 'CST').text = produto_servico.icms_modalidade
+            # Modalidade de determinação da BC do ICMS: 0=Margem Valor Agregado (%); 1=Pauta (Valor); 2=Preço Tabelado Máx. (valor); 3=Valor da operação.
             etree.SubElement(icms_item, 'modBC').text = str(produto_servico.icms_modalidade_determinacao_bc)
-            etree.SubElement(icms_item, 'vBC').text = str(produto_servico.icms_valor_base_calculo)
-            etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)
-            etree.SubElement(icms_item, 'vICMS').text = str(produto_servico.icms_valor)
+            # 00=Tributada integralmente.
+            if produto_servico.icms_modalidade == '00':
+                etree.SubElement(icms_item, 'vBC').text = str(produto_servico.icms_valor_base_calculo)  # Valor da BC do ICMS 
+                etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)          # Alíquota do imposto
+                etree.SubElement(icms_item, 'vICMS').text = '{:.2f}'.format(produto_servico.icms_valor or 0) # Valor do ICMS 
+            # 10=Tributada e com cobrança do ICMS por substituição tributária
+            elif produto_servico.icms_modalidade == '10':
+                etree.SubElement(icms_item, 'vBC').text = str(produto_servico.icms_valor_base_calculo)  # Valor da BC do ICMS 
+                etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)          # Alíquota do imposto
+                etree.SubElement(icms_item, 'vICMS').text = '{:.2f}'.format(produto_servico.icms_valor or 0) # Valor do ICMS 
+                # Modalidade de determinação da BC do ICMS ST
+                # 0=Preço tabelado ou máximo sugerido; 1=Lista Negativa (valor);2=Lista Positiva (valor);3=Lista Neutra (valor);4=Margem Valor Agregado (%);5=Pauta (valor);
+                etree.SubElement(icms_item, 'modBCST').text = str(produto_servico.icms_st_modalidade_determinacao_bc) 
+                etree.SubElement(icms_item, 'pMVAST').text = str(produto_servico.icms_st_percentual_adicional)    # Percentual da margem de valor Adicionado do ICMS ST
+                etree.SubElement(icms_item, 'pRedBCST').text = str(produto_servico.icms_st_percentual_reducao_bc) # APercentual da Redução de BC do ICMS ST
+                etree.SubElement(icms_item, 'vBCST ').text = str(produto_servico.icms_st_valor_base_calculo)
+                etree.SubElement(icms_item, 'pICMSST ').text = str(produto_servico.icms_st_aliquota)
+                etree.SubElement(icms_item, 'vICMSST ').text = str(produto_servico.icms_st_valor)
+            # 20=Com redução de base de cálculo
+            elif produto_servico.icms_modalidade == '20':
+                etree.SubElement(icms_item, 'pRedBC').text = str(produto_servico.icms_percentual_reducao_bc)  # Percentual da Redução de BC
+                etree.SubElement(icms_item, 'vBC').text = '{:.2f}'.format(produto_servico.icms_valor_base_calculo or 0)  # Valor da BC do ICMS 
+                etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)          # Alíquota do imposto
+                etree.SubElement(icms_item, 'vICMS').text = '{:.2f}'.format(produto_servico.icms_valor or 0)  # Valor do ICMS 
+            # Impostos não implementados
+            else:
+                raise NotImplementedError
+        # ipi
+        # ipi = etree.SubElement(imposto, 'IPI')
+        # etree.SubElement(ipi, 'clEnq') = produto_servico.ipi_classe_enquadramento # Preenchimento conforme Atos Normativos editados pela Receita Federal (Observação 2)
+        # ipint = etree.SubElement(ipi, 'IPINT')
+        # # 01=Entrada tributada com alíquota zero 02=Entrada isenta 03=Entrada não-tributada 04=Entrada imune 05=Entrada com suspensão
+        # # 51=Saída tributada com alíquota zero 52=Saída isenta 53=Saída não-tributada 54=Saída imune 55=Saída com suspensão
+        # etree.SubElement(ipint, 'CST') = produto_servico.ipi_codigo_enquadramento
 
         # apenas nfe
-        pisnt = ('04','05','06','07','08','09')
         if modelo == 55:
             ## PIS
+            pisnt = ('04','05','06','07','08','09')
             pis = etree.SubElement(imposto, 'PIS')
             if produto_servico.pis_modalidade in pisnt:
                 pis_item = etree.SubElement(pis, 'PISNT')
@@ -378,7 +412,8 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(ide, 'cUF').text = CODIGOS_ESTADOS[nota_fiscal.uf]
         etree.SubElement(ide, 'cNF').text = nota_fiscal.codigo_numerico_aleatorio
         etree.SubElement(ide, 'natOp').text = nota_fiscal.natureza_operacao
-        etree.SubElement(ide, 'indPag').text = str(nota_fiscal.forma_pagamento)
+        # Removido na NF-e 4.00
+        # etree.SubElement(ide, 'indPag').text = str(nota_fiscal.forma_pagamento)
         etree.SubElement(ide, 'mod').text = str(nota_fiscal.modelo)
         etree.SubElement(ide, 'serie').text = nota_fiscal.serie
         etree.SubElement(ide, 'nNF').text = str(nota_fiscal.numero_nf)
@@ -481,8 +516,18 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_total, 'vBC').text = '{:.2f}'.format(nota_fiscal.totais_icms_base_calculo)
         etree.SubElement(icms_total, 'vICMS').text = '{:.2f}'.format(nota_fiscal.totais_icms_total)
         etree.SubElement(icms_total, 'vICMSDeson').text = '{:.2f}'.format(nota_fiscal.totais_icms_desonerado)  # Valor Total do ICMS desonerado
+        if nota_fiscal.totais_fcp:
+            etree.SubElement(icms_total, 'vFCP').text = '{:.2f}'.format(nota_fiscal.totais_fcp)
+        if nota_fiscal.totais_fcp_destino:
+            etree.SubElement(icms_total, 'vFCPUFDest').text = '{:.2f}'.format(nota_fiscal.totais_fcp_destino)
+        if nota_fiscal.totais_icms_inter_destino:
+            etree.SubElement(icms_total, 'vICMSUFDest').text = '{:.2f}'.format(nota_fiscal.totais_icms_inter_destino)
+        if nota_fiscal.totais_icms_inter_remetente:
+            etree.SubElement(icms_total, 'vICMSUFRemet').text = '{:.2f}'.format(nota_fiscal.totais_icms_remetente)
         etree.SubElement(icms_total, 'vBCST').text = '{:.2f}'.format(nota_fiscal.totais_icms_st_base_calculo)
         etree.SubElement(icms_total, 'vST').text = '{:.2f}'.format(nota_fiscal.totais_icms_st_total)
+        etree.SubElement(icms_total, 'vFCPST').text = '{:.2f}'.format(nota_fiscal.totais_fcp_st)
+        etree.SubElement(icms_total, 'vFCPSTRet').text = '{:.2f}'.format(nota_fiscal.totais_fcp_st_ret)
         etree.SubElement(icms_total, 'vProd').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_produtos_e_servicos)
         etree.SubElement(icms_total, 'vFrete').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_frete)
         etree.SubElement(icms_total, 'vSeg').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_seguro)
@@ -491,6 +536,7 @@ class SerializacaoXML(Serializacao):
         # Tributos
         etree.SubElement(icms_total, 'vII').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_ii)
         etree.SubElement(icms_total, 'vIPI').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_ipi)
+        etree.SubElement(icms_total, 'vIPIDevol').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_ipi_dev)
         etree.SubElement(icms_total, 'vPIS').text = '{:.2f}'.format(nota_fiscal.totais_icms_pis)
         etree.SubElement(icms_total, 'vCOFINS').text = '{:.2f}'.format(nota_fiscal.totais_icms_cofins)
 
@@ -499,13 +545,12 @@ class SerializacaoXML(Serializacao):
         if nota_fiscal.totais_tributos_aproximado:
             etree.SubElement(icms_total, 'vTotTrib').text = '{:.2f}'.format(nota_fiscal.totais_tributos_aproximado)
 
+        # Transporte
+        transp = etree.SubElement(raiz, 'transp')
+        etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
+
         # Apenas NF-e
         if nota_fiscal.modelo == 55:
-
-            # Transporte
-            transp = etree.SubElement(raiz, 'transp')
-            etree.SubElement(transp, 'modFrete').text = str(nota_fiscal.transporte_modalidade_frete)
-
             # Transportadora
             if nota_fiscal.transporte_transportadora:
                 transp.append(self._serializar_transportadora(
@@ -548,26 +593,25 @@ class SerializacaoXML(Serializacao):
                         for lacre in volume.lacres:
                             etree.SubElement(lacres, 'nLacre').text = lacre.numero_lacre
 
-        # Somente NFC-e
-        """ Grupo obrigatório para a NFC-e, a critério da UF. Não informar para a NF-e (modelo 55). """
-        if nota_fiscal.modelo == 65:
-            # Transporte
-            transp = etree.SubElement(raiz, 'transp')
-            etree.SubElement(transp, 'modFrete').text = str(9)
-            # Pagamento
-            pag = etree.SubElement(raiz, 'pag')
-            etree.SubElement(pag, 'tPag').text = str(nota_fiscal.tipo_pagamento).zfill(2) # 01=Dinheiro 02=Cheque 03=Cartão de Crédito 04=Cartão de Débito 05=Crédito Loja 10=Vale Alimentação 11=Vale Refeição 12=Vale Presente 13=Vale Combustível 99=Outros
-            etree.SubElement(pag, 'vPag').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_nota)
-            # Cartão NT2015.002
-            cartao = etree.SubElement(pag, 'card')
+        # Pagamento
+        """ Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e. Para as notas com finalidade de Ajuste ou Devolução o
+campo Forma de Pagamento deve ser preenchido com 90=Sem Pagamento. """
+        pag = etree.SubElement(raiz, 'pag')
+        detpag = etree.SubElement(pag, 'detPag')
+        etree.SubElement(detpag, 'tPag').text = str(nota_fiscal.tipo_pagamento).zfill(2)
+        etree.SubElement(detpag, 'vPag').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_nota)
+        if nota_fiscal.tipo_pagamento == 3 or nota_fiscal.tipo_pagamento == 4:
+            cartao = etree.SubElement(detpag, 'card')
             """ Tipo de Integração do processo de pagamento com o sistema de automação da empresa:
                 1=Pagamento integrado com o sistema de automação da empresa (Ex.: equipamento TEF, Comércio Eletrônico);
                 2= Pagamento não integrado com o sistema de automação da empresa (Ex.: equipamento POS);
             """
             etree.SubElement(cartao, 'tpIntegra').text = '2'
             #etree.SubElement(cartao, 'CNPJ').text = '' # Informar o CNPJ da Credenciadora de cartão de crédito / débito
-            #etree.SubElement(cartao, 'tBand').text = '' # 01=Visa 02=Mastercard 03=American Express 04=Sorocred 99=Outros
+            #etree.SubElement(cartao, 'tBand').text = '' # 01=Visa 02=Mastercard 03=American Express 04=Sorocred 05=Diners Club 06=Elo 07=Hipercard 08=Aura 09=Caba 99=Outros
             #etree.SubElement(cartao, 'cAut').text = '' # Identifica o número da autorização da transação da operação com cartão de crédito e/ou débito
+        # troco
+        # etree.SubElement(pag, 'vTroco').text = str('')
 
         # Informações adicionais
         if nota_fiscal.informacoes_adicionais_interesse_fisco or nota_fiscal.informacoes_complementares_interesse_contribuinte:
@@ -658,22 +702,32 @@ class SerializacaoQrcode(object):
 
         url = url + '&cHashQRCode=' + url_hash.upper()
 
-        if uf.upper() == 'PR':
+        # url_chave - Texto com a URL de consulta por chave de acesso a ser impressa no DANFE NFC-e.
+        # Informar a URL da “Consulta por chave de acesso da NFC-e”. 
+        # A mesma URL que deve estar informada no DANFE NFC-e para consulta por chave de acesso
+        lista_uf_padrao = ['PR', 'CE', 'RS', 'RJ', 'RO']
+        if uf.upper() in lista_uf_padrao:
             qrcode = NFCE[uf.upper()]['QR'] + url
+            url_chave = NFCE[uf.upper()]['URL']
         elif uf.upper() == 'SP':
             if tpamb == '1':
                 qrcode = NFCE[uf.upper()]['HTTPS'] + 'www.' + NFCE[uf.upper()]['QR'] + url
+                url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.' + NFCE[uf.upper()]['URL'] + url
             else:
                 qrcode = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['QR'] + url
+                url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['URL'] + url
+        # AC, AM, RR, PA, 
         else:
             if tpamb == '1':
                 qrcode = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['QR'] + url
+                url_chave = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['URL'] + url
             else:
                 qrcode = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['QR'] + url
-
+                url_chave = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['URL'] + url
         # adicionta tag infNFeSupl com qrcode
         info = etree.Element('infNFeSupl')
         etree.SubElement(info, 'qrCode').text = '<![CDATA['+ qrcode.strip() + ']]>'
+        etree.SubElement(info, 'urlChave').text = url_chave
         nfe.insert(1, info)
         # correção da tag qrCode, retira caracteres pois e CDATA
         tnfe = etree.tostring(nfe, encoding='unicode')
@@ -747,240 +801,3 @@ class SerializacaoNfse(object):
             return SerializacaoBetha().cancelar(nfse)
         else:
             raise Exception('Autorizador não suportado para cancelamento!')
-
-
-class SerializacaoPipes(Serializacao):
-    """Serialização utilizada pela SEFAZ-SP para a importação de notas."""
-
-    def exportar(self, destino, **kwargs):
-        pass
-
-    def _serializar_emitente(self, emitente, retorna_string=True):
-
-        cod_municipio, municipio = obter_municipio_e_codigo(
-            dict(codigo=emitente.endereco_cod_municipio,
-                 municipio=emitente.endereco_municipio),
-            emitente.endereco_uf
-        )
-
-        serial_emitente_list = [
-            '\nC',
-            emitente.razao_social,
-            emitente.nome_fantasia,
-            emitente.inscricao_estadual,
-            emitente.inscricao_estadual_subst_tributaria,
-            emitente.inscricao_municipal,
-            emitente.cnae_fiscal,
-            emitente.codigo_de_regime_tributario,
-            '\nC02',
-            emitente.cnpj,
-            '\nC05',
-            emitente.endereco_logradouro,
-            emitente.endereco_numero,
-            emitente.endereco_complemento,
-            emitente.endereco_bairro,
-            cod_municipio,
-            municipio,
-            obter_uf_por_codigo(emitente.endereco_uf),
-            emitente.endereco_cep.replace('-',''),
-            emitente.endereco_pais,
-            obter_pais_por_codigo(emitente.endereco_pais),
-            emitente.endereco_telefone,
-        ]
-
-        if retorna_string:
-            return '|'.join(map(str,serial_emitente_list))
-        return serial_emitente_list
-
-    def _serializar_cliente(self, cliente, retorna_string=True):
-
-        cod_municipio, municipio = obter_municipio_e_codigo(
-            dict(codigo=cliente.endereco_cod_municipio,
-                 municipio=cliente.endereco_municipio),
-            cliente.endereco_uf
-        )
-
-        serial_data = [
-            '\nE',
-            cliente.razao_social,
-            '2', # indIEDest
-            cliente.inscricao_estadual,
-            cliente.inscricao_suframa,
-            '', # IM
-            cliente.email,
-            '\nE02' if cliente.tipo_documento == 'CNPJ' else '\nE03',
-            cliente.numero_documento,
-            '\nE05',
-            cliente.endereco_logradouro,
-            cliente.endereco_numero,
-            cliente.endereco_complemento,
-            cliente.endereco_bairro,
-            cod_municipio,
-            municipio,
-            obter_uf_por_codigo(cliente.endereco_uf),
-            cliente.endereco_cep.replace('-',''),
-            cliente.endereco_pais,
-            obter_pais_por_codigo(cliente.endereco_pais),
-            cliente.endereco_telefone
-        ]
-
-        if retorna_string:
-            return '|'.join(map(str,serial_data))
-        return serial_data
-
-    def _serializar_produto_servico(self, produto_servico, retorna_string=True):
-        serial_data = [
-            '\nI',
-            produto_servico.codigo,
-            produto_servico.ean,
-            produto_servico.descricao,
-            produto_servico.ncm,
-            produto_servico.ex_tipi,
-            produto_servico.cfop,
-            produto_servico.unidade_comercial,
-            formatar_decimal(produto_servico.quantidade_comercial),
-            formatar_decimal(produto_servico.valor_unitario_comercial),
-            formatar_decimal(produto_servico.valor_total_bruto),
-            produto_servico.ean_tributavel,
-            produto_servico.unidade_tributavel,
-            formatar_decimal(produto_servico.quantidade_tributavel),
-            formatar_decimal(produto_servico.valor_unitario_tributavel),
-            formatar_decimal(produto_servico.total_frete) if produto_servico.total_frete else '',
-            formatar_decimal(produto_servico.total_seguro) if produto_servico.total_seguro else '',
-            formatar_decimal(produto_servico.desconto) if produto_servico.desconto else '',
-            formatar_decimal(produto_servico.outras_despesas_acessorias) if produto_servico.outras_despesas_acessorias else '',
-            produto_servico.compoe_valor_total,
-            produto_servico.numero_pedido,
-            produto_servico.numero_do_item,
-            '', # nFCI
-            '\nM', #IMPOSTOS
-            '\nN', #ICMS
-            '\nN06',
-            produto_servico.icms_origem,
-            produto_servico.icms_modalidade_determinacao_bc,
-            produto_servico.icms_valor if produto_servico.icms_valor else '',
-            produto_servico.icms_motivo_desoneracao if produto_servico.icms_valor else '',
-            '\nQ', #PIS
-            '\nQ02',
-            produto_servico.pis_tipo_calculo,
-            formatar_decimal(produto_servico.pis_valor_base_calculo),
-            formatar_decimal(produto_servico.pis_aliquota_percentual),
-            formatar_decimal(produto_servico.pis_valor),
-            '\nS', #COFINS
-            '\nS02',
-            produto_servico.cofins_situacao_tributaria,
-            formatar_decimal(produto_servico.cofins_valor_base_calculo),
-            formatar_decimal(produto_servico.cofins_aliquota_percentual),
-            formatar_decimal(produto_servico.cofins_valor)
-        ]
-
-        if retorna_string:
-            return '|'.join(map(str, serial_data))
-        return serial_data
-
-    def _serializar_nota_fiscal(self, nota_fiscal, retorna_string=True):
-
-        cod_municipio, municipio = obter_municipio_e_codigo(
-            dict(codigo='',
-                 municipio=nota_fiscal.municipio),
-            nota_fiscal.uf
-        )
-
-        if nota_fiscal.emitente.endereco_uf == nota_fiscal.cliente.endereco_uf:
-            id_dest = '1'
-        else:
-            id_dest = '2'
-
-        tz = time.strftime("%z")
-        tz = "{}:{}".format(tz[:-2], tz[-2:])
-
-        serial_data = [
-            'A',
-            '3.10',
-            nota_fiscal.identificador_unico,
-            '\nB',
-            CODIGOS_ESTADOS.get(nota_fiscal.uf, nota_fiscal.uf),
-            nota_fiscal.codigo_numerico_aleatorio,
-            nota_fiscal.natureza_operacao,
-            nota_fiscal.forma_pagamento,
-            nota_fiscal.modelo,
-            nota_fiscal.serie,
-            nota_fiscal.numero_nf,
-            nota_fiscal.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz,
-            nota_fiscal.data_saida_entrada.strftime('%Y-%m-%dT%H:%M:%S') + tz,
-            nota_fiscal.tipo_documento,
-            id_dest,  # idDest
-            cod_municipio,
-            nota_fiscal.tipo_impressao_danfe,
-            nota_fiscal.forma_emissao,
-            nota_fiscal.dv_codigo_numerico_aleatorio,
-            self._ambiente,
-            nota_fiscal.finalidade_emissao,
-            nota_fiscal.cliente_final,  # indFinal
-            nota_fiscal.indicador_presencial,  # indPres
-            nota_fiscal.processo_emissao,
-            '%s %s' % (self._nome_aplicacao,
-                       nota_fiscal.versao_processo_emissao),
-            '',  # dhCont - Data e Hora da entrada em contingência
-            '',  # xJust - Justificativa da entrada em contingência
-        ]
-
-        serial_data += self._serializar_emitente(nota_fiscal.emitente,
-                                                 retorna_string=False)
-        serial_data += self._serializar_cliente(nota_fiscal.cliente,
-                                                retorna_string=False)
-
-        # Produtos e serviços
-        produtos_servicos = enumerate(nota_fiscal.produtos_e_servicos, start=1)
-        for num, produto_servico in produtos_servicos:
-            num_produto = [
-                '\nH',
-                num, # Número do produto na lista
-                ''
-                '' # End Pipe
-            ]
-            serial_data += num_produto
-            serial_data += self._serializar_produto_servico(produto_servico,
-                                                        retorna_string=False)
-
-        serial_data += [
-            '\nW', #Valores totais NFe,
-            '\nW02',
-            formatar_decimal(nota_fiscal.totais_icms_base_calculo),
-            formatar_decimal(nota_fiscal.totais_icms_total),
-            '', # ICMSDeson
-            formatar_decimal(nota_fiscal.totais_icms_st_base_calculo),
-            formatar_decimal(nota_fiscal.totais_icms_st_total),
-            formatar_decimal(nota_fiscal.totais_icms_total_produtos_e_servicos),
-            formatar_decimal(nota_fiscal.totais_icms_total_frete),
-            formatar_decimal(nota_fiscal.totais_icms_total_seguro),
-            formatar_decimal(nota_fiscal.totais_icms_total_desconto),
-            formatar_decimal(nota_fiscal.totais_icms_total_ii),
-            formatar_decimal(nota_fiscal.totais_icms_total_ipi),
-            formatar_decimal(nota_fiscal.totais_icms_pis),
-            formatar_decimal(nota_fiscal.totais_icms_cofins),
-            formatar_decimal(nota_fiscal.totais_icms_outras_despesas_acessorias),
-            formatar_decimal(nota_fiscal.totais_icms_total_nota),
-            '', # vTotTrib
-            '\nX',
-            nota_fiscal.transporte_modalidade_frete,
-            '\nZ',
-            nota_fiscal.informacoes_adicionais_interesse_fisco,
-            nota_fiscal.informacoes_complementares_interesse_contribuinte,
-            '' # End Pipe
-        ]
-
-        if retorna_string:
-            try:
-                return '|'.join(map(remover_acentos, serial_data))
-            except TypeError as err:
-                enum_args = '\n'.join(
-                    map(
-                        lambda x: str(x[0]) + ' ' + str(x[1]),
-                        enumerate(serial_data)
-                    )
-                )
-                message = err.message + '\n' + enum_args
-                raise TypeError(message)
-
-        return serial_data

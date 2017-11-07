@@ -1,5 +1,5 @@
 
-Atenção este repositório já esta em desenvolvimento para a versão 4.00, para a versão 3.10 utilize a última release, [0.3](https://github.com/leotada/PyNFe/releases/tag/0.3).
+Atenção este repositório já esta em desenvolvimento para a versão NF-e 4.00, para a versão 3.10 utilize a última [release](https://github.com/leotada/PyNFe/releases).
 -----------
 
 Visão Geral
@@ -19,12 +19,10 @@ NFS-e padrão Abrasf para autorizadores Ginfes e Betha.
 Dependências
 ------------
 
-- Java 8u51
-  - para a geração da DANFE
 - lxml
   - biblioteca de leitura e gravação de arquivos XML, de alta
     performance e fácil de implementar.
-- xmlsec1 e openssl (instalado no SO)
+- signxml
   - assinatura e validação do XML
 - pyopenssl
   - biblioteca para manuseio do certificado digital
