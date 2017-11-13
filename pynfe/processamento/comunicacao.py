@@ -155,6 +155,46 @@ class ComunicacaoSefaz(Comunicacao):
         xml = self._construir_xml_soap('NFeConsultaProtocolo4', raiz)
         return self._post(url, xml)
 
+    def gera_xml_consulta_nota(self, modelo, chave):
+        """
+            Este método oferece a consulta da situação da NF-e/NFC-e na Base de Dados do Portal
+            da Secretaria de Fazenda Estadual.
+        :param modelo: Modelo da nota
+        :param chave: Chave da nota
+        :return:
+        """
+
+        # url do serviço
+        url = self._get_url(modelo=modelo, consulta='CHAVE')
+
+        # Monta XML do corpo da requisição
+        raiz = etree.Element('consSitNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
+        etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
+        etree.SubElement(raiz, 'xServ').text = 'CONSULTAR'
+        etree.SubElement(raiz, 'chNFe').text = chave
+
+        # Monta XML para envio da requisição
+        xml = self._construir_xml_soap('NFeConsultaProtocolo4', raiz)
+        return str(etree.tostring(xml), 'utf-8')
+
+    def consulta_nota_assinada(self, xml, modelo, chave_assinatura):
+        """
+            Este método oferece a consulta da situação da NF-e/NFC-e na Base de Dados do Portal
+            da Secretaria de Fazenda Estadual.
+        :param xml: XML da nota
+        :param modelo: Modelo da nota
+        :param chave_assinatura: Tupla (certificado, chave) A3
+        :return:
+        """
+
+        if type(xml) == str:
+            xml = etree.fromstring(xml)
+
+        # url do serviço
+        url = self._get_url(modelo=modelo, consulta='CHAVE')
+
+        return self._post(url, xml, chave_assinatura)
+
     def consulta_notas_cnpj(self, cnpj, nsu=0):
         """
         “Serviço de Consulta da Relação de Documentos Destinados” para um determinado CNPJ de
@@ -477,10 +517,13 @@ class ComunicacaoSefaz(Comunicacao):
             'Accept': 'application/soap+xml; charset=utf-8;',
         }
 
-    def _post(self, url, xml):
-        certificado_a1 = CertificadoA1(self.certificado)
-        chave, cert = certificado_a1.separar_arquivo(self.certificado_senha, caminho=True)
-        chave_cert = (cert, chave)
+    def _post(self, url, xml, _chave_cert=None):
+        if not _chave_cert:
+            certificado_a1 = CertificadoA1(self.certificado)
+            chave, cert = certificado_a1.separar_arquivo(self.certificado_senha, caminho=True)
+            chave_cert = (cert, chave)
+        else:
+            chave_cert = _chave_cert
         # Abre a conexão HTTPS
         try:
             xml_declaration = '<?xml version="1.0" encoding="UTF-8"?>'
