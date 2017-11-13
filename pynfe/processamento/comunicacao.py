@@ -155,6 +155,28 @@ class ComunicacaoSefaz(Comunicacao):
         xml = self._construir_xml_soap('NFeConsultaProtocolo4', raiz)
         return self._post(url, xml)
 
+    def gera_xml_consulta_nota(self, modelo, chave):
+        """
+            Este método oferece a consulta da situação da NF-e/NFC-e na Base de Dados do Portal
+            da Secretaria de Fazenda Estadual.
+        :param modelo: Modelo da nota
+        :param chave: Chave da nota
+        :return:
+        """
+
+        # url do serviço
+        url = self._get_url(modelo=modelo, consulta='CHAVE')
+
+        # Monta XML do corpo da requisição
+        raiz = etree.Element('consSitNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
+        etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
+        etree.SubElement(raiz, 'xServ').text = 'CONSULTAR'
+        etree.SubElement(raiz, 'chNFe').text = chave
+
+        # Monta XML para envio da requisição
+        xml = self._construir_xml_soap('NFeConsultaProtocolo4', raiz)
+        return str(etree.tostring(xml), 'utf-8')
+
     def consulta_notas_cnpj(self, cnpj, nsu=0):
         """
         “Serviço de Consulta da Relação de Documentos Destinados” para um determinado CNPJ de
