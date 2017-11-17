@@ -71,3 +71,4 @@ target/
 db.*
 
 TODO*
+.idea/*
