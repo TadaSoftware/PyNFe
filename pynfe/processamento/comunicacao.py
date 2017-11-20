@@ -216,7 +216,7 @@ class ComunicacaoSefaz(Comunicacao):
         :param cnpj: CNPJ da empresa
         :return:
         """
-        # UF que utilizam a SVRS - Sefaz Virtual do RS: Para serviço de Consulta Cadastro: AC, RN, PB, SC 
+        # UF que utilizam a SVRS - Sefaz Virtual do RS: Para serviço de Consulta Cadastro: AC, RN, PB, SC, PI
         lista_svrs = ['AC', 'RN', 'PB', 'SC', 'PI']
 
         # RS implementa um método diferente na consulta de cadastro
