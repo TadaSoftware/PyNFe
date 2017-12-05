@@ -321,6 +321,20 @@ class ComunicacaoSefaz(Comunicacao):
                     self.url = NFCE['SVRS'][ambiente] + NFCE['SVRS'][consulta]
                 else:
                     raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
+            lista_svan = ['MA','PA']
+            elif self.uf.upper() in lista_svan:
+                if self._ambiente == 1:
+                    ambiente = 'HTTPS'
+                else:
+                    ambiente = 'HOMOLOGACAO'
+                if modelo == 'nfe':
+                    # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
+                    self.url = NFE['SVAN'][ambiente] + NFE['SVAN'][consulta]
+                elif modelo == 'nfce':
+                    # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
+                    self.url = NFCE['SVAN'][ambiente] + NFCE['SVAN'][consulta]
+                else:
+                    raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
             else:
                 raise Exception('UF com URL não definida!')
         return self.url
@@ -435,6 +449,7 @@ class ComunicacaoSefaz(Comunicacao):
             # result.encoding = 'utf-8'
             # return result
             print(url)
+            print(xml)
             # Faz o request com o servidor
             result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False, timeout=120)
             result.encoding = 'utf-8'

@@ -384,12 +384,12 @@ NFE = {
 	    	'HOMOLOGACAO': 'https://homolog.'
 	    },
 	    'SVAN': {
-	    	'STATUS': 'sefazvirtual.fazenda.gov.br/NfeStatusServico2/NfeStatusServico2.asmx',
-	    	'AUTORIZACAO': 'sefazvirtual.fazenda.gov.br/NfeAutorizacao/NfeAutorizacao.asmx',
-	    	'RECIBO': 'sefazvirtual.fazenda.gov.br/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
-	    	'CHAVE': 'sefazvirtual.fazenda.gov.br/NfeConsulta2/NfeConsulta2.asmx',
-	    	'INUTILIZACAO': 'sefazvirtual.fazenda.gov.br/NfeInutilizacao2/NfeInutilizacao2.asmx',
-	    	'EVENTOS': 'sefazvirtual.fazenda.gov.br/RecepcaoEvento/RecepcaoEvento.asmx',
+	    	'STATUS': 'sefazvirtual.fazenda.gov.br/NFeStatusServico4/NFeStatusServico4.asmx',
+	    	'AUTORIZACAO': 'sefazvirtual.fazenda.gov.br/NFeAutorizacao4/NFeAutorizacao4.asmx',
+	    	'RECIBO': 'sefazvirtual.fazenda.gov.br/NFeRetAutorizacao4/NFeRetAutorizacao4.asmx',
+	    	'CHAVE': 'sefazvirtual.fazenda.gov.br/NFeConsultaProtocolo4/NFeConsultaProtocolo4.asmx',
+	    	'INUTILIZACAO': 'sefazvirtual.fazenda.gov.br/NFeInutilizacao4/NFeInutilizacao4.asmx',
+	    	'EVENTOS': 'sefazvirtual.fazenda.gov.br/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx',
 	    	'DOWNLOAD': 'sefazvirtual.fazenda.gov.br/NfeDownloadNF/NfeDownloadNF.asmx',
 	    	'HTTPS': 'https://www.',
 	    	'HOMOLOGACAO': 'https://hom.'
