@@ -1,18 +1,34 @@
 # -*- coding: utf-8 -*-
-import datetime
-import requests
 import re
+import ssl
+import datetime
+
+import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.poolmanager import PoolManager
+
 from pynfe.utils import etree, so_numeros
-from pynfe.utils.flags import NAMESPACE_NFE, NAMESPACE_SOAP, NAMESPACE_XSI, NAMESPACE_XSD, NAMESPACE_METODO, \
-VERSAO_PADRAO, CODIGOS_ESTADOS, NAMESPACE_BETHA
-from pynfe.utils.webservices import NFCE, NFE, NFSE
-from .assinatura import AssinaturaA1, AssinaturaA1SignXML
+from pynfe.utils.flags import (
+    NAMESPACE_NFE,
+    NAMESPACE_XSD,
+    NAMESPACE_XSI,
+    VERSAO_PADRAO,
+    NAMESPACE_SOAP,
+    CODIGOS_ESTADOS,
+    NAMESPACE_BETHA,
+    NAMESPACE_METODO
+)
+from pynfe.utils.webservices import NFE, NFCE, NFSE
 from pynfe.entidades.certificado import CertificadoA1
+
+from .assinatura import AssinaturaA1, AssinaturaA1SignXML
 
 
 class Comunicacao(object):
-    u"""Classe abstrata responsavel por definir os metodos e logica das classes
-    de comunicação com os webservices da NF-e."""
+    """
+    Classe abstrata responsavel por definir os metodos e logica das classes
+    de comunicação com os webservices da NF-e.
+    """
 
     _ambiente = 1   # 1 = Produção, 2 = Homologação
     uf = None
@@ -26,20 +42,32 @@ class Comunicacao(object):
         self.certificado_senha = certificado_senha
         self._ambiente = 2 if homologacao else 1
 
+
 class ComunicacaoSefaz(Comunicacao):
-    u"""Classe de comunicação que segue o padrão definido para as SEFAZ dos Estados."""
+    """Classe de comunicação que segue o padrão definido para as SEFAZ dos Estados."""
 
     _versao = VERSAO_PADRAO
     _assinatura = AssinaturaA1
 
-    def autorizacao(self, modelo, nota_fiscal, idlote=1, indSinc=1):
+    def autorizacao(self, modelo, nota_fiscal, id_lote=1, ind_sinc=1):
+        """
+        Método para realizar autorização da nota de acordo com o modelo
+        :param modelo: Modelo
+        :param nota_fiscal: XML assinado
+        :param id_lote: Id do lote - numero autoincremental gerado pelo sistema
+        :param ind_sinc: Indicador de sincrono e assincrono, 0 para assincrono, 1 para sincrono
+        :return:  Uma tupla que em caso de sucesso, retorna xml com nfe e protocolo de autorização. Caso contrário,
+        envia todo o soap de resposta da Sefaz para decisão do usuário.
+        """
         # url do serviço
         url = self._get_url(modelo=modelo, consulta='AUTORIZACAO')
+
         # Monta XML do corpo da requisição
         raiz = etree.Element('enviNFe', xmlns=NAMESPACE_NFE, versao=VERSAO_PADRAO)
-        etree.SubElement(raiz, 'idLote').text = str(idlote) # numero autoincremental gerado pelo sistema
-        etree.SubElement(raiz, 'indSinc').text = str(indSinc) # 0 para assincrono, 1 para sincrono
+        etree.SubElement(raiz, 'idLote').text = str(id_lote)  # numero autoincremental gerado pelo sistema
+        etree.SubElement(raiz, 'indSinc').text = str(ind_sinc)  # 0 para assincrono, 1 para sincrono
         raiz.append(nota_fiscal)
+
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap('NFeAutorizacao4', raiz)
         # Faz request no Servidor da Sefaz
@@ -48,30 +76,30 @@ class ComunicacaoSefaz(Comunicacao):
         # Em caso de sucesso, retorna xml com nfe e protocolo de autorização.
         # Caso contrário, envia todo o soap de resposta da Sefaz para decisão do usuário.
         if retorno.status_code == 200:
-            if indSinc == 1:
+            if ind_sinc == 1:
                 # Procuta status no xml
-                ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}    # namespace
+                ns = {'ns': 'http://www.portalfiscal.inf.br/nfe'}  # namespace
                 try:
                     prot = etree.fromstring(retorno.text)
                 except ValueError:
-                    #em SP retorno.text apresenta erro
+                    # em SP retorno.text apresenta erro
                     prot = etree.fromstring(retorno.content)
                 try:
                     # Protocolo com envio OK
-                    infProt = prot[1][0][0][6]                             # root protNFe
-                    status = infProt.xpath("ns:infProt/ns:cStat", namespaces=ns)[0].text
+                    inf_prot = prot[1][0][0][6]                             # root protNFe
+                    status = inf_prot.xpath("ns:infProt/ns:cStat", namespaces=ns)[0].text
                 except IndexError:
                     # Protocolo com algum erro no Envio
-                    retEnvi = prot[1][0][0]                             # root retEnvi
-                    status = retEnvi.xpath("ns:cStat", namespaces=ns)[0].text
+                    ret_envi = prot[1][0][0]                             # root retEnvi
+                    status = ret_envi.xpath("ns:cStat", namespaces=ns)[0].text
                 if status == '100':
                     raiz = etree.Element('nfeProc', xmlns=NAMESPACE_NFE, versao=VERSAO_PADRAO)
                     raiz.append(nota_fiscal)
-                    raiz.append(infProt)
+                    raiz.append(inf_prot)
                     return 0, raiz
             else:
                 # Retorna id do protocolo para posterior consulta em caso de sucesso.
-                ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}    # namespace
+                ns = {'ns': 'http://www.portalfiscal.inf.br/nfe'}    # namespace
                 rec = etree.fromstring(retorno.text)
                 rec = rec[1][0][0]
                 status = rec.xpath("ns:cStat", namespaces=ns)[0].text
@@ -83,71 +111,102 @@ class ComunicacaoSefaz(Comunicacao):
 
     def consulta_recibo(self, modelo, numero):
         """
-            Este método oferece a consulta do resultado do processamento de um lote de NF-e.
-            O aplicativo do Contribuinte deve ser construído de forma a aguardar um tempo mínimo de
-            15 segundos entre o envio do Lote de NF-e para processamento e a consulta do resultado
-            deste processamento, evitando a obtenção desnecessária do status de erro 105 - "Lote em
-            Processamento".
+        Este método oferece a consulta do resultado do processamento de um lote de NF-e.
+        O aplicativo do Contribuinte deve ser construído de forma a aguardar um tempo mínimo de
+        15 segundos entre o envio do Lote de NF-e para processamento e a consulta do resultado
+        deste processamento, evitando a obtenção desnecessária do status de erro 105 - "Lote em
+        Processamento".
+        :param modelo: Modelo da nota
+        :param numero: Número da nota
+        :return:
         """
+
         # url do serviço
         url = self._get_url(modelo=modelo, consulta='RECIBO')
+
         # Monta XML do corpo da requisição
         raiz = etree.Element('consReciNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(raiz, 'nRec').text = numero
+
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap('NFeRetAutorizacao4', raiz)
         return self._post(url, xml)
 
     def consulta_nota(self, modelo, chave):
         """
-            Este método oferece a consulta da situação da NF-e/NFC-e na Base de Dados do Portal da Secretaria de Fazenda Estadual.
+            Este método oferece a consulta da situação da NF-e/NFC-e na Base de Dados do Portal
+            da Secretaria de Fazenda Estadual.
+        :param modelo: Modelo da nota
+        :param chave: Chave da nota
+        :return:
         """
+
         # url do serviço
         url = self._get_url(modelo=modelo, consulta='CHAVE')
+
         # Monta XML do corpo da requisição
         raiz = etree.Element('consSitNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(raiz, 'xServ').text = 'CONSULTAR'
         etree.SubElement(raiz, 'chNFe').text = chave
+
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap('NFeConsultaProtocolo4', raiz)
         return self._post(url, xml)
 
     def consulta_notas_cnpj(self, cnpj, nsu=0):
         """
-            “Serviço de Consulta da Relação de Documentos Destinados” para um determinado CNPJ de destinatário informado na NF-e.
+        “Serviço de Consulta da Relação de Documentos Destinados” para um determinado CNPJ de
+        destinatário informado na NF-e.
+        :param cnpj: CNPJ
+        :param nsu:  NSU
+        :return:
         """
+
         # url do serviço
-        url = self._get_url_AN(consulta='DESTINADAS')
+        url = self._get_url_an(consulta='DESTINADAS')
+
         # Monta XML do corpo da requisição
         raiz = etree.Element('consNFeDest', versao='1.01', xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(raiz, 'xServ').text = 'CONSULTAR NFE DEST'
         etree.SubElement(raiz, 'CNPJ').text = cnpj
+
         # Indicador de NF-e consultada:
-        # 0=Todas as NF-e;
-        # 1=Somente as NF-e que ainda não tiveram manifestação do destinatário (Desconhecimento da operação, Operação não Realizada ou Confirmação da Operação);
-        # 2=Idem anterior, incluindo as NF-e que também não tiveram a Ciência da Operação.
+        # 0 = Todas as NF-e;
+        # 1 = Somente as NF-e que ainda não tiveram manifestação do destinatário (Desconhecimento da
+        # operação, Operação não Realizada ou Confirmação da Operação);
+        # 2 = Idem anterior, incluindo as NF-e que também não tiveram a Ciência da Operação.
         etree.SubElement(raiz, 'indNFe').text = '0'
+
         # Indicador do Emissor da NF-e:
-        # 0=Todos os Emitentes / Remetentes;
-        # 1=Somente as NF-e emitidas por emissores / remetentes que não tenham o mesmo CNPJ-Base do destinatário (para excluir as notas fiscais de transferência entre filiais).
+        # 0 = Todos os Emitentes / Remetentes;
+        # 1 = Somente as NF-e emitidas por emissores / remetentes que não tenham o mesmo CNPJ-Base do
+        # destinatário (para excluir as notas fiscais de transferência entre filiais).
         etree.SubElement(raiz, 'indEmi').text = '0'
-        # Último NSU recebido pela Empresa. Caso seja informado com zero, ou com um NSU muito antigo, a consulta retornará unicamente as notas fiscais que tenham sido recepcionadas nos últimos 15 dias.
+
+        # Último NSU recebido pela Empresa. Caso seja informado com zero, ou com um NSU muito antigo, a consulta
+        # retornará unicamente as notas fiscais que tenham sido recepcionadas nos últimos 15 dias.
         etree.SubElement(raiz, 'ultNSU').text = str(nsu)
 
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap('NfeConsultaDest', raiz)
-
         return self._post(url, xml)
 
     def consulta_distribuicao(self, cnpj, nsu=0):
         pass
 
     def consulta_cadastro(self, modelo, cnpj):
+        """
+        Consulta de cadastro
+        :param modelo: Modelo da nota
+        :param cnpj: CNPJ da empresa
+        :return:
+        """
         # UF que utilizam a SVRS - Sefaz Virtual do RS: Para serviço de Consulta Cadastro: AC, RN, PB, SC 
-        lista_svrs = ['AC','RN','PB','SC']
+        lista_svrs = ['AC', 'RN', 'PB', 'SC', 'PI']
+
         # RS implementa um método diferente na consulta de cadastro
         if self.uf.upper() == 'RS':
             url = NFE['RS']['CADASTRO']
@@ -163,33 +222,45 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(info, 'xServ').text = 'CONS-CAD'
         etree.SubElement(info, 'UF').text = self.uf.upper()
         etree.SubElement(info, 'CNPJ').text = cnpj
-        #etree.SubElement(info, 'CPF').text = cpf
+        # etree.SubElement(info, 'CPF').text = cpf
+
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap('CadConsultaCadastro4', raiz)
         # Chama método que efetua a requisição POST no servidor SOAP
         return self._post(url, xml)
 
-    def evento(self, modelo, evento, idlote=1):
-        """ Envia um evento de nota fiscal (cancelamento e carta de correção)"""
+    def evento(self, modelo, evento, id_lote=1):
+        """
+        Envia um evento de nota fiscal (cancelamento e carta de correção)
+        :param modelo: Modelo da nota
+        :param evento: Eventro
+        :param id_lote: Id do lote
+        :return:
+        """
+
         # url do serviço
         try:
             # manifestacao url é do AN
             if evento[0][5].text.startswith('2'):
-                url = self._get_url_AN(consulta='EVENTOS')
+                url = self._get_url_an(consulta='EVENTOS')
             else:
                 url = self._get_url(modelo=modelo, consulta='EVENTOS')
         except Exception:
             url = self._get_url(modelo=modelo, consulta='EVENTOS')
+
         # Monta XML do corpo da requisição
         raiz = etree.Element('envEvento', versao='1.00', xmlns=NAMESPACE_NFE)
-        etree.SubElement(raiz, 'idLote').text = str(idlote) # numero autoincremental gerado pelo sistema
+        etree.SubElement(raiz, 'idLote').text = str(id_lote)  # numero autoincremental gerado pelo sistema
         raiz.append(evento)
         xml = self._construir_xml_soap('NFeRecepcaoEvento4', raiz)
         return self._post(url, xml)
 
     def status_servico(self, modelo):
-        """ Verifica status do servidor da receita. """
-        """ modelo é a string com tipo de serviço que deseja consultar Ex: nfe ou nfce """
+        """
+        Verifica status do servidor da receita.
+        :param modelo: modelo é a string com tipo de serviço que deseja consultar, Ex: nfe ou nfce
+        :return:
+        """
         url = self._get_url(modelo, 'STATUS')
         # Monta XML do corpo da requisição
         raiz = etree.Element('consStatServ', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
@@ -201,12 +272,17 @@ class ComunicacaoSefaz(Comunicacao):
 
     def download(self, cnpj, chave):
         """
-            Metodo para download de NFe por parte de destinatário.
-            O certificado digital deve ser o mesmo do destinatário da Nfe.
-            NT 2012/002
+        Metodo para download de NFe por parte de destinatário.
+        O certificado digital deve ser o mesmo do destinatário da Nfe.
+        NT 2012/002
+        :param cnpj: CNPJ da empresa
+        :param chave: Chave
+        :return:
         """
+
         # url do serviço
-        url = self._get_url_AN(consulta='DOWNLOAD')
+        url = self._get_url_an(consulta='DOWNLOAD')
+
         # Monta XML do corpo da requisição
         raiz = etree.Element('downloadNFe', versao='1.00', xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
@@ -216,13 +292,24 @@ class ComunicacaoSefaz(Comunicacao):
 
          # Monta XML para envio da requisição
         xml = self._construir_xml_soap('NfeDownloadNF', raiz)
-
         return self._post(url, xml)
 
     def inutilizacao(self, modelo, cnpj, numero_inicial, numero_final, justificativa='', ano=None, serie='1'):
-        """ Serviço destinado ao atendimento de solicitações de inutilização de numeração. """
+        """
+        Serviço destinado ao atendimento de solicitações de inutilização de numeração.
+        :param modelo: Modelo da nota
+        :param cnpj: CNPJda empresa
+        :param numero_inicial: Número inicial
+        :param numero_final: Número final
+        :param justificativa: Justificativa
+        :param ano: Ano
+        :param serie:  Série
+        :return:
+        """
+
         # url do servico
         url = self._get_url(modelo=modelo, consulta='INUTILIZACAO')
+
         # Valores default
         ano = str(ano or datetime.date.today().year)[-2:]
         uf = CODIGOS_ESTADOS[self.uf.upper()]
@@ -230,15 +317,15 @@ class ComunicacaoSefaz(Comunicacao):
 
         # Identificador da TAG a ser assinada formada com Código da UF + Ano (2 posições) +
         #  CNPJ + modelo + série + nro inicial e nro final precedida do literal “ID”
-        id_unico = 'ID%(uf)s%(ano)s%(cnpj)s%(modelo)s%(serie)s%(num_ini)s%(num_fin)s'%{
-                'uf': uf,
-                'ano': ano,
-                'cnpj': cnpj,
-                'modelo': '55',
-                'serie': serie.zfill(3),
-                'num_ini': str(numero_inicial).zfill(9),
-                'num_fin': str(numero_final).zfill(9),
-                }
+        id_unico = 'ID%(uf)s%(ano)s%(cnpj)s%(modelo)s%(serie)s%(num_ini)s%(num_fin)s' % {
+            'uf': uf,
+            'ano': ano,
+            'cnpj': cnpj,
+            'modelo': '55',
+            'serie': serie.zfill(3),
+            'num_ini': str(numero_inicial).zfill(9),
+            'num_fin': str(numero_final).zfill(9),
+        }
 
         # Monta XML do corpo da requisição # FIXME
         raiz = etree.Element('inutNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
@@ -263,7 +350,7 @@ class ComunicacaoSefaz(Comunicacao):
         # Faz request no Servidor da Sefaz e retorna resposta
         return self._post(url, xml)
 
-    def _get_url_AN(self, consulta):
+    def _get_url_an(self, consulta):
         # producao
         if self._ambiente == 1:
             if consulta == 'DISTRIBUICAO':
@@ -280,7 +367,7 @@ class ComunicacaoSefaz(Comunicacao):
     def _get_url(self, modelo, consulta):
         """ Retorna a url para comunicação com o webservice """
         # estado que implementam webservices proprios
-        lista = ['PR','MS','SP','AM','CE','BA','GO','MG','MT','PE','RS']
+        lista = ['PR', 'MS', 'SP', 'AM', 'CE', 'BA', 'GO', 'MG', 'MT', 'PE', 'RS']
         if self.uf.upper() in lista:
             if self._ambiente == 1:
                 ambiente = 'HTTPS'
@@ -300,7 +387,7 @@ class ComunicacaoSefaz(Comunicacao):
                 raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
         # Estados que utilizam outros ambientes
         else:
-            lista_svrs = ['AC','RN','PB','SC','SE']
+            lista_svrs = ['AC', 'RN', 'PB', 'SC', 'SE', 'PI']
             if self.uf.upper() in lista_svrs:
                 if self._ambiente == 1:
                     ambiente = 'HTTPS'
@@ -333,8 +420,8 @@ class ComunicacaoSefaz(Comunicacao):
     def _get_url_uf(self, modelo, consulta):
         """ Estados que implementam url diferente do padrão nacional"""
         # estados que implementam webservice SVRS
-        svrs = ['AC','AL','AP','DF','ES','PB','RJ','RN','RO','RR','SC','SE','TO']
-        svan = ['MA','PA','PI']
+        svrs = ['AC', 'AL', 'AP', 'DF', 'ES', 'PB', 'RJ', 'RN', 'RO', 'RR', 'SC', 'SE', 'TO', 'PI']
+        svan = ['MA', 'PA']
         # SVRS
         if self.uf.upper() in svrs:
             if self._ambiente == 1:
@@ -390,8 +477,9 @@ class ComunicacaoSefaz(Comunicacao):
 
     def _construir_xml_soap(self, metodo, dados):
         """Mota o XML para o envio via SOAP"""
-        raiz = etree.Element('{%s}Envelope'%NAMESPACE_SOAP, nsmap={'xsi': NAMESPACE_XSI, 'xsd': NAMESPACE_XSD,'soap': NAMESPACE_SOAP})
-        body = etree.SubElement(raiz, '{%s}Body'%NAMESPACE_SOAP)
+        raiz = etree.Element('{%s}Envelope' % NAMESPACE_SOAP, nsmap={
+          'xsi': NAMESPACE_XSI, 'xsd': NAMESPACE_XSD,'soap': NAMESPACE_SOAP})
+        body = etree.SubElement(raiz, '{%s}Body' % NAMESPACE_SOAP)
         a = etree.SubElement(body, 'nfeDadosMsg', xmlns=NAMESPACE_METODO+metodo)
         a.append(dados)
         return raiz
@@ -401,19 +489,22 @@ class ComunicacaoSefaz(Comunicacao):
         return {
             'content-type': 'application/soap+xml; charset=utf-8;',
             'Accept': 'application/soap+xml; charset=utf-8;',
-            }
+        }
 
     def _post(self, url, xml):
-        certificadoA1 = CertificadoA1(self.certificado)
-        chave, cert = certificadoA1.separar_arquivo(self.certificado_senha, caminho=True)
+        certificado_a1 = CertificadoA1(self.certificado)
+        chave, cert = certificado_a1.separar_arquivo(self.certificado_senha, caminho=True)
         chave_cert = (cert, chave)
         # Abre a conexão HTTPS
         try:
-            xml_declaration='<?xml version="1.0" encoding="UTF-8"?>'
+            xml_declaration = '<?xml version="1.0" encoding="UTF-8"?>'
+
             # limpa xml com caracteres bugados para infNFeSupl em NFC-e
-            xml = re.sub('<qrCode>(.*?)</qrCode>',
-                lambda x:x.group(0).replace('&lt;','<').replace('&gt;','>').replace('amp;',''),
-                etree.tostring(xml, encoding='unicode').replace('\n',''))
+            xml = re.sub(
+                '<qrCode>(.*?)</qrCode>',
+                lambda x: x.group(0).replace('&lt;', '<').replace('&gt;', '>').replace('amp;', ''),
+                etree.tostring(xml, encoding='unicode').replace('\n', '')
+            )
             xml = xml_declaration + xml
             # debug dev 4.00
             print(xml)
@@ -425,7 +516,7 @@ class ComunicacaoSefaz(Comunicacao):
         except requests.exceptions.RequestException as e:
             raise e
         finally:
-            certificadoA1.excluir()
+            certificado_a1.excluir()
 
 
 class ComunicacaoNfse(Comunicacao):
@@ -541,9 +632,10 @@ class ComunicacaoNfse(Comunicacao):
         """ Monta o XML do cabeçalho da requisição wsdl
             Namespaces padrão homologação (Ginfes) """
 
-        xml_declaration='<?xml version="1.0" encoding="UTF-8"?>'
-        # cabecalho = '<ns2:cabecalho versao="3" xmlns:ns2="http://www.ginfes.com.br/cabecalho_v03.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><versaoDados>3</versaoDados></ns2:cabecalho>'
-         # cabecalho
+        xml_declaration = '<?xml version="1.0" encoding="UTF-8"?>'
+        # cabecalho = '<ns2:cabecalho versao="3" xmlns:ns2="http://www.ginfes.com.br/cabecalho_v03.xsd"
+        # xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><versaoDados>3</versaoDados></ns2:cabecalho>'
+        # cabecalho
         raiz = etree.Element('{%s}cabecalho'%self._namespace, nsmap={'ns2':self._namespace, 'xsi':NAMESPACE_XSI}, versao=self._versao)
         etree.SubElement(raiz, 'versaoDados').text = self._versao
 
@@ -558,14 +650,14 @@ class ComunicacaoNfse(Comunicacao):
         """ Monta o XML do cabeçalho da requisição wsdl
             Namespaces que funcionaram em produção (Ginfes)"""
 
-        xml_declaration='<?xml version="1.0" encoding="UTF-8"?>'
+        xml_declaration = '<?xml version="1.0" encoding="UTF-8"?>'
 
         # cabecalho
         raiz = etree.Element('cabecalho', xmlns=self._namespace, versao=self._versao)
         etree.SubElement(raiz, 'versaoDados').text = self._versao
 
         if retorna_string:
-            cabecalho = etree.tostring(raiz, encoding='unicode', pretty_print=False).replace('\n','')
+            cabecalho = etree.tostring(raiz, encoding='unicode', pretty_print=False).replace('\n', '')
             cabecalho = xml_declaration + cabecalho
             return cabecalho
         else:
@@ -644,7 +736,7 @@ class ComunicacaoNfse(Comunicacao):
                 # versão 2
                 return cliente.service.CancelarNfse(xml)
                 # versão 3
-                #return cliente.service.CancelarNfseV3(cabecalho, xml)
+                # return cliente.service.CancelarNfseV3(cabecalho, xml)
             # TODO outros metodos
             else:
                 raise Exception('Método não implementado no autorizador.')
