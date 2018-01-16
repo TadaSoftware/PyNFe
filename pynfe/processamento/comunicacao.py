@@ -308,6 +308,7 @@ class ComunicacaoSefaz(Comunicacao):
         # Estados que utilizam outros ambientes
         else:
             lista_svrs = ['AC','RN','PB','SC','SE','RJ']
+            lista_svan = ['MA','PA']
             if self.uf.upper() in lista_svrs:
                 if self._ambiente == 1:
                     ambiente = 'HTTPS'
@@ -321,7 +322,6 @@ class ComunicacaoSefaz(Comunicacao):
                     self.url = NFCE['SVRS'][ambiente] + NFCE['SVRS'][consulta]
                 else:
                     raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
-            lista_svan = ['MA','PA']
             elif self.uf.upper() in lista_svan:
                 if self._ambiente == 1:
                     ambiente = 'HTTPS'
