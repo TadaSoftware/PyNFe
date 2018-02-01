@@ -246,7 +246,7 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(prod, 'xPed').text = str(produto_servico.numero_pedido)
         # Item do Pedido de Compra. Tam 6
         if produto_servico.numero_item:
-            etree.SubElement(prod, 'nItemPed ').text = str(produto_servico.numero_item)
+            etree.SubElement(prod, 'nItemPed').text = str(produto_servico.numero_item)
 
         # Imposto
         imposto = etree.SubElement(raiz, 'imposto')
