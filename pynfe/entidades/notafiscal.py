@@ -522,7 +522,7 @@ class NotaFiscalProduto(Entidade):
     numero_pedido = str()
 
     # - Item do Pedido de Compra
-    numero_do_item = str()
+    numero_item = str()
 
     #  - Produto especifico (seleciona de lista) - NF_PRODUTOS_ESPECIFICOS
     produto_especifico = str()
