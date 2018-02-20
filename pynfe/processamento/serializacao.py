@@ -588,8 +588,10 @@ class SerializacaoXML(Serializacao):
                     vol = etree.SubElement(transp, 'vol')
                     etree.SubElement(vol, 'qVol').text = str(volume.quantidade)
                     etree.SubElement(vol, 'esp').text = volume.especie
-                    etree.SubElement(vol, 'marca').text = volume.marca
-                    etree.SubElement(vol, 'nVol').text = volume.numeracao
+                    if volume.marca:
+                        etree.SubElement(vol, 'marca').text = volume.marca
+                    if volume.numeracao:
+                        etree.SubElement(vol, 'nVol').text = volume.numeracao
                     etree.SubElement(vol, 'pesoL').text = str(volume.peso_liquido)
                     etree.SubElement(vol, 'pesoB').text = str(volume.peso_bruto)
 
