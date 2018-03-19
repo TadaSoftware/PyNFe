@@ -506,9 +506,6 @@ class ComunicacaoSefaz(Comunicacao):
                 etree.tostring(xml, encoding='unicode').replace('\n', '')
             )
             xml = xml_declaration + xml
-            # debug dev 4.00
-            print(xml)
-            print(url)
             # Faz o request com o servidor
             result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False)
             result.encoding = 'utf-8'
