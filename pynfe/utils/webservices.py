@@ -186,12 +186,12 @@ NFCE = {
 		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeRecepcaoEvento4.asmx 
 		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeInutilizacao4.asmx 
 	    'SP': {
-	    	'STATUS': 'nfce.fazenda.sp.gov.br/ws/nfestatusservico2.asmx',
-	    	'AUTORIZACAO': 'nfce.fazenda.sp.gov.br/ws/nfeautorizacao.asmx',
-	    	'RECIBO': 'nfce.fazenda.sp.gov.br/ws/nferetautorizacao.asmx',
-	    	'CHAVE': 'nfce.fazenda.sp.gov.br/ws/nfeconsulta2.asmx',
-	    	'INUTILIZACAO': 'nfce.fazenda.sp.gov.br/ws/nfeinutilizacao2.asmx',
-	    	'EVENTOS': 'nfce.fazenda.sp.gov.br/ws/recepcaoevento.asmx',
+	    	'STATUS': 'nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx',
+	    	'AUTORIZACAO': 'nfce.fazenda.sp.gov.br/ws/NFeAutorizacao4.asmx',
+	    	'RECIBO': 'nfce.fazenda.sp.gov.br/ws/NFeRetAutorizacao4.asmx',
+	    	'CHAVE': 'nfce.fazenda.sp.gov.br/ws/NFeConsultaProtocolo4.asmx',
+	    	'INUTILIZACAO': 'nfce.fazenda.sp.gov.br/ws/NFeInutilizacao4.asmx',
+	    	'EVENTOS': 'nfce.fazenda.sp.gov.br/ws/NFeRecepcaoEvento4.asmx',
 	    	'QR': 'nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaQRCode.aspx?',
 	    	'URL': 'nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaPublica.aspx',
 	    	'HTTPS': 'https://',
