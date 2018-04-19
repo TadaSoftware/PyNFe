@@ -520,7 +520,6 @@ class SerializacaoXML(Serializacao):
         # Totais
         total = etree.SubElement(raiz, 'total')
         icms_total = etree.SubElement(total, 'ICMSTot')
-        #etree.SubElement(icms_total, 'vBC').text = str(nota_fiscal.totais_icms_base_calculo)
         etree.SubElement(icms_total, 'vBC').text = '{:.2f}'.format(nota_fiscal.totais_icms_base_calculo)
         etree.SubElement(icms_total, 'vICMS').text = '{:.2f}'.format(nota_fiscal.totais_icms_total)
         etree.SubElement(icms_total, 'vICMSDeson').text = '{:.2f}'.format(nota_fiscal.totais_icms_desonerado)  # Valor Total do ICMS desonerado
