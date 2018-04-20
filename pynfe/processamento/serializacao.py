@@ -240,6 +240,14 @@ class SerializacaoXML(Serializacao):
         """
         etree.SubElement(prod, 'indTot').text = str(produto_servico.ind_total)
 
+        """ Informação de interesse do emissor para controle do B2B.(v2.0) """
+        # Número do Pedido de Compra. Tam 1-15
+        if produto_servico.numero_pedido:
+            etree.SubElement(prod, 'xPed').text = str(produto_servico.numero_pedido)
+        # Item do Pedido de Compra. Tam 6
+        if produto_servico.numero_item:
+            etree.SubElement(prod, 'nItemPed').text = str(produto_servico.numero_item)
+
         # Imposto
         imposto = etree.SubElement(raiz, 'imposto')
 
@@ -250,7 +258,7 @@ class SerializacaoXML(Serializacao):
 
         ### ICMS
         icms = etree.SubElement(imposto, 'ICMS')
-        icms_csosn = ('102', '103', '300', '400')
+        icms_csosn = ('102', '103', '300', '400', '500')
         if produto_servico.icms_modalidade in icms_csosn:
             icms_item = etree.SubElement(icms, 'ICMSSN'+produto_servico.icms_modalidade)
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
@@ -580,8 +588,10 @@ class SerializacaoXML(Serializacao):
                     vol = etree.SubElement(transp, 'vol')
                     etree.SubElement(vol, 'qVol').text = str(volume.quantidade)
                     etree.SubElement(vol, 'esp').text = volume.especie
-                    etree.SubElement(vol, 'marca').text = volume.marca
-                    etree.SubElement(vol, 'nVol').text = volume.numeracao
+                    if volume.marca:
+                        etree.SubElement(vol, 'marca').text = volume.marca
+                    if volume.numeracao:
+                        etree.SubElement(vol, 'nVol').text = volume.numeracao
                     etree.SubElement(vol, 'pesoL').text = str(volume.peso_liquido)
                     etree.SubElement(vol, 'pesoB').text = str(volume.peso_bruto)
 
