@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
-from pip.req import parse_requirements as parse
+try:
+    from pip._internal.req import parse_requirements as parse
+except ImportError:
+    from pip.req import parse_requirements as parse
 
 requirements = lambda f: [str(i.req) for i in parse(f, session=False)]
 
