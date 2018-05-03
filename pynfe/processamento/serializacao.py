@@ -535,7 +535,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_total, 'vST').text = '{:.2f}'.format(nota_fiscal.totais_icms_st_total)
         # etree.SubElement(icms_total, 'vFCPST').text = '{:.2f}'.format(nota_fiscal.totais_fcp_st)
         # etree.SubElement(icms_total, 'vFCPSTRet').text = '{:.2f}'.format(nota_fiscal.totais_fcp_st_ret)
-        etree.SubElement(icms_total, 'vProd').text = str(nota_fiscal.totais_icms_total_produtos_e_servicos)
+        etree.SubElement(icms_total, 'vProd').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_produtos_e_servicos)
         etree.SubElement(icms_total, 'vFrete').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_frete)
         etree.SubElement(icms_total, 'vSeg').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_seguro)
         etree.SubElement(icms_total, 'vDesc').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_desconto)
@@ -548,7 +548,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_total, 'vCOFINS').text = '{:.2f}'.format(nota_fiscal.totais_icms_cofins)
 
         etree.SubElement(icms_total, 'vOutro').text = '{:.2f}'.format(nota_fiscal.totais_icms_outras_despesas_acessorias)
-        etree.SubElement(icms_total, 'vNF').text = str(nota_fiscal.totais_icms_total_nota)
+        etree.SubElement(icms_total, 'vNF').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_nota)
         if nota_fiscal.totais_tributos_aproximado:
             etree.SubElement(icms_total, 'vTotTrib').text = '{:.2f}'.format(nota_fiscal.totais_tributos_aproximado)
 
