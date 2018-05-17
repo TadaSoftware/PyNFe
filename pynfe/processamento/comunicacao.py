@@ -486,10 +486,18 @@ class ComunicacaoSefaz(Comunicacao):
 
     def _post_header(self):
         """Retorna um dicionário com os atributos para o cabeçalho da requisição HTTP"""
-        return {
-            'content-type': 'application/soap+xml; charset=utf-8;',
-            'Accept': 'application/soap+xml; charset=utf-8;',
-        }
+        # PE é a únca UF que exige SOAPAction no header
+        if self.uf.upper() == 'PE':
+            return {
+                'content-type': 'application/soap+xml; charset=utf-8;',
+                'Accept': 'application/soap+xml; charset=utf-8;',
+                'SOAPAction': ''  
+            }
+        else:
+            return {
+                'content-type': 'application/soap+xml; charset=utf-8;',
+                'Accept': 'application/soap+xml; charset=utf-8;'  
+            }
 
     def _post(self, url, xml):
         certificado_a1 = CertificadoA1(self.certificado)
