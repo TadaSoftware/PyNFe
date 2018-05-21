@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-
-import time
 from pynfe.entidades import NotaFiscal
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
     obter_pais_por_codigo, obter_municipio_e_codigo, formatar_decimal, \
@@ -9,6 +7,7 @@ from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE, VER
 from pynfe.utils.webservices import NFCE
 import base64
 import hashlib
+from datetime import datetime
 
 
 class Serializacao(object):
@@ -308,6 +307,9 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(icms_item, 'vBC').text = '{:.2f}'.format(produto_servico.icms_valor_base_calculo or 0)  # Valor da BC do ICMS 
                 etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)          # Alíquota do imposto
                 etree.SubElement(icms_item, 'vICMS').text = '{:.2f}'.format(produto_servico.icms_valor or 0)  # Valor do ICMS 
+                etree.SubElement(icms_item, 'vBCFCP').text = '{:.2f}'.format(produto_servico.fcp_base_calculo)  # Base de calculo FCP
+                etree.SubElement(icms_item, 'pFCP').text = '{:.2f}'.format(produto_servico.fcp_percentual)  # Percentual FCP 
+                etree.SubElement(icms_item, 'vFCP').text = '{:.2f}'.format(produto_servico.fcp_valor)  # Valor Fundo Combate a Pobreza 
             # Impostos não implementados
             else:
                 raise NotImplementedError
@@ -398,21 +400,13 @@ class SerializacaoXML(Serializacao):
             return raiz
 
     def _serializar_nota_fiscal(self, nota_fiscal, tag_raiz='infNFe', retorna_string=True):
-        #raiz = etree.Element('NFe', xmlns='http://www.portalfiscal.inf.br/nfe')
         raiz = etree.Element(tag_raiz, versao=self._versao)
 
         # 'Id' da tag raiz
         # Ex.: NFe35080599999090910270550010000000011518005123
         raiz.attrib['Id'] = nota_fiscal.identificador_unico
 
-        # timezone Brasília -03:00
-        # bug no python < 3.5 no windows
-        # http://bugs.python.org/issue20010
-        # TODO utilizar assim quando python superior a 3.5
-        # tz = time.strftime("%z")
-        from datetime import datetime
-        from dateutil import tz
-        tz = datetime.now(tz.tzlocal()).strftime('%z')
+        tz = datetime.now().astimezone().strftime('%z')
         tz = "{}:{}".format(tz[:-2], tz[-2:])
 
         # Dados da Nota Fiscal
@@ -420,13 +414,10 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(ide, 'cUF').text = CODIGOS_ESTADOS[nota_fiscal.uf]
         etree.SubElement(ide, 'cNF').text = nota_fiscal.codigo_numerico_aleatorio
         etree.SubElement(ide, 'natOp').text = nota_fiscal.natureza_operacao
-        # Removido na NF-e 4.00
-        # etree.SubElement(ide, 'indPag').text = str(nota_fiscal.forma_pagamento)
         etree.SubElement(ide, 'mod').text = str(nota_fiscal.modelo)
         etree.SubElement(ide, 'serie').text = nota_fiscal.serie
         etree.SubElement(ide, 'nNF').text = str(nota_fiscal.numero_nf)
         etree.SubElement(ide, 'dhEmi').text = nota_fiscal.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz
-        #etree.SubElement(ide, 'dhSaiEnt').text = nota_fiscal.data_saida_entrada.strftime('%Y-%m-%dT%H:%M:%S') + tz
         """dhCont Data e Hora da entrada em contingência E B01 D 0-1 Formato AAAA-MM-DDThh:mm:ssTZD (UTC - Universal
             Coordinated Time)
             Exemplo: no formato UTC para os campos de Data-Hora, "TZD" pode ser -02:00 (Fernando de Noronha), -03:00 (Brasília) ou -04:00 (Manaus), no
@@ -635,9 +626,7 @@ campo Forma de Pagamento deve ser preenchido com 90=Sem Pagamento. """
             return raiz
 
     def serializar_evento(self, evento, tag_raiz='evento', retorna_string=False):
-
-        # timezone Brasília -03:00
-        tz = time.strftime("%z")
+        tz = datetime.now().astimezone().strftime('%z')
         tz = "{}:{}".format(tz[:-2], tz[-2:])
         raiz = etree.Element(tag_raiz, versao='1.00', xmlns=NAMESPACE_NFE)
         e = etree.SubElement(raiz, 'infEvento', Id=evento.identificador)
