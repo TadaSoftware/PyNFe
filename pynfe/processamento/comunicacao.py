@@ -75,10 +75,13 @@ class ComunicacaoSefaz(Comunicacao):
 
         # Em caso de sucesso, retorna xml com nfe e protocolo de autorização.
         # Caso contrário, envia todo o soap de resposta da Sefaz para decisão do usuário.
+        # import pdb
+        # pdb.set_trace()
         if retorno.status_code == 200:
+            # namespace
+            ns = {'ns': 'http://www.portalfiscal.inf.br/nfe'}
             if ind_sinc == 1:
                 # Procuta status no xml
-                ns = {'ns': 'http://www.portalfiscal.inf.br/nfe'}  # namespace
                 try:
                     prot = etree.fromstring(retorno.text)
                 except ValueError:
@@ -86,23 +89,27 @@ class ComunicacaoSefaz(Comunicacao):
                     prot = etree.fromstring(retorno.content)
                 try:
                     # Protocolo com envio OK
-                    inf_prot = prot[1][0][0][6]                             # root protNFe
-                    status = inf_prot.xpath("ns:infProt/ns:cStat", namespaces=ns)[0].text
+                    inf_prot = prot[0][0]                             # root protNFe
+                    lote_status = inf_prot.xpath("ns:retEnviNFe/ns:cStat", namespaces=ns)[0].text
+                    # Lote processado
+                    if lote_status == '104':
+                        prot_nfe = inf_prot.xpath("ns:retEnviNFe/ns:protNFe", namespaces=ns)[0]
+                        status = prot_nfe.xpath('ns:infProt/ns:cStat', namespaces=ns)[0].text
+                        # autorizado usa da NF-e 
+                        # retorna xml final (NFe+protNFe)
+                        if status == '100':
+                            raiz = etree.Element('nfeProc', xmlns=NAMESPACE_NFE, versao=VERSAO_PADRAO)
+                            raiz.append(nota_fiscal)
+                            raiz.append(prot_nfe)
+                            return 0, raiz
                 except IndexError:
                     # Protocolo com algum erro no Envio
-                    ret_envi = prot[1][0][0]                             # root retEnvi
-                    status = ret_envi.xpath("ns:cStat", namespaces=ns)[0].text
-                if status == '100':
-                    raiz = etree.Element('nfeProc', xmlns=NAMESPACE_NFE, versao=VERSAO_PADRAO)
-                    raiz.append(nota_fiscal)
-                    raiz.append(inf_prot)
-                    return 0, raiz
+                    print(retorno.text)
             else:
                 # Retorna id do protocolo para posterior consulta em caso de sucesso.
-                ns = {'ns': 'http://www.portalfiscal.inf.br/nfe'}    # namespace
                 rec = etree.fromstring(retorno.text)
-                rec = rec[1][0][0]
-                status = rec.xpath("ns:cStat", namespaces=ns)[0].text
+                rec = rec[0][0]
+                status = rec.xpath("ns:retEnviNFe/ns:cStat", namespaces=ns)[0].text
                 # Lote Recebido com Sucesso!
                 if status == '103':
                     nrec = rec.xpath("ns:infRec/ns:nRec", namespaces=ns)[0].text
@@ -141,16 +148,13 @@ class ComunicacaoSefaz(Comunicacao):
         :param chave: Chave da nota
         :return:
         """
-
         # url do serviço
         url = self._get_url(modelo=modelo, consulta='CHAVE')
-
         # Monta XML do corpo da requisição
         raiz = etree.Element('consSitNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(raiz, 'xServ').text = 'CONSULTAR'
         etree.SubElement(raiz, 'chNFe').text = chave
-
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap('NFeConsultaProtocolo4', raiz)
         return self._post(url, xml)
