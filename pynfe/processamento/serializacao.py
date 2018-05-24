@@ -3,7 +3,7 @@ from pynfe.entidades import NotaFiscal
 from pynfe.utils import etree, so_numeros, obter_municipio_por_codigo, \
     obter_pais_por_codigo, obter_municipio_e_codigo, formatar_decimal, \
     remover_acentos, obter_uf_por_codigo, obter_codigo_por_municipio
-from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE, VERSAO_QRCODE
+from pynfe.utils.flags import CODIGOS_ESTADOS, VERSAO_PADRAO, NAMESPACE_NFE, NAMESPACE_SIG, VERSAO_QRCODE
 from pynfe.utils.webservices import NFCE
 import base64
 import hashlib
@@ -47,6 +47,8 @@ class Serializacao(object):
 
 
 class SerializacaoXML(Serializacao):
+    """ Classe de serialização do arquivo xml """
+
     _versao = VERSAO_PADRAO
 
     def exportar(self, destino=None, retorna_string=False, limpar=True, **kwargs):
@@ -593,8 +595,8 @@ class SerializacaoXML(Serializacao):
                             etree.SubElement(lacres, 'nLacre').text = lacre.numero_lacre
 
         # Pagamento
-        """ Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e. Para as notas com finalidade de Ajuste ou Devolução o
-campo Forma de Pagamento deve ser preenchido com 90=Sem Pagamento. """
+        """ Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e. 
+        Para as notas com finalidade de Ajuste ou Devolução o campo Forma de Pagamento deve ser preenchido com 90=Sem Pagamento. """
         pag = etree.SubElement(raiz, 'pag')
         detpag = etree.SubElement(pag, 'detPag')
         etree.SubElement(detpag, 'tPag').text = str(nota_fiscal.tipo_pagamento).zfill(2)
@@ -661,8 +663,8 @@ class SerializacaoQrcode(object):
     def gerar_qrcode(self, token, csc, xml, return_qr=False):
         """ Classe para gerar url do qrcode da NFC-e """
         # Procura atributos no xml
-        ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}
-        sig = {'sig':'http://www.w3.org/2000/09/xmldsig#'}
+        ns = {'ns':NAMESPACE_NFE}
+        sig = {'sig':NAMESPACE_SIG}
         # Tag Raiz NFe Ex: <NFe>
         nfe = xml
         chave = nfe[0].attrib['Id'].replace('NFe','')
@@ -698,7 +700,6 @@ class SerializacaoQrcode(object):
         url_hash = base64.b16encode(url_hash).decode()
 
         url = url + '&cHashQRCode=' + url_hash.upper()
-
         # url_chave - Texto com a URL de consulta por chave de acesso a ser impressa no DANFE NFC-e.
         # Informar a URL da “Consulta por chave de acesso da NFC-e”. 
         # A mesma URL que deve estar informada no DANFE NFC-e para consulta por chave de acesso

@@ -2,11 +2,7 @@
 import re
 import ssl
 import datetime
-
 import requests
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.poolmanager import PoolManager
-
 from pynfe.utils import etree, so_numeros
 from pynfe.utils.flags import (
     NAMESPACE_NFE,
@@ -20,8 +16,7 @@ from pynfe.utils.flags import (
 )
 from pynfe.utils.webservices import NFE, NFCE, NFSE
 from pynfe.entidades.certificado import CertificadoA1
-
-from .assinatura import AssinaturaA1, AssinaturaA1SignXML
+from .assinatura import AssinaturaA1
 
 
 class Comunicacao(object):
@@ -346,7 +341,7 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(inf_inut, 'xJust').text = justificativa
 
         # assinatura
-        a1 = AssinaturaA1SignXML(self.certificado, self.certificado_senha)
+        a1 = AssinaturaA1(self.certificado, self.certificado_senha)
         xml = a1.assinar(raiz)
 
         # Monta XML para envio da requisição
@@ -461,23 +456,6 @@ class ComunicacaoSefaz(Comunicacao):
                     # TODO implementar outros tipos de notas como NFS-e
                     pass
         return self.url
-
-    def _cabecalho_soap(self, metodo):
-        """Monta o XML do cabeçalho da requisição SOAP"""
-
-        raiz = etree.Element('nfeCabecMsg', xmlns=NAMESPACE_METODO+metodo)
-        if metodo == 'RecepcaoEvento':
-            etree.SubElement(raiz, 'versaoDados').text = '1.00'
-        elif metodo == 'NfeConsultaDest':
-            etree.SubElement(raiz, 'versaoDados').text = '1.01'
-        elif metodo == 'NfeDownloadNF':
-            etree.SubElement(raiz, 'versaoDados').text = '1.00'
-        elif metodo == 'CadConsultaCadastro2':
-            etree.SubElement(raiz, 'versaoDados').text = '2.00'
-        else:
-            etree.SubElement(raiz, 'versaoDados').text = VERSAO_PADRAO
-        etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
-        return raiz
 
     def _construir_xml_soap(self, metodo, dados):
         """Mota o XML para o envio via SOAP"""
