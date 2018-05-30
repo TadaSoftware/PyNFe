@@ -268,3 +268,7 @@ CODIGOS_ESTADOS = {
     'DF': '53',
     'AN': '91'
 }
+
+NAMESPACE_MDFE = 'http://www.portalfiscal.inf.br/mdfe'
+NAMESPACE_MDFE_METODO = 'http://www.portalfiscal.inf.br/mdfe/wsdl/'
+MODELO_MDFE = '58'
