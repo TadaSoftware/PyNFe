@@ -45,6 +45,8 @@ class ComunicacaoSefaz(Comunicacao):
     _assinatura = AssinaturaA1
     _namespace = NAMESPACE_NFE
     _header = False
+    _envio_mensagem = 'nfeDadosMsg'
+    _namespace_metodo = NAMESPACE_METODO
 
     def autorizacao(self, modelo, nota_fiscal, id_lote=1, ind_sinc=1):
         """
@@ -491,7 +493,11 @@ class ComunicacaoSefaz(Comunicacao):
             c.append(cabecalho)
 
         body = etree.SubElement(raiz, '{%s}Body' % NAMESPACE_SOAP)
-        a = etree.SubElement(body, 'nfeDadosMsg', xmlns=NAMESPACE_METODO+metodo)
+        a = etree.SubElement(
+            body,
+            self._envio_mensagem,
+            xmlns=self._namespace_metodo+metodo
+        )
         a.append(dados)
         return raiz
 
