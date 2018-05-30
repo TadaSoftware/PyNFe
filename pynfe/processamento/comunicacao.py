@@ -44,6 +44,7 @@ class ComunicacaoSefaz(Comunicacao):
     _versao = VERSAO_PADRAO
     _assinatura = AssinaturaA1
     _namespace = NAMESPACE_NFE
+    _header = False
 
     def autorizacao(self, modelo, nota_fiscal, id_lote=1, ind_sinc=1):
         """
@@ -462,10 +463,33 @@ class ComunicacaoSefaz(Comunicacao):
                     pass
         return self.url
 
+    def _cabecalho_soap(self, metodo):
+        """Monta o XML do cabeçalho da requisição SOAP"""
+
+        raiz = etree.Element('nfeCabecMsg', xmlns=NAMESPACE_METODO+metodo)
+        if metodo == 'RecepcaoEvento':
+            etree.SubElement(raiz, 'versaoDados').text = '1.00'
+        elif metodo == 'NfeConsultaDest':
+            etree.SubElement(raiz, 'versaoDados').text = '1.01'
+        elif metodo == 'NfeDownloadNF':
+            etree.SubElement(raiz, 'versaoDados').text = '1.00'
+        elif metodo == 'CadConsultaCadastro2':
+            etree.SubElement(raiz, 'versaoDados').text = '2.00'
+        else:
+            etree.SubElement(raiz, 'versaoDados').text = VERSAO_PADRAO
+        etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
+        return raiz
+
     def _construir_xml_soap(self, metodo, dados):
         """Mota o XML para o envio via SOAP"""
         raiz = etree.Element('{%s}Envelope' % NAMESPACE_SOAP, nsmap={
           'xsi': NAMESPACE_XSI, 'xsd': NAMESPACE_XSD,'soap': NAMESPACE_SOAP})
+
+        if self._header:
+            cabecalho = self._cabecalho_soap(metodo)
+            c = etree.SubElement(raiz, '{%s}Header' % NAMESPACE_SOAP)
+            c.append(cabecalho)
+
         body = etree.SubElement(raiz, '{%s}Body' % NAMESPACE_SOAP)
         a = etree.SubElement(body, 'nfeDadosMsg', xmlns=NAMESPACE_METODO+metodo)
         a.append(dados)
