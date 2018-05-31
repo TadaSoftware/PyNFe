@@ -538,7 +538,7 @@ MDFE_WS_URL = {
         WS_MDFE_RECEPCAO_EVENTO: 'ws/MDFeRecepcaoEvento/MDFeRecepcaoEvento.asmx',
         WS_MDFE_CONSULTA: 'ws/MDFeConsulta/MDFeConsulta.asmx',
         WS_MDFE_STATUS_SERVICO: 'ws/MDFeStatusServico/MDFeStatusServico.asmx',
-        WS_MDFE_CONSULTA_NAO_ENCERRADOS: 'ws/MDFeConsNaoEnc/MDFeConsNaoEnc.asmx ',
+        WS_MDFE_CONSULTA_NAO_ENCERRADOS: 'ws/MDFeConsNaoEnc/MDFeConsNaoEnc.asmx',
     },
     AMBIENTE_HOMOLOGACAO: {
         'servidor': 'mdfe-homologacao.svrs.rs.gov.br',
@@ -547,6 +547,6 @@ MDFE_WS_URL = {
         WS_MDFE_RECEPCAO_EVENTO: 'ws/MDFeRecepcaoEvento/MDFeRecepcaoEvento.asmx',
         WS_MDFE_CONSULTA: 'ws/MDFeConsulta/MDFeConsulta.asmx',
         WS_MDFE_STATUS_SERVICO: 'ws/MDFeStatusServico/MDFeStatusServico.asmx',
-        WS_MDFE_CONSULTA_NAO_ENCERRADOS: 'ws/MDFeConsNaoEnc/MDFeConsNaoEnc.asmx ',
+        WS_MDFE_CONSULTA_NAO_ENCERRADOS: 'ws/MDFeConsNaoEnc/MDFeConsNaoEnc.asmx',
     },
 }
