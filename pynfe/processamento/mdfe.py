@@ -21,6 +21,7 @@ from pynfe.utils.webservices import (
     WS_MDFE_RET_RECEPCAO,
     WS_MDFE_RECEPCAO_EVENTO,
 )
+from pynfe.utils import etree
 from .comunicacao import ComunicacaoSefaz
 
 from mdfelib.v3_00.consStatServMDFe import TConsStatServ
@@ -108,29 +109,22 @@ class ComunicacaoMDFE(ComunicacaoSefaz):
             url, xml, soap_webservice_method=webservice + b'/' + metodo
         )
 
-    def autorizacao(self, documento, id_lote='1'):
+    def autorizacao(self, str_documento_assinado, id_lote='1'):
         url, webservice, metodo = self._get_url_webservice_metodo(
             WS_MDFE_RECEPCAO
         )
 
-        raiz = TEnviMDFe(
-            versao=self._versao,
-            idLote=id_lote,
-            MDFe=documento,
-        )
+        raiz = TEnviMDFe(versao=self._versao, idLote=id_lote)
         raiz.original_tagname_ = 'enviMDFe'
 
-        xml = self._construir_xml_soap(
-            webservice,
-            self._construir_etree_ds(raiz)
-        )
-        # Faz request no Servidor da Sefaz
-        retorno = self._post(
+        etree_ds = self._construir_etree_ds(raiz)
+        etree_ds.append(etree.fromstring(str_documento_assinado))
+
+        xml = self._construir_xml_soap(webservice, etree_ds)
+
+        return self._post(
             url, xml, soap_webservice_method=webservice + b'/' + metodo
         )
-
-        # TODO: Processar o retorno
-        return retorno
 
     def consulta_recibo(self, numero):
         url, webservice, metodo = self._get_url_webservice_metodo(
