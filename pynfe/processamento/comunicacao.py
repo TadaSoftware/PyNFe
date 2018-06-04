@@ -3,7 +3,7 @@ import re
 import ssl
 import datetime
 import requests
-from pynfe.utils import etree, so_numeros
+from pynfe.utils import etree, so_numeros, StringIO
 from pynfe.utils.flags import (
     NAMESPACE_NFE,
     NAMESPACE_XSD,
@@ -43,6 +43,7 @@ class ComunicacaoSefaz(Comunicacao):
 
     _versao = VERSAO_PADRAO
     _assinatura = AssinaturaA1
+    _namespace = NAMESPACE_NFE
 
     def autorizacao(self, modelo, nota_fiscal, id_lote=1, ind_sinc=1):
         """
@@ -469,6 +470,18 @@ class ComunicacaoSefaz(Comunicacao):
         a = etree.SubElement(body, 'nfeDadosMsg', xmlns=NAMESPACE_METODO+metodo)
         a.append(dados)
         return raiz
+
+    def _construir_etree_ds(self, ds):
+        output = StringIO()
+        ds.export(
+            output,
+            0,
+            pretty_print=False,
+            namespacedef_='xmlns="' + self._namespace + '"'
+        )
+        contents = output.getvalue()
+        output.close()
+        return etree.fromstring(contents)
 
     def _post_header(self):
         """Retorna um dicionário com os atributos para o cabeçalho da requisição HTTP"""
