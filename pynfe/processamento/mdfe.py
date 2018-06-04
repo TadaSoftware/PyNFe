@@ -53,32 +53,40 @@ class ComunicacaoMDFE(ComunicacaoSefaz):
     _namespace_xsd = NAMESPACE_XSD
     _soap_version = 'soap12'
 
-    def status_servico(self):
-        url, webservice, metodo = self._get_url_webservice_metodo(
-            WS_MDFE_STATUS_SERVICO
-        )
 
+    def _post_soap(self, classe, ws_metodo, raiz_xml, str_xml=False):
+        url, webservice, metodo = self._get_url_webservice_metodo(
+            ws_metodo
+        )
+        if not str_xml:
+            xml = self._construir_xml_soap(
+                webservice,
+                self._construir_etree_ds(raiz_xml)
+            )
+        else:
+            etree_ds = self._construir_etree_ds(raiz_xml)
+            etree_ds.append(etree.fromstring(str_xml))
+            xml = self._construir_xml_soap(webservice, etree_ds)
+
+        retorno = self._post(
+            url, xml, soap_webservice_method=webservice + b'/' + metodo
+        )
+        return analisar_retorno(ws_metodo, retorno, classe)
+
+    def status_servico(self):
         raiz = consStatServMDFe.TConsStatServ(
             versao=self._versao,
             tpAmb=str(self._ambiente),
             xServ='STATUS',
         )
         raiz.original_tagname_ = 'consStatServMDFe'
-
-        xml = self._construir_xml_soap(
-            webservice,
-            self._construir_etree_ds(raiz)
+        return self._post_soap(
+            classe=consStatServMDFe,
+            ws_metodo=WS_MDFE_STATUS_SERVICO,
+            raiz_xml=raiz
         )
-
-        retorno = self._post(
-            url, xml, soap_webservice_method=webservice + b'/' + metodo
-        )
-        return analisar_retorno(retorno, consStatServMDFe)
 
     def consulta(self, chave):
-        url, webservice, metodo = self._get_url_webservice_metodo(
-            WS_MDFE_CONSULTA
-        )
         raiz = consSitMDFe.TConsSitMDFe(
             versao=self._versao,
             tpAmb=str(self._ambiente),
@@ -86,19 +94,13 @@ class ComunicacaoMDFE(ComunicacaoSefaz):
             chMDFe=chave,
         )
         raiz.original_tagname_ = 'consSitMDFe'
-        xml = self._construir_xml_soap(
-            webservice,
-            self._construir_etree_ds(raiz)
+        return self._post_soap(
+            classe=consSitMDFe,
+            ws_metodo=WS_MDFE_CONSULTA,
+            raiz_xml=raiz
         )
-        retorno = self._post(
-            url, xml, soap_webservice_method=webservice + b'/' + metodo
-        )
-        return analisar_retorno(retorno, consSitMDFe)
 
     def consulta_nao_encerrados(self, cnpj):
-        url, webservice, metodo = self._get_url_webservice_metodo(
-            WS_MDFE_CONSULTA_NAO_ENCERRADOS
-        )
         raiz = consMDFeNaoEnc.TConsMDFeNaoEnc(
             versao=self._versao,
             tpAmb=str(self._ambiente),
@@ -106,50 +108,35 @@ class ComunicacaoMDFE(ComunicacaoSefaz):
             CNPJ=cnpj,
         )
         raiz.original_tagname_ = 'consMDFeNaoEnc'
-        xml = self._construir_xml_soap(
-            webservice,
-            self._construir_etree_ds(raiz)
+
+        return self._post_soap(
+            classe=consMDFeNaoEnc,
+            ws_metodo=WS_MDFE_CONSULTA_NAO_ENCERRADOS,
+            raiz_xml=raiz
         )
-        retorno = self._post(
-            url, xml, soap_webservice_method=webservice + b'/' + metodo
-        )
-        return analisar_retorno(retorno, consMDFeNaoEnc)
 
     def autorizacao(self, str_documento_assinado, id_lote='1'):
-        url, webservice, metodo = self._get_url_webservice_metodo(
-            WS_MDFE_RECEPCAO
+        raiz = enviMDFe.TEnviMDFe(
+            versao=self._versao,
+            idLote=id_lote
         )
-
-        raiz = enviMDFe.TEnviMDFe(versao=self._versao, idLote=id_lote)
         raiz.original_tagname_ = 'enviMDFe'
-
-        etree_ds = self._construir_etree_ds(raiz)
-        etree_ds.append(etree.fromstring(str_documento_assinado))
-
-        xml = self._construir_xml_soap(webservice, etree_ds)
-
-        retorno = self._post(
-            url, xml, soap_webservice_method=webservice + b'/' + metodo
+        return self._post_soap(
+            classe=enviMDFe,
+            ws_metodo=WS_MDFE_RECEPCAO,
+            raiz_xml=raiz,
+            str_xml=str_documento_assinado,
         )
-        return analisar_retorno(retorno, enviMDFe)
 
     def consulta_recibo(self, numero):
-        url, webservice, metodo = self._get_url_webservice_metodo(
-            WS_MDFE_RET_RECEPCAO
-        )
-
         raiz = consReciMDFe.TConsReciMDFe(
             versao=self._versao,
             tpAmb=str(self._ambiente),
             nRec=numero,
         )
         raiz.original_tagname_ = 'consReciMDFe'
-        xml = self._construir_xml_soap(
-            webservice,
-            self._construir_etree_ds(raiz)
+        return self._post_soap(
+            classe=consReciMDFe,
+            ws_metodo=WS_MDFE_RET_RECEPCAO,
+            raiz_xml=raiz,
         )
-        retorno = self._post(
-            url, xml, soap_webservice_method=webservice + b'/' + metodo
-        )
-        return analisar_retorno(retorno, consReciMDFe)
-
