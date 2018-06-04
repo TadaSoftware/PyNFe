@@ -4,6 +4,7 @@
 
 from __future__ import division, print_function, unicode_literals
 
+import time
 
 from pynfe.utils.flags import (
     NAMESPACE_MDFE,
@@ -23,7 +24,7 @@ from pynfe.utils.webservices import (
     WS_MDFE_RET_RECEPCAO,
     WS_MDFE_RECEPCAO_EVENTO,
 )
-from pynfe.utils import etree
+from pynfe.utils import etree, extrai_id_srtxml
 from .comunicacao import ComunicacaoSefaz
 from .resposta import analisar_retorno
 
@@ -32,6 +33,8 @@ from mdfelib.v3_00 import consSitMDFe
 from mdfelib.v3_00 import consMDFeNaoEnc
 from mdfelib.v3_00 import enviMDFe
 from mdfelib.v3_00 import consReciMDFe
+
+MDFE_SITUACAO_JA_ENVIADO = ('100', '101', '132')
 
 
 class ComunicacaoMDFE(ComunicacaoSefaz):
@@ -52,7 +55,13 @@ class ComunicacaoMDFE(ComunicacaoSefaz):
     _namespace_xsi = NAMESPACE_XSI
     _namespace_xsd = NAMESPACE_XSD
     _soap_version = 'soap12'
+    _edoc_situacao_ja_enviado = MDFE_SITUACAO_JA_ENVIADO
+    _edoc_situacao_arquivo_recebido_com_sucesso = '103'
+    _edoc_situacao_em_processamento = '105'
+    _edoc_situacao_servico_em_operacao = '107'
 
+    consulta_servico_ao_enviar = True
+    maximo_tentativas_consulta_recibo = 5
 
     def _post_soap(self, classe, ws_metodo, raiz_xml, str_xml=False):
         url, webservice, metodo = self._get_url_webservice_metodo(
@@ -140,3 +149,80 @@ class ComunicacaoMDFE(ComunicacaoSefaz):
             ws_metodo=WS_MDFE_RET_RECEPCAO,
             raiz_xml=raiz,
         )
+
+    def processar_documento(self, edoc):
+
+        if self.consulta_servico_ao_enviar:
+            proc_servico = self.status_servico()
+            yield proc_servico
+            #
+            # Se o serviço não estiver em operação
+            #
+            if not proc_servico.resposta.cStat == \
+               self._edoc_situacao_servico_em_operacao:
+                #
+                # Interrompe todo o processo
+                #
+                return
+        #
+        # Verificar se os documentos já não foram emitados antes
+        #
+        chave = extrai_id_srtxml(edoc)
+        if not chave:
+            #
+            # Interrompe todo o processo se o documento nao tem chave
+            #
+            return
+
+        proc_consulta = self.consulta(chave)
+        yield proc_consulta
+
+        #
+        # Se o documento já constar na SEFAZ (autorizada ou denegada)
+        #
+        if proc_consulta.resposta.cStat in self._edoc_situacao_ja_enviado:
+            #
+            # Interrompe todo o processo
+            #
+            return
+        #
+        # Documento nao foi enviado, entao vamos envia-lo
+        #
+
+        proc_envio = self.autorizacao(edoc)
+        yield proc_envio
+
+        #
+        # Deu errado?
+        #
+        if proc_envio.resposta.cStat != \
+                self._edoc_situacao_arquivo_recebido_com_sucesso:
+            #
+            # Interrompe o processo
+            #
+            return
+
+        #
+        # Aguarda o tempo do processamento antes da consulta
+        #
+        time.sleep(proc_envio.resposta.infRec.tMed * 1.3)
+
+        #
+        # Consulta o recibo do lote, para ver o que aconteceu
+        #
+        proc_recibo = self.consulta_recibo(proc_envio.resposta.infRec.nRec)
+
+        #
+        # Tenta receber o resultado do processamento do lote, caso ainda
+        # esteja em processamento
+        #
+        tentativa = 0
+        while (proc_recibo.resposta.cStat ==
+               self._edoc_situacao_em_processamento and
+               tentativa < self.maximo_tentativas_consulta_recibo):
+            time.sleep(proc_envio.resposta.infRec.tMed * 1.5)
+            tentativa += 1
+            proc_recibo = self.consulta_recibo(
+                proc_envio.resposta.infRec.nRec
+            )
+        yield proc_recibo
