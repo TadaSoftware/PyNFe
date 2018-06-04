@@ -6,7 +6,15 @@ import re
 from pynfe.utils import etree
 
 
-def analisar_retorno(retorno, classe_resposta):
+class RetornoSoap(object):
+
+    def __init__(self, webservice, retorno, resposta):
+        self.webservice = webservice
+        self.resposta = resposta
+        self.retorno = retorno
+
+
+def analisar_retorno(webservice, retorno, classe_resposta):
 
     retorno.raise_for_status()
 
@@ -15,6 +23,6 @@ def analisar_retorno(retorno, classe_resposta):
     if match:
         resultado = etree.tostring(etree.fromstring(match.group(1))[0])
         classe_resposta.Validate_simpletypes_ = False
-        retorno = classe_resposta.parseString(resultado.encode('utf-8'))
+        resposta = classe_resposta.parseString(resultado.encode('utf-8'))
 
-    return retorno
+    return RetornoSoap(webservice, retorno, resposta)
