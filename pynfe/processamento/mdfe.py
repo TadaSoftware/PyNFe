@@ -40,7 +40,8 @@ class ComunicacaoMDFE(ComunicacaoSefaz):
     _envio_mensagem = 'mdfeDadosMsg'
     _retorno_mensagem = 'mdfeRecepcaoResult'
     _namespace_metodo = NAMESPACE_MDFE_METODO
-    _accept = False
+
+    _accept = True
     _soap_action = False
     _namespace_soap = NAMESPACE_SOAP
     _namespace_xsi = NAMESPACE_XSI
@@ -48,8 +49,9 @@ class ComunicacaoMDFE(ComunicacaoSefaz):
     _soap_version = 'soap12'
 
     def status_servico(self):
-
-        url, metodo = self._get_url_metodo(WS_MDFE_STATUS_SERVICO)
+        url, webservice, metodo = self._get_url_webservice_metodo(
+            WS_MDFE_STATUS_SERVICO
+        )
 
         raiz = TConsStatServ(
             versao=self._versao,
@@ -59,14 +61,18 @@ class ComunicacaoMDFE(ComunicacaoSefaz):
         raiz.original_tagname_ = 'consStatServMDFe'
 
         xml = self._construir_xml_soap(
-            metodo, self._construir_etree_ds(raiz)
+            webservice,
+            self._construir_etree_ds(raiz)
         )
 
-        return self._post(url, xml)
+        return self._post(
+            url, xml, soap_webservice_method=webservice + b'/' + metodo
+        )
 
     def consulta(self, chave):
-
-        url, metodo = self._get_url_metodo(WS_MDFE_CONSULTA)
+        url, webservice, metodo = self._get_url_webservice_metodo(
+            WS_MDFE_CONSULTA
+        )
         raiz = TConsSitMDFe(
             versao=self._versao,
             tpAmb=str(self._ambiente),
@@ -75,14 +81,17 @@ class ComunicacaoMDFE(ComunicacaoSefaz):
         )
         raiz.original_tagname_ = 'consSitMDFe'
         xml = self._construir_xml_soap(
-            metodo,
+            webservice,
             self._construir_etree_ds(raiz)
         )
-        return self._post(url, xml)
+        return self._post(
+            url, xml, soap_webservice_method=webservice + b'/' + metodo
+        )
 
     def consulta_nao_encerrados(self, cnpj):
-
-        url, metodo = self._get_url_metodo(WS_MDFE_CONSULTA_NAO_ENCERRADOS)
+        url, webservice, metodo = self._get_url_webservice_metodo(
+            WS_MDFE_CONSULTA_NAO_ENCERRADOS
+        )
         raiz = TConsMDFeNaoEnc(
             versao=self._versao,
             tpAmb=str(self._ambiente),
@@ -91,14 +100,17 @@ class ComunicacaoMDFE(ComunicacaoSefaz):
         )
         raiz.original_tagname_ = 'consMDFeNaoEnc'
         xml = self._construir_xml_soap(
-            metodo,
+            webservice,
             self._construir_etree_ds(raiz)
         )
-        return self._post(url, xml)
+        return self._post(
+            url, xml, soap_webservice_method=webservice + b'/' + metodo
+        )
 
-    def autorizacao(self, documento, id_lote=1):
-
-        url, metodo = self._get_url_metodo(WS_MDFE_RECEPCAO)
+    def autorizacao(self, documento, id_lote='1'):
+        url, webservice, metodo = self._get_url_webservice_metodo(
+            WS_MDFE_RECEPCAO
+        )
 
         raiz = TEnviMDFe(
             versao=self._versao,
@@ -108,11 +120,13 @@ class ComunicacaoMDFE(ComunicacaoSefaz):
         raiz.original_tagname_ = 'enviMDFe'
 
         xml = self._construir_xml_soap(
-            metodo,
+            webservice,
             self._construir_etree_ds(raiz)
         )
         # Faz request no Servidor da Sefaz
-        retorno = self._post(url, xml)
+        retorno = self._post(
+            url, xml, soap_webservice_method=webservice + b'/' + metodo
+        )
 
         # TODO: Processar o retorno
         return retorno
