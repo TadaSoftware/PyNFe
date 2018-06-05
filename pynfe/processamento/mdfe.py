@@ -32,6 +32,8 @@ from mdfelib.v3_00 import consSitMDFe
 from mdfelib.v3_00 import consMDFeNaoEnc
 from mdfelib.v3_00 import enviMDFe
 from mdfelib.v3_00 import consReciMDFe
+from mdfelib.v3_00 import procMDFe
+# from mdfelib.v3_00 import procEventoMDFe
 
 MDFE_SITUACAO_JA_ENVIADO = ('100', '101', '132')
 
@@ -129,6 +131,7 @@ class ComunicacaoMDFe(Comunicacao):
             ws_metodo=WS_MDFE_CONSULTA,
             raiz_xml=raiz
         )
+        # ).analisar_processo('MDFe', procEventoMDFe)
 
     def consulta_nao_encerrados(self, cnpj):
         raiz = consMDFeNaoEnc.TConsMDFeNaoEnc(
@@ -169,7 +172,7 @@ class ComunicacaoMDFe(Comunicacao):
             classe=consReciMDFe,
             ws_metodo=WS_MDFE_RET_RECEPCAO,
             raiz_xml=raiz,
-        )
+        ).analisar_processo('MDFe', procMDFe)
 
     def processar_documento(self, edoc):
 
@@ -246,4 +249,9 @@ class ComunicacaoMDFe(Comunicacao):
             proc_recibo = self.consulta_recibo(
                 proc_envio.resposta.infRec.nRec
             )
+
+        # TODO: Juntar processo com protocolo
+        if proc_recibo.processo:
+            pass
+
         yield proc_recibo
