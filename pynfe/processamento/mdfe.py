@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2018 - TODAY Junior Tada - Tada Software LTDA
 # Copyright (C) 2018 - TODAY Luis Felipe Mileo - KMEE INFORMATICA LTDA
 # License AGPL-3 - See https://www.gnu.org/licenses/lgpl-3.0.html
 

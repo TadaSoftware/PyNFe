@@ -6,7 +6,7 @@ Visão Geral
 -----------
 
 Biblioteca de interface com o webservice de Nota Fiscal Eletronica,
-(NF-e/NFC-e/NFS-e) da SEFAZ, oficializada pelo Ministerio da Fazendo do
+(NF-e/NFC-e/NFS-e/MDF-e) da SEFAZ, oficializada pelo Ministerio da Fazendo do
 Governo do Brasil.  
 Desenvolvido e testado com Python 3.6 no GNU/Linux.
 
@@ -14,6 +14,7 @@ A NF-e visa substituir as notas fiscais séries 1 e 1A.
 A NFC-e visa substituir as notas fiscais modelo 2 e
 cupom fiscal emitido por ECF.  
 NFS-e padrão Abrasf para autorizadores Ginfes e Betha.
+A finalidade do MDF-e é agilizar o registro em lote de documentos fiscais em trânsito e identificar a unidade de carga utilizada e demais características do transporte.
 
 
 Dependências
@@ -95,3 +96,7 @@ backlog:
 - renomeado metodo serializar_evento (_serializar_evento)
 - removido metoco con.cancelar (utilizar con.evento)
 - add evento carta de correção (con.evento)
+- renomeado classe ComunicacaoSefaz (ComunicacaoNFe)
+- renomeado classe ComunicacaoMDFE (ComunicacaoMDFe)
+- renomeado classe ComunicacaoNfse (ComunicacaoNFSe)
+- add MDF-e
