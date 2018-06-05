@@ -116,16 +116,16 @@ class ComunicacaoSefaz(Comunicacao):
     def _post_header(self, soap_webservice_method=False):
         """Retorna um dicionário com os atributos para o cabeçalho da requisição HTTP"""
         header = {
-            b'content-type': b'application/soap+xml; charset=utf-8;'
+            b'content-type': b'text/xml; charset=utf-8;',
         }
 
         # PE é a únca UF que exige SOAPAction no header
         if soap_webservice_method:
-            header['SOAPAction'] = \
-                self._namespace_metodo + soap_webservice_method
+            header[b'SOAPAction'] = \
+                (self._namespace_metodo + soap_webservice_method).encode('utf-8')
 
         if self._accept:
-            header['Accept'] = b'application/soap+xml; charset=utf-8;'
+            header[b'Accept'] = b'application/soap+xml; charset=utf-8;'
 
         return header
 
