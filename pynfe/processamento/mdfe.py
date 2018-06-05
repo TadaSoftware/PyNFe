@@ -13,9 +13,6 @@ from pynfe.utils.flags import (
     NAMESPACE_SOAP,
     NAMESPACE_XSI,
     NAMESPACE_XSD,
-)
-from pynfe.utils.webservices import (
-    MDFE_WS_URL,
     MDFE_WS_METODO,
     WS_MDFE_CONSULTA,
     WS_MDFE_STATUS_SERVICO,
@@ -24,6 +21,7 @@ from pynfe.utils.webservices import (
     WS_MDFE_RET_RECEPCAO,
     WS_MDFE_RECEPCAO_EVENTO,
 )
+from pynfe.utils.webservices import MDFE
 from pynfe.utils import etree, extrai_id_srtxml
 from .comunicacao import Comunicacao
 from .resposta import analisar_retorno
@@ -42,7 +40,6 @@ class ComunicacaoMDFe(Comunicacao):
     _modelo = MODELO_MDFE
     _namespace = NAMESPACE_MDFE
     _versao = '3.00'
-    _ws_url = MDFE_WS_URL
     _ws_metodo = MDFE_WS_METODO
     _header = 'mdfeCabecMsg'
     _envio_mensagem = 'mdfeDadosMsg'
@@ -77,12 +74,11 @@ class ComunicacaoMDFe(Comunicacao):
         return raiz
 
     def _get_url_webservice_metodo(self, ws_metodo):
-        url = (
-                'https://' +
-                self._ws_url[self._ambiente]['servidor'] +
-                '/' +
-                self._ws_url[self._ambiente][ws_metodo]
-        )
+        if self._ambiente == 1:
+            ambiente = 'HTTPS'
+        else:
+            ambiente = 'HOMOLOGACAO'
+        url = MDFE['SVRS'][ambiente] + MDFE['SVRS'][self._ws_metodo[ws_metodo]['url']]
         webservice = self._ws_metodo[ws_metodo]['webservice']
         metodo = self._ws_metodo[ws_metodo]['metodo']
         return url, webservice, metodo
