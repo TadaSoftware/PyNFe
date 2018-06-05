@@ -451,20 +451,3 @@ class ComunicacaoNFe(ComunicacaoSefaz):
                     # TODO implementar outros tipos de notas como NFS-e
                     pass
         return self.url
-
-    def _cabecalho_soap(self, metodo):
-        """Monta o XML do cabeçalho da requisição SOAP"""
-
-        raiz = etree.Element('nfeCabecMsg', xmlns=NAMESPACE_METODO+metodo)
-        if metodo == 'RecepcaoEvento':
-            etree.SubElement(raiz, 'versaoDados').text = '1.00'
-        elif metodo == 'NfeConsultaDest':
-            etree.SubElement(raiz, 'versaoDados').text = '1.01'
-        elif metodo == 'NfeDownloadNF':
-            etree.SubElement(raiz, 'versaoDados').text = '1.00'
-        elif metodo == 'CadConsultaCadastro2':
-            etree.SubElement(raiz, 'versaoDados').text = '2.00'
-        else:
-            etree.SubElement(raiz, 'versaoDados').text = VERSAO_PADRAO
-        etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
-        return raiz
