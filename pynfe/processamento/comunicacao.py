@@ -45,6 +45,7 @@ class ComunicacaoSefaz(Comunicacao):
     _namespace_metodo = False
     _accept = False
     _soap_action = False
+    _ws_url = False
     _namespace_soap = NAMESPACE_SOAP
     _namespace_xsi = NAMESPACE_XSI
     _namespace_xsd = NAMESPACE_XSD
@@ -63,15 +64,16 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
         return raiz
 
-    def _get_url_metodo(self, ws_metodo):
+    def _get_url_webservice_metodo(self, ws_metodo):
         url = (
                 'https://' +
                 self._ws_url[self._ambiente]['servidor'] +
                 '/' +
                 self._ws_url[self._ambiente][ws_metodo]
         )
+        webservice = self._ws_metodo[ws_metodo]['webservice']
         metodo = self._ws_metodo[ws_metodo]['metodo']
-        return url, metodo
+        return url, webservice, metodo
 
     def _construir_xml_soap(self, metodo, dados):
         """Mota o XML para o envio via SOAP"""
