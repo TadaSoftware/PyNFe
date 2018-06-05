@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+from __future__ import division, print_function, unicode_literals
+
 from pynfe.utils import etree
 from pynfe.utils.flags import (
     NAMESPACE_XSI,

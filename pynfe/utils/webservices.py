@@ -1,7 +1,9 @@
-
+# -*- coding: utf-8 -*-
 """
 	@author: Junior Tada, Leonardo Tada
 """
+
+from __future__ import division, print_function, unicode_literals
 
 # http://nfce.encat.org/desenvolvedor/qrcode/
 # http://nfce.encat.org/consumidor/consulte-sua-nota/ 	url consulta por chave
