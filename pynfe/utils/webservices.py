@@ -487,66 +487,15 @@ NFSE = {
 	}
 }
 
-AMBIENTE_PRODUCAO = 1
-AMBIENTE_HOMOLOGACAO = 2
-
-WS_MDFE_RECEPCAO = '1'
-WS_MDFE_RET_RECEPCAO = '2'
-WS_MDFE_RECEPCAO_EVENTO = '3'
-WS_MDFE_CONSULTA = '4'
-WS_MDFE_STATUS_SERVICO = '5'
-WS_MDFE_CONSULTA_NAO_ENCERRADOS = '6'
-
-MDFE_WS_METODO = {
-    WS_MDFE_RECEPCAO: {
-        'webservice': 'MDFeRecepcao',
-        'metodo': 'mdfeRecepcaoLote',
-        'versao': '3.00',
-    },
-    WS_MDFE_RET_RECEPCAO: {
-        'webservice': 'MDFeRetRecepcao',
-        'metodo': 'mdfeRetRecepcao',
-        'versao': '3.00',
-    },
-    WS_MDFE_RECEPCAO_EVENTO: {
-        'webservice': 'MDFeRecepcaoEvento',
-        'metodo': 'mdfeRecepcaoEvento',
-        'versao': '3.00',
-    },
-    WS_MDFE_CONSULTA: {
-        'webservice': 'MDFeConsulta',
-        'metodo': 'mdfeConsultaMDF',
-        'versao': '3.00',
-    },
-    WS_MDFE_STATUS_SERVICO: {
-        'webservice': 'MDFeStatusServico',
-        'metodo': 'mdfeStatusServicoMDF',
-        'versao': '3.00',
-    },
-    WS_MDFE_CONSULTA_NAO_ENCERRADOS: {
-        'webservice': 'MDFeConsNaoEnc',
-        'metodo': 'mdfeConsNaoEnc',
-        'versao': '3.00',
-    },
-}
-
-MDFE_WS_URL = {
-    AMBIENTE_PRODUCAO: {
-        'servidor': 'mdfe.svrs.rs.gov.br',
-        WS_MDFE_RECEPCAO: 'ws/MDFerecepcao/MDFeRecepcao.asmx',
-        WS_MDFE_RET_RECEPCAO: 'ws/MDFeRetRecepcao/MDFeRetRecepcao.asmx',
-        WS_MDFE_RECEPCAO_EVENTO: 'ws/MDFeRecepcaoEvento/MDFeRecepcaoEvento.asmx',
-        WS_MDFE_CONSULTA: 'ws/MDFeConsulta/MDFeConsulta.asmx',
-        WS_MDFE_STATUS_SERVICO: 'ws/MDFeStatusServico/MDFeStatusServico.asmx',
-        WS_MDFE_CONSULTA_NAO_ENCERRADOS: 'ws/MDFeConsNaoEnc/MDFeConsNaoEnc.asmx',
-    },
-    AMBIENTE_HOMOLOGACAO: {
-        'servidor': 'mdfe-homologacao.svrs.rs.gov.br',
-        WS_MDFE_RECEPCAO: 'ws/MDFerecepcao/MDFeRecepcao.asmx',
-        WS_MDFE_RET_RECEPCAO: 'ws/MDFeRetRecepcao/MDFeRetRecepcao.asmx',
-        WS_MDFE_RECEPCAO_EVENTO: 'ws/MDFeRecepcaoEvento/MDFeRecepcaoEvento.asmx',
-        WS_MDFE_CONSULTA: 'ws/MDFeConsulta/MDFeConsulta.asmx',
-        WS_MDFE_STATUS_SERVICO: 'ws/MDFeStatusServico/MDFeStatusServico.asmx',
-        WS_MDFE_CONSULTA_NAO_ENCERRADOS: 'ws/MDFeConsNaoEnc/MDFeConsNaoEnc.asmx',
-    },
+MDFE = {
+	# unico autorizador de MDF-e
+	'SVRS': {
+		'RECEPCAO': 'MDFerecepcao/MDFeRecepcao.asmx',
+		'RET_RECEPCAO': 'MDFeRetRecepcao/MDFeRetRecepcao.asmx',
+		'EVENTO': 'MDFeRecepcaoEvento/MDFeRecepcaoEvento.asmx',
+		'CONSULTA': 'MDFeConsulta/MDFeConsulta.asmx',
+		'STATUS': 'MDFeStatusServico/MDFeStatusServico.asmx',
+		'HTTPS': 'https://mdfe.svrs.rs.gov.br/ws/',
+		'HOMOLOGACAO': 'https://mdfe-homologacao.svrs.rs.gov.br/ws/'
+	}
 }

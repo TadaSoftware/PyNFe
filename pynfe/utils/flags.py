@@ -272,3 +272,44 @@ CODIGOS_ESTADOS = {
 NAMESPACE_MDFE = 'http://www.portalfiscal.inf.br/mdfe'
 NAMESPACE_MDFE_METODO = 'http://www.portalfiscal.inf.br/mdfe/wsdl/'
 MODELO_MDFE = '58'
+
+MDFE_VERSAO = '3.00'
+
+
+AMBIENTE_PRODUCAO = 1
+AMBIENTE_HOMOLOGACAO = 2
+
+WS_MDFE_RECEPCAO = '1'
+WS_MDFE_RET_RECEPCAO = '2'
+WS_MDFE_RECEPCAO_EVENTO = '3'
+WS_MDFE_CONSULTA = '4'
+WS_MDFE_STATUS_SERVICO = '5'
+WS_MDFE_CONSULTA_NAO_ENCERRADOS = '6'
+
+MDFE_WS_METODO = {
+    WS_MDFE_RECEPCAO: {
+        'webservice': 'MDFeRecepcao',
+        'metodo': 'mdfeRecepcaoLote',
+    },
+    WS_MDFE_RET_RECEPCAO: {
+        'webservice': 'MDFeRetRecepcao',
+        'metodo': 'mdfeRetRecepcao',
+    },
+    WS_MDFE_RECEPCAO_EVENTO: {
+        'webservice': 'MDFeRecepcaoEvento',
+        'metodo': 'mdfeRecepcaoEvento',
+    },
+    WS_MDFE_CONSULTA: {
+        'webservice': 'MDFeConsulta',
+        'metodo': 'mdfeConsultaMDF',
+    },
+    WS_MDFE_STATUS_SERVICO: {
+        'webservice': 'MDFeStatusServico',
+        'metodo': 'mdfeStatusServicoMDF',
+        'url': 'STATUS'
+    },
+    WS_MDFE_CONSULTA_NAO_ENCERRADOS: {
+        'webservice': 'MDFeConsNaoEnc',
+        'metodo': 'mdfeConsNaoEnc',
+    },
+}
