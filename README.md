@@ -53,6 +53,7 @@ Referências
 
 - Validador de xml
   - https://www.sefaz.rs.gov.br/NFE/NFE-VAL.aspx
+  - https://mdfe-portal.sefaz.rs.gov.br/Site/ValidadorXml
 
 - Validador de assinaturas
   - https://www.receita.fazenda.gov.br/Aplicacoes/SSL/ATBHE/Assinadoc/ValidadorAssinaturas.app/valida.aspx
