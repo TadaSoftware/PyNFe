@@ -3,13 +3,17 @@
 import os
 import codecs
 from unicodedata import normalize
+import re
 
 try:
     from lxml import etree
 except ImportError:
     raise Exception('Falhou ao importar lxml/ElementTree')
 
-from io import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 try:
     from . import flags
@@ -146,3 +150,11 @@ def obter_uf_por_codigo(codigo_uf):
 
 def remover_acentos(txt):
     return normalize('NFKD', txt).encode('ASCII','ignore').decode('ASCII')
+
+
+def extrai_id_srtxml(edoc):
+    result = ''
+    match = re.search('Id=[^0-9]+(\d+)"', edoc)
+    if match:
+        result = match.group(1)
+    return result

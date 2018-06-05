@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division, print_function, unicode_literals
+
 NAMESPACE_NFE = 'http://www.portalfiscal.inf.br/nfe'
 NAMESPACE_SIG = 'http://www.w3.org/2000/09/xmldsig#'
 NAMESPACE_SOAP = 'http://www.w3.org/2003/05/soap-envelope'
@@ -266,3 +268,7 @@ CODIGOS_ESTADOS = {
     'DF': '53',
     'AN': '91'
 }
+
+NAMESPACE_MDFE = 'http://www.portalfiscal.inf.br/mdfe'
+NAMESPACE_MDFE_METODO = 'http://www.portalfiscal.inf.br/mdfe/wsdl/'
+MODELO_MDFE = '58'
