@@ -25,7 +25,7 @@ from pynfe.utils.webservices import (
     WS_MDFE_RECEPCAO_EVENTO,
 )
 from pynfe.utils import etree, extrai_id_srtxml
-from .comunicacao import ComunicacaoSefaz
+from .comunicacao import Comunicacao
 from .resposta import analisar_retorno
 
 from mdfelib.v3_00 import consStatServMDFe
@@ -37,7 +37,7 @@ from mdfelib.v3_00 import consReciMDFe
 MDFE_SITUACAO_JA_ENVIADO = ('100', '101', '132')
 
 
-class ComunicacaoMDFE(ComunicacaoSefaz):
+class ComunicacaoMDFe(Comunicacao):
 
     _modelo = MODELO_MDFE
     _namespace = NAMESPACE_MDFE
@@ -62,6 +62,30 @@ class ComunicacaoMDFE(ComunicacaoSefaz):
 
     consulta_servico_ao_enviar = True
     maximo_tentativas_consulta_recibo = 5
+
+    def _cabecalho_soap(self, metodo):
+        """Monta o XML do cabeçalho da requisição SOAP"""
+
+        raiz = etree.Element(
+            self._header,
+            xmlns=self._namespace_metodo + metodo
+        )
+        etree.SubElement(raiz, 'versaoDados').text = '3.00'
+        # MDFE_WS_METODO[metodo]['versao']
+
+        etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
+        return raiz
+
+    def _get_url_webservice_metodo(self, ws_metodo):
+        url = (
+                'https://' +
+                self._ws_url[self._ambiente]['servidor'] +
+                '/' +
+                self._ws_url[self._ambiente][ws_metodo]
+        )
+        webservice = self._ws_metodo[ws_metodo]['webservice']
+        metodo = self._ws_metodo[ws_metodo]['metodo']
+        return url, webservice, metodo
 
     def _post_soap(self, classe, ws_metodo, raiz_xml, str_xml=False):
         url, webservice, metodo = self._get_url_webservice_metodo(

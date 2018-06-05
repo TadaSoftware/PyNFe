@@ -17,10 +17,10 @@ from pynfe.utils.flags import (
 
 from pynfe.utils.webservices import NFE, NFCE
 from .assinatura import AssinaturaA1
-from .comunicacao import ComunicacaoSefaz
+from .comunicacao import Comunicacao
 
 
-class ComunicacaoNFe(ComunicacaoSefaz):
+class ComunicacaoNFe(Comunicacao):
     """Classe de comunicação que segue o padrão definido para as SEFAZ dos Estados."""
 
     _versao = VERSAO_PADRAO

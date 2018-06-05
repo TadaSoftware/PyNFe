@@ -18,7 +18,7 @@ from .assinatura import AssinaturaA1
 class Comunicacao(object):
     """
     Classe abstrata responsavel por definir os metodos e logica das classes
-    de comunicação com os webservices da NF-e.
+    de comunicação com os webservices.
     """
 
     _ambiente = 1   # 1 = Produção, 2 = Homologação
@@ -26,17 +26,6 @@ class Comunicacao(object):
     certificado = None
     certificado_senha = None
     url = None
-
-    def __init__(self, uf, certificado, certificado_senha, homologacao=False):
-        self.uf = uf
-        self.certificado = certificado
-        self.certificado_senha = certificado_senha
-        self._ambiente = 2 if homologacao else 1
-
-
-class ComunicacaoSefaz(Comunicacao):
-    """Classe de comunicação que segue o padrão definido para as SEFAZ dos Estados."""
-
     _versao = False
     _assinatura = AssinaturaA1
     _namespace = False
@@ -51,29 +40,11 @@ class ComunicacaoSefaz(Comunicacao):
     _namespace_xsd = NAMESPACE_XSD
     _soap_version = 'soap'
 
-    def _cabecalho_soap(self, metodo):
-        """Monta o XML do cabeçalho da requisição SOAP"""
-
-        raiz = etree.Element(
-            self._header,
-            xmlns=self._namespace_metodo + metodo
-        )
-        etree.SubElement(raiz, 'versaoDados').text = '3.00'
-        # MDFE_WS_METODO[metodo]['versao']
-
-        etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
-        return raiz
-
-    def _get_url_webservice_metodo(self, ws_metodo):
-        url = (
-                'https://' +
-                self._ws_url[self._ambiente]['servidor'] +
-                '/' +
-                self._ws_url[self._ambiente][ws_metodo]
-        )
-        webservice = self._ws_metodo[ws_metodo]['webservice']
-        metodo = self._ws_metodo[ws_metodo]['metodo']
-        return url, webservice, metodo
+    def __init__(self, uf, certificado, certificado_senha, homologacao=False):
+        self.uf = uf
+        self.certificado = certificado
+        self.certificado_senha = certificado_senha
+        self._ambiente = 2 if homologacao else 1
 
     def _construir_xml_soap(self, metodo, dados):
         """Mota o XML para o envio via SOAP"""

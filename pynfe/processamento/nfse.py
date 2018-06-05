@@ -12,7 +12,7 @@ from pynfe.entidades.certificado import CertificadoA1
 from .comunicacao import Comunicacao
 
 
-class ComunicacaoNfse(Comunicacao):
+class ComunicacaoNFSe(Comunicacao):
     """ Classe de comunicação que segue o padrão definido para as SEFAZ dos Municípios. """
 
     _versao = ''
