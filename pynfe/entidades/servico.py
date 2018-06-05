@@ -1,6 +1,10 @@
+# -*- coding: utf-8 -*-
+
 """
     @author: Junior Tada, Leonardo Tada
 """
+
+from __future__ import division, print_function, unicode_literals
 
 from .base import Entidade
 from decimal import Decimal
