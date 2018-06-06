@@ -495,6 +495,7 @@ MDFE = {
 		'EVENTO': 'MDFeRecepcaoEvento/MDFeRecepcaoEvento.asmx',
 		'CONSULTA': 'MDFeConsulta/MDFeConsulta.asmx',
 		'STATUS': 'MDFeStatusServico/MDFeStatusServico.asmx',
+		'NAO_ENCERRADOS': 'MDFeConsNaoEnc/MDFeConsNaoEnc.asmx',
 		'HTTPS': 'https://mdfe.svrs.rs.gov.br/ws/',
 		'HOMOLOGACAO': 'https://mdfe-homologacao.svrs.rs.gov.br/ws/'
 	}

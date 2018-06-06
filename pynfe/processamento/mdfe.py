@@ -9,6 +9,7 @@ import time
 
 from pynfe.utils.flags import (
     NAMESPACE_MDFE,
+    CODIGOS_ESTADOS,
     MODELO_MDFE,
     NAMESPACE_MDFE_METODO,
     NAMESPACE_SOAP,
@@ -81,7 +82,7 @@ class ComunicacaoMDFe(Comunicacao):
             ambiente = 'HTTPS'
         else:
             ambiente = 'HOMOLOGACAO'
-        url = MDFE['SVRS'][ambiente] + MDFE['SVRS'][self._ws_metodo[ws_metodo]['url']]
+        url = MDFE['SVRS'][ambiente] + MDFE['SVRS'][ws_metodo]
         webservice = self._ws_metodo[ws_metodo]['webservice']
         metodo = self._ws_metodo[ws_metodo]['metodo']
         return url, webservice, metodo
