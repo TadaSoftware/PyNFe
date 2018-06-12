@@ -60,13 +60,13 @@ Instalação
 -----------
 
 ```sh
-pip3 install --user https://github.com/leotada/PyNFe/archive/master.zip
+pip3 install --user https://github.com/TadaSoftware/PyNFe/archive/master.zip
 ```
 
 Opcional para NFS-e:
 
 ```sh
-pip3 install --user -r https://github.com/leotada/PyNFe/raw/master/requirements-nfse.txt
+pip3 install --user -r https://github.com/TadaSoftware/PyNFe/raw/master/requirements-nfse.txt
 ```
 
 Exemplos de uso

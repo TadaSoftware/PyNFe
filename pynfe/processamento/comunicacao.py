@@ -102,12 +102,16 @@ class ComunicacaoSefaz(Comunicacao):
                     return 1, retorno, nota_fiscal
             else:
                 # Retorna id do protocolo para posterior consulta em caso de sucesso.
-                rec = etree.fromstring(retorno.text)
+                try:
+                    rec = etree.fromstring(retorno.text)
+                except ValueError:
+                    # em SP retorno.text apresenta erro
+                    rec = etree.fromstring(retorno.content)
                 rec = rec[0][0]
                 status = rec.xpath("ns:retEnviNFe/ns:cStat", namespaces=ns)[0].text
                 # Lote Recebido com Sucesso!
                 if status == '103':
-                    nrec = rec.xpath("ns:infRec/ns:nRec", namespaces=ns)[0].text
+                    nrec = rec.xpath("ns:retEnviNFe/ns:infRec/ns:nRec", namespaces=ns)[0].text
                     return 0, nrec, nota_fiscal
         return 1, retorno, nota_fiscal
 
