@@ -74,7 +74,7 @@ class ComunicacaoSefaz(Comunicacao):
         # pdb.set_trace()
         if retorno.status_code == 200:
             # namespace
-            ns = {'ns': 'http://www.portalfiscal.inf.br/nfe'}
+            ns = {'ns': NAMESPACE_NFE}
             if ind_sinc == 1:
                 # Procuta status no xml
                 try:
@@ -99,7 +99,7 @@ class ComunicacaoSefaz(Comunicacao):
                             return 0, raiz
                 except IndexError:
                     # Protocolo com algum erro no Envio
-                    print(retorno.text)
+                    return 1, retorno, nota_fiscal
             else:
                 # Retorna id do protocolo para posterior consulta em caso de sucesso.
                 rec = etree.fromstring(retorno.text)

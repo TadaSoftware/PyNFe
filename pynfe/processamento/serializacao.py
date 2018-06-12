@@ -718,10 +718,10 @@ class SerializacaoQrcode(object):
         else:
             if tpamb == '1':
                 qrcode = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['QR'] + url
-                url_chave = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['URL'] + url
+                url_chave = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['URL']
             else:
                 qrcode = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['QR'] + url
-                url_chave = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['URL'] + url
+                url_chave = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['URL']
         # adicionta tag infNFeSupl com qrcode
         info = etree.Element('infNFeSupl')
         etree.SubElement(info, 'qrCode').text = '<![CDATA['+ qrcode.strip() + ']]>'
