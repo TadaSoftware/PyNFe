@@ -280,12 +280,11 @@ NFCE = {
 NFE = {
 		# Alguns serviços são disponibilizados apenas pelo ambiente nacional
 		'AN': {
-	    	'EVENTOS': 'nfe.fazenda.gov.br/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx',	# versao: 4.00
-	    	'DISTRIBUICAO': 'nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx',
-	    	'DOWNLOAD': 'nfe.fazenda.gov.br/NfeDownloadNF/NfeDownloadNF.asmx', 				# versao: 2.00/3.10
-	    	'DESTINADAS': 'nfe.fazenda.gov.br/NFeConsultaDest/NFeConsultaDest.asmx',		# versao: 2.00/3.10
-	    	'HTTPS': 'https://www.',
-	    	'HOMOLOGACAO': 'https://hom.'
+	    	'EVENTOS': '.nfe.fazenda.gov.br/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx',	# versao: 4.00
+	    	'DISTRIBUICAO': '1.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx',
+	    	'DESTINADAS': '.nfe.fazenda.gov.br/NFeConsultaDest/NFeConsultaDest.asmx',		# versao: 2.00/3.10
+	    	'HTTPS': 'https://www',
+	    	'HOMOLOGACAO': 'https://hom'
 	    },
 	    'AM': {
 	    	'STATUS': 'nfe.sefaz.am.gov.br/services2/services/NfeStatusServico2',

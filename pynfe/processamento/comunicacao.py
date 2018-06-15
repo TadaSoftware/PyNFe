@@ -70,18 +70,16 @@ class ComunicacaoSefaz(Comunicacao):
 
         # Em caso de sucesso, retorna xml com nfe e protocolo de autorização.
         # Caso contrário, envia todo o soap de resposta da Sefaz para decisão do usuário.
-        # import pdb
-        # pdb.set_trace()
         if retorno.status_code == 200:
             # namespace
             ns = {'ns': NAMESPACE_NFE}
+            # Procuta status no xml
+            try:
+                prot = etree.fromstring(retorno.text)
+            except ValueError:
+                # em SP retorno.text apresenta erro
+                prot = etree.fromstring(retorno.content)
             if ind_sinc == 1:
-                # Procuta status no xml
-                try:
-                    prot = etree.fromstring(retorno.text)
-                except ValueError:
-                    # em SP retorno.text apresenta erro
-                    prot = etree.fromstring(retorno.content)
                 try:
                     # Protocolo com envio OK
                     inf_prot = prot[0][0]                             # root protNFe
@@ -91,7 +89,7 @@ class ComunicacaoSefaz(Comunicacao):
                         prot_nfe = inf_prot.xpath("ns:retEnviNFe/ns:protNFe", namespaces=ns)[0]
                         status = prot_nfe.xpath('ns:infProt/ns:cStat', namespaces=ns)[0].text
                         # autorizado usa da NF-e 
-                        # retorna xml final (NFe+protNFe)
+                        # retorna xml final (protNFe+NFe)
                         if status == '100':
                             raiz = etree.Element('nfeProc', xmlns=NAMESPACE_NFE, versao=VERSAO_PADRAO)
                             raiz.append(nota_fiscal)
@@ -102,12 +100,7 @@ class ComunicacaoSefaz(Comunicacao):
                     return 1, retorno, nota_fiscal
             else:
                 # Retorna id do protocolo para posterior consulta em caso de sucesso.
-                try:
-                    rec = etree.fromstring(retorno.text)
-                except ValueError:
-                    # em SP retorno.text apresenta erro
-                    rec = etree.fromstring(retorno.content)
-                rec = rec[0][0]
+                rec = prot[0][0]
                 status = rec.xpath("ns:retEnviNFe/ns:cStat", namespaces=ns)[0].text
                 # Lote Recebido com Sucesso!
                 if status == '103':
@@ -124,7 +117,7 @@ class ComunicacaoSefaz(Comunicacao):
         Processamento".
         :param modelo: Modelo da nota
         :param numero: Número da nota
-        :return:
+        :return: 
         """
 
         # url do serviço
@@ -271,30 +264,6 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
         etree.SubElement(raiz, 'xServ').text = 'STATUS'
         xml = self._construir_xml_soap('NFeStatusServico4', raiz)
-        return self._post(url, xml)
-
-    def download(self, cnpj, chave):
-        """
-        Metodo para download de NFe por parte de destinatário.
-        O certificado digital deve ser o mesmo do destinatário da Nfe.
-        NT 2012/002
-        :param cnpj: CNPJ da empresa
-        :param chave: Chave
-        :return:
-        """
-
-        # url do serviço
-        url = self._get_url_an(consulta='DOWNLOAD')
-
-        # Monta XML do corpo da requisição
-        raiz = etree.Element('downloadNFe', versao='1.00', xmlns=NAMESPACE_NFE)
-        etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
-        etree.SubElement(raiz, 'xServ').text = 'DOWNLOAD NFE'
-        etree.SubElement(raiz, 'CNPJ').text = str(cnpj)
-        etree.SubElement(raiz, 'chNFe').text = str(chave)
-
-         # Monta XML para envio da requisição
-        xml = self._construir_xml_soap('NfeDownloadNF', raiz)
         return self._post(url, xml)
 
     def inutilizacao(self, modelo, cnpj, numero_inicial, numero_final, justificativa='', ano=None, serie='1'):
