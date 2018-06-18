@@ -151,47 +151,40 @@ class ComunicacaoSefaz(Comunicacao):
         xml = self._construir_xml_soap('NFeConsultaProtocolo4', raiz)
         return self._post(url, xml)
 
-    def consulta_notas_cnpj(self, cnpj, nsu=0):
+    def consulta_distribuicao(self, cnpj=None, cpf=None, chave=None, nsu=0):
+        """ 
+            O XML do pedido de distribuição suporta três tipos de consultas que são definidas de acordo com a tag
+            informada no XML. As tags são distNSU, consNSU e consChNFe.
+            a) distNSU – Distribuição de Conjunto de DF-e a Partir do NSU Informado
+            b) consNSU – Consulta DF-e Vinculado ao NSU Informado
+            c) consChNFe – Consulta de NF-e por Chave de Acesso Informada 
+        :param cnpj: CNPJ do interessado
+        :param cpf: CPF do interessado
+        :param chave: Chave da NF-e a ser consultada
+        :param nsu: Ultimo nsu ou nsu específico para ser consultado.
+        :return: 
         """
-        “Serviço de Consulta da Relação de Documentos Destinados” para um determinado CNPJ de
-        destinatário informado na NF-e.
-        :param cnpj: CNPJ
-        :param nsu:  NSU
-        :return:
-        """
-
-        # url do serviço
-        url = self._get_url_an(consulta='DESTINADAS')
-
-        # Monta XML do corpo da requisição
-        raiz = etree.Element('consNFeDest', versao='1.01', xmlns=NAMESPACE_NFE)
-        etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
-        etree.SubElement(raiz, 'xServ').text = 'CONSULTAR NFE DEST'
-        etree.SubElement(raiz, 'CNPJ').text = cnpj
-
-        # Indicador de NF-e consultada:
-        # 0 = Todas as NF-e;
-        # 1 = Somente as NF-e que ainda não tiveram manifestação do destinatário (Desconhecimento da
-        # operação, Operação não Realizada ou Confirmação da Operação);
-        # 2 = Idem anterior, incluindo as NF-e que também não tiveram a Ciência da Operação.
-        etree.SubElement(raiz, 'indNFe').text = '0'
-
-        # Indicador do Emissor da NF-e:
-        # 0 = Todos os Emitentes / Remetentes;
-        # 1 = Somente as NF-e emitidas por emissores / remetentes que não tenham o mesmo CNPJ-Base do
-        # destinatário (para excluir as notas fiscais de transferência entre filiais).
-        etree.SubElement(raiz, 'indEmi').text = '0'
-
-        # Último NSU recebido pela Empresa. Caso seja informado com zero, ou com um NSU muito antigo, a consulta
-        # retornará unicamente as notas fiscais que tenham sido recepcionadas nos últimos 15 dias.
-        etree.SubElement(raiz, 'ultNSU').text = str(nsu)
-
+        # url
+        url = self._get_url_an(consulta='DISTRIBUICAO')
         # Monta XML para envio da requisição
-        xml = self._construir_xml_soap('NfeConsultaDest', raiz)
+        raiz = etree.Element('distDFeInt', versao='1.00', xmlns=NAMESPACE_NFE)
+        etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
+        if self.uf:
+            etree.SubElement(raiz, 'cUFAutor').text = CODIGOS_ESTADOS[self.uf.upper()]
+        if cnpj:
+            etree.SubElement(raiz, 'CNPJ').text = cnpj
+        else:
+            etree.SubElement(raiz, 'CPF').text = cpf
+        distNSU = etree.SubElement(raiz, 'distNSU')
+        etree.SubElement(distNSU, 'ultNSU').text = str(nsu).zfill(15)
+        # if chave:
+        #     consChNFe = etree.SubElement(raiz, 'consChNFe')
+        #     etree.SubElement(consChNFe, 'chNFe').text = chave
+        # Monta XML para envio da requisição
+        xml = self._construir_xml_soap('NFeDistribuicaoDFe', raiz)
+        # print(url)
+        # print(etree.tostring(xml))
         return self._post(url, xml)
-
-    def consulta_distribuicao(self, cnpj, nsu=0):
-        pass
 
     def consulta_cadastro(self, modelo, cnpj):
         """
@@ -389,53 +382,17 @@ class ComunicacaoSefaz(Comunicacao):
                     raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
         return self.url
 
-    def _get_url_uf(self, modelo, consulta):
-        """ Estados que implementam url diferente do padrão nacional"""
-        # estados que implementam webservice SVRS
-        svrs = ['AC', 'AL', 'AP', 'DF', 'ES', 'PB', 'RJ', 'RN', 'RO', 'RR', 'SC', 'SE', 'TO', 'PI']
-        svan = ['MA', 'PA']
-        # SVRS
-        if self.uf.upper() in svrs:
-            if self._ambiente == 1:
-                ambiente = 'HTTPS'
-            else:
-                ambiente = 'HOMOLOGACAO'
-            if modelo == 'nfe':
-                # nfe Ex: https://nfe.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
-                #         https://nfe-homologacao.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
-                self.url = NFE['SVRS'][ambiente] + NFE['SVRS'][consulta]
-            elif modelo == 'nfce':
-                # nfce Ex: https://nfce.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
-                #          https://nfce-homologacao.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
-                self.url = NFCE['SVRS'][ambiente] + NFCE['SVRS'][consulta]
-            else:
-                # TODO implementar outros tipos de notas como NFS-e
-                pass
-        # SVAN
-        else:
-            if self.uf.upper() in svan:
-                if self._ambiente == 1:
-                    ambiente = 'HTTPS'
-                else:
-                    ambiente = 'HOMOLOGACAO'
-                if modelo == 'nfe':
-                    # nfe Ex: https://nfe.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
-                    #         https://nfe-homologacao.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx
-                    self.url = NFE['SVAN'][ambiente] + NFE['SVAN'][consulta]
-                elif modelo == 'nfce':
-                    # TODO não existe SVAN para nfce
-                    pass
-                else:
-                    # TODO implementar outros tipos de notas como NFS-e
-                    pass
-        return self.url
-
-    def _construir_xml_soap(self, metodo, dados):
+    def _construir_xml_soap(self, metodo, dados, cabecalho=False):
         """Mota o XML para o envio via SOAP"""
         raiz = etree.Element('{%s}Envelope' % NAMESPACE_SOAP, nsmap={
           'xsi': NAMESPACE_XSI, 'xsd': NAMESPACE_XSD,'soap': NAMESPACE_SOAP})
         body = etree.SubElement(raiz, '{%s}Body' % NAMESPACE_SOAP)
-        a = etree.SubElement(body, 'nfeDadosMsg', xmlns=NAMESPACE_METODO+metodo)
+        ## distribuição tem um corpo de xml diferente
+        if metodo == 'NFeDistribuicaoDFe':
+            x = etree.SubElement(body, 'nfeDistDFeInteresse', xmlns=NAMESPACE_METODO+metodo)
+            a = etree.SubElement(x, 'nfeDadosMsg')
+        else:
+            a = etree.SubElement(body, 'nfeDadosMsg', xmlns=NAMESPACE_METODO+metodo)
         a.append(dados)
         return raiz
 
