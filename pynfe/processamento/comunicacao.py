@@ -194,7 +194,7 @@ class ComunicacaoSefaz(Comunicacao):
         :return:
         """
         # UF que utilizam a SVRS - Sefaz Virtual do RS: Para serviço de Consulta Cadastro: AC, RN, PB, SC 
-        lista_svrs = ['AC', 'RN', 'PB', 'SC', 'PI']
+        lista_svrs = ['AC', 'RJ', 'RN', 'PB', 'SC', 'PI']
 
         # RS implementa um método diferente na consulta de cadastro
         if self.uf.upper() == 'RS':
@@ -352,7 +352,7 @@ class ComunicacaoSefaz(Comunicacao):
                 raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
         # Estados que utilizam outros ambientes
         else:
-            lista_svrs = ['AC', 'RN', 'PB', 'SC', 'SE', 'PI']
+            lista_svrs = ['AC', 'RJ', 'RN', 'PB', 'SC', 'SE', 'PI']
             lista_svan = ['MA','PA']
             if self.uf.upper() in lista_svrs:
                 if self._ambiente == 1:
