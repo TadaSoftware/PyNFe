@@ -278,6 +278,10 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(icms_item, 'vICMSSTRet').text = ''     # Informar o valor do ICMS ST retido na UF remetente
             etree.SubElement(icms_item, 'vBCSTDest').text = ''      # Informar o valor da BC do ICMS ST da UF destino
             etree.SubElement(icms_item, 'vICMSSTDest').text = ''    # Informar o valor do ICMS ST da UF destino
+        elif produto_servico.icms_modalidade == '500':
+            icms_item = etree.SubElement(icms, 'ICMSSN'+produto_servico.icms_modalidade)
+            etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
+            etree.SubElement(icms_item, 'CSOSN').text = produto_servico.icms_csosn
         else:
             ### OUTROS TIPOS DE ICMS (00,10,20)
             icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
@@ -309,9 +313,9 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(icms_item, 'vBC').text = '{:.2f}'.format(produto_servico.icms_valor_base_calculo or 0)  # Valor da BC do ICMS 
                 etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)          # Alíquota do imposto
                 etree.SubElement(icms_item, 'vICMS').text = '{:.2f}'.format(produto_servico.icms_valor or 0)  # Valor do ICMS 
-                etree.SubElement(icms_item, 'vBCFCP').text = '{:.2f}'.format(produto_servico.fcp_base_calculo)  # Base de calculo FCP
-                etree.SubElement(icms_item, 'pFCP').text = '{:.2f}'.format(produto_servico.fcp_percentual)  # Percentual FCP 
-                etree.SubElement(icms_item, 'vFCP').text = '{:.2f}'.format(produto_servico.fcp_valor)  # Valor Fundo Combate a Pobreza 
+                etree.SubElement(icms_item, 'vBCFCP').text = '{:.2f}'.format(produto_servico.fcp_base_calculo or 0)  # Base de calculo FCP
+                etree.SubElement(icms_item, 'pFCP').text = '{:.2f}'.format(produto_servico.fcp_percentual or 0)  # Percentual FCP 
+                etree.SubElement(icms_item, 'vFCP').text = '{:.2f}'.format(produto_servico.fcp_valor or 0)  # Valor Fundo Combate a Pobreza 
             # Impostos não implementados
             else:
                 raise NotImplementedError
