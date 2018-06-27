@@ -634,6 +634,9 @@ class NotaFiscalProduto(Entidade):
     #    - Valor do ICMS ST
     icms_st_valor = Decimal()
 
+    #    - Fundo de Combate a Pobreza
+    fcp_base_calculo = Decimal()
+    fcp_percentual = Decimal()
     fcp_valor = Decimal()
     fcp_destino_valor = Decimal()
     fcp_st_valor = Decimal()
