@@ -103,6 +103,11 @@ class Produto(Entidade):
     cofins_aliquota_percentual = str()
     cofins_valor = str()
 
+    # # Fundo de Combate a Pobreza
+    fcp_base_calculo = Decimal()
+    fcp_percentual = Decimal()
+    fcp_valor = Decimal()
+
     # # - ICMS (lista 1 para * / ManyToManyField)
     icms = None
     def adicionar_icms(self, **kwargs):
