@@ -124,7 +124,8 @@ class FonteDados(object):
             return len(self._objetos)
 
     def limpar_dados(self):
-        self._objetos.clear()
+        del self._objetos[:]
+        #self._objetos.clear()
 
 # Instancia da fonte de dados default
 _fonte_dados = FonteDados()

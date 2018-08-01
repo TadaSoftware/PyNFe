@@ -65,6 +65,7 @@ class ComunicacaoSefaz(Comunicacao):
 
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap('NFeAutorizacao4', raiz)
+        #print '---->', etree.tostring(xml, pretty_print=True)
         # Faz request no Servidor da Sefaz
         retorno = self._post(url, xml)
 

@@ -1,3 +1,4 @@
+# encoding: utf-8
 
 """
 	@author: Junior Tada, Leonardo Tada

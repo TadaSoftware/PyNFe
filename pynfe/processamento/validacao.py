@@ -58,5 +58,8 @@ class Validacao(object):
             xsd_doc = etree.parse(xsd_file)
             xsd_schema = etree.XMLSchema(xsd_doc)
             self.MEM_CACHE[xsd_file] = xsd_schema
-        return use_assert and xsd_schema.assertValid(xml_doc) \
+        ret = use_assert and xsd_schema.assertValid(xml_doc) \
                or xsd_schema.validate(xml_doc)
+        if ret is True:
+            return True
+        raise Exception(xsd_schema.error_log)

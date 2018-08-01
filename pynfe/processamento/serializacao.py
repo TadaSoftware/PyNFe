@@ -9,6 +9,8 @@ import base64
 import hashlib
 from datetime import datetime
 
+import pytz
+
 
 class Serializacao(object):
     """Classe abstrata responsavel por fornecer as funcionalidades basicas para
@@ -74,7 +76,7 @@ class SerializacaoXML(Serializacao):
             else:
                 return raiz
         except Exception as e:
-            raise e
+            raise
         finally:
             if limpar:
                 self._fonte_dados.limpar_dados()
@@ -416,7 +418,8 @@ class SerializacaoXML(Serializacao):
         # Ex.: NFe35080599999090910270550010000000011518005123
         raiz.attrib['Id'] = nota_fiscal.identificador_unico
 
-        tz = datetime.now().astimezone().strftime('%z')
+        #tz = datetime.now().astimezone().strftime('%z')
+        tz = datetime.now(pytz.timezone('America/Sao_Paulo')).strftime('%z')
         tz = "{}:{}".format(tz[:-2], tz[-2:])
 
         # Dados da Nota Fiscal
@@ -535,7 +538,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_total, 'vST').text = '{:.2f}'.format(nota_fiscal.totais_icms_st_total)
         etree.SubElement(icms_total, 'vFCPST').text = '{:.2f}'.format(nota_fiscal.totais_fcp_st)
         etree.SubElement(icms_total, 'vFCPSTRet').text = '{:.2f}'.format(nota_fiscal.totais_fcp_st_ret)
-        etree.SubElement(icms_total, 'vProd').text = str(nota_fiscal.totais_icms_total_produtos_e_servicos)
+        etree.SubElement(icms_total, 'vProd').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_produtos_e_servicos)
         etree.SubElement(icms_total, 'vFrete').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_frete)
         etree.SubElement(icms_total, 'vSeg').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_seguro)
         etree.SubElement(icms_total, 'vDesc').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_desconto)
@@ -548,7 +551,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_total, 'vCOFINS').text = '{:.2f}'.format(nota_fiscal.totais_icms_cofins)
 
         etree.SubElement(icms_total, 'vOutro').text = '{:.2f}'.format(nota_fiscal.totais_icms_outras_despesas_acessorias)
-        etree.SubElement(icms_total, 'vNF').text = str(nota_fiscal.totais_icms_total_nota)
+        etree.SubElement(icms_total, 'vNF').text = str('{:.2f}').format(nota_fiscal.totais_icms_total_nota)
         if nota_fiscal.totais_tributos_aproximado:
             etree.SubElement(icms_total, 'vTotTrib').text = '{:.2f}'.format(nota_fiscal.totais_tributos_aproximado)
 
@@ -640,7 +643,8 @@ class SerializacaoXML(Serializacao):
             return raiz
 
     def serializar_evento(self, evento, tag_raiz='evento', retorna_string=False):
-        tz = datetime.now().astimezone().strftime('%z')
+        #tz = datetime.now().astimezone().strftime('%z')
+        tz = datetime.now(pytz.timezone('America/Sao_Paulo')).strftime('%z')
         tz = "{}:{}".format(tz[:-2], tz[-2:])
         raiz = etree.Element(tag_raiz, versao='1.00', xmlns=NAMESPACE_NFE)
         e = etree.SubElement(raiz, 'infEvento', Id=evento.identificador)
