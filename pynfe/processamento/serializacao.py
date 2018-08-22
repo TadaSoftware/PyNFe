@@ -741,8 +741,7 @@ class SerializacaoQrcode(object):
         etree.SubElement(info, 'urlChave').text = url_chave
         nfe.insert(1, info)
         # correção da tag qrCode, retira caracteres pois e CDATA
-        # tnfe = etree.tostring(nfe, encoding='unicode')
-        tnfe = etree.tostring(nfe.find(".//qrCode"), encoding='unicode') \
+        tnfe = etree.tostring(nfe, encoding='unicode') \
             .replace('\n','').replace('&lt;','<').replace('&gt;','>').replace('amp;','')
         nfe = etree.fromstring(tnfe)
         # retorna nfe com o qrcode incluido NT2015/002 e qrcode
