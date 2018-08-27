@@ -151,7 +151,7 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': 'sefaz.ba.gov.br/servicos/nfce/modulos/geral/NFCEC_consulta_chave_acesso.aspx',
+	    	'QR': 'sefaz.ba.gov.br/servicos/nfce/modulos/geral/NFCEC_consulta_chave_acesso.aspx?',
 	    	'HTTPS': 'http://nfe.',
 	    	'HOMOLOGACAO': 'http://hnfe.',
 	    	'URL': 'nfe.sefaz.ba.gov.br/servicos/nfce/default.aspx'
