@@ -252,14 +252,14 @@ NFCE = {
 	    	'HOMOLOGACAO': 'http://homologacao.'
 	    },
 	    'GO': {
-	    	'STATUS': 'sefaz.go.gov.br/nfe/services/v2/NfeStatusServico2',
-	    	'AUTORIZACAO': 'sefaz.go.gov.br/nfe/services/v2/NfeAutorizacao',
-	    	'RECIBO': 'sefaz.go.gov.br/nfe/services/v2/NfeRetAutorizacao',
-	    	'CHAVE': 'sefaz.go.gov.br/nfe/services/v2/NfeConsulta2',
-	    	'INUTILIZACAO': 'sefaz.go.gov.br/nfe/services/v2/NfeInutilizacao2',
-	    	'EVENTOS': 'sefaz.go.gov.br/nfe/services/v2/RecepcaoEvento',
+	    	'STATUS': 'sefaz.go.gov.br/nfe/services/NFeStatusServico4?wsdl',
+	    	'AUTORIZACAO': 'sefaz.go.gov.br/nfe/services/NFeAutorizacao4?wsdl',
+	    	'RECIBO': 'sefaz.go.gov.br/nfe/services/NFeRetAutorizacao4?wsdl',
+	    	'CHAVE': 'sefaz.go.gov.br/nfe/services/NFeConsultaProtocolo4?wsdl',
+	    	'INUTILIZACAO': 'sefaz.go.gov.br/nfe/services/NFeInutilizacao4?wsdl',
+	    	'EVENTOS': 'sefaz.go.gov.br/nfe/services/NFeRecepcaoEvento4?wsdl',
 	    	'QR': 'sefaz.go.gov.br/nfeweb/sites/nfce/danfeNFCe?',
-	    	'CADASTRO': 'sefaz.go.gov.br/nfe/services/v2/CadConsultaCadastro2',
+	    	'CADASTRO': 'sefaz.go.gov.br/nfe/services/CadConsultaCadastro4?wsdl',
 	    	'HTTPS': 'http://nfe.',
 	    	'HOMOLOGACAO': 'http://homolog.'
 	    },
