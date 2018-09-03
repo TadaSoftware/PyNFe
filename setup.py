@@ -12,7 +12,7 @@ setup(
     version='0.4',
     packages=find_packages(),
     package_data={
-        'pynfe': ['data/**/*.txt'],
+        'pynfe': ['data/**/*.txt', 'data/**/*.xsd', 'danfe/**/*.ttf'],
     },
     install_requires=requirements('requirements.txt'),
     zip_safe=False,
