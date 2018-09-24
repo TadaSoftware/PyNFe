@@ -256,7 +256,7 @@ class SerializacaoXML(Serializacao):
         # Lei da transparencia
         # Tributos aprox por item
         if produto_servico.valor_tributos_aprox:
-            etree.SubElement(imposto, 'vTotTrib').text = produto_servico.valor_tributos_aprox
+            etree.SubElement(imposto, 'vTotTrib').text = str(produto_servico.valor_tributos_aprox)
 
         ### ICMS
         icms = etree.SubElement(imposto, 'ICMS')
@@ -674,7 +674,7 @@ class SerializacaoXML(Serializacao):
 
 class SerializacaoQrcode(object):
     """ Classe que gera e serializa o qrcode de NFC-e no xml """
-    def gerar_qrcode(self, token, csc, xml, return_qr=False,qrcode_emissao="1"):
+    def gerar_qrcode(self, token, csc, xml, return_qr=False, online=True):
         """ Classe para gerar url do qrcode da NFC-e """
         # Procura atributos no xml
         ns = {'ns':NAMESPACE_NFE}
@@ -697,30 +697,19 @@ class SerializacaoQrcode(object):
             except IndexError:
                 cpf = None
         total = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vNF/text()', namespaces=ns)[0]
-        icms = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vICMS/text()', namespaces=ns)[0]
+        # icms = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vICMS/text()', namespaces=ns)[0]
         digest = nfe.xpath('sig:Signature/sig:SignedInfo/sig:Reference/sig:DigestValue/text()', namespaces=sig)[0].encode()
-
 
         lista_dia = re.findall("-\d{2}", str(data))
         dia = str(lista_dia[1])
         dia = dia[1:]
-
-
-
         replacements = {'0': ''}
         token = re.sub('([0])', lambda m: replacements[m.group()], token)
 
-
-
         #VERSAO_QRCODE =2
-
-        if qrcode_emissao == "1":
+        if online:
             #versão online
-
-            url = '{}|{}|{}|{}'.format(
-                chave,VERSAO_QRCODE,tpamb,token
-                )
-
+            url = '{}|{}|{}|{}'.format(chave,VERSAO_QRCODE, tpamb, token)
         else:
             #versão offline
             digest = digest.lower()
@@ -734,23 +723,7 @@ class SerializacaoQrcode(object):
         url_hash = hashlib.sha1(url_complementar.encode()).digest()
         url_hash = base64.b16encode(url_hash).decode()
 
-        url_formatacao = "p="
-        url = url_formatacao + url + "|" + url_hash
-
-
-
-
-        #if cpf is None:
-        #    url = 'chNFe={}&nVersao={}&tpAmb={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
-        #           chave, VERSAO_QRCODE, tpamb, data.lower(), total, icms, digest.lower(), token)
-        #else:
-        #    url = 'chNFe={}&nVersao={}&tpAmb={}&cDest={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
-        #           chave, VERSAO_QRCODE, tpamb, cpf, data.lower(), total, icms, digest.lower(), token)
-
-        #url_hash = hashlib.sha1(url.encode()+csc.encode()).digest()
-        #url_hash = base64.b16encode(url_hash).decode()
-
-        #url = url + '&cHashQRCode=' + url_hash.upper()
+        url = 'p={}|{}'.format(url, url_hash)
 
         # url_chave - Texto com a URL de consulta por chave de acesso a ser impressa no DANFE NFC-e.
         # Informar a URL da “Consulta por chave de acesso da NFC-e”.
@@ -792,9 +765,6 @@ class SerializacaoQrcode(object):
             .replace('\n','').replace('&lt;','<').replace('&gt;','>').replace('amp;','')
         nfe = etree.fromstring(tnfe)
         # retorna nfe com o qrcode incluido NT2015/002 e qrcode
-
-
-
         if return_qr:
             return nfe, qrcode.strip()
         # retorna apenas nfe com o qrcode incluido NT2015/002

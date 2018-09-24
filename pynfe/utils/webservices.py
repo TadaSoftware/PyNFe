@@ -199,7 +199,7 @@ NFCE = {
 	    	'INUTILIZACAO': 'nfce.fazenda.sp.gov.br/ws/NFeInutilizacao4.asmx',
 	    	'EVENTOS': 'nfce.fazenda.sp.gov.br/ws/NFeRecepcaoEvento4.asmx',
 	    	'QR': 'nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaQRCode.aspx?',
-	    	'URL': 'nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaPublica.aspx',
+	    	'URL': 'nfce.fazenda.sp.gov.br/consulta',
 	    	'HTTPS': 'https://',
 	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
@@ -212,7 +212,7 @@ NFCE = {
 	    	'EVENTOS': 'nfce.sefa.pr.gov.br/nfce/NFeRecepcaoEvento4?wsdl',
 	    	'CADASTRO': 'nfce.sefa.pr.gov.br/nfce/CadConsultaCadastro4?wsdl',
 	    	'QR': 'http://www.fazenda.pr.gov.br/nfce/qrcode?',
-	    	'URL': 'http://www.fazenda.pr.gov.br',
+	    	'URL': 'www.fazenda.pr.gov.br/nfce/consulta',
 	    	'HTTPS': 'https://',
 	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
