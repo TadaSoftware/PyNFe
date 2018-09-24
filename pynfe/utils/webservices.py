@@ -212,7 +212,7 @@ NFCE = {
 	    	'EVENTOS': 'nfce.sefa.pr.gov.br/nfce/NFeRecepcaoEvento4?wsdl',
 	    	'CADASTRO': 'nfce.sefa.pr.gov.br/nfce/CadConsultaCadastro4?wsdl',
 	    	'QR': 'http://www.fazenda.pr.gov.br/nfce/qrcode?',
-	    	'URL': 'www.fazenda.pr.gov.br/nfce/consulta',
+	    	'URL': 'http://www.fazenda.pr.gov.br/nfce/consulta',
 	    	'HTTPS': 'https://',
 	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
