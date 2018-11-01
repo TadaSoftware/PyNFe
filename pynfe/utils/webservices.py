@@ -125,10 +125,10 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': 'sefaz.pe.gov.br/nfce-web/consultarNFCe?',
+	    	'QR': 'sefaz.pe.gov.br/nfce/consulta',
 	    	'HTTPS': 'http://nfce.',
-	    	'HOMOLOGACAO': 'http://nfcehomolog.',
-	    	'URL': 'sefaz.pe.gov.br/nfce-web/consultarNFCe'
+	    	'HOMOLOGACAO': 'http://nfce.',
+	    	'URL': 'sefaz.pe.gov.br/nfce/consulta'
 	    },
 	    'AL': {
 	    	'STATUS': '',

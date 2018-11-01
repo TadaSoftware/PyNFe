@@ -418,7 +418,7 @@ class ComunicacaoSefaz(Comunicacao):
             # limpa xml com caracteres bugados para infNFeSupl em NFC-e
             xml = re.sub(
                 '<qrCode>(.*?)</qrCode>',
-                lambda x: x.group(0).replace('&lt;', '<').replace('&gt;', '>').replace('amp;', ''),
+                lambda x: x.group(0).replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', ''),
                 etree.tostring(xml, encoding='unicode').replace('\n', '')
             )
             xml = xml_declaration + xml
