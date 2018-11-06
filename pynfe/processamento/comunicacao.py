@@ -17,6 +17,7 @@ from pynfe.utils.flags import (
 from pynfe.utils.webservices import NFE, NFCE, NFSE
 from pynfe.entidades.certificado import CertificadoA1
 from .assinatura import AssinaturaA1
+from pynfe.utils.descompactar import DescompactaGzip
 
 
 class Comunicacao(object):
@@ -167,7 +168,7 @@ class ComunicacaoSefaz(Comunicacao):
         # url
         url = self._get_url_an(consulta='DISTRIBUICAO')
         # Monta XML para envio da requisição
-        raiz = etree.Element('distDFeInt', versao='1.00', xmlns=NAMESPACE_NFE)
+        raiz = etree.Element('distDFeInt', versao='1.01', xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
         if self.uf:
             etree.SubElement(raiz, 'cUFAutor').text = CODIGOS_ESTADOS[self.uf.upper()]
@@ -175,15 +176,19 @@ class ComunicacaoSefaz(Comunicacao):
             etree.SubElement(raiz, 'CNPJ').text = cnpj
         else:
             etree.SubElement(raiz, 'CPF').text = cpf
-        distNSU = etree.SubElement(raiz, 'distNSU')
-        etree.SubElement(distNSU, 'ultNSU').text = str(nsu).zfill(15)
-        # if chave:
-        #     consChNFe = etree.SubElement(raiz, 'consChNFe')
-        #     etree.SubElement(consChNFe, 'chNFe').text = chave
-        # Monta XML para envio da requisição
+        if not chave:
+            distNSU = etree.SubElement(raiz, 'distNSU')
+            etree.SubElement(distNSU, 'ultNSU').text = str(nsu).zfill(15)
+        if chave:
+            consChNFe = etree.SubElement(raiz, 'consChNFe')
+            etree.SubElement(consChNFe, 'chNFe').text = chave
+        #Monta XML para envio da requisição
         xml = self._construir_xml_soap('NFeDistribuicaoDFe', raiz)
-        # print(url)
-        # print(etree.tostring(xml))
+        #print(url)
+        #print(etree.tostring(xml))
+        #print('\n\n')
+
+        
         return self._post(url, xml)
 
     def consulta_cadastro(self, modelo, cnpj):
