@@ -127,7 +127,7 @@ NFCE = {
 	    	'EVENTOS': '',
 	    	'QR': 'sefaz.pe.gov.br/nfce/consulta?',
 	    	'HTTPS': 'http://nfce.',
-	    	'HOMOLOGACAO': 'http://nfce.',
+	    	'HOMOLOGACAO': 'http://nfcehomolog.',
 	    	'URL': 'sefaz.pe.gov.br/nfce/consulta'
 	    },
 	    'AL': {
@@ -351,7 +351,7 @@ NFE = {
 	    	'STATUS': 'nfe.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx',
 	    	'AUTORIZACAO': 'nfe.fazenda.sp.gov.br/ws/nfeautorizacao4.asmx',
 	    	'RECIBO': 'nfe.fazenda.sp.gov.br/ws/nferetautorizacao4.asmx',
-	    	'CHAVE': 'nfe.fazenda.sp.gov.br/ws/nfeconsulta4.asmx',
+	    	'CHAVE': 'nfe.fazenda.sp.gov.br/ws/nfeconsultaprotocolo4.asmx',
 	    	'INUTILIZACAO': 'nfe.fazenda.sp.gov.br/ws/nfeinutilizacao4.asmx',
 	    	'EVENTOS': 'nfe.fazenda.sp.gov.br/ws/nferecepcaoevento4.asmx',
 	    	'CADASTRO': 'nfe.fazenda.sp.gov.br/ws/cadconsultacadastro4.asmx',

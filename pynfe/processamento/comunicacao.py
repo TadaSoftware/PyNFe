@@ -286,7 +286,7 @@ class ComunicacaoSefaz(Comunicacao):
             'uf': uf,
             'ano': ano,
             'cnpj': cnpj,
-            'modelo': '55',
+            'modelo': '55' if modelo == 'nfe' else '65',  # 55=NF-e; 65=NFC-e;
             'serie': serie.zfill(3),
             'num_ini': str(numero_inicial).zfill(9),
             'num_fin': str(numero_final).zfill(9),
