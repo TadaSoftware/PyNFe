@@ -125,10 +125,10 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': 'sefaz.pe.gov.br/nfce-web/consultarNFCe?',
+	    	'QR': 'sefaz.pe.gov.br/nfce/consulta?',
 	    	'HTTPS': 'http://nfce.',
 	    	'HOMOLOGACAO': 'http://nfcehomolog.',
-	    	'URL': 'sefaz.pe.gov.br/nfce-web/consultarNFCe'
+	    	'URL': 'sefaz.pe.gov.br/nfce/consulta'
 	    },
 	    'AL': {
 	    	'STATUS': '',
@@ -199,7 +199,7 @@ NFCE = {
 	    	'INUTILIZACAO': 'nfce.fazenda.sp.gov.br/ws/NFeInutilizacao4.asmx',
 	    	'EVENTOS': 'nfce.fazenda.sp.gov.br/ws/NFeRecepcaoEvento4.asmx',
 	    	'QR': 'nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaQRCode.aspx?',
-	    	'URL': 'nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaPublica.aspx',
+	    	'URL': 'nfce.fazenda.sp.gov.br/consulta',
 	    	'HTTPS': 'https://',
 	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
@@ -212,7 +212,7 @@ NFCE = {
 	    	'EVENTOS': 'nfce.sefa.pr.gov.br/nfce/NFeRecepcaoEvento4?wsdl',
 	    	'CADASTRO': 'nfce.sefa.pr.gov.br/nfce/CadConsultaCadastro4?wsdl',
 	    	'QR': 'http://www.fazenda.pr.gov.br/nfce/qrcode?',
-	    	'URL': 'http://www.fazenda.pr.gov.br',
+	    	'URL': 'http://www.fazenda.pr.gov.br/nfce/consulta',
 	    	'HTTPS': 'https://',
 	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
@@ -351,7 +351,7 @@ NFE = {
 	    	'STATUS': 'nfe.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx',
 	    	'AUTORIZACAO': 'nfe.fazenda.sp.gov.br/ws/nfeautorizacao4.asmx',
 	    	'RECIBO': 'nfe.fazenda.sp.gov.br/ws/nferetautorizacao4.asmx',
-	    	'CHAVE': 'nfe.fazenda.sp.gov.br/ws/nfeconsulta4.asmx',
+	    	'CHAVE': 'nfe.fazenda.sp.gov.br/ws/nfeconsultaprotocolo4.asmx',
 	    	'INUTILIZACAO': 'nfe.fazenda.sp.gov.br/ws/nfeinutilizacao4.asmx',
 	    	'EVENTOS': 'nfe.fazenda.sp.gov.br/ws/nferecepcaoevento4.asmx',
 	    	'CADASTRO': 'nfe.fazenda.sp.gov.br/ws/cadconsultacadastro4.asmx',
