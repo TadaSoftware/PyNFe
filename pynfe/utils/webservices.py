@@ -107,7 +107,7 @@ NFCE = {
 	    	'QR': 'http://nfce.set.rn.gov.br/consultarNFCe.aspx?',
 	    	'HTTPS': '',
 	    	'HOMOLOGACAO': ''
-	    	
+
 	    },
 	    'PB': {
 	    	'STATUS': '',
@@ -155,7 +155,7 @@ NFCE = {
 	    	'HTTPS': 'http://nfe.',
 	    	'HOMOLOGACAO': 'http://hnfe.',
 	    	'URL': 'http://hinternet.sefaz.ba.gov.br/nfce/consulta'
-	    },	
+	    },
 	    'MG': {
 	    	'STATUS': '',
 	    	'AUTORIZACAO': '',
@@ -181,16 +181,16 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': 'http://www4.fazenda.rj.gov.br/consultaNFCe/QRCode?', 
+	    	'QR': 'http://www4.fazenda.rj.gov.br/consultaNFCe/QRCode?',
 	    	'URL': 'www.nfce.fazenda.rj.gov.br/consulta'
 	    },
-	    # Os Web Services de homologação da NFC-e 4.00 são: 
-		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeAutorizacao4.asmx 
-		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx 
-		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeConsultaProtocolo4.asmx 
-		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeRetAutorizacao4.asmx 
-		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeRecepcaoEvento4.asmx 
-		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeInutilizacao4.asmx 
+	    # Os Web Services de homologação da NFC-e 4.00 são:
+		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeAutorizacao4.asmx
+		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx
+		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeConsultaProtocolo4.asmx
+		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeRetAutorizacao4.asmx
+		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeRecepcaoEvento4.asmx
+		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeInutilizacao4.asmx
 	    'SP': {
 	    	'STATUS': 'nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx',
 	    	'AUTORIZACAO': 'nfce.fazenda.sp.gov.br/ws/NFeAutorizacao4.asmx',
@@ -335,7 +335,7 @@ NFE = {
 	    	'CADASTRO': 'nfe.sefaz.ba.gov.br/webservices/CadConsultaCadastro4/CadConsultaCadastro4.asmx',
 	    	'HTTPS': 'https://',
 	    	'HOMOLOGACAO': 'https://h'
-	    },	
+	    },
 	    'MG': {
 	    	'STATUS': 'nfe.fazenda.mg.gov.br/nfe2/services/NFeStatusServico4',
 	    	'AUTORIZACAO': 'nfe.fazenda.mg.gov.br/nfe2/services/NFeAutorizacao4',
@@ -348,7 +348,7 @@ NFE = {
 	    	'HOMOLOGACAO': 'https://h'
 	    },
 	    'SP': {
-	    	'STATUS': 'nfe.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx',
+	    	'STATUS': 'nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx',
 	    	'AUTORIZACAO': 'nfe.fazenda.sp.gov.br/ws/nfeautorizacao4.asmx',
 	    	'RECIBO': 'nfe.fazenda.sp.gov.br/ws/nferetautorizacao4.asmx',
 	    	'CHAVE': 'nfe.fazenda.sp.gov.br/ws/nfeconsultaprotocolo4.asmx',
@@ -461,7 +461,7 @@ NFE = {
 
 # Nfs-e
 NFSE = {
-	# 
+	#
 	'BETHA': {
 		'AUTORIZACAO':'GerarNfse',
 		'CANCELAR':'CancelarNfse',
