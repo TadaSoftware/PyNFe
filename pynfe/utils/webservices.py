@@ -395,13 +395,13 @@ NFE = {
 	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
 	    'MT': {
-	    	'STATUS': 'sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl',
-	    	'AUTORIZACAO': 'sefaz.mt.gov.br/nfews/v2/services/NfeAutorizacao?wsdl',
-	    	'RECIBO': 'sefaz.mt.gov.br/nfews/v2/services/NfeRetAutorizacao?wsdl',
-	    	'CHAVE': 'sefaz.mt.gov.br/nfews/v2/services/NfeConsulta2?wsdl',
-	    	'INUTILIZACAO': 'sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao2?wsdl',
-	    	'EVENTOS': 'sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento?wsdl',
-	    	'CADASTRO': 'sefaz.mt.gov.br/nfews/v2/services/CadConsultaCadastro2?wsdl',
+	    	'STATUS': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico4?wsdl',
+	    	'AUTORIZACAO': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeAutorizacao4?wsdl',
+	    	'RECIBO': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeRetAutorizacao4?wsdl',
+	    	'CHAVE': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeConsulta4?wsdl',
+	    	'INUTILIZACAO': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao4?wsdl',
+	    	'EVENTOS': 'nfe.sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento4?wsdl',
+	    	'CADASTRO': 'nfe.sefaz.mt.gov.br/nfews/v2/services/CadConsultaCadastro4?wsdl',
 	    	'HTTPS': 'https://nfe.',
 	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
