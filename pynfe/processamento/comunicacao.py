@@ -184,9 +184,6 @@ class ComunicacaoSefaz(Comunicacao):
             etree.SubElement(consChNFe, 'chNFe').text = chave
         #Monta XML para envio da requisição
         xml = self._construir_xml_soap('NFeDistribuicaoDFe', raiz)
-        #print(url)
-        #print(etree.tostring(xml))
-        #print('\n\n')
 
         
         return self._post(url, xml)
