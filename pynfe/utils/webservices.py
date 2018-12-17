@@ -263,6 +263,10 @@ NFCE = {
 	    	'HTTPS': 'http://nfe.',
 	    	'HOMOLOGACAO': 'http://homolog.'
 	    },
+	    'DF': {
+	    	'QR': 'http://www.fazenda.df.gov.br/nfce/qrcode?',
+	    	'URL': 'www.fazenda.df.gov.br/nfce/consulta'
+	    },
 	    # RO, AC, RR, PA, AP, TO, MA, PI, RN, PB, AL, SE, BA, ES, RJ, GO, DF
 	    'SVRS': {
 	    	'STATUS': 'svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx',
