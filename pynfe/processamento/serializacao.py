@@ -220,6 +220,11 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'cEAN').text = produto_servico.ean
         etree.SubElement(prod, 'xProd').text = produto_servico.descricao
         etree.SubElement(prod, 'NCM').text = produto_servico.ncm
+        """ Código Especificador da Substituição Tributária – CEST, que estabelece a sistemática de uniformização e identificação das mercadorias e bens passíveis de
+        sujeição aos regimes de substituição tributária e de antecipação de recolhimento do ICMS. """
+        icms_modalidade_cest_list = ('10', '30', '60', '70', '90', '201', '202', '203', '500', '900')
+        if produto_servico.icms_modalidade in icms_modalidade_cest_list:
+            etree.SubElement(prod, 'CEST').text = str(produto_servico.cest)
         # Codificação opcional que detalha alguns NCM. Formato: duas letras maiúsculas e 4 algarismos.
         # Se a mercadoria se enquadrar em mais de uma codificação, informar até 8 codificações principais.
         #etree.SubElement(prod, 'NVE').text = ''
@@ -227,10 +232,6 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'uCom').text = produto_servico.unidade_comercial
         etree.SubElement(prod, 'qCom').text = str(produto_servico.quantidade_comercial or 0)
         etree.SubElement(prod, 'vUnCom').text = str('{:.4f}').format(produto_servico.valor_unitario_comercial or 0)
-        """ Código Especificador da Substituição Tributária – CEST, que estabelece a sistemática de uniformização e identificação das mercadorias e bens passíveis de
-        sujeição aos regimes de substituição tributária e de antecipação de recolhimento do ICMS. """
-        #if produto_servico.cest:
-        #    etree.SubElement(prod, 'CEST').text = produto_servico.cest
         etree.SubElement(prod, 'vProd').text = str('{:.2f}').format(produto_servico.valor_total_bruto or 0)
         etree.SubElement(prod, 'cEANTrib').text = produto_servico.ean_tributavel
         etree.SubElement(prod, 'uTrib').text = produto_servico.unidade_tributavel
