@@ -9,7 +9,7 @@ import base64
 import hashlib
 from datetime import datetime
 import re
-
+import pytz
 
 class Serializacao(object):
     """Classe abstrata responsavel por fornecer as funcionalidades basicas para
@@ -642,7 +642,7 @@ class SerializacaoXML(Serializacao):
             return raiz
 
     def serializar_evento(self, evento, tag_raiz='evento', retorna_string=False):
-        tz = datetime.now().astimezone().strftime('%z')
+        tz = datetime.utcnow().replace(tzinfo=pytz.utc)
         tz = "{}:{}".format(tz[:-2], tz[-2:])
         raiz = etree.Element(tag_raiz, versao='1.00', xmlns=NAMESPACE_NFE)
         e = etree.SubElement(raiz, 'infEvento', Id=evento.identificador)
