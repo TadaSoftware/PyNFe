@@ -642,7 +642,7 @@ class SerializacaoXML(Serializacao):
             return raiz
 
     def serializar_evento(self, evento, tag_raiz='evento', retorna_string=False):
-        tz = datetime.utcnow().replace(tzinfo=pytz.utc)
+        tz = datetime.utcnow().replace(tzinfo=pytz.utc).strftime('%z')
         tz = "{}:{}".format(tz[:-2], tz[-2:])
         raiz = etree.Element(tag_raiz, versao='1.00', xmlns=NAMESPACE_NFE)
         e = etree.SubElement(raiz, 'infEvento', Id=evento.identificador)
