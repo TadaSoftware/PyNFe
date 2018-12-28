@@ -152,7 +152,7 @@ class ComunicacaoSefaz(Comunicacao):
         xml = self._construir_xml_soap('NFeConsultaProtocolo4', raiz)
         return self._post(url, xml)
 
-    def consulta_distribuicao(self, cnpj=None, cpf=None, chave=None, nsu=0):
+    def consulta_distribuicao(self, cnpj=None, cpf=None, chave=None, nsu=0,consulta_nsu=False):
         """ 
             O XML do pedido de distribuição suporta três tipos de consultas que são definidas de acordo com a tag
             informada no XML. As tags são distNSU, consNSU e consChNFe.
@@ -176,12 +176,15 @@ class ComunicacaoSefaz(Comunicacao):
             etree.SubElement(raiz, 'CNPJ').text = cnpj
         else:
             etree.SubElement(raiz, 'CPF').text = cpf
-        if not chave:
+        if not chave and not consulta_nsu:
             distNSU = etree.SubElement(raiz, 'distNSU')
             etree.SubElement(distNSU, 'ultNSU').text = str(nsu).zfill(15)
         if chave:
             consChNFe = etree.SubElement(raiz, 'consChNFe')
             etree.SubElement(consChNFe, 'chNFe').text = chave
+        if consulta_nsu:
+            nsu_tag = etree.SubElement(raiz, 'consNSU')
+            etree.SubElement(nsu_tag, 'NSU').text = nsu
         #Monta XML para envio da requisição
         xml = self._construir_xml_soap('NFeDistribuicaoDFe', raiz)
 
