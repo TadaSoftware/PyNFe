@@ -172,7 +172,10 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'QR': 'sefaz.es.gov.br/ConsultaNFCe/qrcode.aspx?	',
+	    	'HTTPS': 'http://nfe.',
+	    	'HOMOLOGACAO': 'http://homologacao.',
+	    	'URL': 'www.sefaz.es.gov.br/nfce/consulta'
 	    },
 	    'RJ': {
 	    	'STATUS': '',
