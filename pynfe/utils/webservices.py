@@ -172,7 +172,10 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'QR': 'sefaz.es.gov.br/ConsultaNFCe/qrcode.aspx?	',
+	    	'HTTPS': 'http://nfe.',
+	    	'HOMOLOGACAO': 'http://homologacao.',
+	    	'URL': 'www.sefaz.es.gov.br/nfce/consulta'
 	    },
 	    'RJ': {
 	    	'STATUS': '',
@@ -262,6 +265,10 @@ NFCE = {
 	    	'CADASTRO': 'sefaz.go.gov.br/nfe/services/CadConsultaCadastro4?wsdl',
 	    	'HTTPS': 'http://nfe.',
 	    	'HOMOLOGACAO': 'http://homolog.'
+	    },
+	    'DF': {
+	    	'QR': 'http://www.fazenda.df.gov.br/nfce/qrcode?',
+	    	'URL': 'www.fazenda.df.gov.br/nfce/consulta'
 	    },
 	    # RO, AC, RR, PA, AP, TO, MA, PI, RN, PB, AL, SE, BA, ES, RJ, GO, DF
 	    'SVRS': {

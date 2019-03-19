@@ -305,9 +305,9 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(icms_item, 'modBCST').text = str(produto_servico.icms_st_modalidade_determinacao_bc)
                 etree.SubElement(icms_item, 'pMVAST').text = str(produto_servico.icms_st_percentual_adicional)    # Percentual da margem de valor Adicionado do ICMS ST
                 etree.SubElement(icms_item, 'pRedBCST').text = str(produto_servico.icms_st_percentual_reducao_bc) # APercentual da Redução de BC do ICMS ST
-                etree.SubElement(icms_item, 'vBCST ').text = str(produto_servico.icms_st_valor_base_calculo)
-                etree.SubElement(icms_item, 'pICMSST ').text = str(produto_servico.icms_st_aliquota)
-                etree.SubElement(icms_item, 'vICMSST ').text = str(produto_servico.icms_st_valor)
+                etree.SubElement(icms_item, 'vBCST').text = str(produto_servico.icms_st_valor_base_calculo)
+                etree.SubElement(icms_item, 'pICMSST').text = str(produto_servico.icms_st_aliquota)
+                etree.SubElement(icms_item, 'vICMSST').text = str(produto_servico.icms_st_valor)
             # 20=Com redução de base de cálculo
             elif produto_servico.icms_modalidade == '20':
                 etree.SubElement(icms_item, 'pRedBC').text = '{:.2f}'.format(produto_servico.icms_percentual_reducao_bc or 0)  # Percentual da Redução de BC
@@ -728,7 +728,7 @@ class SerializacaoQrcode(object):
         # url_chave - Texto com a URL de consulta por chave de acesso a ser impressa no DANFE NFC-e.
         # Informar a URL da “Consulta por chave de acesso da NFC-e”.
         # A mesma URL que deve estar informada no DANFE NFC-e para consulta por chave de acesso
-        lista_uf_padrao = ['PR', 'CE', 'RS', 'RJ', 'RO']
+        lista_uf_padrao = ['PR', 'CE', 'RS', 'RJ', 'RO', 'DF']
         if uf.upper() in lista_uf_padrao:
             qrcode = NFCE[uf.upper()]['QR'] + url
             url_chave = NFCE[uf.upper()]['URL']
