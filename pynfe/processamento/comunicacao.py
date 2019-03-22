@@ -17,7 +17,6 @@ from pynfe.utils.flags import (
 from pynfe.utils.webservices import NFE, NFCE, NFSE
 from pynfe.entidades.certificado import CertificadoA1
 from .assinatura import AssinaturaA1
-from pynfe.utils.descompactar import DescompactaGzip
 
 
 class Comunicacao(object):
@@ -291,7 +290,7 @@ class ComunicacaoSefaz(Comunicacao):
             'uf': uf,
             'ano': ano,
             'cnpj': cnpj,
-            'modelo': '55',
+            'modelo': '55' if modelo == 'nfe' else '65',  # 55=NF-e; 65=NFC-e;
             'serie': serie.zfill(3),
             'num_ini': str(numero_inicial).zfill(9),
             'num_fin': str(numero_final).zfill(9),
@@ -357,7 +356,7 @@ class ComunicacaoSefaz(Comunicacao):
                 raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
         # Estados que utilizam outros ambientes
         else:
-            lista_svrs = ['AC', 'RJ', 'RN', 'PB', 'SC', 'SE', 'PI']
+            lista_svrs = ['AC', 'RJ', 'RN', 'PB', 'SC', 'SE', 'PI', 'DF', 'ES']
             lista_svan = ['MA','PA']
             if self.uf.upper() in lista_svrs:
                 if self._ambiente == 1:
