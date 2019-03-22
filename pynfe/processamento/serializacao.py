@@ -746,6 +746,11 @@ class SerializacaoQrcode(object):
             else:
                 qrcode = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['QR'] + url
             url_chave = url_chave = NFCE[uf.upper()]['URL']
+        # A url do PI de producao e homologacao eh diferente, a de homologacao eh a mesma de producao
+        elif uf.upper() == 'PI': 
+            qrcode = NFCE[uf.upper()]['QR'] + url
+            url_chave = NFCE[uf.upper()]['QR'][:-1]
+
         # AC, AM, RR, PA,
         else:
             if tpamb == '1':

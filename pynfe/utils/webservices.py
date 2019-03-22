@@ -88,7 +88,7 @@ NFCE = {
 	    	'HOMOLOGACAO': 'http://www.hom.'
 	    },
 	    'PI': {
-	    	'QR': 'sefaz.pi.gov.br/nfceweb/consultarNFCe.jsf?',
+	    	'QR': 'http://www.sefaz.pi.gov.br/nfce/qrcode?',
 	    	'HTTPS': 'http://webas.',
 	    	'HOMOLOGACAO': 'http://webas.'
 	    },
