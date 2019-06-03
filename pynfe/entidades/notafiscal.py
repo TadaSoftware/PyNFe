@@ -397,7 +397,6 @@ class NotaFiscal(Entidade):
         ## TODO calcular impostos aproximados
         #self.totais_tributos_aproximado += obj.tributos
 
-        # self.totais_icms_total_nota = total
         self.totais_icms_total_nota += obj.valor_total_bruto - obj.desconto + \
                                        obj.icms_desonerado + obj.icms_st_valor + \
                                        obj.total_frete + obj.total_seguro + \
