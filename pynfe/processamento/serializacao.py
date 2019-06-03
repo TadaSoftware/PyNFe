@@ -651,7 +651,7 @@ class SerializacaoXML(Serializacao):
         # Responsavel Tecnico NT2018/003
         if nota_fiscal.responsavel_tecnico:
             for resp_tec in nota_fiscal.responsavel_tecnico:
-                raiz.append(self._serializar_responsavel_tecnico(resp_tec, returna_string=False))
+                raiz.append(self._serializar_responsavel_tecnico(resp_tec, retorna_string=False))
                 return
 
 
