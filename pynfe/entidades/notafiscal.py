@@ -355,6 +355,7 @@ class NotaFiscal(Entidade):
         self.duplicatas = []
         self.observacoes_contribuinte = []
         self.processos_referenciados = []
+        self.responsavel_tecnico = []
 
         super(NotaFiscal, self).__init__(*args, **kwargs)
 
@@ -417,9 +418,15 @@ class NotaFiscal(Entidade):
         return obj
 
     def adicionar_processo_referenciado(self, **kwargs):
-        u"""Adiciona uma instancia de Processo Referenciado"""
+        """Adiciona uma instancia de Processo Referenciado"""
         obj = NotaFiscalProcessoReferenciado(**kwargs)
         self.processos_referenciados.append(obj)
+        return obj
+
+    def adicionar_responsavel_tecnico(self, **kwargs):
+        """ Adiciona uma instancia de Responsavel Tecnico """
+        obj = NotaFiscalResponsavelTecnico(**kwargs)
+        self.responsavel_tecnico.append(obj)
         return obj
 
     def _codigo_numerico_aleatorio(self):
@@ -1003,3 +1010,11 @@ class NotaFiscalServico(Entidade):
 
     def __str__(self):
         return ' '.join([str(self.identificador)])
+
+class NotaFiscalResponsavelTecnico(Entidade):
+    # NT 2018/003
+    cnpj = str()
+    contato = str()
+    email = str()
+    fone = str()
+    csrt = str()
