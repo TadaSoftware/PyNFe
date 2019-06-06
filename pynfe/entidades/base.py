@@ -16,6 +16,9 @@ class Entidade(object):
 
         self._fonte_dados.adicionar_objeto(self)
 
+    def __str__(self):
+        return self.__class__.__name__
+    
     def __repr__(self):
         return '<%s %s>'%(self.__class__.__name__, str(self))
 
