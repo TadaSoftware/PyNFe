@@ -104,6 +104,7 @@ NF_FINALIDADES_EMISSAO = (
     (1, 'NF-e normal'),
     (2, 'NF-e complementar'),
     (3, 'NF-e de ajuste'),
+    (4, 'NF-e de Devolução'),
 )
 
 NF_REFERENCIADA_TIPOS = (
