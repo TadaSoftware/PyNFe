@@ -415,6 +415,18 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
+    def _serializar_responsavel_tecnico(self, responsavel_tecnico, tag_raiz='infRespTec', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+        etree.SubElement(raiz, 'CNPJ').text = responsavel_tecnico.cnpj
+        etree.SubElement(raiz, 'xContato').text = responsavel_tecnico.contato
+        etree.SubElement(raiz, 'email').text = responsavel_tecnico.email
+        etree.SubElement(raiz, 'fone').text = responsavel_tecnico.fone
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
     def _serializar_nota_fiscal(self, nota_fiscal, tag_raiz='infNFe', retorna_string=True):
         raiz = etree.Element(tag_raiz, versao=self._versao)
 
@@ -640,6 +652,12 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(info_ad, 'infAdFisco').text = nota_fiscal.informacoes_adicionais_interesse_fisco
             if nota_fiscal.informacoes_complementares_interesse_contribuinte:
                 etree.SubElement(info_ad, 'infCpl').text = nota_fiscal.informacoes_complementares_interesse_contribuinte
+
+        # Responsavel Tecnico NT2018/003
+        if nota_fiscal.responsavel_tecnico:
+            raiz.append(self._serializar_responsavel_tecnico(
+                nota_fiscal.responsavel_tecnico[0], retorna_string=False))
+
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
