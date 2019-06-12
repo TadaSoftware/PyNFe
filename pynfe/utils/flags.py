@@ -59,6 +59,15 @@ ICMS_MODALIDADES = (
     (3, 'Valor da Operacao'),
 )
 
+ICMS_MODALIDADES_ST = (
+    (0, 'Preço tabelado ou máximo sugerido'),
+    (1, 'Lista Negativa (valor)'),
+    (2, 'Lista Positiva (valor)'),
+    (3, 'Lista Neutra (valor)'),
+    (4, 'Margem Valor Agregado (%)'),
+    (5, 'Pauta (valor)'),
+)
+
 NF_STATUS = (
     'Em Digitacao',
     'Validada',
