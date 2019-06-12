@@ -397,6 +397,7 @@ class NotaFiscal(Entidade):
         ## TODO calcular impostos aproximados
         #self.totais_tributos_aproximado += obj.tributos
 
+        # self.totais_icms_total_nota = total
         self.totais_icms_total_nota += obj.valor_total_bruto - obj.desconto + \
                                        obj.icms_desonerado + obj.icms_st_valor + \
                                        obj.total_frete + obj.total_seguro + \
@@ -618,13 +619,7 @@ class NotaFiscalProduto(Entidade):
     icms_motivo_desoneracao = int()
 
     #   - ICMS ST
-    #    - Modalidade de determinacao da BC ICMS ST
-    # 0=Preço tabelado ou máximo sugerido;
-    # 1=Lista Negativa (valor);
-    # 2=Lista Positiva (valor);
-    # 3=Lista Neutra (valor);
-    # 4=Margem Valor Agregado (%);
-    # 5=Pauta (valor);
+    #    - Modalidade de determinacao da BC ICMS ST  (seleciona de lista) - ICMS_MODALIDADES_ST    
     icms_st_modalidade_determinacao_bc = str()
 
     #    - Percentual da margem de valor Adicionado do ICMS ST
