@@ -268,26 +268,39 @@ class SerializacaoXML(Serializacao):
             icms_item = etree.SubElement(icms, 'ICMSSN102')
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, 'CSOSN').text = produto_servico.icms_csosn
+
         elif produto_servico.icms_modalidade == '101':
             icms_item = etree.SubElement(icms, 'ICMSSN'+produto_servico.icms_modalidade)
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, 'CSOSN').text = produto_servico.icms_csosn
             etree.SubElement(icms_item, 'pCredSN').text = str(produto_servico.icms_aliquota)       # Alíquota aplicável de cálculo do crédito (Simples Nacional).
             etree.SubElement(icms_item, 'vCredICMSSN').text = str(produto_servico.icms_credito)    # Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123 (Simples Nacional)
-        elif produto_servico.icms_modalidade == '201':
-            icms_item = etree.SubElement(icms, 'ICMSSN' + produto_servico.icms_modalidade)
+
+        elif produto_servico.icms_modalidade in ('201', '202', '203'):
+
+            if produto_servico.icms_modalidade == '201':
+                icms_item = etree.SubElement(icms, 'ICMSSN201')
+            else:
+                icms_item = etree.SubElement(icms, 'ICMSSN202')
+
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)  # Origem da mercadoria
             etree.SubElement(icms_item, 'CSOSN').text = produto_servico.icms_csosn  # Código de Situação da Operação – Simples Nacional
             etree.SubElement(icms_item, 'modBCST').text = str(produto_servico.icms_st_modalidade_determinacao_bc)  # Modalidade de determinação da BC do ICMS ST
+
             if produto_servico.icms_st_percentual_adicional > 0:
                 etree.SubElement(icms_item, 'pMVAST').text = '{:.4f}'.format(produto_servico.icms_st_percentual_adicional)  # Percentual da margem de valor Adicionado do ICMS ST
+
             if produto_servico.icms_st_percentual_reducao_bc > 0:
                 etree.SubElement(icms_item, 'pRedBCST').text = '{:.4f}'.format(produto_servico.icms_st_percentual_reducao_bc)  # APercentual da Redução de BC do ICMS ST
+
             etree.SubElement(icms_item, 'vBCST').text = '{:.2f}'.format(produto_servico.icms_st_valor_base_calculo)  # Valor da BC do ICMS ST
             etree.SubElement(icms_item, 'pICMSST').text = '{:.4f}'.format(produto_servico.icms_st_aliquota)  # Alíquota do imposto do ICMS ST
             etree.SubElement(icms_item, 'vICMSST').text = '{:.2f}'.format(produto_servico.icms_st_valor)  # Valor do ICMS ST
-            etree.SubElement(icms_item, 'pCredSN').text = '{:.4f}'.format(produto_servico.icms_aliquota)  # Alíquota aplicável de cálculo do crédito (Simples Nacional).
-            etree.SubElement(icms_item, 'vCredICMSSN').text = '{:.2f}'.format(produto_servico.icms_credito)  # Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123 (Simples Nacional)
+
+            if produto_servico.icms_modalidade == '201':
+                etree.SubElement(icms_item, 'pCredSN').text = '{:.4f}'.format(produto_servico.icms_aliquota)  # Alíquota aplicável de cálculo do crédito (Simples Nacional).
+                etree.SubElement(icms_item, 'vCredICMSSN').text = '{:.2f}'.format(produto_servico.icms_credito)  # Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123 (Simples Nacional)
+
         elif produto_servico.icms_modalidade == 'ST':
             icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
