@@ -82,7 +82,12 @@ class ComunicacaoSefaz(Comunicacao):
             if ind_sinc == 1:
                 try:
                     # Protocolo com envio OK
-                    inf_prot = prot[0][0]                             # root protNFe
+                    try:
+                        inf_prot = prot[0][0]  # root protNFe
+                    except IndexError:
+                        # Estados como GO vem com a tag header
+                        inf_prot = prot[1][0]
+                        
                     lote_status = inf_prot.xpath("ns:retEnviNFe/ns:cStat", namespaces=ns)[0].text
                     # Lote processado
                     if lote_status == '104':
