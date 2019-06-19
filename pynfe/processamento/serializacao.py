@@ -236,6 +236,10 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'uTrib').text = produto_servico.unidade_tributavel
         etree.SubElement(prod, 'qTrib').text = str(produto_servico.quantidade_tributavel)
         etree.SubElement(prod, 'vUnTrib').text = '{:.4f}'.format(produto_servico.valor_unitario_tributavel or 0)
+
+        if produto_servico.desconto:
+            etree.SubElement(prod, 'vDesc').text = '{:.2f}'.format(produto_servico.desconto)
+
         """ Indica se valor do Item (vProd) entra no valor total da NF-e (vProd)
             0=Valor do item (vProd) não compõe o valor total da NF-e
             1=Valor do item (vProd) compõe o valor total da NF-e (vProd) (v2.0)
@@ -349,7 +353,7 @@ class SerializacaoXML(Serializacao):
             elif produto_servico.pis_modalidade == '03':
                 pis_item = etree.SubElement(pis, 'PISQtde')
                 etree.SubElement(pis_item, 'CST').text = produto_servico.pis_modalidade
-                etree.SubElement(pis_item, 'qBCProd').text = produto_servico.quantidade_comercial
+                etree.SubElement(pis_item, 'qBCProd').text = '{:.4f}'.format(produto_servico.quantidade_comercial)
                 etree.SubElement(pis_item, 'vAliqProd').text = produto_servico.pis_aliquota_percentual
                 etree.SubElement(pis_item, 'vPIS').text = '{:.2f}'.format(produto_servico.pis_valor_base_calculo or 0)
             else:
@@ -358,7 +362,7 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(pis_item, 'vBC').text = '{:.2f}'.format(produto_servico.pis_valor_base_calculo or 0)
                 etree.SubElement(pis_item, 'pPIS').text = '{:.2f}'.format(produto_servico.pis_aliquota_percentual or 0)
                 if produto_servico.pis_modalidade is not '99':
-                    etree.SubElement(pis_item, 'qBCProd').text = produto_servico.quantidade_comercial
+                    etree.SubElement(pis_item, 'qBCProd').text = '{:.4f}'.format(produto_servico.quantidade_comercial)
                     etree.SubElement(pis_item, 'vAliqProd').text = produto_servico.pis_aliquota_percentual
                 etree.SubElement(pis_item, 'vPIS').text = '{:.2f}'.format(produto_servico.pis_valor_base_calculo or 0)
 
@@ -385,9 +389,9 @@ class SerializacaoXML(Serializacao):
             elif produto_servico.cofins_modalidade == '03':
                 cofins_item = etree.SubElement(cofins, 'COFINSQtde')
                 etree.SubElement(cofins_item, 'CST').text = produto_servico.cofins_modalidade
-                etree.SubElement(cofins_item, 'qBCProd').text = produto_servico.quantidade_comercial
-                etree.SubElement(cofins_item, 'vAliqProd').text = produto_servico.cofins_aliquota_percentual
-                etree.SubElement(cofins_item, 'vCOFINS').text = produto_servico.cofins_valor
+                etree.SubElement(cofins_item, 'qBCProd').text = '{:.4f}'.format(produto_servico.quantidade_comercial)
+                etree.SubElement(cofins_item, 'vAliqProd').text = '{:.4f}'.format(produto_servico.cofins_aliquota_percentual)
+                etree.SubElement(cofins_item, 'vCOFINS').text = '{:.2f}'.format(produto_servico.cofins_valor)
             else:
                 cofins_item = etree.SubElement(cofins, 'COFINSOutr')
                 etree.SubElement(cofins_item, 'CST').text = produto_servico.cofins_modalidade
@@ -404,6 +408,18 @@ class SerializacaoXML(Serializacao):
                 # etree.SubElement(cofins_item, 'qBCProd').text = produto_servico.quantidade_comercial
                 # etree.SubElement(cofins_item, 'vAliqProd').text = produto_servico.cofins_aliquota_percentual
                 # etree.SubElement(cofins_item, 'vCOFINS').text = produto_servico.cofins_valor
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_responsavel_tecnico(self, responsavel_tecnico, tag_raiz='infRespTec', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+        etree.SubElement(raiz, 'CNPJ').text = responsavel_tecnico.cnpj
+        etree.SubElement(raiz, 'xContato').text = responsavel_tecnico.contato
+        etree.SubElement(raiz, 'email').text = responsavel_tecnico.email
+        etree.SubElement(raiz, 'fone').text = responsavel_tecnico.fone
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
@@ -635,6 +651,12 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(info_ad, 'infAdFisco').text = nota_fiscal.informacoes_adicionais_interesse_fisco
             if nota_fiscal.informacoes_complementares_interesse_contribuinte:
                 etree.SubElement(info_ad, 'infCpl').text = nota_fiscal.informacoes_complementares_interesse_contribuinte
+
+        # Responsavel Tecnico NT2018/003
+        if nota_fiscal.responsavel_tecnico:
+            raiz.append(self._serializar_responsavel_tecnico(
+                nota_fiscal.responsavel_tecnico[0], retorna_string=False))
+
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)

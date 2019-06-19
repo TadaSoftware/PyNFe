@@ -263,8 +263,9 @@ NFCE = {
 	    	'EVENTOS': 'sefaz.go.gov.br/nfe/services/NFeRecepcaoEvento4?wsdl',
 	    	'QR': 'sefaz.go.gov.br/nfeweb/sites/nfce/danfeNFCe?',
 	    	'CADASTRO': 'sefaz.go.gov.br/nfe/services/CadConsultaCadastro4?wsdl',
-	    	'HTTPS': 'http://nfe.',
-	    	'HOMOLOGACAO': 'http://homolog.'
+	    	'HTTPS': 'https://nfe.',
+	    	'HOMOLOGACAO': 'https://homolog.',
+	        'URL': 'sefaz.go.gov.br/nfeweb/sites/nfce/danfeNFCe'
 	    },
 	    'DF': {
 	    	'QR': 'http://www.fazenda.df.gov.br/nfce/qrcode?',
@@ -402,13 +403,13 @@ NFE = {
 	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
 	    'MT': {
-	    	'STATUS': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico4?wsdl',
-	    	'AUTORIZACAO': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeAutorizacao4?wsdl',
-	    	'RECIBO': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeRetAutorizacao4?wsdl',
-	    	'CHAVE': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeConsulta4?wsdl',
-	    	'INUTILIZACAO': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao4?wsdl',
-	    	'EVENTOS': 'nfe.sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento4?wsdl',
-	    	'CADASTRO': 'nfe.sefaz.mt.gov.br/nfews/v2/services/CadConsultaCadastro4?wsdl',
+	    	'STATUS': 'sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico4?wsdl',
+	    	'AUTORIZACAO': 'sefaz.mt.gov.br/nfews/v2/services/NfeAutorizacao4?wsdl',
+	    	'RECIBO': 'sefaz.mt.gov.br/nfews/v2/services/NfeRetAutorizacao4?wsdl',
+	    	'CHAVE': 'sefaz.mt.gov.br/nfews/v2/services/NfeConsulta4?wsdl',
+	    	'INUTILIZACAO': 'sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao4?wsdl',
+	    	'EVENTOS': 'sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento4?wsdl',
+	    	'CADASTRO': 'sefaz.mt.gov.br/nfews/v2/services/CadConsultaCadastro4?wsdl',
 	    	'HTTPS': 'https://nfe.',
 	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },

@@ -355,6 +355,7 @@ class NotaFiscal(Entidade):
         self.duplicatas = []
         self.observacoes_contribuinte = []
         self.processos_referenciados = []
+        self.responsavel_tecnico = []
 
         super(NotaFiscal, self).__init__(*args, **kwargs)
 
@@ -386,7 +387,6 @@ class NotaFiscal(Entidade):
         self.totais_icms_pis += obj.pis_valor
         self.totais_icms_cofins += obj.cofins_valor
         self.totais_icms_outras_despesas_acessorias += obj.outras_despesas_acessorias
-        self.totais_icms_total_nota += obj.valor_total_bruto
         # - Valor Total do FCP (Fundo de Combate à Pobreza)
         self.totais_fcp += obj.fcp_valor
         self.totais_fcp_destino += obj.fcp_destino_valor
@@ -396,6 +396,12 @@ class NotaFiscal(Entidade):
         self.totais_icms_inter_remetente += obj.icms_inter_remetente_valor
         ## TODO calcular impostos aproximados
         #self.totais_tributos_aproximado += obj.tributos
+
+        self.totais_icms_total_nota += obj.valor_total_bruto - obj.desconto + \
+                                       obj.icms_desonerado + obj.icms_st_valor + \
+                                       obj.total_frete + obj.total_seguro + \
+                                       obj.outras_despesas_acessorias + obj.ipi_valor_ipi
+
         return obj
 
     def adicionar_transporte_volume(self, **kwargs):
@@ -417,9 +423,15 @@ class NotaFiscal(Entidade):
         return obj
 
     def adicionar_processo_referenciado(self, **kwargs):
-        u"""Adiciona uma instancia de Processo Referenciado"""
+        """Adiciona uma instancia de Processo Referenciado"""
         obj = NotaFiscalProcessoReferenciado(**kwargs)
         self.processos_referenciados.append(obj)
+        return obj
+
+    def adicionar_responsavel_tecnico(self, **kwargs):
+        """ Adiciona uma instancia de Responsavel Tecnico """
+        obj = NotaFiscalResponsavelTecnico(**kwargs)
+        self.responsavel_tecnico.append(obj)
         return obj
 
     def _codigo_numerico_aleatorio(self):
@@ -1003,3 +1015,11 @@ class NotaFiscalServico(Entidade):
 
     def __str__(self):
         return ' '.join([str(self.identificador)])
+
+class NotaFiscalResponsavelTecnico(Entidade):
+    # NT 2018/003
+    cnpj = str()
+    contato = str()
+    email = str()
+    fone = str()
+    csrt = str()
