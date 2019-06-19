@@ -392,15 +392,15 @@ NFE = {
 	    	'HOMOLOGACAO': 'https://nfe-homologacao.'
 	    },
 	    'MS': {
-	    	'STATUS': 'nfe.ms.gov.br/ws/NFeStatusServico4',
-	    	'AUTORIZACAO': 'nfe.ms.gov.br/ws/NFeAutorizacao4',
-	    	'RECIBO': 'nfe.ms.gov.br/ws/NFeRetAutorizacao4',
-	    	'CHAVE': 'nfe.ms.gov.br/ws/NFeConsultaProtocolo4',
-	    	'INUTILIZACAO': 'nfe.ms.gov.br/ws/NFeInutilizacao4',
-	    	'EVENTOS': 'nfe.ms.gov.br/ws/NFeRecepcaoEvento4',
+	    	'STATUS': 'nfe.sefaz.ms.gov.br/ws/NFeStatusServico4',
+	    	'AUTORIZACAO': 'nfe.sefaz.ms.gov.br/ws/NFeAutorizacao4',
+	    	'RECIBO': 'nfe.sefaz.ms.gov.br/ws/NFeRetAutorizacao4',
+	    	'CHAVE': 'nfe.sefaz.ms.gov.br/ws/NFeConsultaProtocolo4',
+	    	'INUTILIZACAO': 'nfe.sefaz.ms.gov.br/ws/NFeInutilizacao4',
+	    	'EVENTOS': 'nfe.sefaz.ms.gov.br/ws/NFeRecepcaoEvento4',
 	    	'CADASTRO': 'nfe.sefaz.ms.gov.br/ws/CadConsultaCadastro4',
 	    	'HTTPS': 'https://',
-	    	'HOMOLOGACAO': 'https://homologacao.'
+	    	'HOMOLOGACAO': 'https://hom.'
 	    },
 	    'MT': {
 	    	'STATUS': 'sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico4?wsdl',
