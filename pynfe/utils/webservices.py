@@ -392,24 +392,24 @@ NFE = {
 	    	'HOMOLOGACAO': 'https://nfe-homologacao.'
 	    },
 	    'MS': {
-	    	'STATUS': 'nfe.ms.gov.br/ws/NFeStatusServico4',
-	    	'AUTORIZACAO': 'nfe.ms.gov.br/ws/NFeAutorizacao4',
-	    	'RECIBO': 'nfe.ms.gov.br/ws/NFeRetAutorizacao4',
-	    	'CHAVE': 'nfe.ms.gov.br/ws/NFeConsultaProtocolo4',
-	    	'INUTILIZACAO': 'nfe.ms.gov.br/ws/NFeInutilizacao4',
-	    	'EVENTOS': 'nfe.ms.gov.br/ws/NFeRecepcaoEvento4',
+	    	'STATUS': 'nfe.sefaz.ms.gov.br/ws/NFeStatusServico4',
+	    	'AUTORIZACAO': 'nfe.sefaz.ms.gov.br/ws/NFeAutorizacao4',
+	    	'RECIBO': 'nfe.sefaz.ms.gov.br/ws/NFeRetAutorizacao4',
+	    	'CHAVE': 'nfe.sefaz.ms.gov.br/ws/NFeConsultaProtocolo4',
+	    	'INUTILIZACAO': 'nfe.sefaz.ms.gov.br/ws/NFeInutilizacao4',
+	    	'EVENTOS': 'nfe.sefaz.ms.gov.br/ws/NFeRecepcaoEvento4',
 	    	'CADASTRO': 'nfe.sefaz.ms.gov.br/ws/CadConsultaCadastro4',
 	    	'HTTPS': 'https://',
-	    	'HOMOLOGACAO': 'https://homologacao.'
+	    	'HOMOLOGACAO': 'https://hom.'
 	    },
 	    'MT': {
-	    	'STATUS': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico4?wsdl',
-	    	'AUTORIZACAO': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeAutorizacao4?wsdl',
-	    	'RECIBO': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeRetAutorizacao4?wsdl',
-	    	'CHAVE': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeConsulta4?wsdl',
-	    	'INUTILIZACAO': 'nfe.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao4?wsdl',
-	    	'EVENTOS': 'nfe.sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento4?wsdl',
-	    	'CADASTRO': 'nfe.sefaz.mt.gov.br/nfews/v2/services/CadConsultaCadastro4?wsdl',
+	    	'STATUS': 'sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico4?wsdl',
+	    	'AUTORIZACAO': 'sefaz.mt.gov.br/nfews/v2/services/NfeAutorizacao4?wsdl',
+	    	'RECIBO': 'sefaz.mt.gov.br/nfews/v2/services/NfeRetAutorizacao4?wsdl',
+	    	'CHAVE': 'sefaz.mt.gov.br/nfews/v2/services/NfeConsulta4?wsdl',
+	    	'INUTILIZACAO': 'sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao4?wsdl',
+	    	'EVENTOS': 'sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento4?wsdl',
+	    	'CADASTRO': 'sefaz.mt.gov.br/nfews/v2/services/CadConsultaCadastro4?wsdl',
 	    	'HTTPS': 'https://nfe.',
 	    	'HOMOLOGACAO': 'https://homologacao.'
 	    },
