@@ -69,6 +69,6 @@ class CertificadoA1(Certificado):
         try:
             for i in self.arquivos_temp:
                 os.remove(i)
-            self.arquivos_temp.clear()
+            del self.arquivos_temp[:]
         except:
             pass
