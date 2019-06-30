@@ -3,6 +3,7 @@
 import os
 import codecs
 from unicodedata import normalize
+import six
 
 try:
     from lxml import etree
@@ -50,6 +51,9 @@ CARACTERS_ACENTUADOS = {
 
 # @memoize
 def normalizar_municipio(municipio):
+    if six.PY2:
+        return remover_acentos(unicode(municipio.lower())).upper()
+
     if not isinstance(municipio, str):
         municipio = municipio.decode('utf-8')
 

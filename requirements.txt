@@ -3,6 +3,7 @@ pyopenssl
 requests
 lxml
 signxml
+six >= 1.10.0
 
 # Opcional para NFS-e
 #-r requirements-nfse.txt

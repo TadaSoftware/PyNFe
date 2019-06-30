@@ -438,7 +438,10 @@ class SerializacaoXML(Serializacao):
         # Ex.: NFe35080599999090910270550010000000011518005123
         raiz.attrib['Id'] = nota_fiscal.identificador_unico
 
-        tz = datetime.now().astimezone().strftime('%z')
+        if six.PY2:
+            tz = datetime.now().strftime('%z')
+        else:
+            tz = datetime.now().astimezone().strftime('%z')
         tz = "{}:{}".format(tz[:-2], tz[-2:])
 
         # Dados da Nota Fiscal
