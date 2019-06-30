@@ -9,6 +9,7 @@ import base64
 import hashlib
 from datetime import datetime
 import re
+import six
 
 
 class Serializacao(object):
