@@ -4,6 +4,7 @@ requests
 lxml
 signxml
 six >= 1.10.0
+python-dateutil >=2.2
 
 # Opcional para NFS-e
 #-r requirements-nfse.txt

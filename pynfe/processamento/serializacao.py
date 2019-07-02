@@ -440,7 +440,8 @@ class SerializacaoXML(Serializacao):
         raiz.attrib['Id'] = nota_fiscal.identificador_unico
 
         if six.PY2:
-            tz = datetime.now().strftime('%z')
+            from dateutil.tz import tzlocal
+            tz = datetime.now(tzlocal()).strftime("%z")
         else:
             tz = datetime.now().astimezone().strftime('%z')
         tz = "{}:{}".format(tz[:-2], tz[-2:])
@@ -674,7 +675,8 @@ class SerializacaoXML(Serializacao):
 
     def serializar_evento(self, evento, tag_raiz='evento', retorna_string=False):
         if six.PY2:
-            tz = datetime.now().strftime("%z")
+            from dateutil.tz import tzlocal
+            tz = datetime.now(tzlocal()).strftime("%z")
         else:
             tz = datetime.now().astimezone().strftime('%z')
         tz = "{}:{}".format(tz[:-2], tz[-2:])
