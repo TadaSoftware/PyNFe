@@ -337,17 +337,6 @@ class TestGetUrl(unittest.TestCase):
         list_servicos_hom = []
         uf = "ba"
 
-        # list_servicos = ['STATUS','AUTORIZACAO','RECIBO','CHAVE','INUTILIZACAO','EVENTOS','CADASTRO']
-        # list_web_service = ['nfe.sefaz.ba.gov.br/webservices/NFeStatusServico4/NFeStatusServico4.asmx',
-        #                     'nfe.sefaz.ba.gov.br/webservices/NFeAutorizacao4/NFeAutorizacao4.asmx',
-        #                     'nfe.sefaz.ba.gov.br/webservices/NFeRetAutorizacao4/NFeRetAutorizacao4.asmx',
-        #                     'nfe.sefaz.ba.gov.br/webservices/NFeConsultaProtocolo4/NFeConsultaProtocolo4.asmx',
-        #                     'nfe.sefaz.ba.gov.br/webservices/NFeInutilizacao4/NFeInutilizacao4.asmx',
-        #                     'nfe.sefaz.ba.gov.br/webservices/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx',
-        #                     'nfe.sefaz.ba.gov.br/webservices/CadConsultaCadastro4/CadConsultaCadastro4.asmx'
-        # ]
-
-
         with self.subTest("Erro do WebService em Homologação em BA"):
             for estado in url_hom:
                 if estado[3]=="BA":
