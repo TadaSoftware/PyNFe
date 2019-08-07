@@ -9,10 +9,10 @@ except ImportError:
 
 XSD_FOLDER = "pynfe/data/XSDs/"
 
-XSD_NFE="nfe_v1.10.xsd"
-XSD_NFE_PROCESSADA="procNFe_v1.10.xsd"
+XSD_NFE="nfe_v4.00.xsd"
+XSD_NFE_PROCESSADA="procNFe_v4.00.xsd"
 XSD_PD_CANCELAR_NFE="procCancNFe_v1.07.xsd"
-XSD_PD_INUTILIZAR_NFE="procInutNFe_v1.07.xsd"
+XSD_PD_INUTILIZAR_NFE="procInutNFe_v4.00.xsd"
 
 def get_xsd(xsd_file):
     """Retorna o caminho absoluto para um arquivo xsd.
