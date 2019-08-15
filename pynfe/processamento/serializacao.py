@@ -173,6 +173,20 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
+    def _serializar_autxml(self,notafiscal,tag_raiz='autXML',retorna_string=True):
+        # Dados pessoas autorizadas 
+        # list object [tipodoc{string},cpfcnpj{string}]
+        pessoas = getattr(notafiscal,'autXML',[])
+        if pessoas:
+            raiz = etree.Element(tag_raiz)
+            for p in pessoas:
+                etree.SubElement(raiz, p.tipodoc).text = p.cpfcnpj
+
+            if retorna_string:
+                return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+
+        return raiz
+
     def _serializar_transportadora(self, transportadora, tag_raiz='transporta', retorna_string=True):
         raiz = etree.Element(tag_raiz)
 
@@ -522,6 +536,14 @@ class SerializacaoXML(Serializacao):
                 pass
             else:
                 raise e
+
+        # autXML
+        if nota_fiscal.modelo == 55:
+            try:
+                raiz.append(self._serializar_autxml(nota_fiscal),retorna_string=False)
+            except:
+                pass 
+
         # Retirada
         if nota_fiscal.retirada:
             raiz.append(self._serializar_entrega_retirada(
