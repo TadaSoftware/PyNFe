@@ -540,7 +540,7 @@ class SerializacaoXML(Serializacao):
         # autXML
         if nota_fiscal.modelo == 55:
             try:
-                raiz.append(self._serializar_autxml(nota_fiscal,retorna_string=False)
+                raiz.append(self._serializar_autxml(nota_fiscal,retorna_string=False))
             except:
                 pass 
 
