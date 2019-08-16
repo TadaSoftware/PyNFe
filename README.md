@@ -1,5 +1,5 @@
 
-Atenção este repositório já esta em desenvolvimento para a versão NF-e 4.00, para a versão 3.10 utilize a última [release](https://github.com/leotada/PyNFe/releases).
+Atualizado para a versão 4.00 NF-e/NFC-e
 -----------
 
 Visão Geral

@@ -12,7 +12,7 @@ NAMESPACE_BETHA = 'http://www.betha.com.br/e-nota-contribuinte-ws'
 
 VERSAO_PADRAO = '4.00'
 
-VERSAO_QRCODE = '100'
+VERSAO_QRCODE = '2'
 
 TIPOS_DOCUMENTO = (
     'CNPJ',
@@ -40,7 +40,7 @@ ICMS_TIPOS_TRIBUTACAO = (
     ('ST', 'ICMS ST - Grupo de informação do ICMS ST devido para a UF de destino, nas operações interestaduais de produtos que tiveram retenção antecipada de ICMS por ST na UF do remetente. Repasse via Substituto Tributário.')
 )
 
-ICMS_ORIGENS = (	
+ICMS_ORIGENS = (
     (0, 'Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8. '),
     (1, 'Estrangeira - Importação direta, exceto a indicada no código 6.'),
     (2, 'Estrangeira - Adquirida no mercado interno, exceto a indicada no código 7.'),
@@ -49,7 +49,7 @@ ICMS_ORIGENS = (
     (5, 'Nacional, mercadoria ou bem com Conteúdo de Importação inferior ou igual a 40%. '),
     (6, 'Estrangeira - Importação direta, sem similar nacional, constante em lista da CAMEX e gás natural. '),
     (7, 'Estrangeira - Adquirida no mercado interno, sem similar nacional, constante em lista da CAMEX e gás natural.'),
-    (8, 'Nacional, mercadoria ou bem com Conteúdo de Importação superior a 70%.')		
+    (8, 'Nacional, mercadoria ou bem com Conteúdo de Importação superior a 70%.')
 )
 
 ICMS_MODALIDADES = (
@@ -147,7 +147,7 @@ IPI_TIPOS_CALCULO = (
 
 PIS_TIPOS_TRIBUTACAO = (
     ('01', 'PIS 01 - Operação Tributável - Base de cálculo = valor da operação alíquota normal (cumulativo/não cumulativo)'),
-    ('02', 'PIS 02 - Operação Tributável - Base de cálculo = valor da operação (alíquota diferenciada)'), 
+    ('02', 'PIS 02 - Operação Tributável - Base de cálculo = valor da operação (alíquota diferenciada)'),
     ('03', 'PIS 03 - Operacao Tributavel - Base de cálculo = quantidade vendida x alíquota por unidade de produto)'),
     ('04', 'PIS 04 - Operacao Tributavel - Tributacao Monofasica - (Aliquota Zero)'),
     ('06', 'PIS 06 - Operacao Tributavel - Aliquota Zero'),
@@ -184,7 +184,7 @@ PIS_TIPOS_CALCULO = IPI_TIPOS_CALCULO
 
 COFINS_TIPOS_TRIBUTACAO = (
     ('01', 'COFINS 01 - Operação Tributável - Base de cálculo = valor da operação alíquota normal (cumulativo/não cumulativo)'),
-    ('02', 'COFINS 02 - Operação Tributável - Base de cálculo = valor da operação (alíquota diferenciada)'), 
+    ('02', 'COFINS 02 - Operação Tributável - Base de cálculo = valor da operação (alíquota diferenciada)'),
     ('03', 'COFINS 03 - Operacao Tributavel - Base de cálculo = quantidade vendida x alíquota por unidade de produto)'),
     ('04', 'COFINS 04 - Operacao Tributavel - Tributacao Monofasica - (Aliquota Zero)'),
     ('06', 'COFINS 06 - Operacao Tributavel - Aliquota Zero'),

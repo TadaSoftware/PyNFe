@@ -8,6 +8,7 @@ from pynfe.utils.webservices import NFCE
 import base64
 import hashlib
 from datetime import datetime
+import re
 
 import pytz
 
@@ -237,6 +238,10 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'uTrib').text = produto_servico.unidade_tributavel
         etree.SubElement(prod, 'qTrib').text = str(produto_servico.quantidade_tributavel)
         etree.SubElement(prod, 'vUnTrib').text = '{:.4f}'.format(produto_servico.valor_unitario_tributavel or 0)
+
+        if produto_servico.desconto:
+            etree.SubElement(prod, 'vDesc').text = '{:.2f}'.format(produto_servico.desconto)
+
         """ Indica se valor do Item (vProd) entra no valor total da NF-e (vProd)
             0=Valor do item (vProd) não compõe o valor total da NF-e
             1=Valor do item (vProd) compõe o valor total da NF-e (vProd) (v2.0)
@@ -257,7 +262,7 @@ class SerializacaoXML(Serializacao):
         # Lei da transparencia
         # Tributos aprox por item
         if produto_servico.valor_tributos_aprox:
-            etree.SubElement(imposto, 'vTotTrib').text = produto_servico.valor_tributos_aprox
+            etree.SubElement(imposto, 'vTotTrib').text = str(produto_servico.valor_tributos_aprox)
 
         ### ICMS
         icms = etree.SubElement(imposto, 'ICMS')
@@ -293,35 +298,35 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(icms_item, 'modBC').text = str(produto_servico.icms_modalidade_determinacao_bc)
             # 00=Tributada integralmente.
             if produto_servico.icms_modalidade == '00':
-                etree.SubElement(icms_item, 'vBC').text = str(produto_servico.icms_valor_base_calculo)  # Valor da BC do ICMS 
+                etree.SubElement(icms_item, 'vBC').text = str(produto_servico.icms_valor_base_calculo)  # Valor da BC do ICMS
                 etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)          # Alíquota do imposto
-                etree.SubElement(icms_item, 'vICMS').text = '{:.2f}'.format(produto_servico.icms_valor or 0) # Valor do ICMS 
+                etree.SubElement(icms_item, 'vICMS').text = '{:.2f}'.format(produto_servico.icms_valor or 0) # Valor do ICMS
             # 10=Tributada e com cobrança do ICMS por substituição tributária
             elif produto_servico.icms_modalidade == '10':
-                etree.SubElement(icms_item, 'vBC').text = str(produto_servico.icms_valor_base_calculo)  # Valor da BC do ICMS 
+                etree.SubElement(icms_item, 'vBC').text = str(produto_servico.icms_valor_base_calculo)  # Valor da BC do ICMS
                 etree.SubElement(icms_item, 'pICMS').text = str(produto_servico.icms_aliquota)          # Alíquota do imposto
-                etree.SubElement(icms_item, 'vICMS').text = '{:.2f}'.format(produto_servico.icms_valor or 0) # Valor do ICMS 
+                etree.SubElement(icms_item, 'vICMS').text = '{:.2f}'.format(produto_servico.icms_valor or 0) # Valor do ICMS
                 # Modalidade de determinação da BC do ICMS ST
                 # 0=Preço tabelado ou máximo sugerido; 1=Lista Negativa (valor);2=Lista Positiva (valor);3=Lista Neutra (valor);4=Margem Valor Agregado (%);5=Pauta (valor);
-                etree.SubElement(icms_item, 'modBCST').text = str(produto_servico.icms_st_modalidade_determinacao_bc) 
+                etree.SubElement(icms_item, 'modBCST').text = str(produto_servico.icms_st_modalidade_determinacao_bc)
                 etree.SubElement(icms_item, 'pMVAST').text = str(produto_servico.icms_st_percentual_adicional)    # Percentual da margem de valor Adicionado do ICMS ST
                 etree.SubElement(icms_item, 'pRedBCST').text = str(produto_servico.icms_st_percentual_reducao_bc) # APercentual da Redução de BC do ICMS ST
-                etree.SubElement(icms_item, 'vBCST ').text = str(produto_servico.icms_st_valor_base_calculo)
-                etree.SubElement(icms_item, 'pICMSST ').text = str(produto_servico.icms_st_aliquota)
-                etree.SubElement(icms_item, 'vICMSST ').text = str(produto_servico.icms_st_valor)
+                etree.SubElement(icms_item, 'vBCST').text = str(produto_servico.icms_st_valor_base_calculo)
+                etree.SubElement(icms_item, 'pICMSST').text = str(produto_servico.icms_st_aliquota)
+                etree.SubElement(icms_item, 'vICMSST').text = str(produto_servico.icms_st_valor)
             # 20=Com redução de base de cálculo
             elif produto_servico.icms_modalidade == '20':
                 etree.SubElement(icms_item, 'pRedBC').text = '{:.2f}'.format(produto_servico.icms_percentual_reducao_bc or 0)  # Percentual da Redução de BC
-                etree.SubElement(icms_item, 'vBC').text = '{:.2f}'.format(produto_servico.icms_valor_base_calculo or 0)  # Valor da BC do ICMS 
+                etree.SubElement(icms_item, 'vBC').text = '{:.2f}'.format(produto_servico.icms_valor_base_calculo or 0)  # Valor da BC do ICMS
                 etree.SubElement(icms_item, 'pICMS').text = '{:.2f}'.format(produto_servico.icms_aliquota or 0)          # Alíquota do imposto
                 etree.SubElement(icms_item, 'vICMS').text = '{:.2f}'.format(produto_servico.icms_valor or 0)  # Valor do ICMS
                 # NT_2016_002
-                # Inclusão das regras de validação N17b-20, N23b-20 e N27b-20 que impedem que seja informado zero como percentual de FCP ou FCP ST. 
+                # Inclusão das regras de validação N17b-20, N23b-20 e N27b-20 que impedem que seja informado zero como percentual de FCP ou FCP ST.
                 # Os campos relativos ao Fundo de Combate à Pobreza só devem ser informados se o produto estiver sujeito a incidência do mesmo.
-                if produto_servico.fcp_valor:  
+                if produto_servico.fcp_valor:
                     etree.SubElement(icms_item, 'vBCFCP').text = '{:.2f}'.format(produto_servico.fcp_base_calculo or 0)  # Base de calculo FCP
-                    etree.SubElement(icms_item, 'pFCP').text = '{:.2f}'.format(produto_servico.fcp_percentual or 0)  # Percentual FCP 
-                    etree.SubElement(icms_item, 'vFCP').text = '{:.2f}'.format(produto_servico.fcp_valor or 0)  # Valor Fundo Combate a Pobreza 
+                    etree.SubElement(icms_item, 'pFCP').text = '{:.2f}'.format(produto_servico.fcp_percentual or 0)  # Percentual FCP
+                    etree.SubElement(icms_item, 'vFCP').text = '{:.2f}'.format(produto_servico.fcp_valor or 0)  # Valor Fundo Combate a Pobreza
             # Impostos não implementados
             else:
                 raise NotImplementedError
@@ -350,7 +355,7 @@ class SerializacaoXML(Serializacao):
             elif produto_servico.pis_modalidade == '03':
                 pis_item = etree.SubElement(pis, 'PISQtde')
                 etree.SubElement(pis_item, 'CST').text = produto_servico.pis_modalidade
-                etree.SubElement(pis_item, 'qBCProd').text = produto_servico.quantidade_comercial
+                etree.SubElement(pis_item, 'qBCProd').text = '{:.4f}'.format(produto_servico.quantidade_comercial)
                 etree.SubElement(pis_item, 'vAliqProd').text = produto_servico.pis_aliquota_percentual
                 etree.SubElement(pis_item, 'vPIS').text = '{:.2f}'.format(produto_servico.pis_valor_base_calculo or 0)
             else:
@@ -359,7 +364,7 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(pis_item, 'vBC').text = '{:.2f}'.format(produto_servico.pis_valor_base_calculo or 0)
                 etree.SubElement(pis_item, 'pPIS').text = '{:.2f}'.format(produto_servico.pis_aliquota_percentual or 0)
                 if produto_servico.pis_modalidade is not '99':
-                    etree.SubElement(pis_item, 'qBCProd').text = produto_servico.quantidade_comercial
+                    etree.SubElement(pis_item, 'qBCProd').text = '{:.4f}'.format(produto_servico.quantidade_comercial)
                     etree.SubElement(pis_item, 'vAliqProd').text = produto_servico.pis_aliquota_percentual
                 etree.SubElement(pis_item, 'vPIS').text = '{:.2f}'.format(produto_servico.pis_valor_base_calculo or 0)
 
@@ -386,9 +391,9 @@ class SerializacaoXML(Serializacao):
             elif produto_servico.cofins_modalidade == '03':
                 cofins_item = etree.SubElement(cofins, 'COFINSQtde')
                 etree.SubElement(cofins_item, 'CST').text = produto_servico.cofins_modalidade
-                etree.SubElement(cofins_item, 'qBCProd').text = produto_servico.quantidade_comercial
-                etree.SubElement(cofins_item, 'vAliqProd').text = produto_servico.cofins_aliquota_percentual
-                etree.SubElement(cofins_item, 'vCOFINS').text = produto_servico.cofins_valor
+                etree.SubElement(cofins_item, 'qBCProd').text = '{:.4f}'.format(produto_servico.quantidade_comercial)
+                etree.SubElement(cofins_item, 'vAliqProd').text = '{:.4f}'.format(produto_servico.cofins_aliquota_percentual)
+                etree.SubElement(cofins_item, 'vCOFINS').text = '{:.2f}'.format(produto_servico.cofins_valor)
             else:
                 cofins_item = etree.SubElement(cofins, 'COFINSOutr')
                 etree.SubElement(cofins_item, 'CST').text = produto_servico.cofins_modalidade
@@ -405,6 +410,18 @@ class SerializacaoXML(Serializacao):
                 # etree.SubElement(cofins_item, 'qBCProd').text = produto_servico.quantidade_comercial
                 # etree.SubElement(cofins_item, 'vAliqProd').text = produto_servico.cofins_aliquota_percentual
                 # etree.SubElement(cofins_item, 'vCOFINS').text = produto_servico.cofins_valor
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_responsavel_tecnico(self, responsavel_tecnico, tag_raiz='infRespTec', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+        etree.SubElement(raiz, 'CNPJ').text = responsavel_tecnico.cnpj
+        etree.SubElement(raiz, 'xContato').text = responsavel_tecnico.contato
+        etree.SubElement(raiz, 'email').text = responsavel_tecnico.email
+        etree.SubElement(raiz, 'fone').text = responsavel_tecnico.fone
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
@@ -607,14 +624,14 @@ class SerializacaoXML(Serializacao):
                                 etree.SubElement(lacres, 'nLacre').text = lacre.numero_lacre
 
         # Pagamento
-        """ Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e. 
+        """ Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e.
         Para as notas com finalidade de Ajuste ou Devolução o campo Forma de Pagamento deve ser preenchido com 90=Sem Pagamento. """
         pag = etree.SubElement(raiz, 'pag')
         detpag = etree.SubElement(pag, 'detPag')
         if nota_fiscal.finalidade_emissao == '3' or nota_fiscal.finalidade_emissao == '4':
             etree.SubElement(detpag, 'tPag').text = '90'
             etree.SubElement(detpag, 'vPag').text = '{:.2f}'.format(0)
-        else: 
+        else:
             etree.SubElement(detpag, 'tPag').text = str(nota_fiscal.tipo_pagamento).zfill(2)
             etree.SubElement(detpag, 'vPag').text = '{:.2f}'.format(nota_fiscal.totais_icms_total_nota)
             if nota_fiscal.tipo_pagamento == 3 or nota_fiscal.tipo_pagamento == 4:
@@ -637,6 +654,12 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(info_ad, 'infAdFisco').text = nota_fiscal.informacoes_adicionais_interesse_fisco
             if nota_fiscal.informacoes_complementares_interesse_contribuinte:
                 etree.SubElement(info_ad, 'infCpl').text = nota_fiscal.informacoes_complementares_interesse_contribuinte
+
+        # Responsavel Tecnico NT2018/003
+        if nota_fiscal.responsavel_tecnico:
+            raiz.append(self._serializar_responsavel_tecnico(
+                nota_fiscal.responsavel_tecnico[0], retorna_string=False))
+
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
@@ -677,7 +700,7 @@ class SerializacaoXML(Serializacao):
 
 class SerializacaoQrcode(object):
     """ Classe que gera e serializa o qrcode de NFC-e no xml """
-    def gerar_qrcode(self, token, csc, xml, return_qr=False):
+    def gerar_qrcode(self, token, csc, xml, return_qr=False, online=True):
         """ Classe para gerar url do qrcode da NFC-e """
         # Procura atributos no xml
         ns = {'ns':NAMESPACE_NFE}
@@ -700,38 +723,56 @@ class SerializacaoQrcode(object):
             except IndexError:
                 cpf = None
         total = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vNF/text()', namespaces=ns)[0]
-        icms = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vICMS/text()', namespaces=ns)[0]
+        # icms = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vICMS/text()', namespaces=ns)[0]
         digest = nfe.xpath('sig:Signature/sig:SignedInfo/sig:Reference/sig:DigestValue/text()', namespaces=sig)[0].encode()
 
-        data = base64.b16encode(data).decode()
-        digest = base64.b16encode(digest).decode()
+        lista_dia = re.findall("-\d{2}", str(data))
+        dia = str(lista_dia[1])
+        dia = dia[1:]
+        replacements = {'0': ''}
+        token = re.sub('([0])', lambda m: replacements[m.group()], token)
 
-        if cpf is None:
-            url = 'chNFe={}&nVersao={}&tpAmb={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
-                   chave, VERSAO_QRCODE, tpamb, data.lower(), total, icms, digest.lower(), token)
+        #VERSAO_QRCODE =2
+        if online:
+            #versão online
+            url = '{}|{}|{}|{}'.format(chave,VERSAO_QRCODE, tpamb, token)
         else:
-            url = 'chNFe={}&nVersao={}&tpAmb={}&cDest={}&dhEmi={}&vNF={}&vICMS={}&digVal={}&cIdToken={}'.format(
-                   chave, VERSAO_QRCODE, tpamb, cpf, data.lower(), total, icms, digest.lower(), token)
+            #versão offline
+            digest = digest.lower()
+            digest = digest.hex()
 
-        url_hash = hashlib.sha1(url.encode()+csc.encode()).digest()
+            url = '{}|{}|{}|{}|{}|{}|{}'.format(
+                chave,VERSAO_QRCODE,tpamb,dia,total,digest,token
+                )
+
+        url_complementar = url + csc
+        url_hash = hashlib.sha1(url_complementar.encode()).digest()
         url_hash = base64.b16encode(url_hash).decode()
 
-        url = url + '&cHashQRCode=' + url_hash.upper()
+        url = 'p={}|{}'.format(url, url_hash)
+
         # url_chave - Texto com a URL de consulta por chave de acesso a ser impressa no DANFE NFC-e.
-        # Informar a URL da “Consulta por chave de acesso da NFC-e”. 
+        # Informar a URL da “Consulta por chave de acesso da NFC-e”.
         # A mesma URL que deve estar informada no DANFE NFC-e para consulta por chave de acesso
-        lista_uf_padrao = ['PR', 'CE', 'RS', 'RJ', 'RO']
+        lista_uf_padrao = ['PR', 'CE', 'RS', 'RJ', 'RO', 'DF']
         if uf.upper() in lista_uf_padrao:
             qrcode = NFCE[uf.upper()]['QR'] + url
             url_chave = NFCE[uf.upper()]['URL']
         elif uf.upper() == 'SP':
             if tpamb == '1':
                 qrcode = NFCE[uf.upper()]['HTTPS'] + 'www.' + NFCE[uf.upper()]['QR'] + url
-                url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.' + NFCE[uf.upper()]['URL'] + url
+                url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.' + NFCE[uf.upper()]['URL']
             else:
                 qrcode = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['QR'] + url
-                url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['URL'] + url
-        # AC, AM, RR, PA, 
+                url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['URL']
+        # BA tem comportamento distindo para qrcode e url
+        elif uf.upper() == 'BA':
+            if tpamb == '1':
+                qrcode = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['QR'] + url
+            else:
+                qrcode = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['QR'] + url
+            url_chave = url_chave = NFCE[uf.upper()]['URL']
+        # AC, AM, RR, PA,
         else:
             if tpamb == '1':
                 qrcode = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['QR'] + url

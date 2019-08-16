@@ -83,7 +83,12 @@ class ComunicacaoSefaz(Comunicacao):
             if ind_sinc == 1:
                 try:
                     # Protocolo com envio OK
-                    inf_prot = prot[0][0]                             # root protNFe
+                    try:
+                        inf_prot = prot[0][0]  # root protNFe
+                    except IndexError:
+                        # Estados como GO vem com a tag header
+                        inf_prot = prot[1][0]
+                        
                     lote_status = inf_prot.xpath("ns:retEnviNFe/ns:cStat", namespaces=ns)[0].text
                     # Lote processado
                     if lote_status == '104':
@@ -168,7 +173,7 @@ class ComunicacaoSefaz(Comunicacao):
         # url
         url = self._get_url_an(consulta='DISTRIBUICAO')
         # Monta XML para envio da requisição
-        raiz = etree.Element('distDFeInt', versao='1.00', xmlns=NAMESPACE_NFE)
+        raiz = etree.Element('distDFeInt', versao='1.01', xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
         if self.uf:
             etree.SubElement(raiz, 'cUFAutor').text = CODIGOS_ESTADOS[self.uf.upper()]
@@ -176,15 +181,16 @@ class ComunicacaoSefaz(Comunicacao):
             etree.SubElement(raiz, 'CNPJ').text = cnpj
         else:
             etree.SubElement(raiz, 'CPF').text = cpf
-        distNSU = etree.SubElement(raiz, 'distNSU')
-        etree.SubElement(distNSU, 'ultNSU').text = str(nsu).zfill(15)
-        # if chave:
-        #     consChNFe = etree.SubElement(raiz, 'consChNFe')
-        #     etree.SubElement(consChNFe, 'chNFe').text = chave
-        # Monta XML para envio da requisição
+        if not chave:
+            distNSU = etree.SubElement(raiz, 'distNSU')
+            etree.SubElement(distNSU, 'ultNSU').text = str(nsu).zfill(15)
+        if chave:
+            consChNFe = etree.SubElement(raiz, 'consChNFe')
+            etree.SubElement(consChNFe, 'chNFe').text = chave
+        #Monta XML para envio da requisição
         xml = self._construir_xml_soap('NFeDistribuicaoDFe', raiz)
-        # print(url)
-        # print(etree.tostring(xml))
+
+        
         return self._post(url, xml)
 
     def consulta_cadastro(self, modelo, cnpj):
@@ -287,7 +293,7 @@ class ComunicacaoSefaz(Comunicacao):
             'uf': uf,
             'ano': ano,
             'cnpj': cnpj,
-            'modelo': '55',
+            'modelo': '55' if modelo == 'nfe' else '65',  # 55=NF-e; 65=NFC-e;
             'serie': serie.zfill(3),
             'num_ini': str(numero_inicial).zfill(9),
             'num_fin': str(numero_final).zfill(9),
@@ -353,7 +359,7 @@ class ComunicacaoSefaz(Comunicacao):
                 raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
         # Estados que utilizam outros ambientes
         else:
-            lista_svrs = ['AC', 'RJ', 'RN', 'PB', 'SC', 'SE', 'PI']
+            lista_svrs = ['AC', 'RJ', 'RN', 'PB', 'SC', 'SE', 'PI', 'DF', 'ES']
             lista_svan = ['MA','PA']
             if self.uf.upper() in lista_svrs:
                 if self._ambiente == 1:
@@ -419,7 +425,7 @@ class ComunicacaoSefaz(Comunicacao):
             # limpa xml com caracteres bugados para infNFeSupl em NFC-e
             xml = re.sub(
                 '<qrCode>(.*?)</qrCode>',
-                lambda x: x.group(0).replace('&lt;', '<').replace('&gt;', '>').replace('amp;', ''),
+                lambda x: x.group(0).replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', ''),
                 etree.tostring(xml, encoding='unicode').replace('\n', '')
             )
             xml = xml_declaration + xml
