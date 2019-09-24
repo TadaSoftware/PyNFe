@@ -222,7 +222,10 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'NCM').text = produto_servico.ncm
         # Codificação opcional que detalha alguns NCM. Formato: duas letras maiúsculas e 4 algarismos.
         # Se a mercadoria se enquadrar em mais de uma codificação, informar até 8 codificações principais.
-        #etree.SubElement(prod, 'NVE').text = ''
+        # etree.SubElement(prod, 'NVE').text = ''
+        # etree.SubElement(prod, 'CEST').text = produto_service.cest
+        if produto_servico.cbenef:
+            etree.SubElement(prod, 'cBenef').text = produto_servico.cbenef
         etree.SubElement(prod, 'CFOP').text = produto_servico.cfop
         etree.SubElement(prod, 'uCom').text = produto_servico.unidade_comercial
         etree.SubElement(prod, 'qCom').text = str(produto_servico.quantidade_comercial or 0)
