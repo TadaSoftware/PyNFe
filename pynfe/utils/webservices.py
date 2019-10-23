@@ -446,7 +446,7 @@ NFE = {
 	    	'CHAVE': 'svrs.rs.gov.br/ws/NfeConsulta/NfeConsulta4.asmx',
 	    	'INUTILIZACAO': 'svrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao4.asmx',
 	    	'EVENTOS': 'svrs.rs.gov.br/ws/recepcaoevento/recepcaoevento4.asmx',
-	    	'CADASTRO': 'https://cad.svrs.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro2.asmx',
+	    	'CADASTRO': 'https://cad.svrs.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro4.asmx',
 	    	'HTTPS': 'https://nfe.',
 	    	'HOMOLOGACAO': 'https://nfe-homologacao.'
 	    },
