@@ -333,7 +333,7 @@ NFE = {
 	    	'CHAVE': 'sefaz.pe.gov.br/nfe-service/services/NFeConsultaProtocolo4',
 	    	'INUTILIZACAO': 'sefaz.pe.gov.br/nfe-service/services/NFeInutilizacao4',
 	    	'EVENTOS': 'sefaz.pe.gov.br/nfe-service/services/NFeRecepcaoEvento4',
-	    	# 'CADASTRO': 'sefaz.pe.gov.br/nfe-service/services/CadConsultaCadastro2',
+	    	'CADASTRO': 'sefaz.pe.gov.br/nfe-service/services/CadConsultaCadastro4?wsdl',
 	    	'HTTPS': 'https://nfe.',
 	    	'HOMOLOGACAO': 'https://nfehomolog.'
 	    },
