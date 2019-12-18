@@ -157,13 +157,17 @@ NFCE = {
 	    	'URL': 'http://hinternet.sefaz.ba.gov.br/nfce/consulta'
 	    },
 	    'MG': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'STATUS': 'fazenda.mg.gov.br/nfce/services/NFeStatusServico4',
+	    	'AUTORIZACAO': 'fazenda.mg.gov.br/nfce/services/NFeAutorizacao4',
+	    	'RECIBO': 'fazenda.mg.gov.br/nfce/services/NFeRetAutorizacao4',
+	    	'CHAVE': 'fazenda.mg.gov.br/nfce/services/NFeConsultaProtocolo4',
+	    	'INUTILIZACAO': 'fazenda.mg.gov.br/nfce/services/NFeInutilizacao4',
+	    	'EVENTOS': 'fazenda.mg.gov.br/nfce/services/NFeRecepcaoEvento4',
+	    	'CADASTRO': 'fazenda.mg.gov.br/nfce/services/CadConsultaCadastro4',
+	    	'QR': 'fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml?',
+	    	'HTTPS': 'https://nfce.',
+	    	'HOMOLOGACAO': 'https://hnfce.',
+	    	'URL': 'fazenda.mg.gov.br/portalnfce'
 	    },
 	    'ES': {
 	    	'STATUS': '',
@@ -317,7 +321,7 @@ NFE = {
 	    	'CHAVE': 'sefaz.ce.gov.br/nfe4/services/NFeConsultaProtocolo4?WSDL',
 	    	'INUTILIZACAO': 'sefaz.ce.gov.br/nfe4/services/NFeInutilizacao4?WSDL',
 	    	'EVENTOS': 'sefaz.ce.gov.br/nfe4/services/NFeRecepcaoEvento4?WSDL',
-	    	'CADASTRO': 'nfe.sefaz.ce.gov.br/nfe4/services/CadConsultaCadastro4?wsdl',
+	    	'CADASTRO': 'sefaz.ce.gov.br/nfe4/services/CadConsultaCadastro4?wsdl',
 	    	'DOWNLOAD': 'sefaz.ce.gov.br/nfe2/services/NfeDownloadNF?wsdl',
 	    	'HTTPS': 'https://nfe.',
 	    	'HOMOLOGACAO': 'https://nfeh.'
@@ -329,7 +333,7 @@ NFE = {
 	    	'CHAVE': 'sefaz.pe.gov.br/nfe-service/services/NFeConsultaProtocolo4',
 	    	'INUTILIZACAO': 'sefaz.pe.gov.br/nfe-service/services/NFeInutilizacao4',
 	    	'EVENTOS': 'sefaz.pe.gov.br/nfe-service/services/NFeRecepcaoEvento4',
-	    	# 'CADASTRO': 'sefaz.pe.gov.br/nfe-service/services/CadConsultaCadastro2',
+	    	'CADASTRO': 'sefaz.pe.gov.br/nfe-service/services/CadConsultaCadastro4?wsdl',
 	    	'HTTPS': 'https://nfe.',
 	    	'HOMOLOGACAO': 'https://nfehomolog.'
 	    },
@@ -442,7 +446,7 @@ NFE = {
 	    	'CHAVE': 'svrs.rs.gov.br/ws/NfeConsulta/NfeConsulta4.asmx',
 	    	'INUTILIZACAO': 'svrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao4.asmx',
 	    	'EVENTOS': 'svrs.rs.gov.br/ws/recepcaoevento/recepcaoevento4.asmx',
-	    	'CADASTRO': 'https://cad.svrs.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro2.asmx',
+	    	'CADASTRO': 'https://cad.svrs.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro4.asmx',
 	    	'HTTPS': 'https://nfe.',
 	    	'HOMOLOGACAO': 'https://nfe-homologacao.'
 	    },
