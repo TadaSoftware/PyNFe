@@ -176,13 +176,19 @@ class SerializacaoXML(Serializacao):
         raiz = etree.Element(tag_raiz)
 
         # Dados da transportadora
-        etree.SubElement(raiz, transportadora.tipo_documento.upper()).text = so_numeros(transportadora.numero_documento)
-        etree.SubElement(raiz, 'xNome').text = transportadora.razao_social
-        etree.SubElement(raiz, 'IE').text = transportadora.inscricao_estadual
+        if transportadora.numero_documento:
+            etree.SubElement(raiz, transportadora.tipo_documento.upper()).text = so_numeros(transportadora.numero_documento)
+        if transportadora.razao_social:
+            etree.SubElement(raiz, 'xNome').text = transportadora.razao_social
+        if transportadora.inscricao_estadual:
+            etree.SubElement(raiz, 'IE').text = transportadora.inscricao_estadual
         # Endereço
-        etree.SubElement(raiz, 'xEnder').text = transportadora.endereco_logradouro
-        etree.SubElement(raiz, 'xMun').text = transportadora.endereco_municipio
-        etree.SubElement(raiz, 'UF').text = transportadora.endereco_uf
+        if transportadora.endereco_logradouro:
+            etree.SubElement(raiz, 'xEnder').text = transportadora.endereco_logradouro
+        if transportadora.endereco_municipio:
+            etree.SubElement(raiz, 'xMun').text = transportadora.endereco_municipio
+        if transportadora.endereco_uf:
+            etree.SubElement(raiz, 'UF').text = transportadora.endereco_uf
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
