@@ -340,12 +340,18 @@ class SerializacaoXML(Serializacao):
             else:
                 raise NotImplementedError
         # ipi
-        # ipi = etree.SubElement(imposto, 'IPI')
-        # etree.SubElement(ipi, 'clEnq') = produto_servico.ipi_classe_enquadramento # Preenchimento conforme Atos Normativos editados pela Receita Federal (Observação 2)
-        # ipint = etree.SubElement(ipi, 'IPINT')
-        # # 01=Entrada tributada com alíquota zero 02=Entrada isenta 03=Entrada não-tributada 04=Entrada imune 05=Entrada com suspensão
-        # # 51=Saída tributada com alíquota zero 52=Saída isenta 53=Saída não-tributada 54=Saída imune 55=Saída com suspensão
-        # etree.SubElement(ipint, 'CST') = produto_servico.ipi_codigo_enquadramento
+        ipint_lista = ('01','02','03','04','05','51','52','53','54','55')
+        if produto_servico.ipi_codigo_enquadramento in ipint_lista:
+            ipi = etree.SubElement(imposto, 'IPI')
+            # Preenchimento conforme Atos Normativos editados pela Receita Federal (Observação 2)
+            etree.SubElement(ipi, 'cEnq').text = produto_servico.ipi_classe_enquadramento
+            if produto_servico.ipi_classe_enquadramento == '':
+                etree.SubElement(ipi, 'cEnq').text = '999'
+
+            ipint = etree.SubElement(ipi, 'IPINT')
+            # 01=Entrada tributada com alíquota zero 02=Entrada isenta 03=Entrada não-tributada 04=Entrada imune 05=Entrada com suspensão
+            # 51=Saída tributada com alíquota zero 52=Saída isenta 53=Saída não-tributada 54=Saída imune 55=Saída com suspensão
+            etree.SubElement(ipint, 'CST').text = produto_servico.ipi_codigo_enquadramento
 
         # apenas nfe
         if modelo == 55:
