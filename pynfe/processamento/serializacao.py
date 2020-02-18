@@ -293,6 +293,11 @@ class SerializacaoXML(Serializacao):
             icms_item = etree.SubElement(icms, 'ICMSSN'+produto_servico.icms_modalidade)
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, 'CSOSN').text = produto_servico.icms_csosn
+        elif produto_servico.icms_modalidade == '51':
+            icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
+            etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
+            etree.SubElement(icms_item, 'CST').text = '51'
+            etree.SubElement(icms_item, 'modBC').text = str(produto_servico.icms_modalidade_determinacao_bc)
         else:
             ### OUTROS TIPOS DE ICMS (00,10,20)
             icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
