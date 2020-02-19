@@ -189,7 +189,7 @@ NFCE = {
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
 	    	'QR': 'http://www4.fazenda.rj.gov.br/consultaNFCe/QRCode?',
-	    	'URL': 'www.nfce.fazenda.rj.gov.br/consulta'
+	    	'URL': 'http://www.nfce.fazenda.rj.gov.br/consulta'
 	    },
 	    # Os Web Services de homologação da NFC-e 4.00 são:
 		# https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeAutorizacao4.asmx
