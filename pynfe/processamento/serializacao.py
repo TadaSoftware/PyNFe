@@ -655,10 +655,6 @@ class SerializacaoXML(Serializacao):
                             for lacre in volume.lacres:
                                 etree.SubElement(lacres, 'nLacre').text = lacre.numero_lacre
 
-            # Cobrança
-            # TODO: Adicionar todas as tags desse grupo
-            cobr = etree.SubElement(raiz, 'cobr')
-
         # Pagamento
         """ Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e.
         Para as notas com finalidade de Ajuste ou Devolução o campo Forma de Pagamento deve ser preenchido com 90=Sem Pagamento. """
