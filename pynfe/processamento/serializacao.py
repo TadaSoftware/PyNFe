@@ -687,8 +687,10 @@ class SerializacaoXML(Serializacao):
         e = etree.SubElement(raiz, 'infEvento', Id=evento.identificador)
         etree.SubElement(e, 'cOrgao').text = CODIGOS_ESTADOS[evento.uf.upper()]
         etree.SubElement(e, 'tpAmb').text = str(self._ambiente)
-        etree.SubElement(e, 'CNPJ').text = evento.cnpj # Empresas somente terão CNPJ
-        #etree.SubElement(e, 'CPF').text = ''
+        if len(so_numeros(evento.cnpj)) == 11:
+            etree.SubElement(e, 'CPF').text = evento.cnpj
+        else:
+            etree.SubElement(e, 'CNPJ').text = evento.cnpj
         etree.SubElement(e, 'chNFe').text = evento.chave
         etree.SubElement(e, 'dhEvento').text = evento.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz
         etree.SubElement(e, 'tpEvento').text = evento.tp_evento
