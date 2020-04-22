@@ -550,6 +550,9 @@ class NotaFiscalProduto(Entidade):
     #  - Unidade Tributavel (obrigatorio)
     unidade_tributavel = str()
 
+    # - cBenef
+    cbenef = str()
+
     #  - Quantidade Tributavel (obrigatorio)
     quantidade_tributavel = Decimal()
 
