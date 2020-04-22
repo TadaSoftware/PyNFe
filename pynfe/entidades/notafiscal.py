@@ -55,8 +55,8 @@ class NotaFiscal(Entidade):
     # forma_pagamento = int()
 
     # - Tipo de pagamento
-    """ 
-    Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e. 
+    """
+    Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e.
     Para as notas com finalidade de Ajuste ou Devolução o campo Forma de Pagamento deve ser preenchido com 90=Sem Pagamento.
     01=Dinheiro
     02=Cheque
@@ -183,8 +183,8 @@ class NotaFiscal(Entidade):
     #  - Total do IPI (somente leitura)
     totais_icms_total_ipi = Decimal()
 
-    #  - Valor Total do IPI devolvido 
-    # Deve ser informado quando preenchido o Grupo Tributos Devolvidos na emissão de nota finNFe=4 (devolução) nas operações com não contribuintes do IPI. 
+    #  - Valor Total do IPI devolvido
+    # Deve ser informado quando preenchido o Grupo Tributos Devolvidos na emissão de nota finNFe=4 (devolução) nas operações com não contribuintes do IPI.
     # Corresponde ao total da soma dos campos id:UA04.
     totais_icms_total_ipi_dev = Decimal()
 
@@ -244,7 +244,7 @@ class NotaFiscal(Entidade):
     # - Valor Total do FCP (Fundo de Combate à Pobreza)
     totais_fcp = Decimal()
 
-    # - Valor total do ICMS relativo Fundo de Combate à Pobreza (FCP) da UF de destino 
+    # - Valor total do ICMS relativo Fundo de Combate à Pobreza (FCP) da UF de destino
     totais_fcp_destino = Decimal()
 
      # - Valor Total do FCP (Fundo de Combate à Pobreza) retido por substituição tributária
@@ -253,7 +253,7 @@ class NotaFiscal(Entidade):
      # - Valor Total do FCP retido anteriormente por Substituição Tributária
     totais_fcp_st_ret = Decimal()
 
-    # - Valor total do ICMS Interestadual para a UF de destino 
+    # - Valor total do ICMS Interestadual para a UF de destino
     totais_icms_inter_destino = Decimal()
 
     # - Valor total do ICMS Interestadual para a UF do remetente
@@ -549,6 +549,9 @@ class NotaFiscalProduto(Entidade):
 
     #  - Unidade Tributavel (obrigatorio)
     unidade_tributavel = str()
+
+    # - cBenef
+    cbenef = str()
 
     #  - Quantidade Tributavel (obrigatorio)
     quantidade_tributavel = Decimal()
@@ -985,7 +988,7 @@ class NotaFiscalEntregaRetirada(Entidade):
     endereco_telefone = str()
 
 class NotaFiscalServico(Entidade):
-    
+
     # id do rps
     identificador = str()
     # tag competencia
