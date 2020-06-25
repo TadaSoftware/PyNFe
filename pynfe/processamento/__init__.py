@@ -2,5 +2,8 @@ from .serializacao import SerializacaoXML
 from .serializacao import SerializacaoNfse
 from .validacao import Validacao
 from .assinatura import AssinaturaA1
-from .comunicacao import ComunicacaoSefaz
+from pynfe.entidades.certificado import CertificadoA1
+from .nfe import ComunicacaoNFe
+from .mdfe import ComunicacaoMDFe
+from .nfse import ComunicacaoNfse
 from .danfe import DanfeNfce

@@ -4,7 +4,9 @@
     @author: Junior Tada, Leonardo Tada
 """
 
+from decimal import Decimal
 from .base import Entidade
+
 
 class Evento(Entidade):
     # - Identificador da TAG a ser assinada, a regra de formação do Id é: “ID” + tpEvento + chave da NF-e + nSeqEvento
@@ -114,4 +116,111 @@ class EventoManifestacaoDest(Evento):
 
     # - Informar a justificativa porque a operação não foi realizada, este campo deve ser informado somente no evento de Operação não Realizada. (min 15 max 255 caracteres)
     justificativa = str()
-        
+
+
+class EventoEncerramento(Evento):
+
+    def __init__(self, *args, **kwargs):
+        super(EventoEncerramento, self).__init__(*args, **kwargs)
+        # - Código do evento = 110112
+        self.tp_evento = '110112'
+        # - "Encerramento"
+        self.descricao = 'Encerramento'
+
+    # - Informar o número do Protocolo de Autorização da MDF-e a ser Encerrada
+    protocolo = str()
+    # - Data e hora do evento no formato AAAA-MM-DDThh:mm:ssTZD
+    dtenc = None
+    # - uf de onde a manifesto foi encerrado
+    cuf = str()
+    # - minicipio onde o manifesto foi encerrado
+    cmun = str()
+
+
+class EventoInclusaoCondutor(Evento):
+
+    def __init__(self, *args, **kwargs):
+        super(EventoInclusaoCondutor, self).__init__(*args, **kwargs)
+        # - Código do evento = 110114
+        self.tp_evento = '110114'
+        # - "Encerramento"
+        self.descricao = 'Inclusão Condutor'
+
+    # - Nome do motorista
+    nome_motorista = str()
+    # - CPF do motorista
+    cpf_motorista = str()
+
+
+class EventoInclusaoDFe(Evento):
+
+    def __init__(self, *args, **kwargs):
+        super(EventoInclusaoDFe, self).__init__(*args, **kwargs)
+        # - Código do evento = 110115
+        self.tp_evento = '110115'
+        # - "Inclusao DF-e"
+        self.descricao = 'Inclusao DF-e'
+
+    # - Informar o número do Protocolo de Autorização da MDF-e a ser Incluida nova NF-e
+    protocolo = str()
+    # - Código IBGE do Município de Carregamento
+    cmun_carrega = str()
+    # - Nome do Município de Carregamento
+    xmun_carrega = str()
+    # - Código IBGE do Município de Descarga
+    cmun_descarga = str()
+    # - Nome do Município de Descarga
+    xmun_descarga = str()
+    # - Chave de Acesso da NF-e a ser incluída no MDFe
+    chave_nfe = str()
+
+
+class EventoInclusaoPagamento(Evento):
+
+    def __init__(self, *args, **kwargs):
+        super(EventoInclusaoPagamento, self).__init__(*args, **kwargs)
+        # - Código do evento = 110116
+        self.tp_evento = '110116'
+        # - "Pagamento Operacao MDF-e"
+        self.descricao = 'Pagamento Operacao MDF-e'
+
+    # - Informar o número do Protocolo de Autorização da MDF-e a ser Incluida nova NF-e
+    protocolo = str()
+
+    # - Quantidade de viagens
+    qtd_viagens = str()
+    # - Número da viagem
+    nro_viagens = str()
+
+    # Informações do pagamento
+    # - Nome do Contratante
+    nome_contratante = str()
+    # - CPF/CNPJ do Contratante
+    cpfcnpj_contratante = str()
+
+    # Componentes do Pagamento
+    # - Tipo do pagamento
+    tpComp = str()
+    # - Valor
+    vComp = Decimal()
+
+    # - Valor total do contrato
+    vContrato = Decimal()
+    # - Tipo do pagamento (0=a vista e 1=a prazo)
+    indPag = str()
+
+    # Se o pagamento for a prazo
+    # - Numero da parcela
+    nParcela = str()
+    # - Data vencimento
+    dVenc = None
+    # - Valor da parcela
+    vParcela = Decimal()
+
+    # Informações bancárias
+    # - CNPJ da Instituição de Pagamento eletrônico do Frete
+    CNPJIPEF = str()
+    # - Código do Banco
+    codBanco = str()
+    # - Código da Agência
+    codAgencia = str()
