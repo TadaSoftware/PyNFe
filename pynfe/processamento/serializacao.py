@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
-from pynfe.entidades import NotaFiscal
+from pynfe.entidades import NotaFiscal, Manifesto
 from pynfe.utils import (
-    etree, so_numeros, obter_municipio_por_codigo,
-    obter_pais_por_codigo, obter_municipio_e_codigo, formatar_decimal,
-    remover_acentos, obter_uf_por_codigo, obter_codigo_por_municipio
+    etree, 
+    so_numeros, 
+    obter_municipio_por_codigo,
+    obter_pais_por_codigo, 
+    obter_municipio_e_codigo,
+    formatar_decimal,
+    remover_acentos,
+    obter_uf_por_codigo,
+    obter_codigo_por_municipio
 )
 from pynfe.utils.flags import (
     CODIGOS_ESTADOS,
@@ -14,7 +20,7 @@ from pynfe.utils.flags import (
     NAMESPACE_SIG,
     VERSAO_QRCODE
 )
-from pynfe.utils.webservices import NFCE
+from pynfe.utils.webservices import NFCE, MDFE
 import base64
 import hashlib
 from datetime import datetime
@@ -909,6 +915,39 @@ class SerializacaoQrcode(object):
             return nfe
 
 
+class SerializacaoQrcodeMDFe(object):
+    """ Classe que gera e serializa o qrcode do MDF-e no xml """
+    def gerar_qrcode(self, xml, return_qr=False):
+
+        # Procura atributos no xml
+        ns = {'ns': NAMESPACE_MDFE}
+
+        # Tag Raiz MDFe Ex: <MDFe>
+        mdfe = xml
+        chave = mdfe[0].attrib['Id'].replace('MDFe', '')
+        tpamb = mdfe.xpath('ns:infMDFe/ns:ide/ns:tpAmb/text()', namespaces=ns)[0]
+
+        url_padrao = MDFE['SVRS']['QRCODE']
+        qrcode = f'{url_padrao}?chMDFe={chave}&tpAmb={tpamb}'
+
+        # adiciona tag infMDFeSupl com qrcode
+        infMDFeSupl = etree.Element('infMDFeSupl')
+        etree.SubElement(infMDFeSupl, 'qrCodMDFe').text = f'<![CDATA[{qrcode.strip()}]]>'
+
+        mdfe.insert(1, infMDFeSupl)
+
+        # correção da tag qrCodMDFe
+        tmdfe = etree.tostring(mdfe, encoding='unicode')
+        etree.tostring(mdfe.find('.//qrCodMDFe'), encoding='unicode') \
+            .replace('\n','').replace('&lt;','<').replace('&gt;','>').replace('amp;','')
+        mdfe = etree.fromstring(tmdfe)
+
+        if return_qr:
+            return mdfe, qrcode.strip()
+        else:
+            return mdfe
+
+
 class SerializacaoNfse(object):
     def __init__(self, autorizador):
         "Recebe uma string com o nome do autorizador."
@@ -968,3 +1007,416 @@ class SerializacaoNfse(object):
             return SerializacaoBetha().cancelar(nfse)
         else:
             raise Exception('Autorizador não suportado para cancelamento!')
+
+
+class SerializacaoMDFe(Serializacao):
+    """ Classe de serialização do arquivo xml """
+
+    _versao = VERSAO_MDFE
+
+    def exportar(self, destino=None, retorna_string=False, limpar=True, **kwargs):
+        """Gera o(s) arquivo(s) do Manifesto de Documento Fiscais Eletrônicos no padrao oficial
+        da SEFAZ e Receita Federal, para ser(em) enviado(s) para o webservice ou para ser(em)
+        armazenado(s) em cache local.
+        @param destino -
+        @param retorna_string - Retorna uma string para debug.
+        @param limpar - Limpa a fonte de dados para não gerar xml com dados duplicados.
+        """
+        try:
+            # No raiz do XML de saida
+            raiz = etree.Element('MDFe', xmlns=NAMESPACE_MDFE)
+
+            # Carrega lista de Manifestos
+            manifestos = self._fonte_dados.obter_lista(_classe=Manifesto, **kwargs)
+
+            for mdfe in manifestos:
+                raiz.append(self._serializar_manifesto(mdfe, retorna_string=False))
+
+            if retorna_string:
+                return etree.tostring(raiz, encoding="unicode", pretty_print=False)
+            else:
+                return raiz
+        except Exception as e:
+            raise e
+        finally:
+            if limpar:
+                self._fonte_dados.limpar_dados()
+
+    def importar(self, origem):
+        """Cria as instancias do PyNFe a partir de arquivos XML no formato padrao da
+        SEFAZ e Receita Federal."""
+
+        raise Exception('Metodo nao implementado')
+
+    def _serializar_emitente(self, emitente, tag_raiz='emit', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+
+        # Dados do emitente
+        if len(so_numeros(emitente.cpfcnpj)) == 11:
+            etree.SubElement(raiz, 'CPF').text = so_numeros(emitente.cpfcnpj)
+        else:
+            etree.SubElement(raiz, 'CNPJ').text = so_numeros(emitente.cpfcnpj)
+        etree.SubElement(raiz, 'IE').text = emitente.inscricao_estadual
+        etree.SubElement(raiz, 'xNome').text = emitente.razao_social
+        etree.SubElement(raiz, 'xFant').text = emitente.nome_fantasia
+        # Endereço
+        endereco = etree.SubElement(raiz, 'enderEmit')
+        etree.SubElement(endereco, 'xLgr').text = emitente.endereco_logradouro
+        etree.SubElement(endereco, 'nro').text = emitente.endereco_numero
+        if emitente.endereco_complemento:
+            etree.SubElement(endereco, 'xCpl').text = emitente.endereco_complemento
+        etree.SubElement(endereco, 'xBairro').text = emitente.endereco_bairro
+        etree.SubElement(endereco, 'cMun').text = obter_codigo_por_municipio(
+            emitente.endereco_municipio, emitente.endereco_uf)
+        etree.SubElement(endereco, 'xMun').text = emitente.endereco_municipio
+        etree.SubElement(endereco, 'CEP').text = so_numeros(emitente.endereco_cep)
+        etree.SubElement(endereco, 'UF').text = emitente.endereco_uf
+        if emitente.endereco_telefone:
+            etree.SubElement(endereco, 'fone').text = emitente.endereco_telefone
+        etree.SubElement(endereco, 'email').text = emitente.endereco_email
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_municipio_carrega(self, municipio_carrega, tag_raiz='infMunCarrega', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+        etree.SubElement(raiz, 'cMunCarrega').text = str(municipio_carrega.cMunCarrega)
+        etree.SubElement(raiz, 'xMunCarrega').text = str(municipio_carrega.xMunCarrega)
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_percurso(self, percurso, tag_raiz='infPercurso', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+        etree.SubElement(raiz, 'UFPer').text = percurso.UFPer
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_modal_rodoviario(self, modal_rodoviario, tag_raiz='infModal', retorna_string=True):
+
+        """
+        <infModal versaoModal="3.00">
+            rodo
+                infANTT
+                    infCIOT
+                    valePed
+                    infContratante
+                    infPag
+                veicTracao
+                    prop
+                    condutor
+                veicReboque
+                    prop
+        """
+        raiz = etree.Element(tag_raiz, versaoModal=self._versao)
+        rodo = etree.SubElement(raiz, 'rodo')
+
+        infANTT = etree.SubElement(rodo, 'infANTT')
+        etree.SubElement(infANTT, 'RNTRC').text = modal_rodoviario.rntrc
+
+        # CIOT
+        if len(modal_rodoviario.ciot) > 0:
+            for num, item in enumerate(modal_rodoviario.ciot):
+                infCIOT = etree.SubElement(infANTT, 'infCIOT')
+                etree.SubElement(infCIOT, 'CIOT').text = item.numero_ciot
+                if len(item.cpfcnpj) == 11:
+                    etree.SubElement(infCIOT, 'CPF').text = item.cpfcnpj
+                elif len(item.cpfcnpj) == 14:
+                    etree.SubElement(infCIOT, 'CNPJ').text = item.cpfcnpj
+
+        # Vale Pedágio
+        if len(modal_rodoviario.pedagio) > 0:
+            valePed = etree.SubElement(infANTT, 'valePed')
+            for num, item in enumerate(modal_rodoviario.pedagio):
+                disp = etree.SubElement(valePed, 'disp')
+                etree.SubElement(disp, 'CNPJForn').text = item.cnpj_fornecedor
+                if len(item.cpfcnpj_pagador) == 11:
+                    etree.SubElement(disp, 'CPFPg').text = item.cpfcnpj_pagador
+                elif len(item.cpfcnpj_pagador) == 14:
+                    etree.SubElement(disp, 'CNPJPg').text = item.cpfcnpj_pagador
+                etree.SubElement(disp, 'nCompra').text = item.numero_compra
+                etree.SubElement(disp, 'vValePed').text = '{:.2f}'.format(item.valor_pedagio or 0) # Valor do ICMS
+
+        # Contratantes
+        if len(modal_rodoviario.contratante) > 0:
+            for num, item in enumerate(modal_rodoviario.contratante):
+                infContratante = etree.SubElement(infANTT, 'infContratante')
+                etree.SubElement(infContratante, 'xNome').text = item.nome
+                if len(item.cpfcnpj) == 11:
+                    etree.SubElement(infContratante, 'CPF').text = item.cpfcnpj
+                elif len(item.cpfcnpj) == 14:
+                    etree.SubElement(infContratante, 'CNPJ').text = item.cpfcnpj
+
+        # Veículo Tração
+        veicTracao = etree.SubElement(rodo, 'veicTracao')
+        etree.SubElement(veicTracao, 'cInt').text = modal_rodoviario.veiculo_tracao.cInt
+        etree.SubElement(veicTracao, 'placa').text = modal_rodoviario.veiculo_tracao.placa
+        etree.SubElement(veicTracao, 'RENAVAM').text = modal_rodoviario.veiculo_tracao.RENAVAM
+        etree.SubElement(veicTracao, 'tara').text = modal_rodoviario.veiculo_tracao.tara
+        etree.SubElement(veicTracao, 'capKG').text = modal_rodoviario.veiculo_tracao.capKG
+        etree.SubElement(veicTracao, 'capM3').text = modal_rodoviario.veiculo_tracao.capM3
+
+        # Propritario do veículo Tração
+        if modal_rodoviario.veiculo_tracao.proprietario:
+            prop = etree.SubElement(veicTracao, 'prop')
+
+            if len(modal_rodoviario.veiculo_tracao.proprietario.cpfcnpj) == 11:
+                etree.SubElement(prop, 'CPF').text = modal_rodoviario.veiculo_tracao.proprietario.cpfcnpj
+            elif len(modal_rodoviario.veiculo_tracao.proprietario.cpfcnpj) == 14:
+                etree.SubElement(prop, 'CNPJ').text = modal_rodoviario.veiculo_tracao.proprietario.cpfcnpj
+
+            etree.SubElement(prop, 'RNTRC').text = modal_rodoviario.veiculo_tracao.proprietario.rntrc
+            etree.SubElement(prop, 'xNome').text = modal_rodoviario.veiculo_tracao.proprietario.nome
+            if modal_rodoviario.veiculo_tracao.proprietario.inscricao_estudual != None:
+                etree.SubElement(prop, 'IE').text = modal_rodoviario.veiculo_tracao.proprietario.inscricao_estudual
+            etree.SubElement(prop, 'UF').text = modal_rodoviario.veiculo_tracao.proprietario.uf
+            # tpProp: 0=TACAgregado; 1=TACIndependente; 2=Outros
+            etree.SubElement(prop, 'tpProp').text = modal_rodoviario.veiculo_tracao.proprietario.tipo
+
+        # condutor 1-n
+        if len(modal_rodoviario.veiculo_tracao.condutor) > 0:
+            for num, item_condutor in enumerate(modal_rodoviario.veiculo_tracao.condutor):
+                condutor = etree.SubElement(veicTracao, 'condutor')
+                etree.SubElement(condutor, 'xNome').text = item_condutor.nome_motorista
+                etree.SubElement(condutor, 'CPF').text = item_condutor.cpf_motorista
+        # fim-condutor
+
+        etree.SubElement(veicTracao, 'tpRod').text = modal_rodoviario.veiculo_tracao.tpRod
+        etree.SubElement(veicTracao, 'tpCar').text = modal_rodoviario.veiculo_tracao.tpCar
+        etree.SubElement(veicTracao, 'UF').text = modal_rodoviario.veiculo_tracao.UF
+        # fim-veicTracao
+
+        # Veículos reboque 1-n
+        if len(modal_rodoviario.veiculo_reboque) > 0:
+            for num, item_reboque in enumerate(modal_rodoviario.veiculo_reboque):
+                veicReboque = etree.SubElement(rodo, 'veicReboque')
+                etree.SubElement(veicReboque, 'cInt').text = item_reboque.cInt
+                etree.SubElement(veicReboque, 'placa').text = item_reboque.placa
+                etree.SubElement(veicReboque, 'RENAVAM').text = item_reboque.RENAVAM
+                etree.SubElement(veicReboque, 'tara').text = item_reboque.tara
+                etree.SubElement(veicReboque, 'capKG').text = item_reboque.capKG
+                etree.SubElement(veicReboque, 'capM3').text = item_reboque.capM3
+
+                # Propritario do veículo Reboque
+                if item_reboque.proprietario:
+                    prop = etree.SubElement(veicReboque, 'prop')
+
+                    if len(item_reboque.proprietario.cpfcnpj) == 11:
+                        etree.SubElement(prop, 'CPF').text = item_reboque.proprietario.cpfcnpj
+                    elif len(item_reboque.proprietario.cpfcnpj) == 14:
+                        etree.SubElement(prop, 'CNPJ').text = item_reboque.proprietario.cpfcnpj
+
+                    etree.SubElement(prop, 'RNTRC').text = item_reboque.proprietario.rntrc
+                    etree.SubElement(prop, 'xNome').text = item_reboque.proprietario.nome
+                    if item_reboque.proprietario.inscricao_estudual != None:
+                        etree.SubElement(prop, 'IE').text = item_reboque.proprietario.inscricao_estudual
+                    etree.SubElement(prop, 'UF').text = item_reboque.proprietario.uf
+                    # tpProp: 0=TACAgregado; 1=TACIndependente; 2=Outros
+                    etree.SubElement(prop, 'tpProp').text = item_reboque.proprietario.tipo
+
+                etree.SubElement(veicReboque, 'tpCar').text = item_reboque.tpCar
+                etree.SubElement(veicReboque, 'UF').text = item_reboque.UF
+        # fim-veicReboque
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_documentos(self, documentos, tag_raiz='infDoc', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+
+        if len(documentos) <= 0:
+            raise f'MDFe deve ter uma NFe ou uma CTe vinculadas'
+
+        for num, item in enumerate(documentos):
+            infMunDescarga = etree.SubElement(raiz, 'infMunDescarga')
+            etree.SubElement(infMunDescarga, 'cMunDescarga').text = item.cMunDescarga
+            etree.SubElement(infMunDescarga, 'xMunDescarga').text = item.xMunDescarga
+
+            if len(item.documentos_nfe) > 0:
+                for num, item_doc in enumerate(item.documentos_nfe):
+                    infNFe = etree.SubElement(infMunDescarga, 'infNFe')
+                    etree.SubElement(infNFe, 'chNFe').text = item_doc.chave_acesso_nfe
+
+            elif len(documentos.documentos_cte) > 0:
+                for num, item_doc in enumerate(item.documentos_cte):
+                    infCTe = etree.SubElement(infMunDescarga, 'infCTe')
+                    etree.SubElement(infCTe, 'chCTe').text = item_doc.chave_acesso_cte
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_seguradora(self, seguradora, tag_raiz='seg', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+
+        infResp = etree.SubElement(raiz, 'infResp')
+        etree.SubElement(infResp, 'respSeg').text = seguradora.responsavel_seguro
+        etree.SubElement(infResp, 'CNPJ').text = seguradora.cnpj_responsavel
+
+        infSeg = etree.SubElement(raiz, 'infSeg')
+        etree.SubElement(infSeg, 'xSeg').text = seguradora.nome_seguradora
+        etree.SubElement(infSeg, 'CNPJ').text = seguradora.cnpj_seguradora
+
+        etree.SubElement(raiz, 'nApol').text = seguradora.numero_apolice
+
+        if len(seguradora.averbacoes) > 0:
+            for num, item in enumerate(seguradora.averbacoes):
+                etree.SubElement(raiz, 'nAver').text = item.numero
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_produto(self, produto, tag_raiz='prodPred', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+        etree.SubElement(raiz, 'tpCarga').text = produto.tipo_carga
+        etree.SubElement(raiz, 'xProd').text = produto.nome_produto
+        etree.SubElement(raiz, 'cEAN').text = produto.cean
+        etree.SubElement(raiz, 'NCM').text = produto.ncm
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_totais(self, totais, tag_raiz='tot', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+
+        if totais.qCTe > 0:
+            etree.SubElement(raiz, 'qCTe').text = str(totais.qCTe)
+        elif totais.qNFe > 0:
+            etree.SubElement(raiz, 'qNFe').text = str(totais.qNFe)
+
+        etree.SubElement(raiz, 'vCarga').text = str(totais.vCarga)
+        if totais.cUnid == 'KG':
+            etree.SubElement(raiz, 'cUnid').text = '01'
+        elif totais.cUnid == 'TON':
+            etree.SubElement(raiz, 'cUnid').text = '02'
+        else:
+            raise f'cUnid deve ser KG ou TON'
+        etree.SubElement(raiz, 'qCarga').text = str(totais.qCarga)
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_lacres(self, lacres, tag_raiz='lacres', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+        etree.SubElement(raiz, 'nLacre').text = str(lacres.nLacre)
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_responsavel_tecnico(self, responsavel_tecnico, tag_raiz='infRespTec', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+        etree.SubElement(raiz, 'CNPJ').text = responsavel_tecnico.cnpj
+        etree.SubElement(raiz, 'xContato').text = responsavel_tecnico.contato
+        etree.SubElement(raiz, 'email').text = responsavel_tecnico.email
+        etree.SubElement(raiz, 'fone').text = responsavel_tecnico.fone
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+    def _serializar_manifesto(self, manifesto, tag_raiz='infMDFe', retorna_string=True):
+        raiz = etree.Element(tag_raiz, versao=self._versao)
+
+        # 'Id' da tag raiz
+        # Ex.: MDFe35080599999090910270550010000000011518005123
+        raiz.attrib['Id'] = manifesto.identificador_unico
+
+        tz = datetime.now().astimezone().strftime('%z')
+        tz = "{}:{}".format(tz[:-2], tz[-2:])
+
+        # Dados do Manifesto
+        ide = etree.SubElement(raiz, 'ide')
+        etree.SubElement(ide, 'cUF').text = CODIGOS_ESTADOS[manifesto.uf]
+        etree.SubElement(ide, 'tpAmb').text = str(self._ambiente)
+        etree.SubElement(ide, 'tpEmit').text = str(manifesto.tipo_emitente)
+
+        # 0=nenhum; 1=etc; 2=tac; 3=ctc
+        if manifesto.tipo_transportador != 0:
+            etree.SubElement(ide, 'tpTransp').text = str(manifesto.tipo_transportador)
+
+        etree.SubElement(ide, 'mod').text = str(manifesto.modelo)
+        etree.SubElement(ide, 'serie').text = manifesto.serie
+        etree.SubElement(ide, 'nMDF').text = str(manifesto.numero_mdfe)
+        etree.SubElement(ide, 'cMDF').text = manifesto.codigo_numerico_aleatorio
+        etree.SubElement(ide, 'cDV').text = manifesto.dv_codigo_numerico_aleatorio
+        etree.SubElement(ide, 'modal').text = str(manifesto.modal)
+        etree.SubElement(ide, 'dhEmi').text = manifesto.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz
+        etree.SubElement(ide, 'tpEmis').text = str(manifesto.forma_emissao)
+        etree.SubElement(ide, 'procEmi').text = str(manifesto.processo_emissao)
+        etree.SubElement(ide, 'verProc').text = f'{self._nome_aplicacao} {manifesto.versao_processo_emissao}'
+        etree.SubElement(ide, 'UFIni').text = manifesto.UFIni
+        etree.SubElement(ide, 'UFFim').text = manifesto.UFFim
+
+        # Municipios de Carregamento
+        for num, item in enumerate(manifesto.infMunCarrega):
+            ide.append(self._serializar_municipio_carrega(item, retorna_string=False))
+
+        # UFs Percurso
+        for num, item in enumerate(manifesto.infPercurso):
+            ide.append(self._serializar_percurso(item, retorna_string=False))
+
+        if manifesto.dhIniViagem != None:
+            etree.SubElement(ide, 'dhIniViagem').text = manifesto.dhIniViagem.strftime('%Y-%m-%dT%H:%M:%S') + tz
+        # - fim ide
+
+        # Emitente
+        raiz.append(self._serializar_emitente(manifesto.emitente, retorna_string=False))
+
+        # infModal rodo
+        raiz.append(self._serializar_modal_rodoviario(manifesto.modal_rodoviario, retorna_string=False))
+
+        # infDoc infCTe ou infNFe
+        raiz.append(self._serializar_documentos(manifesto.documentos, retorna_string=False))
+
+        # seg
+        if len(manifesto.seguradora) > 0:
+            for num, item in enumerate(manifesto.seguradora):
+                raiz.append(self._serializar_seguradora(item, retorna_string=False))
+
+        # prodPred
+        if len(manifesto.produto) > 0:
+            raiz.append(self._serializar_produto(manifesto.produto[0], retorna_string=False))
+
+        # totais
+        raiz.append(self._serializar_totais(manifesto.totais, retorna_string=False))
+
+        # lacres
+        if len(manifesto.lacres) > 0:
+            for num, item in enumerate(manifesto.lacres):
+                raiz.append(self._serializar_lacres(item, retorna_string=False))
+
+        # Informações adicionais
+        if manifesto.informacoes_adicionais_interesse_fisco or manifesto.informacoes_complementares_interesse_contribuinte:
+            info_ad = etree.SubElement(raiz, 'infAdic')
+            if manifesto.informacoes_adicionais_interesse_fisco:
+                etree.SubElement(info_ad, 'infAdFisco').text = manifesto.informacoes_adicionais_interesse_fisco
+            if manifesto.informacoes_complementares_interesse_contribuinte:
+                etree.SubElement(info_ad, 'infCpl').text = manifesto.informacoes_complementares_interesse_contribuinte
+
+        # Responsavel Tecnico NT2018/003
+        if manifesto.responsavel_tecnico:
+            raiz.append(self._serializar_responsavel_tecnico(
+                manifesto.responsavel_tecnico[0], retorna_string=False))
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
