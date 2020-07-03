@@ -4,7 +4,7 @@ import re
 import requests
 import collections
 from io import StringIO
-
+import base64
 
 from pynfe.utils.flags import (
     NAMESPACE_MDFE,
@@ -43,11 +43,91 @@ class ComunicacaoMDFe(Comunicacao):
     _soap_version = 'soap12'
     _edoc_situacao_ja_enviado = MDFE_SITUACAO_JA_ENVIADO
     _edoc_situacao_arquivo_recebido_com_sucesso = '103'
+    _edoc_situacao_lote_processado = '104'
     _edoc_situacao_em_processamento = '105'
     _edoc_situacao_servico_em_operacao = '107'
 
     consulta_servico_ao_enviar = True
     maximo_tentativas_consulta_recibo = 5
+
+    def autorizacao(self, manifesto, id_lote=1, ind_sinc=1):
+        """
+        Método para realizar autorização do manifesto
+        :param manifesto: XML assinado
+        :param id_lote: Id do lote - numero autoincremental gerado pelo sistema
+        :param ind_sinc: Indicador de sincrono e assincrono, 0 para assincrono, 1 para sincrono
+        :return:  Uma tupla que em caso de sucesso, retorna xml com manifesto e protocolo de autorização. 
+        Caso contrário, envia todo o soap de resposta da Sefaz para decisão do usuário.
+        """
+        # url do serviço
+        if ind_sinc == 0:
+            url = self._get_url(consulta='RECEPCAO')
+        elif ind_sinc == 1:
+            url = self._get_url(consulta='RECEPCAO_SINC')
+        else:
+            raise f'ind_sinc deve ser 0=assincrono ou 1=sincrono'
+
+        # Monta XML do corpo da requisição
+        raiz = etree.Element('enviMDFe', xmlns=NAMESPACE_MDFE, versao=VERSAO_MDFE)
+        etree.SubElement(raiz, 'idLote').text = str(id_lote)  # numero autoincremental gerado pelo sistema
+        etree.SubElement(raiz, 'indSinc').text = str(ind_sinc)  # 0 para assincrono, 1 para sincrono
+        raiz.append(manifesto)
+
+        # Monta XML para envio da requisição
+        if ind_sinc == 0:
+            xml = self._construir_xml_soap('MDFeRecepcao', raiz)
+        elif ind_sinc == 1:
+            xml = self._construir_xml_soap('MDFeRecepcaoSinc', raiz)
+
+        # Faz request no Servidor da Sefaz
+        retorno = self._post(url, xml)
+
+        # Em caso de sucesso, retorna xml com o mdfe e protocolo de autorização.
+        # Caso contrário, envia todo o soap de resposta da Sefaz para decisão do usuário.
+        if retorno.status_code == 200:
+            # namespace
+            ns = {'ns': NAMESPACE_MDFE}
+            # Procuta status no xml
+            try:
+                prot = etree.fromstring(retorno.text)
+            except ValueError:
+                # em SP retorno.text apresenta erro
+                prot = etree.fromstring(retorno.content)
+
+            if ind_sinc == 1:
+                try:
+                    # Protocolo com envio OK
+                    try:
+                        inf_prot = prot[0][0]  # root protMDFe
+                    except IndexError:
+                        # Estados como GO vem com a tag header
+                        inf_prot = prot[1][0]
+
+                    lote_status = inf_prot.xpath("ns:retEnviMDFe/ns:cStat", namespaces=ns)[0].text
+                    # Lote processado
+                    if lote_status == self._edoc_situacao_lote_processado:
+                        prot_mdfe = inf_prot.xpath("ns:retEnviMDFe/ns:protMDFe", namespaces=ns)[0]
+                        status = prot_mdfe.xpath('ns:infProt/ns:cStat', namespaces=ns)[0].text
+
+                        # autorizado uso do MDF-e
+                        # retorna xml final (protMDFe + MDFe)
+                        if status in self._edoc_situacao_ja_enviado:  # if status == '100':
+                            raiz = etree.Element('mdfeProc', xmlns=NAMESPACE_MDFE, versao=VERSAO_MDFE)
+                            raiz.append(manifesto)
+                            raiz.append(prot_mdfe)
+                            return 0, raiz
+                except IndexError:
+                    # Protocolo com algum erro no Envio
+                    return 1, retorno, manifesto
+            else:
+                # Retorna id do protocolo para posterior consulta em caso de sucesso.
+                rec = prot[0][0]
+                status = rec.xpath("ns:retEnviMDFe/ns:cStat", namespaces=ns)[0].text
+                # Lote Recebido com Sucesso!
+                if status == self._edoc_situacao_arquivo_recebido_com_sucesso:
+                    nrec = rec.xpath("ns:retEnviMDFe/ns:infRec/ns:nRec", namespaces=ns)[0].text
+                    return 0, nrec, manifesto
+        return 1, retorno, manifesto
 
     def status_servico(self):
         url = self._get_url('STATUS')
@@ -138,6 +218,10 @@ class ComunicacaoMDFe(Comunicacao):
             self._envio_mensagem,
             xmlns=self._namespace_metodo+metodo
         )
+
+        # if metodo == 'MDFeRecepcaoSinc':
+        #     body_base64 = base64.b16encode(a).decode()
+
         a.append(dados)
         return raiz
 
