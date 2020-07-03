@@ -74,6 +74,17 @@ NF_STATUS = (
     'Cancelada',
 )
 
+MDFE_STATUS = (
+    'Em Digitacao',
+    'Validada',
+    'Assinada',
+    'Em processamento',
+    'Autorizada',
+    'Rejeitada',
+    'Cancelada',
+    'Encerrada',
+)
+
 NF_TIPOS_DOCUMENTO = (
     (0, 'Entrada'),
     (1, 'Saida'),
