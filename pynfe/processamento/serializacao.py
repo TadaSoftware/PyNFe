@@ -743,6 +743,11 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(e, 'tpEvento').text = evento.tp_evento
         etree.SubElement(e, 'nSeqEvento').text = str(evento.n_seq_evento)
         det = etree.SubElement(e, 'detEvento', versaoEvento=VERSAO_MDFE)
+        if evento.descricao == 'Cancelamento':
+            cancelamento = etree.SubElement(det, 'evCancMDFe')
+            etree.SubElement(cancelamento, 'descEvento').text = evento.descricao
+            etree.SubElement(cancelamento, 'nProt').text = evento.protocolo
+            etree.SubElement(cancelamento, 'xJust').text = evento.justificativa
         if evento.descricao == 'Encerramento':
             encerramento = etree.SubElement(det, 'evEncMDFe')
             etree.SubElement(encerramento, 'descEvento').text = evento.descricao
