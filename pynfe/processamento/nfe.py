@@ -239,13 +239,13 @@ class ComunicacaoNFe(Comunicacao):
         xml = self._construir_xml_soap('NFeRecepcaoEvento4', raiz)
         return self._post(url, xml)
 
-    def status_servico(self):
+    def status_servico(self, modelo):
         """
         Verifica status do servidor da receita.
         :param modelo: modelo é a string com tipo de serviço que deseja consultar, Ex: nfe ou nfce
         :return:
         """
-        url = self._get_url('mdfe', 'STATUS')
+        url = self._get_url(modelo, 'STATUS')
         # Monta XML do corpo da requisição
         raiz = etree.Element('consStatServ', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
