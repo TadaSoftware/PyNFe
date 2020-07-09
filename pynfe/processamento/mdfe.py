@@ -2,7 +2,6 @@
 import time
 import re
 import requests
-import collections
 from io import StringIO
 import base64
 
@@ -152,11 +151,7 @@ class ComunicacaoMDFe(Comunicacao):
     def consulta_nao_encerrados(self, cpfcnpj):
         url = self._get_url('NAO_ENCERRADOS')
         # Monta XML do corpo da requisição
-        # raiz = etree.Element('consMDFeNaoEnc', xmlns=NAMESPACE_MDFE, versao=self._versao)
-        attr = collections.OrderedDict()
-        attr['xmlns'] = NAMESPACE_MDFE
-        attr['versao'] = self._versao
-        raiz = etree.Element('consMDFeNaoEnc', attr)
+        raiz = etree.Element('consMDFeNaoEnc', xmlns=NAMESPACE_MDFE, versao=self._versao)
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
         etree.SubElement(raiz, 'xServ').text = 'CONSULTAR NÃO ENCERRADOS'
         if len(cpfcnpj) == 11:
@@ -197,13 +192,13 @@ class ComunicacaoMDFe(Comunicacao):
     def _construir_xml_soap(self, metodo, dados):
         """Mota o XML para o envio via SOAP"""
 
-        ns = collections.OrderedDict()
-        ns['xsi'] = self._namespace_xsi
-        ns['xsd'] = self._namespace_xsd
-        ns[self._soap_version] = self._namespace_soap
         raiz = etree.Element(
-            '{%s}Envelope' % self._namespace_soap,
-            nsmap=ns
+            '{%s}Envelope' % NAMESPACE_SOAP,
+            nsmap={
+                'xsi': NAMESPACE_XSI,
+                'xsd': NAMESPACE_XSD,
+                'soap': NAMESPACE_SOAP
+            }
         )
 
         if self._header:
@@ -256,7 +251,7 @@ class ComunicacaoMDFe(Comunicacao):
                 etree.tostring(xml, encoding='unicode').replace('\n', '')
             )
             xml = xml_declaration + xml
-
+            xml = xml.encode('utf8')  # necessário para o evento "CONSULTAR NÃO ENCERRADOS"
             # print(xml)
             # print('-' * 20)
 
