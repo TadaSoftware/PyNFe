@@ -938,13 +938,12 @@ class SerializacaoQrcodeMDFe(object):
         # adiciona tag infMDFeSupl com qrcode
         infMDFeSupl = etree.Element('infMDFeSupl')
         etree.SubElement(infMDFeSupl, 'qrCodMDFe').text = f'<![CDATA[{qrcode.strip()}]]>'
-
         mdfe.insert(1, infMDFeSupl)
 
-        # correção da tag qrCodMDFe
+        # correção da tag qrCode, retira caracteres pois e CDATA
         tmdfe = etree.tostring(mdfe, encoding='unicode')
         etree.tostring(mdfe.find('.//qrCodMDFe'), encoding='unicode') \
-            .replace('\n','').replace('&lt;','<').replace('&gt;','>').replace('amp;','')
+            .replace('\n', '').replace('&lt;', '<').replace('&gt;', '>').replace('amp;', '')
         mdfe = etree.fromstring(tmdfe)
 
         if return_qr:
@@ -1126,7 +1125,7 @@ class SerializacaoMDFe(Serializacao):
         etree.SubElement(infANTT, 'RNTRC').text = modal_rodoviario.rntrc
 
         # CIOT
-        if len(modal_rodoviario.ciot) > 0:
+        if modal_rodoviario.ciot != None:
             for num, item in enumerate(modal_rodoviario.ciot):
                 infCIOT = etree.SubElement(infANTT, 'infCIOT')
                 etree.SubElement(infCIOT, 'CIOT').text = item.numero_ciot
@@ -1136,7 +1135,7 @@ class SerializacaoMDFe(Serializacao):
                     etree.SubElement(infCIOT, 'CNPJ').text = item.cpfcnpj
 
         # Vale Pedágio
-        if len(modal_rodoviario.pedagio) > 0:
+        if modal_rodoviario.pedagio != None:
             valePed = etree.SubElement(infANTT, 'valePed')
             for num, item in enumerate(modal_rodoviario.pedagio):
                 disp = etree.SubElement(valePed, 'disp')
@@ -1149,7 +1148,7 @@ class SerializacaoMDFe(Serializacao):
                 etree.SubElement(disp, 'vValePed').text = '{:.2f}'.format(item.valor_pedagio or 0) # Valor do ICMS
 
         # Contratantes
-        if len(modal_rodoviario.contratante) > 0:
+        if modal_rodoviario.contratante != None:
             for num, item in enumerate(modal_rodoviario.contratante):
                 infContratante = etree.SubElement(infANTT, 'infContratante')
                 etree.SubElement(infContratante, 'xNome').text = item.nome
@@ -1185,7 +1184,7 @@ class SerializacaoMDFe(Serializacao):
             etree.SubElement(prop, 'tpProp').text = modal_rodoviario.veiculo_tracao.proprietario.tipo
 
         # condutor 1-n
-        if len(modal_rodoviario.veiculo_tracao.condutor) > 0:
+        if modal_rodoviario.veiculo_tracao.condutor != None:
             for num, item_condutor in enumerate(modal_rodoviario.veiculo_tracao.condutor):
                 condutor = etree.SubElement(veicTracao, 'condutor')
                 etree.SubElement(condutor, 'xNome').text = item_condutor.nome_motorista
@@ -1198,7 +1197,7 @@ class SerializacaoMDFe(Serializacao):
         # fim-veicTracao
 
         # Veículos reboque 1-n
-        if len(modal_rodoviario.veiculo_reboque) > 0:
+        if modal_rodoviario.veiculo_reboque != None:
             for num, item_reboque in enumerate(modal_rodoviario.veiculo_reboque):
                 veicReboque = etree.SubElement(rodo, 'veicReboque')
                 etree.SubElement(veicReboque, 'cInt').text = item_reboque.cInt

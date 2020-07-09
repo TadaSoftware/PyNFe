@@ -503,8 +503,8 @@ NFSE = {
 MDFE = {
 	# unico autorizador de MDF-e
 	'SVRS': {
-		'RECEPCAO': 'mdferecepcao/MDFeRecepcao.asmx',
-		'RECEPCAO_SINC': 'mdferecepcao/MDFeRecepcaoSinc.asmx',
+		'RECEPCAO': 'MDFeRecepcao/MDFeRecepcao.asmx',
+		'RECEPCAO_SINC': 'MDFeRecepcaoSinc/MDFeRecepcaoSinc.asmx',
 		'RET_RECEPCAO': 'mdferetrecepcao/MDFeRetRecepcao.asmx',
 		'EVENTOS': 'mdferecepcaoevento/MDFeRecepcaoEvento.asmx',
 		'CONSULTA': 'mdfeconsulta/MDFeConsulta.asmx',

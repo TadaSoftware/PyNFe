@@ -69,7 +69,6 @@ class ComunicacaoMDFe(Comunicacao):
         # Monta XML do corpo da requisição
         raiz = etree.Element('enviMDFe', xmlns=NAMESPACE_MDFE, versao=VERSAO_MDFE)
         etree.SubElement(raiz, 'idLote').text = str(id_lote)  # numero autoincremental gerado pelo sistema
-        etree.SubElement(raiz, 'indSinc').text = str(ind_sinc)  # 0 para assincrono, 1 para sincrono
         raiz.append(manifesto)
 
         # Monta XML para envio da requisição
@@ -96,13 +95,9 @@ class ComunicacaoMDFe(Comunicacao):
             if ind_sinc == 1:
                 try:
                     # Protocolo com envio OK
-                    try:
-                        inf_prot = prot[0][0]  # root protMDFe
-                    except IndexError:
-                        # Estados como GO vem com a tag header
-                        inf_prot = prot[1][0]
-
+                    inf_prot = prot[1][0]
                     lote_status = inf_prot.xpath("ns:retEnviMDFe/ns:cStat", namespaces=ns)[0].text
+
                     # Lote processado
                     if lote_status == self._edoc_situacao_lote_processado:
                         prot_mdfe = inf_prot.xpath("ns:retEnviMDFe/ns:protMDFe", namespaces=ns)[0]
@@ -120,7 +115,7 @@ class ComunicacaoMDFe(Comunicacao):
                     return 1, retorno, manifesto
             else:
                 # Retorna id do protocolo para posterior consulta em caso de sucesso.
-                rec = prot[0][0]
+                rec = prot[1][0]
                 status = rec.xpath("ns:retEnviMDFe/ns:cStat", namespaces=ns)[0].text
                 # Lote Recebido com Sucesso!
                 if status == self._edoc_situacao_arquivo_recebido_com_sucesso:
@@ -195,9 +190,9 @@ class ComunicacaoMDFe(Comunicacao):
         raiz = etree.Element(
             '{%s}Envelope' % NAMESPACE_SOAP,
             nsmap={
-                'xsi': NAMESPACE_XSI,
-                'xsd': NAMESPACE_XSD,
-                'soap': NAMESPACE_SOAP
+                'xsi': self._namespace_xsi,
+                'xsd': self._namespace_xsd,
+                self._soap_version: self._namespace_soap
             }
         )
 
@@ -244,16 +239,14 @@ class ComunicacaoMDFe(Comunicacao):
         try:
             xml_declaration = '<?xml version="1.0" encoding="UTF-8"?>'
 
-            # limpa xml com caracteres bugados para infNFeSupl em NFC-e
+            # limpa xml com caracteres bugados para infMDFeSupl em NFC-e
             xml = re.sub(
-                '<qrCode>(.*?)</qrCode>',
-                lambda x: x.group(0).replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', ''),
+                '<qrCodMDFe>(.*?)</qrCodMDFe>',
+                lambda x: x.group(0).replace('&lt;', '<').replace('&gt;', '>').replace('amp;', ''),
                 etree.tostring(xml, encoding='unicode').replace('\n', '')
             )
             xml = xml_declaration + xml
             xml = xml.encode('utf8')  # necessário para o evento "CONSULTAR NÃO ENCERRADOS"
-            # print(xml)
-            # print('-' * 20)
 
             # Faz o request com o servidor
             result = requests.post(
