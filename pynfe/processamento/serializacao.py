@@ -1122,7 +1122,7 @@ class SerializacaoMDFe(Serializacao):
         rodo = etree.SubElement(raiz, 'rodo')
 
         infANTT = etree.SubElement(rodo, 'infANTT')
-        etree.SubElement(infANTT, 'RNTRC').text = modal_rodoviario.rntrc
+        etree.SubElement(infANTT, 'RNTRC').text = modal_rodoviario.rntrc.zfill(8)
 
         # CIOT
         if modal_rodoviario.ciot != None:
@@ -1158,43 +1158,47 @@ class SerializacaoMDFe(Serializacao):
                     etree.SubElement(infContratante, 'CNPJ').text = item.cpfcnpj
 
         # Veículo Tração
-        veicTracao = etree.SubElement(rodo, 'veicTracao')
-        etree.SubElement(veicTracao, 'cInt').text = modal_rodoviario.veiculo_tracao.cInt
-        etree.SubElement(veicTracao, 'placa').text = modal_rodoviario.veiculo_tracao.placa
-        etree.SubElement(veicTracao, 'RENAVAM').text = modal_rodoviario.veiculo_tracao.RENAVAM
-        etree.SubElement(veicTracao, 'tara').text = modal_rodoviario.veiculo_tracao.tara
-        etree.SubElement(veicTracao, 'capKG').text = modal_rodoviario.veiculo_tracao.capKG
-        etree.SubElement(veicTracao, 'capM3').text = modal_rodoviario.veiculo_tracao.capM3
+        if (len(modal_rodoviario.veiculo_tracao) != 1):
+            raise f'Permitido somente um único veículo Tração'
 
-        # Propritario do veículo Tração
-        if modal_rodoviario.veiculo_tracao.proprietario:
-            prop = etree.SubElement(veicTracao, 'prop')
+        for num, item in enumerate(modal_rodoviario.veiculo_tracao):
+            veicTracao = etree.SubElement(rodo, 'veicTracao')
+            etree.SubElement(veicTracao, 'cInt').text = item.cInt
+            etree.SubElement(veicTracao, 'placa').text = item.placa
+            etree.SubElement(veicTracao, 'RENAVAM').text = item.RENAVAM
+            etree.SubElement(veicTracao, 'tara').text = '{:.2f}'.format(item.tara or 0)
+            etree.SubElement(veicTracao, 'capKG').text = '{:.2f}'.format(item.capKG or 0)
+            etree.SubElement(veicTracao, 'capM3').text = '{:.2f}'.format(item.capM3 or 0)
 
-            if len(modal_rodoviario.veiculo_tracao.proprietario.cpfcnpj) == 11:
-                etree.SubElement(prop, 'CPF').text = modal_rodoviario.veiculo_tracao.proprietario.cpfcnpj
-            elif len(modal_rodoviario.veiculo_tracao.proprietario.cpfcnpj) == 14:
-                etree.SubElement(prop, 'CNPJ').text = modal_rodoviario.veiculo_tracao.proprietario.cpfcnpj
+            # Propritario do veículo Tração
+            if item.proprietario:
+                prop = etree.SubElement(veicTracao, 'prop')
 
-            etree.SubElement(prop, 'RNTRC').text = modal_rodoviario.veiculo_tracao.proprietario.rntrc
-            etree.SubElement(prop, 'xNome').text = modal_rodoviario.veiculo_tracao.proprietario.nome
-            if modal_rodoviario.veiculo_tracao.proprietario.inscricao_estudual != None:
-                etree.SubElement(prop, 'IE').text = modal_rodoviario.veiculo_tracao.proprietario.inscricao_estudual
-            etree.SubElement(prop, 'UF').text = modal_rodoviario.veiculo_tracao.proprietario.uf
-            # tpProp: 0=TACAgregado; 1=TACIndependente; 2=Outros
-            etree.SubElement(prop, 'tpProp').text = modal_rodoviario.veiculo_tracao.proprietario.tipo
+                if len(item.proprietario.cpfcnpj) == 11:
+                    etree.SubElement(prop, 'CPF').text = item.proprietario.cpfcnpj
+                elif len(item.proprietario.cpfcnpj) == 14:
+                    etree.SubElement(prop, 'CNPJ').text = item.proprietario.cpfcnpj
 
-        # condutor 1-n
-        if modal_rodoviario.veiculo_tracao.condutor != None:
-            for num, item_condutor in enumerate(modal_rodoviario.veiculo_tracao.condutor):
-                condutor = etree.SubElement(veicTracao, 'condutor')
-                etree.SubElement(condutor, 'xNome').text = item_condutor.nome_motorista
-                etree.SubElement(condutor, 'CPF').text = item_condutor.cpf_motorista
-        # fim-condutor
+                etree.SubElement(prop, 'RNTRC').text = item.proprietario.rntrc.zfill(8)
+                etree.SubElement(prop, 'xNome').text = item.proprietario.nome
+                if item.proprietario.inscricao_estudual != None:
+                    etree.SubElement(prop, 'IE').text = item.proprietario.inscricao_estudual
+                etree.SubElement(prop, 'UF').text = item.proprietario.uf
+                # tpProp: 0=TACAgregado; 1=TACIndependente; 2=Outros
+                etree.SubElement(prop, 'tpProp').text = item.proprietario.tipo
 
-        etree.SubElement(veicTracao, 'tpRod').text = modal_rodoviario.veiculo_tracao.tpRod
-        etree.SubElement(veicTracao, 'tpCar').text = modal_rodoviario.veiculo_tracao.tpCar
-        etree.SubElement(veicTracao, 'UF').text = modal_rodoviario.veiculo_tracao.UF
-        # fim-veicTracao
+            # condutor 1-n
+            if item.condutor != None:
+                for num, item_condutor in enumerate(item.condutor):
+                    condutor = etree.SubElement(veicTracao, 'condutor')
+                    etree.SubElement(condutor, 'xNome').text = item_condutor.nome_motorista
+                    etree.SubElement(condutor, 'CPF').text = item_condutor.cpf_motorista
+            # fim-condutor
+
+            etree.SubElement(veicTracao, 'tpRod').text = item.tpRod
+            etree.SubElement(veicTracao, 'tpCar').text = item.tpCar
+            etree.SubElement(veicTracao, 'UF').text = item.UF
+            # fim-veicTracao
 
         # Veículos reboque 1-n
         if modal_rodoviario.veiculo_reboque != None:
@@ -1203,9 +1207,9 @@ class SerializacaoMDFe(Serializacao):
                 etree.SubElement(veicReboque, 'cInt').text = item_reboque.cInt
                 etree.SubElement(veicReboque, 'placa').text = item_reboque.placa
                 etree.SubElement(veicReboque, 'RENAVAM').text = item_reboque.RENAVAM
-                etree.SubElement(veicReboque, 'tara').text = item_reboque.tara
-                etree.SubElement(veicReboque, 'capKG').text = item_reboque.capKG
-                etree.SubElement(veicReboque, 'capM3').text = item_reboque.capM3
+                etree.SubElement(veicReboque, 'tara').text =  '{:.2f}'.format(item_reboque.tara or 0)
+                etree.SubElement(veicReboque, 'capKG').text = '{:.2f}'.format(item_reboque.capKG or 0)
+                etree.SubElement(veicReboque, 'capM3').text = '{:.2f}'.format(item_reboque.capM3 or 0)
 
                 # Propritario do veículo Reboque
                 if item_reboque.proprietario:
@@ -1216,7 +1220,7 @@ class SerializacaoMDFe(Serializacao):
                     elif len(item_reboque.proprietario.cpfcnpj) == 14:
                         etree.SubElement(prop, 'CNPJ').text = item_reboque.proprietario.cpfcnpj
 
-                    etree.SubElement(prop, 'RNTRC').text = item_reboque.proprietario.rntrc
+                    etree.SubElement(prop, 'RNTRC').text = item_reboque.proprietario.rntrc.zfill(8)
                     etree.SubElement(prop, 'xNome').text = item_reboque.proprietario.nome
                     if item_reboque.proprietario.inscricao_estudual != None:
                         etree.SubElement(prop, 'IE').text = item_reboque.proprietario.inscricao_estudual
