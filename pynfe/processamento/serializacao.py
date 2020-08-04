@@ -1166,9 +1166,9 @@ class SerializacaoMDFe(Serializacao):
             etree.SubElement(veicTracao, 'cInt').text = item.cInt
             etree.SubElement(veicTracao, 'placa').text = item.placa
             etree.SubElement(veicTracao, 'RENAVAM').text = item.RENAVAM
-            etree.SubElement(veicTracao, 'tara').text = '{:.2f}'.format(item.tara or 0)
-            etree.SubElement(veicTracao, 'capKG').text = '{:.2f}'.format(item.capKG or 0)
-            etree.SubElement(veicTracao, 'capM3').text = '{:.2f}'.format(item.capM3 or 0)
+            etree.SubElement(veicTracao, 'tara').text = '{:.0f}'.format(item.tara or 0)
+            etree.SubElement(veicTracao, 'capKG').text = '{:.0f}'.format(item.capKG or 0)
+            etree.SubElement(veicTracao, 'capM3').text = '{:.0f}'.format(item.capM3 or 0)
 
             # Propritario do veículo Tração
             if item.proprietario:
@@ -1207,7 +1207,7 @@ class SerializacaoMDFe(Serializacao):
                 etree.SubElement(veicReboque, 'cInt').text = item_reboque.cInt
                 etree.SubElement(veicReboque, 'placa').text = item_reboque.placa
                 etree.SubElement(veicReboque, 'RENAVAM').text = item_reboque.RENAVAM
-                etree.SubElement(veicReboque, 'tara').text =  '{:.2f}'.format(item_reboque.tara or 0)
+                etree.SubElement(veicReboque, 'tara').text = '{:.2f}'.format(item_reboque.tara or 0)
                 etree.SubElement(veicReboque, 'capKG').text = '{:.2f}'.format(item_reboque.capKG or 0)
                 etree.SubElement(veicReboque, 'capM3').text = '{:.2f}'.format(item_reboque.capM3 or 0)
 
@@ -1311,8 +1311,8 @@ class SerializacaoMDFe(Serializacao):
         elif totais.cUnid == 'TON':
             etree.SubElement(raiz, 'cUnid').text = '02'
         else:
-            raise f'cUnid deve ser KG ou TON'
-        etree.SubElement(raiz, 'qCarga').text = str(totais.qCarga)
+            raise 'cUnid deve ser KG ou TON'
+        etree.SubElement(raiz, 'qCarga').text = str('{:.4f}').format(totais.qCarga or 0)
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
