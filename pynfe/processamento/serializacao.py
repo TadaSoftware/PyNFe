@@ -753,8 +753,8 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(encerramento, 'descEvento').text = evento.descricao
             etree.SubElement(encerramento, 'nProt').text = evento.protocolo
             etree.SubElement(encerramento, 'dtEnc').text = evento.dtenc.strftime('%Y-%m-%d')
-            etree.SubElement(encerramento, 'cUF').text = evento.cuf
-            etree.SubElement(encerramento, 'cMun').text = evento.cmun
+            etree.SubElement(encerramento, 'cUF').text = str(evento.cuf)
+            etree.SubElement(encerramento, 'cMun').text = str(evento.cmun)
         elif evento.descricao == 'Inclusão Condutor':
             inclusao = etree.SubElement(det, 'evIncCondutorMDFe')
             etree.SubElement(inclusao, 'descEvento').text = evento.descricao
@@ -765,10 +765,10 @@ class SerializacaoXML(Serializacao):
             inclusao = etree.SubElement(det, 'evIncDFeMDFe')
             etree.SubElement(inclusao, 'descEvento').text = evento.descricao
             etree.SubElement(inclusao, 'nProt').text = evento.protocolo
-            etree.SubElement(inclusao, 'cMunCarrega').text = evento.cmun_carrega
+            etree.SubElement(inclusao, 'cMunCarrega').text = str(evento.cmun_carrega)
             etree.SubElement(inclusao, 'xMunCarrega').text = evento.xmun_carrega
             infDoc = etree.SubElement(inclusao, 'infDoc')
-            etree.SubElement(infDoc, 'cMunDescarga').text = evento.cmun_descarga
+            etree.SubElement(infDoc, 'cMunDescarga').text = str(evento.cmun_descarga)
             etree.SubElement(infDoc, 'xMunDescarga').text = evento.xmun_descarga
             etree.SubElement(infDoc, 'chNFe').text = evento.chave_nfe
         elif evento.descricao == 'Pagamento Operacao MDF-e':
