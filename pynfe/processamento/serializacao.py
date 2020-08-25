@@ -90,7 +90,10 @@ class SerializacaoXML(Serializacao):
         raiz = etree.Element(tag_raiz)
 
         # Dados do emitente
-        etree.SubElement(raiz, 'CNPJ').text = so_numeros(emitente.cnpj)
+        if len(so_numeros(emitente.cnpj)) == 11:
+            etree.SubElement(raiz, 'CPF').text = so_numeros(emitente.cnpj)
+        else:
+            etree.SubElement(raiz, 'CNPJ').text = so_numeros(emitente.cnpj)
         etree.SubElement(raiz, 'xNome').text = emitente.razao_social
         etree.SubElement(raiz, 'xFant').text = emitente.nome_fantasia
         # Endereço
@@ -322,6 +325,11 @@ class SerializacaoXML(Serializacao):
             icms_item = etree.SubElement(icms, 'ICMSSN'+produto_servico.icms_modalidade)
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, 'CSOSN').text = produto_servico.icms_csosn
+        elif produto_servico.icms_modalidade == '51':
+            icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
+            etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
+            etree.SubElement(icms_item, 'CST').text = '51'
+            etree.SubElement(icms_item, 'modBC').text = str(produto_servico.icms_modalidade_determinacao_bc)
         else:
             ### OUTROS TIPOS DE ICMS (00,10,20)
             icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
@@ -364,12 +372,18 @@ class SerializacaoXML(Serializacao):
             else:
                 raise NotImplementedError
         # ipi
-        # ipi = etree.SubElement(imposto, 'IPI')
-        # etree.SubElement(ipi, 'clEnq') = produto_servico.ipi_classe_enquadramento # Preenchimento conforme Atos Normativos editados pela Receita Federal (Observação 2)
-        # ipint = etree.SubElement(ipi, 'IPINT')
-        # # 01=Entrada tributada com alíquota zero 02=Entrada isenta 03=Entrada não-tributada 04=Entrada imune 05=Entrada com suspensão
-        # # 51=Saída tributada com alíquota zero 52=Saída isenta 53=Saída não-tributada 54=Saída imune 55=Saída com suspensão
-        # etree.SubElement(ipint, 'CST') = produto_servico.ipi_codigo_enquadramento
+        ipint_lista = ('01','02','03','04','05','51','52','53','54','55')
+        if produto_servico.ipi_codigo_enquadramento in ipint_lista:
+            ipi = etree.SubElement(imposto, 'IPI')
+            # Preenchimento conforme Atos Normativos editados pela Receita Federal (Observação 2)
+            etree.SubElement(ipi, 'cEnq').text = produto_servico.ipi_classe_enquadramento
+            if produto_servico.ipi_classe_enquadramento == '':
+                etree.SubElement(ipi, 'cEnq').text = '999'
+
+            ipint = etree.SubElement(ipi, 'IPINT')
+            # 01=Entrada tributada com alíquota zero 02=Entrada isenta 03=Entrada não-tributada 04=Entrada imune 05=Entrada com suspensão
+            # 51=Saída tributada com alíquota zero 52=Saída isenta 53=Saída não-tributada 54=Saída imune 55=Saída com suspensão
+            etree.SubElement(ipint, 'CST').text = produto_servico.ipi_codigo_enquadramento
 
         # apenas nfe
         if modelo == 55:
@@ -706,8 +720,10 @@ class SerializacaoXML(Serializacao):
         e = etree.SubElement(raiz, 'infEvento', Id=evento.identificador)
         etree.SubElement(e, 'cOrgao').text = CODIGOS_ESTADOS[evento.uf.upper()]
         etree.SubElement(e, 'tpAmb').text = str(self._ambiente)
-        etree.SubElement(e, 'CNPJ').text = evento.cnpj # Empresas somente terão CNPJ
-        #etree.SubElement(e, 'CPF').text = ''
+        if len(so_numeros(evento.cnpj)) == 11:
+            etree.SubElement(e, 'CPF').text = evento.cnpj
+        else:
+            etree.SubElement(e, 'CNPJ').text = evento.cnpj
         etree.SubElement(e, 'chNFe').text = evento.chave
         etree.SubElement(e, 'dhEvento').text = evento.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz
         etree.SubElement(e, 'tpEvento').text = evento.tp_evento
