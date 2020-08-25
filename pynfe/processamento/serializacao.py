@@ -641,7 +641,8 @@ class SerializacaoXML(Serializacao):
                     vol = etree.SubElement(transp, 'vol')
                     if volume.quantidade:
                         etree.SubElement(vol, 'qVol').text = str(volume.quantidade)
-                        etree.SubElement(vol, 'esp').text = volume.especie
+                        if volume.especie:
+                            etree.SubElement(vol, 'esp').text = volume.especie
                         if volume.marca:
                             etree.SubElement(vol, 'marca').text = volume.marca
                         if volume.numeracao:
