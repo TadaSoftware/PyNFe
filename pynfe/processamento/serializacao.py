@@ -243,8 +243,18 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'qTrib').text = str(produto_servico.quantidade_tributavel)
         etree.SubElement(prod, 'vUnTrib').text = '{:.4f}'.format(produto_servico.valor_unitario_tributavel or 0)
 
+        # frete
+        if produto_servico.total_frete:
+            etree.SubElement(prod, 'vFrete').text = '{:.2f}'.format(produto_servico.total_frete)
+        # seguro
+        if produto_servico.total_seguro:
+            etree.SubElement(prod, 'vSeg').text = '{:.2f}'.format(produto_servico.total_seguro)
+        # desconto
         if produto_servico.desconto:
             etree.SubElement(prod, 'vDesc').text = '{:.2f}'.format(produto_servico.desconto)
+        # outras despesas acessórias
+        if produto_servico.outras_despesas_acessorias:
+            etree.SubElement(prod, 'vOutro').text = '{:.2f}'.format(produto_servico.outras_despesas_acessorias)
 
         """ Indica se valor do Item (vProd) entra no valor total da NF-e (vProd)
             0=Valor do item (vProd) não compõe o valor total da NF-e
