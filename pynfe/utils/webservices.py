@@ -389,7 +389,7 @@ NFE = {
 	    	'CHAVE': 'sefazrs.rs.gov.br/ws/NfeConsulta/NfeConsulta4.asmx',
 	    	'INUTILIZACAO': 'sefazrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao4.asmx',
 	    	'EVENTOS': 'sefazrs.rs.gov.br/ws/recepcaoevento/recepcaoevento4.asmx',
-	    	'CADASTRO': 'cad.sefazrs.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro2.asmx',
+	    	'CADASTRO': 'https://cad.sefazrs.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro4.asmx',
 	    	'DOWNLOAD': 'sefazrs.rs.gov.br/ws/nfeDownloadNF/nfeDownloadNF.asmx',
 	    	'DESTINADAS': 'sefazrs.rs.gov.br/ws/nfeConsultaDest/nfeConsultaDest.asmx',
 	    	'HTTPS': 'https://nfe.',
