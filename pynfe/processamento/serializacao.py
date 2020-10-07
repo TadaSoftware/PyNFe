@@ -303,6 +303,10 @@ class SerializacaoXML(Serializacao):
             icms_item = etree.SubElement(icms, 'ICMSSN'+produto_servico.icms_modalidade)
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, 'CSOSN').text = produto_servico.icms_csosn
+        elif produto_servico.icms_modalidade in ['40', '41', '50']:
+            icms_item = etree.SubElement(icms, 'ICMS40')
+            etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
+            etree.SubElement(icms_item, 'CST').text = str(produto_servico.icms_modalidade)
         elif produto_servico.icms_modalidade == '51':
             icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
