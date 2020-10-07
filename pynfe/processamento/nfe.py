@@ -189,9 +189,11 @@ class ComunicacaoNFe(Comunicacao):
         :return:
         """
         # UF que utilizam a SVRS - Sefaz Virtual do RS: Para serviço de Consulta Cadastro: AC, RN, PB, SC 
-        lista_svrs = ['AC', 'RN', 'PB', 'SC']
+        lista_svrs = ['AC', 'RN', 'PB', 'SC', 'PA']
 
         # RS implementa um método diferente na consulta de cadastro
+        # usa o mesmo url para produção e homologação
+        # não tem url para NFCE
         if self.uf.upper() == 'RS':
             url = NFE['RS']['CADASTRO']
         elif self.uf.upper() in lista_svrs:
@@ -347,7 +349,7 @@ class ComunicacaoNFe(Comunicacao):
                 raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
         # Estados que utilizam outros ambientes
         else:
-            lista_svrs = ['AC', 'AL', 'AP', 'DF', 'ES', 'PB', 'PI', 'RJ', 'RN', 'RO', 'RR', 'SC', 'SE', 'TO']
+            lista_svrs = ['AC', 'AL', 'AP', 'DF', 'ES', 'PB', 'PI', 'RJ', 'RN', 'RO', 'RR', 'SC', 'SE', 'TO', 'PA']
             if self.uf.upper() in lista_svrs:
                 if self._ambiente == 1:
                     ambiente = 'HTTPS'
