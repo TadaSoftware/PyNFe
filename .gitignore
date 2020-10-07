@@ -1,6 +1,9 @@
 # Pycharm
 .idea/*
 
+# VsCode
+.vscode/*
+
 # Apple OS X
 .DS_Store
 
