@@ -214,6 +214,19 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
+    def _serializar_autorizados_baixar_xml(self, autorizados_baixar_xml, tag_raiz='autXML', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+
+        if len(so_numeros(autorizados_baixar_xml.CPFCNPJ)) == 11:
+            etree.SubElement(raiz, 'CPF').text = so_numeros(autorizados_baixar_xml.CPFCNPJ)
+        else:
+            etree.SubElement(raiz, 'CNPJ').text = so_numeros(autorizados_baixar_xml.CPFCNPJ)
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
     def _serializar_produto_servico(self, produto_servico, modelo, tag_raiz='det', retorna_string=True):
         raiz = etree.Element(tag_raiz)
 
@@ -554,6 +567,10 @@ class SerializacaoXML(Serializacao):
                 retorna_string=False,
                 tag_raiz='entrega',
                 ))
+
+        # Autorizados a baixar o XML
+        for num, item in enumerate(nota_fiscal.autorizados_baixar_xml):
+            raiz.append(self._serializar_autorizados_baixar_xml(item, retorna_string=False))
 
         # Itens
         for num, item in enumerate(nota_fiscal.produtos_e_servicos):
