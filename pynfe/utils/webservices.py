@@ -355,7 +355,7 @@ NFE = {
 	    	'CHAVE': 'nfe.fazenda.mg.gov.br/nfe2/services/NFeConsultaProtocolo4',
 	    	'INUTILIZACAO': 'nfe.fazenda.mg.gov.br/nfe2/services/NFeInutilizacao4',
 	    	'EVENTOS': 'nfe.fazenda.mg.gov.br/nfe2/services/NFeRecepcaoEvento4',
-	    	'CADASTRO': 'nfe.fazenda.mg.gov.br/nfe2/services/cadconsultacadastro2',
+	    	'CADASTRO': 'nfe.fazenda.mg.gov.br/nfe2/services/CadConsultaCadastro4',
 	    	'HTTPS': 'https://',
 	    	'HOMOLOGACAO': 'https://h'
 	    },
