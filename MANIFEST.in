@@ -1,0 +1,2 @@
+graft tests
+include AUTHORS PLANEJAMENTO LICENCE *.py *.sh
