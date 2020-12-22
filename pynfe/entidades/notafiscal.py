@@ -145,6 +145,9 @@ class NotaFiscal(Entidade):
     #  - Local de entrega diferente do destinatario (Sim/Nao)
     local_entrega_diferente_destinatario = False
 
+    # - Autorizados a baixar XML (lista 1 para * / ManyToManyField)
+    autorizados_baixar_xml = None
+
     # - Produtos e Servicos (lista 1 para * / ManyToManyField)
     produtos_e_servicos = None
 
@@ -349,6 +352,7 @@ class NotaFiscal(Entidade):
     processos_referenciados = None
 
     def __init__(self, *args, **kwargs):
+        self.autorizados_baixar_xml = []
         self.notas_fiscais_referenciadas = []
         self.produtos_e_servicos = []
         self.transporte_volumes = []
@@ -361,6 +365,11 @@ class NotaFiscal(Entidade):
 
     def __str__(self):
         return ' '.join([str(self.modelo), self.serie, self.numero_nf])
+
+    def adicionar_autorizados_baixar_xml(self, **kwargs):
+        obj = AutorizadosBaixarXML(**kwargs)
+        self.autorizados_baixar_xml.append(obj)
+        return obj
 
     def adicionar_nota_fiscal_referenciada(self, **kwargs):
         u"""Adiciona uma instancia de Nota Fisca referenciada"""
@@ -1026,3 +1035,6 @@ class NotaFiscalResponsavelTecnico(Entidade):
     email = str()
     fone = str()
     csrt = str()
+
+class AutorizadosBaixarXML(Entidade):
+    CPFCNPJ = str()
