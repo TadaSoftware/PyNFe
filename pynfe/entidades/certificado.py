@@ -35,11 +35,21 @@ class CertificadoA1(Certificado):
         e retorna a string. Se caminho for True grava na pasta temporaria e retorna
         o caminho dos arquivos, senao retorna o objeto. Apos o uso devem ser excluidos com o metodo excluir."""
 
+        try:
+            with open(self.caminho_arquivo, "rb") as cert_arquivo:
+                cert_conteudo = cert_arquivo.read()
+        except (PermissionError, FileNotFoundError) as exc:
+            raise Exception('Falha ao abrir arquivo do certificado digital A1. Verifique local e permissoes do arquivo.') from exc
+        except Exception as exc:
+            raise Exception('Falha ao abrir arquivo do certificado digital A1. Causa desconhecida.') from exc
+
         # Carrega o arquivo .pfx, erro pode ocorrer se a senha estiver errada ou formato invalido.
         try:
-            pkcs12 = crypto.load_pkcs12(open(self.caminho_arquivo, "rb").read(), senha)
-        except Exception as e:
-            raise Exception('Falha ao carregar certificado digital A1. Verifique local e senha.')
+            pkcs12 = crypto.load_pkcs12(cert_conteudo, senha)
+        except crypto.Error as exc:
+            raise Exception('Falha ao carregar certificado digital A1. Verifique a senha do certificado.') from exc
+        except Exception as exc:
+            raise Exception('Falha ao carregar certificado digital A1. Causa desconhecida.') from exc
 
         if caminho:
             cert = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate())
