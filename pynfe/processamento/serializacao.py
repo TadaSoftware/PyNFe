@@ -92,7 +92,10 @@ class SerializacaoXML(Serializacao):
         raiz = etree.Element(tag_raiz)
 
         # Dados do emitente
-        etree.SubElement(raiz, 'CNPJ').text = so_numeros(emitente.cnpj)
+        if len(so_numeros(emitente.cnpj)) == 11:
+            etree.SubElement(raiz, 'CPF').text = so_numeros(emitente.cnpj)
+        else:
+            etree.SubElement(raiz, 'CNPJ').text = so_numeros(emitente.cnpj)
         etree.SubElement(raiz, 'xNome').text = emitente.razao_social
         etree.SubElement(raiz, 'xFant').text = emitente.nome_fantasia
         # Endereço
@@ -213,6 +216,19 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
+    def _serializar_autorizados_baixar_xml(self, autorizados_baixar_xml, tag_raiz='autXML', retorna_string=True):
+        raiz = etree.Element(tag_raiz)
+
+        if len(so_numeros(autorizados_baixar_xml.CPFCNPJ)) == 11:
+            etree.SubElement(raiz, 'CPF').text = so_numeros(autorizados_baixar_xml.CPFCNPJ)
+        else:
+            etree.SubElement(raiz, 'CNPJ').text = so_numeros(autorizados_baixar_xml.CPFCNPJ)
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
     def _serializar_produto_servico(self, produto_servico, modelo, tag_raiz='det', retorna_string=True):
         raiz = etree.Element(tag_raiz)
 
@@ -224,7 +240,10 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'NCM').text = produto_servico.ncm
         # Codificação opcional que detalha alguns NCM. Formato: duas letras maiúsculas e 4 algarismos.
         # Se a mercadoria se enquadrar em mais de uma codificação, informar até 8 codificações principais.
-        #etree.SubElement(prod, 'NVE').text = ''
+        # etree.SubElement(prod, 'NVE').text = ''
+        # etree.SubElement(prod, 'CEST').text = produto_service.cest
+        if produto_servico.cbenef:
+            etree.SubElement(prod, 'cBenef').text = produto_servico.cbenef
         etree.SubElement(prod, 'CFOP').text = produto_servico.cfop
         etree.SubElement(prod, 'uCom').text = produto_servico.unidade_comercial
         etree.SubElement(prod, 'qCom').text = str(produto_servico.quantidade_comercial or 0)
@@ -239,8 +258,18 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, 'qTrib').text = str(produto_servico.quantidade_tributavel)
         etree.SubElement(prod, 'vUnTrib').text = '{:.4f}'.format(produto_servico.valor_unitario_tributavel or 0)
 
+        # frete
+        if produto_servico.total_frete:
+            etree.SubElement(prod, 'vFrete').text = '{:.2f}'.format(produto_servico.total_frete)
+        # seguro
+        if produto_servico.total_seguro:
+            etree.SubElement(prod, 'vSeg').text = '{:.2f}'.format(produto_servico.total_seguro)
+        # desconto
         if produto_servico.desconto:
             etree.SubElement(prod, 'vDesc').text = '{:.2f}'.format(produto_servico.desconto)
+        # outras despesas acessórias
+        if produto_servico.outras_despesas_acessorias:
+            etree.SubElement(prod, 'vOutro').text = '{:.2f}'.format(produto_servico.outras_despesas_acessorias)
 
         """ Indica se valor do Item (vProd) entra no valor total da NF-e (vProd)
             0=Valor do item (vProd) não compõe o valor total da NF-e
@@ -289,6 +318,11 @@ class SerializacaoXML(Serializacao):
             icms_item = etree.SubElement(icms, 'ICMSSN'+produto_servico.icms_modalidade)
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, 'CSOSN').text = produto_servico.icms_csosn
+        elif produto_servico.icms_modalidade == '51':
+            icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
+            etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
+            etree.SubElement(icms_item, 'CST').text = '51'
+            etree.SubElement(icms_item, 'modBC').text = str(produto_servico.icms_modalidade_determinacao_bc)
         else:
             ### OUTROS TIPOS DE ICMS (00,10,20)
             icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
@@ -331,12 +365,18 @@ class SerializacaoXML(Serializacao):
             else:
                 raise NotImplementedError
         # ipi
-        # ipi = etree.SubElement(imposto, 'IPI')
-        # etree.SubElement(ipi, 'clEnq') = produto_servico.ipi_classe_enquadramento # Preenchimento conforme Atos Normativos editados pela Receita Federal (Observação 2)
-        # ipint = etree.SubElement(ipi, 'IPINT')
-        # # 01=Entrada tributada com alíquota zero 02=Entrada isenta 03=Entrada não-tributada 04=Entrada imune 05=Entrada com suspensão
-        # # 51=Saída tributada com alíquota zero 52=Saída isenta 53=Saída não-tributada 54=Saída imune 55=Saída com suspensão
-        # etree.SubElement(ipint, 'CST') = produto_servico.ipi_codigo_enquadramento
+        ipint_lista = ('01','02','03','04','05','51','52','53','54','55')
+        if produto_servico.ipi_codigo_enquadramento in ipint_lista:
+            ipi = etree.SubElement(imposto, 'IPI')
+            # Preenchimento conforme Atos Normativos editados pela Receita Federal (Observação 2)
+            etree.SubElement(ipi, 'cEnq').text = produto_servico.ipi_classe_enquadramento
+            if produto_servico.ipi_classe_enquadramento == '':
+                etree.SubElement(ipi, 'cEnq').text = '999'
+
+            ipint = etree.SubElement(ipi, 'IPINT')
+            # 01=Entrada tributada com alíquota zero 02=Entrada isenta 03=Entrada não-tributada 04=Entrada imune 05=Entrada com suspensão
+            # 51=Saída tributada com alíquota zero 52=Saída isenta 53=Saída não-tributada 54=Saída imune 55=Saída com suspensão
+            etree.SubElement(ipint, 'CST').text = produto_servico.ipi_codigo_enquadramento
 
         # apenas nfe
         if modelo == 55:
@@ -356,7 +396,7 @@ class SerializacaoXML(Serializacao):
                 pis_item = etree.SubElement(pis, 'PISQtde')
                 etree.SubElement(pis_item, 'CST').text = produto_servico.pis_modalidade
                 etree.SubElement(pis_item, 'qBCProd').text = '{:.4f}'.format(produto_servico.quantidade_comercial)
-                etree.SubElement(pis_item, 'vAliqProd').text = produto_servico.pis_aliquota_percentual
+                etree.SubElement(pis_item, 'vAliqProd').text = '{:.4f}'.format(produto_servico.pis_aliquota_percentual or 0)
                 etree.SubElement(pis_item, 'vPIS').text = '{:.2f}'.format(produto_servico.pis_valor_base_calculo or 0)
             else:
                 pis_item = etree.SubElement(pis, 'PISOutr')
@@ -365,7 +405,7 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(pis_item, 'pPIS').text = '{:.2f}'.format(produto_servico.pis_aliquota_percentual or 0)
                 if produto_servico.pis_modalidade is not '99':
                     etree.SubElement(pis_item, 'qBCProd').text = '{:.4f}'.format(produto_servico.quantidade_comercial)
-                    etree.SubElement(pis_item, 'vAliqProd').text = produto_servico.pis_aliquota_percentual
+                    etree.SubElement(pis_item, 'vAliqProd').text = '{:.4f}'.format(produto_servico.pis_aliquota_percentual or 0)
                 etree.SubElement(pis_item, 'vPIS').text = '{:.2f}'.format(produto_servico.pis_valor_base_calculo or 0)
 
                 ## PISST
@@ -400,7 +440,7 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(cofins_item, 'vBC').text = '{:.2f}'.format(produto_servico.cofins_valor_base_calculo or 0)
                 etree.SubElement(cofins_item, 'pCOFINS').text = '{:.2f}'.format(produto_servico.cofins_aliquota_percentual or 0)
                 if produto_servico.cofins_modalidade is not '99':
-                    etree.SubElement(cofins_item, 'vAliqProd').text = '{:.2f}'.format(produto_servico.cofins_aliquota_percentual or 0)
+                    etree.SubElement(cofins_item, 'vAliqProd').text = '{:.4f}'.format(produto_servico.cofins_aliquota_percentual or 0)
                 etree.SubElement(cofins_item, 'vCOFINS').text = '{:.2f}'.format(produto_servico.cofins_valor or 0)
 
                 ## COFINSST
@@ -530,6 +570,10 @@ class SerializacaoXML(Serializacao):
                 retorna_string=False,
                 tag_raiz='entrega',
                 ))
+
+        # Autorizados a baixar o XML
+        for num, item in enumerate(nota_fiscal.autorizados_baixar_xml):
+            raiz.append(self._serializar_autorizados_baixar_xml(item, retorna_string=False))
 
         # Itens
         for num, item in enumerate(nota_fiscal.produtos_e_servicos):
@@ -674,8 +718,10 @@ class SerializacaoXML(Serializacao):
         e = etree.SubElement(raiz, 'infEvento', Id=evento.identificador)
         etree.SubElement(e, 'cOrgao').text = CODIGOS_ESTADOS[evento.uf.upper()]
         etree.SubElement(e, 'tpAmb').text = str(self._ambiente)
-        etree.SubElement(e, 'CNPJ').text = evento.cnpj # Empresas somente terão CNPJ
-        #etree.SubElement(e, 'CPF').text = ''
+        if len(so_numeros(evento.cnpj)) == 11:
+            etree.SubElement(e, 'CPF').text = evento.cnpj
+        else:
+            etree.SubElement(e, 'CNPJ').text = evento.cnpj
         etree.SubElement(e, 'chNFe').text = evento.chave
         etree.SubElement(e, 'dhEvento').text = evento.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz
         etree.SubElement(e, 'tpEvento').text = evento.tp_evento

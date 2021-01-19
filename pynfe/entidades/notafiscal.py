@@ -145,6 +145,9 @@ class NotaFiscal(Entidade):
     #  - Local de entrega diferente do destinatario (Sim/Nao)
     local_entrega_diferente_destinatario = False
 
+    # - Autorizados a baixar XML (lista 1 para * / ManyToManyField)
+    autorizados_baixar_xml = None
+
     # - Produtos e Servicos (lista 1 para * / ManyToManyField)
     produtos_e_servicos = None
 
@@ -349,6 +352,7 @@ class NotaFiscal(Entidade):
     processos_referenciados = None
 
     def __init__(self, *args, **kwargs):
+        self.autorizados_baixar_xml = []
         self.notas_fiscais_referenciadas = []
         self.produtos_e_servicos = []
         self.transporte_volumes = []
@@ -361,6 +365,11 @@ class NotaFiscal(Entidade):
 
     def __str__(self):
         return ' '.join([str(self.modelo), self.serie, self.numero_nf])
+
+    def adicionar_autorizados_baixar_xml(self, **kwargs):
+        obj = AutorizadosBaixarXML(**kwargs)
+        self.autorizados_baixar_xml.append(obj)
+        return obj
 
     def adicionar_nota_fiscal_referenciada(self, **kwargs):
         u"""Adiciona uma instancia de Nota Fisca referenciada"""
@@ -468,7 +477,7 @@ class NotaFiscal(Entidade):
                 'uf': CODIGOS_ESTADOS[self.uf],
                 'ano': self.data_emissao.strftime('%y'),
                 'mes': self.data_emissao.strftime('%m'),
-                'cnpj': so_numeros(self.emitente.cnpj),
+                'cnpj': so_numeros(self.emitente.cnpj).zfill(14),
                 'mod': self.modelo,
                 'serie': str(self.serie).zfill(3),
                 'nNF': str(self.numero_nf).zfill(9),
@@ -479,7 +488,7 @@ class NotaFiscal(Entidade):
                 'uf': CODIGOS_ESTADOS[self.uf],
                 'ano': self.data_emissao.strftime('%y'),
                 'mes': self.data_emissao.strftime('%m'),
-                'cnpj': so_numeros(self.emitente.cnpj),
+                'cnpj': so_numeros(self.emitente.cnpj).zfill(14),
                 'mod': self.modelo,
                 'serie': str(self.serie).zfill(3),
                 'nNF': str(self.numero_nf).zfill(9),
@@ -549,6 +558,9 @@ class NotaFiscalProduto(Entidade):
 
     #  - Unidade Tributavel (obrigatorio)
     unidade_tributavel = str()
+
+    # - cBenef
+    cbenef = str()
 
     #  - Quantidade Tributavel (obrigatorio)
     quantidade_tributavel = Decimal()
@@ -1023,3 +1035,6 @@ class NotaFiscalResponsavelTecnico(Entidade):
     email = str()
     fone = str()
     csrt = str()
+
+class AutorizadosBaixarXML(Entidade):
+    CPFCNPJ = str()
