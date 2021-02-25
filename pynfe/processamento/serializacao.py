@@ -283,6 +283,17 @@ class SerializacaoXML(Serializacao):
         if produto_servico.numero_item:
             etree.SubElement(prod, 'nItemPed').text = str(produto_servico.numero_item)
 
+        # Combustível
+        if produto_servico.cProdANP:
+            combustivel = etree.SubElement(prod, 'comb')
+            etree.SubElement(combustivel, 'cProdANP').text = str(produto_servico.cProdANP)
+            etree.SubElement(combustivel, 'descANP').text = str(produto_servico.descANP)
+            etree.SubElement(combustivel, 'pGLP').text = '{:.4f}'.format(produto_servico.pGLP or 0)
+            etree.SubElement(combustivel, 'pGNn').text = '{:.4f}'.format(produto_servico.pGNn or 0)
+            etree.SubElement(combustivel, 'pGNi').text = '{:.4f}'.format(produto_servico.pGNi or 0)
+            etree.SubElement(combustivel, 'vPart').text = '{:.2f}'.format(produto_servico.vPart or 0)
+            etree.SubElement(combustivel, 'UFCons').text = str(produto_servico.UFCons)
+
         # Imposto
         imposto = etree.SubElement(raiz, 'imposto')
 
