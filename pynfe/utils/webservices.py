@@ -248,13 +248,16 @@ NFCE = {
 	    	'HOMOLOGACAO': 'https://nfce-homologacao.'
 	    },
 	    'MS': {
-	    	'STATUS': '',
-	    	'AUTORIZACAO': '',
-	    	'RECIBO': '',
-	    	'CHAVE': '',
-	    	'INUTILIZACAO': '',
-	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'STATUS': 'sefaz.ms.gov.br/ws/NFeStatusServico4?wsdl',
+	    	'AUTORIZACAO': 'sefaz.ms.gov.br/ws/NFeAutorizacao4?wsdl',
+	    	'RECIBO': 'sefaz.ms.gov.br/ws/NFeRetAutorizacao4?wsdl',
+	    	'CHAVE': 'sefaz.ms.gov.br/ws/NFeConsultaProtocolo4?wsdl',
+	    	'INUTILIZACAO': 'sefaz.ms.gov.br/ws/NFeInutilizacao4?wsdl',
+	    	'EVENTOS': 'sefaz.ms.gov.br/ws/NFeRetAutorizacao4',
+	    	'QR': 'http://www.dfe.ms.gov.br/nfce/qrcode',
+	    	'URL': 'http://www.dfe.ms.gov.br/nfce/consulta',
+	    	'HTTPS': 'https://nfce.',
+	    	'HOMOLOGACAO': 'https://hom.nfce.'
 	    },
 	    'MT': {
 	    	'QR': 'sefaz.mt.gov.br/nfce/consultanfce?',
