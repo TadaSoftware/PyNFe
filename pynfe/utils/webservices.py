@@ -230,7 +230,10 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'QR': 'sat.sef.sc.gov.br/nfce/consulta?p=',
+	    	'HTTPS': 'https://',
+	    	'HOMOLOGACAO': 'https://hom.',
+	    	'URL': 'sat.sef.sc.gov.br/nfce/consulta'
 	    },
 	    'RS': {
 	    	'STATUS': 'sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx',
