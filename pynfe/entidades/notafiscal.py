@@ -598,6 +598,28 @@ class NotaFiscalProduto(Entidade):
     #  - Produto especifico (seleciona de lista) - NF_PRODUTOS_ESPECIFICOS
     produto_especifico = str()
 
+    # Grupo de informações de Combustível
+    # Código de produto da ANP
+    cProdANP = str()
+
+    # Descrição do produto conforme ANP
+    descANP = str()
+
+    # Percentual de Gás derivado do Petróleo
+    pGLP = Decimal()
+
+    # Percentual de gás natural nacional
+    pGNn = Decimal()
+
+    # Percentual do gás natural importado
+    pGNi = Decimal()
+
+    # Valor de Partida (apenas para GLP)
+    vPart = Decimal()
+
+    # Sigla da UF de consumo – (OBS: Deve ser a Sigla e não o Código da UF)
+    UFCons = str()
+
     # - Tributos
     #  - ICMS
     #   - Situacao tributaria (obrigatorio - seleciona de lista) - ICMS_TIPOS_TRIBUTACAO
