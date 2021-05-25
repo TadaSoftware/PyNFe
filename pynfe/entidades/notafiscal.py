@@ -679,6 +679,11 @@ class NotaFiscalProduto(Entidade):
     fcp_base_calculo = Decimal()
     fcp_percentual = Decimal()
     fcp_valor = Decimal()
+
+    fcp_st_base_calculo = Decimal()
+    fcp_st_percentual = Decimal()
+    fcp_st_valor = Decimal()
+
     fcp_destino_valor = Decimal()
     fcp_st_valor = Decimal()
     fcp_st_ret_valor = Decimal()
