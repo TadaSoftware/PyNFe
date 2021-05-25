@@ -318,6 +318,10 @@ class SerializacaoXML(Serializacao):
         self._serializar_imposto_cofins(
             produto_servico=produto_servico, modelo=modelo, tag_raiz=imposto, retorna_string=False)
 
+        # Imposto de Importação II
+        self._serializar_imposto_importacao(
+            produto_servico=produto_servico, modelo=modelo, tag_raiz=imposto, retorna_string=False)
+
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
@@ -672,6 +676,17 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(cofins_item, 'pCOFINS').text = '{:.2f}'.format(produto_servico.cofins_aliquota_percentual or 0)
                 etree.SubElement(cofins_item, 'vCOFINS').text = '{:.2f}'.format(produto_servico.cofins_valor or 0)
 
+    def _serializar_imposto_importacao(self, produto_servico, modelo, tag_raiz='imposto', retorna_string=True):
+        if (produto_servico.imposto_importacao_valor_base_calculo > 0) or\
+            (produto_servico.imposto_importacao_valor_despesas_aduaneiras > 0) or\
+            (produto_servico.imposto_importacao_valor > 0) or\
+            (produto_servico.imposto_importacao_valor_iof > 0) or\
+            (produto_servico.cfop[1] == '3'):
+            ii = etree.SubElement(tag_raiz, 'II')
+            etree.SubElement(ii, 'vBC').text = '{:.2f}'.format(produto_servico.imposto_importacao_valor_base_calculo or 0)
+            etree.SubElement(ii, 'vDespAdu').text = '{:.2f}'.format(produto_servico.imposto_importacao_valor_despesas_aduaneiras or 0)
+            etree.SubElement(ii, 'vII').text = '{:.2f}'.format(produto_servico.imposto_importacao_valor)
+            etree.SubElement(ii, 'vIOF').text = '{:.2f}'.format(produto_servico.imposto_importacao_valor_iof)
 
     def _serializar_responsavel_tecnico(self, responsavel_tecnico, tag_raiz='infRespTec', retorna_string=True):
         raiz = etree.Element(tag_raiz)
