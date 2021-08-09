@@ -589,6 +589,10 @@ class SerializacaoXML(Serializacao):
         else:
             etree.SubElement(ide, 'indFinal').text = str(nota_fiscal.cliente_final)
             etree.SubElement(ide, 'indPres').text = str(nota_fiscal.indicador_presencial)
+        # Rejeição 435: NF-e não pode ter o indicativo do intermediador quando for modelo 55
+        #               e informando o indicativo de presença (indPres) igual a 0, 1 ou 5.
+        if (nota_fiscal.modelo in [55, 65]) and (nota_fiscal.indicador_presencial not in [0, 1, 5]):
+            etree.SubElement(ide, 'indIntermed').text = str(nota_fiscal.indicador_intermediador)
         etree.SubElement(ide, 'procEmi').text = str(nota_fiscal.processo_emissao)
         etree.SubElement(ide, 'verProc').text = '%s %s'%(self._nome_aplicacao, nota_fiscal.versao_processo_emissao)
 
