@@ -94,6 +94,13 @@ class NotaFiscal(Entidade):
     """
     indicador_presencial = int()
 
+    # - Indicador de intermediador/marketplace
+    """
+        0=Operação sem intermediador (em site ou plataforma própria)
+        1=Operação em site ou plataforma de terceiros (intermediadores/marketplace)</xs:documentation>
+    """
+    indicador_intermediador = int()
+
     """ nfce suporta apenas operação interna
         Identificador de local de destino da operação 1=Operação interna;2=Operação interestadual;3=Operação com exterior.
     """
