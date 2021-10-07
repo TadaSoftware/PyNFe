@@ -116,6 +116,9 @@ class Produto(Entidade):
         """Adiciona uma instancia de ICMS a lista de ICMS do produto"""
         self.icms.append(ProdutoICMS(**kwargs))
 
+    # Informações adicionais do produto
+    inf_adicionais_produto = str()
+
     def __init__(self, *args, **kwargs):
         self.icms = []
 
