@@ -45,6 +45,7 @@ CARACTERS_ACENTUADOS = {
     ord(u'ô'): u'o',
     ord(u'ú'): u'u',
     ord(u'ç'): u'c',
+    ord(u"'"): u'',
 }
 
 
