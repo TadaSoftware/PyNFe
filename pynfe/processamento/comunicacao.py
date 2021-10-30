@@ -271,7 +271,7 @@ class ComunicacaoSefaz(Comunicacao):
         """
         Serviço destinado ao atendimento de solicitações de inutilização de numeração.
         :param modelo: Modelo da nota
-        :param cnpj: CNPJda empresa
+        :param cnpj: CNPJ ou CPF da empresa
         :param numero_inicial: Número inicial
         :param numero_final: Número final
         :param justificativa: Justificativa
@@ -288,14 +288,19 @@ class ComunicacaoSefaz(Comunicacao):
         uf = CODIGOS_ESTADOS[self.uf.upper()]
         cnpj = so_numeros(cnpj)
 
+        if len(cnpj) == 14:
+            cnpjcpf_chaveacesso = cnpj
+        elif len(cnpj) == 11:
+            cnpjcpf_chaveacesso = str(cnpj).zfill(14)
+
         # Identificador da TAG a ser assinada formada com Código da UF + Ano (2 posições) +
         #  CNPJ + modelo + série + nro inicial e nro final precedida do literal “ID”
         id_unico = 'ID%(uf)s%(ano)s%(cnpj)s%(modelo)s%(serie)s%(num_ini)s%(num_fin)s' % {
             'uf': uf,
             'ano': ano,
-            'cnpj': cnpj,
+            'cnpj': cnpjcpf_chaveacesso,
             'modelo': '55' if modelo == 'nfe' else '65',  # 55=NF-e; 65=NFC-e;
-            'serie': serie.zfill(3),
+            'serie': str(serie).zfill(3),
             'num_ini': str(numero_inicial).zfill(9),
             'num_fin': str(numero_final).zfill(9),
         }
@@ -307,9 +312,12 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(inf_inut, 'xServ').text = 'INUTILIZAR'
         etree.SubElement(inf_inut, 'cUF').text = uf
         etree.SubElement(inf_inut, 'ano').text = ano
-        etree.SubElement(inf_inut, 'CNPJ').text = cnpj
+        if len(cnpj) == 14:
+            etree.SubElement(inf_inut, 'CNPJ').text = cnpj
+        else:
+            etree.SubElement(inf_inut, 'CPF').text = cnpj
         etree.SubElement(inf_inut, 'mod').text = '55' if modelo == 'nfe' else '65'  # 55=NF-e; 65=NFC-e
-        etree.SubElement(inf_inut, 'serie').text = serie
+        etree.SubElement(inf_inut, 'serie').text = str(serie)
         etree.SubElement(inf_inut, 'nNFIni').text = str(numero_inicial)
         etree.SubElement(inf_inut, 'nNFFin').text = str(numero_final)
         etree.SubElement(inf_inut, 'xJust').text = justificativa
