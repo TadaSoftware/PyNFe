@@ -509,8 +509,8 @@ class SerializacaoXML(Serializacao):
                 # etree.SubElement(cofins_item, 'vCOFINS').text = produto_servico.cofins_valor
 
         # Informações adicionais do produto
-        if produto_servico.inf_adicionais_produto:
-            etree.SubElement(raiz, 'infAdProd').text = produto_servico.inf_adicionais_produto
+        if produto_servico.informacoes_adicionais:
+            etree.SubElement(raiz, 'infAdProd').text = produto_servico.informacoes_adicionais
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)

@@ -117,7 +117,7 @@ class Produto(Entidade):
         self.icms.append(ProdutoICMS(**kwargs))
 
     # Informações adicionais do produto
-    inf_adicionais_produto = str()
+    informacoes_adicionais = str()
 
     def __init__(self, *args, **kwargs):
         self.icms = []
