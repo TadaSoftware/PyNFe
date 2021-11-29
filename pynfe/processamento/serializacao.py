@@ -497,6 +497,7 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(cofins_item, 'vBC').text = '{:.2f}'.format(produto_servico.cofins_valor_base_calculo or 0)
                 etree.SubElement(cofins_item, 'pCOFINS').text = '{:.2f}'.format(produto_servico.cofins_aliquota_percentual or 0)
                 if produto_servico.cofins_modalidade != '99' and produto_servico.cofins_modalidade != '49':
+                    etree.SubElement(cofins_item, 'qBCProd').text = '{:.4f}'.format(produto_servico.quantidade_comercial)
                     etree.SubElement(cofins_item, 'vAliqProd').text = '{:.4f}'.format(produto_servico.cofins_aliquota_percentual or 0)
                 etree.SubElement(cofins_item, 'vCOFINS').text = '{:.2f}'.format(produto_servico.cofins_valor or 0)
 
