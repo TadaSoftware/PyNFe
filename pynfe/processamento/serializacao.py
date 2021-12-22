@@ -612,7 +612,7 @@ class SerializacaoXML(Serializacao):
         ### CONTINGENCIA ###
         if self._contingencia != None:
             etree.SubElement(ide, 'dhCont').text = nota_fiscal.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz # Data e Hora da entrada em contingência AAAA-MM-DDThh:mm:ssTZD
-            etree.SubElement(ide, 'xJust').text = nota_fiscal.self._contingencia  # Justificativa da entrada em contingência (min 20, max 256 caracteres)
+            etree.SubElement(ide, 'xJust').text = self._contingencia  # Justificativa da entrada em contingência (min 20, max 256 caracteres)
 
         # Emitente
         raiz.append(self._serializar_emitente(nota_fiscal.emitente, retorna_string=False))
