@@ -390,8 +390,12 @@ class ComunicacaoSefaz(Comunicacao):
             else:
                 ambiente = 'HOMOLOGACAO'
             if modelo == 'nfe':
-                # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
-                self.url = NFE[self.uf.upper()][ambiente] + NFE[self.uf.upper()][consulta]
+                # CE é a única UF que possuem NFE SVRS e NFCe próprio
+                if self.uf.upper() == 'CE':
+                    self.url = NFE['SVRS'][ambiente] + NFE['SVRS'][consulta]
+                else:
+                    # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
+                    self.url = NFE[self.uf.upper()][ambiente] + NFE[self.uf.upper()][consulta]
             elif modelo == 'nfce':
                 # PE e BA são as únicas UF'sque possuem NFE proprio e SVRS para NFCe
                 if self.uf.upper() == 'PE' or self.uf.upper() == 'BA':
