@@ -605,8 +605,8 @@ class SerializacaoXML(Serializacao):
         # Apenas NF-e
         if nota_fiscal.modelo == 55:
             if nota_fiscal.notas_fiscais_referenciadas:
-                nfref = etree.SubElement(ide, 'NFref')
                 for refNFe in nota_fiscal.notas_fiscais_referenciadas:
+                    nfref = etree.SubElement(ide, 'NFref')
                     etree.SubElement(nfref, 'refNFe').text = refNFe.chave_acesso
 
         ### CONTINGENCIA ###
