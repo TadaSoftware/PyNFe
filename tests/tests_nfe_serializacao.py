@@ -76,6 +76,11 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         return self.cliente
 
     def preenche_notafiscal(self):
+
+        utc = datetime.timezone.utc
+        data_emissao = datetime.datetime(2021, 1, 14, 12, 0, 0, tzinfo=utc)
+        data_saida_entrada = datetime.datetime(2021, 1, 14, 13, 10, 20, tzinfo=utc)
+
         self.notafiscal = NotaFiscal(
             emitente=self.emitente,
             cliente=self.cliente,
@@ -86,8 +91,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             modelo=55,  # 55=NF-e; 65=NFC-e
             serie='1',
             numero_nf='111',  # Número do Documento Fiscal.
-            data_emissao=datetime.datetime.now(),
-            data_saida_entrada=datetime.datetime.now(),
+            data_emissao=data_emissao,
+            data_saida_entrada=data_saida_entrada,
             tipo_documento=1,  # 0=entrada; 1=saida
             municipio='4118402',  # Código IBGE do Município
             tipo_impressao_danfe=1,  # 0=Sem geração de DANFE;1=DANFE normal, Retrato;2=DANFE normal Paisagem;3=DANFE Simplificado;4=DANFE NFC-e;
@@ -145,6 +150,43 @@ class SerializacaoNFeTestCase(unittest.TestCase):
     def assina_xml(self):
         a1 = AssinaturaA1(self.certificado, self.senha)
         return a1.assinar(self.xml)
+
+    def test_grupo_ide(self):
+        uf = self.xml_assinado.xpath('//ns:ide/ns:cUF', namespaces=self.ns)[0].text
+        natureza_operacao = self.xml_assinado.xpath('//ns:ide/ns:natOp', namespaces=self.ns)[0].text
+        modelo = self.xml_assinado.xpath('//ns:ide/ns:mod', namespaces=self.ns)[0].text
+        serie = self.xml_assinado.xpath('//ns:ide/ns:serie', namespaces=self.ns)[0].text
+        numero_nf = self.xml_assinado.xpath('//ns:ide/ns:nNF', namespaces=self.ns)[0].text
+        data_emissao = self.xml_assinado.xpath('//ns:ide/ns:dhEmi', namespaces=self.ns)[0].text
+        data_saida_entrada = self.xml_assinado.xpath('//ns:ide/ns:dhSaiEnt', namespaces=self.ns)[0].text
+        tipo_documento = self.xml_assinado.xpath('//ns:ide/ns:tpNF', namespaces=self.ns)[0].text
+        indicador_destino = self.xml_assinado.xpath('//ns:ide/ns:idDest', namespaces=self.ns)[0].text
+        municipio = self.xml_assinado.xpath('//ns:ide/ns:cMunFG', namespaces=self.ns)[0].text
+        tipo_impressao_danfe = self.xml_assinado.xpath('//ns:ide/ns:tpImp', namespaces=self.ns)[0].text
+        forma_emissao = self.xml_assinado.xpath('//ns:ide/ns:tpEmis', namespaces=self.ns)[0].text
+        tipo_ambiente = self.xml_assinado.xpath('//ns:ide/ns:tpAmb', namespaces=self.ns)[0].text
+        finalidade_emissao = self.xml_assinado.xpath('//ns:ide/ns:finNFe', namespaces=self.ns)[0].text
+        cliente_final = self.xml_assinado.xpath('//ns:ide/ns:indFinal', namespaces=self.ns)[0].text
+        indicador_presencial = self.xml_assinado.xpath('//ns:ide/ns:indPres', namespaces=self.ns)[0].text
+        processo_emissao = self.xml_assinado.xpath('//ns:ide/ns:procEmi', namespaces=self.ns)[0].text
+
+        self.assertEqual(uf, '41')
+        self.assertEqual(natureza_operacao, 'VENDA')
+        self.assertEqual(modelo, '55')
+        self.assertEqual(serie, '1')
+        self.assertEqual(numero_nf, '111')
+        self.assertEqual(data_emissao, '2021-01-14T12:00:00+00:00')
+        self.assertEqual(data_saida_entrada, '2021-01-14T13:10:20+00:00')
+        self.assertEqual(tipo_documento, '1')
+        self.assertEqual(indicador_destino, '1')
+        self.assertEqual(municipio, '4118402')
+        self.assertEqual(tipo_impressao_danfe, '1')
+        self.assertEqual(forma_emissao, '1')
+        self.assertEqual(tipo_ambiente, '2')
+        self.assertEqual(finalidade_emissao, '1')
+        self.assertEqual(cliente_final, '1')
+        self.assertEqual(indicador_presencial, '1')
+        self.assertEqual(processo_emissao, '0')
 
     def test_dados_emitente(self):
         razao_social = self.xml_assinado.xpath('//ns:emit/ns:xNome', namespaces=self.ns)[0].text
