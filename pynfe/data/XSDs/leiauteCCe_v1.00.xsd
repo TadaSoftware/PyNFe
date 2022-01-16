@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--  08-06-2011 - correcao do pattern do nSeq para aceitar 1-20  -->
+<!--  13-05-2011 - correcao do pattern da data para aceitar -4:00 -->
+<!--  03-03-2011 - correcao do pattern da data -->
+<!--  03-03-2011 - correcao do pattern nSeq rejeitar zerno nao significativo -->
+<!--  03-03-2011 - acrescimo do xCondUso no detalhamento da carta de correcao -->
+<!--  03-03-2011 - correcao da literal versao no enumeration da versao -->
+<!--  03-03-2011 - correcao do nome da tag raiz da carta de correcao -->
+<!--  PL_006CC leiauteCCe 30/08/2010 -->
 <xs:schema xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.portalfiscal.inf.br/nfe" targetNamespace="http://www.portalfiscal.inf.br/nfe" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema_v1.01.xsd"/>
 	<xs:include schemaLocation="tiposBasico_v1.03.xsd"/>
@@ -12,7 +20,7 @@
 					<xs:sequence>
 						<xs:element name="cOrgao" type="TCOrgaoIBGE">
 							<xs:annotation>
-								<xs:documentation>Código do órgão de recepção do Evento. Utilizar a Tabela do IBGE extendida, utilizar 91 para identificar o Ambiente Nacional</xs:documentation>
+								<xs:documentation>Código do órgão de recepção do Evento. Utilizar a Tabela do IBGE extendida, utilizar 90 para identificar o Ambiente Nacional</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 						<xs:element name="tpAmb" type="TAmb">
@@ -44,8 +52,8 @@
 						</xs:element>
 						<xs:element name="dhEvento" type="TDateTimeUTC">
 							<xs:annotation>
-								<xs:documentation>Data e Hora do Evento, formato UTC (AAAA-MM-DDThh:mm:ssTZD, onde TZD = +hh:mm ou -hh:mm)</xs:documentation>
-							</xs:annotation>
+								<xs:documentation>Data de emissão no formato UTC.  AAAA-MM-DDThh:mm:ssTZD</xs:documentation>
+						</xs:annotation>
 						</xs:element>
 						<xs:element name="tpEvento">
 							<xs:annotation>
@@ -55,7 +63,7 @@
 								<xs:restriction base="xs:string">
 									<xs:whiteSpace value="preserve"/>
 									<xs:pattern value="[0-9]{6}"/>
-									<xs:enumeration value="110111"/>
+									<xs:enumeration value="110110"/>
 								</xs:restriction>
 							</xs:simpleType>
 						</xs:element>
@@ -83,30 +91,46 @@
 						</xs:element>
 						<xs:element name="detEvento">
 							<xs:annotation>
-								<xs:documentation>Schema XML de validação do evento do cancelamento 1101111</xs:documentation>
+								<xs:documentation>Evento do carta de correção e1101110</xs:documentation>
 							</xs:annotation>
 							<xs:complexType>
 								<xs:sequence>
 									<xs:element name="descEvento">
 										<xs:annotation>
-											<xs:documentation>Descrição do Evento - “Cancelamento”</xs:documentation>
+											<xs:documentation>Descrição do Evento - “Carta de Correção”</xs:documentation>
 										</xs:annotation>
 										<xs:simpleType>
 											<xs:restriction base="xs:string">
 												<xs:whiteSpace value="preserve"/>
-												<xs:enumeration value="Cancelamento"/>
+												<xs:enumeration value="Carta de Correção"/>
+												<xs:enumeration value="Carta de Correcao"/>
 											</xs:restriction>
 										</xs:simpleType>
 									</xs:element>
-									<xs:element name="nProt" type="TProt">
+									<xs:element name="xCorrecao">
 										<xs:annotation>
-											<xs:documentation>Número do Protocolo de Status da NF-e. 1 posição (1 – Secretaria de Fazenda Estadual 2 – Receita Federal); 2 posições ano; 10 seqüencial no ano.</xs:documentation>
+											<xs:documentation>Correção a ser considerada</xs:documentation>
 										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:whiteSpace value="preserve"/>
+												<xs:minLength value="15"/>
+												<xs:maxLength value="1000"/>
+												<xs:pattern value="[!-ÿ]{1}[ -ÿ]{0,}[!-ÿ]{1}|[!-ÿ]{1}"/>
+											</xs:restriction>
+										</xs:simpleType>
 									</xs:element>
-									<xs:element name="xJust" type="TJust">
+									<xs:element name="xCondUso">
 										<xs:annotation>
-											<xs:documentation>Justificativa do cancelamento</xs:documentation>
+											<xs:documentation>Texto Fixo com as condições de uso da Carta de Correção</xs:documentation>
 										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:whiteSpace value="preserve"/>
+												<xs:enumeration value="A Carta de Correção é disciplinada pelo § 1º-A do art. 7º do Convênio S/N, de 15 de dezembro de 1970 e pode ser utilizada para regularização de erro ocorrido na emissão de documento fiscal, desde que o erro não esteja relacionado com: I - as variáveis que determinam o valor do imposto tais como: base de cálculo, alíquota, diferença de preço, quantidade, valor da operação ou da prestação; II - a correção de dados cadastrais que implique mudança do remetente ou do destinatário; III - a data de emissão ou de saída."/>
+												<xs:enumeration value="A Carta de Correcao e disciplinada pelo paragrafo 1o-A do art. 7o do Convenio S/N, de 15 de dezembro de 1970 e pode ser utilizada para regularizacao de erro ocorrido na emissao de documento fiscal, desde que o erro nao esteja relacionado com: I - as variaveis que determinam o valor do imposto tais como: base de calculo, aliquota, diferenca de preco, quantidade, valor da operacao ou da prestacao; II - a correcao de dados cadastrais que implique mudanca do remetente ou do destinatario; III - a data de emissao ou de saida."/>
+											</xs:restriction>
+										</xs:simpleType>
 									</xs:element>
 								</xs:sequence>
 								<xs:attribute name="versao" use="required">
@@ -137,7 +161,7 @@
 		</xs:sequence>
 		<xs:attribute name="versao" type="TVerEvento" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="TRetEvento">
+	<xs:complexType name="TretEvento">
 		<xs:annotation>
 			<xs:documentation>Tipo retorno do Evento</xs:documentation>
 		</xs:annotation>
@@ -159,7 +183,7 @@
 						</xs:element>
 						<xs:element name="cOrgao" type="TCOrgaoIBGE">
 							<xs:annotation>
-								<xs:documentation>Código do órgão de recepção do Evento. Utilizar a Tabela do IBGE extendida, utilizar 91 para identificar o Ambiente Nacional</xs:documentation>
+								<xs:documentation>Código do órgão de recepção do Evento. Utilizar a Tabela do IBGE extendida, utilizar 90 para identificar o Ambiente Nacional</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 						<xs:element name="cStat" type="TStat">
@@ -323,7 +347,7 @@
 					<xs:documentation>Descrição literal do status do registro do Evento</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="retEvento" type="TRetEvento" minOccurs="0" maxOccurs="20"/>
+			<xs:element name="retEvento" type="TretEvento" minOccurs="0" maxOccurs="20"/>
 		</xs:sequence>
 		<xs:attribute name="versao" type="TVerEnvEvento" use="required"/>
 	</xs:complexType>
@@ -333,7 +357,7 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="evento" type="TEvento"/>
-			<xs:element name="retEvento" type="TRetEvento"/>
+			<xs:element name="retEvento" type="TretEvento"/>
 		</xs:sequence>
 		<xs:attribute name="versao" type="TVerEvento" use="required"/>
 	</xs:complexType>
@@ -353,6 +377,42 @@
 		<xs:restriction base="xs:string">
 			<xs:whiteSpace value="preserve"/>
 			<xs:pattern value="1\.00"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TCOrgaoIBGE">
+		<xs:annotation>
+			<xs:documentation>Tipo Código de orgão (UF da tabela do IBGE + 90 RFB)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:enumeration value="11"/>
+			<xs:enumeration value="12"/>
+			<xs:enumeration value="13"/>
+			<xs:enumeration value="14"/>
+			<xs:enumeration value="15"/>
+			<xs:enumeration value="16"/>
+			<xs:enumeration value="17"/>
+			<xs:enumeration value="21"/>
+			<xs:enumeration value="22"/>
+			<xs:enumeration value="23"/>
+			<xs:enumeration value="24"/>
+			<xs:enumeration value="25"/>
+			<xs:enumeration value="26"/>
+			<xs:enumeration value="27"/>
+			<xs:enumeration value="28"/>
+			<xs:enumeration value="29"/>
+			<xs:enumeration value="31"/>
+			<xs:enumeration value="32"/>
+			<xs:enumeration value="33"/>
+			<xs:enumeration value="35"/>
+			<xs:enumeration value="41"/>
+			<xs:enumeration value="42"/>
+			<xs:enumeration value="43"/>
+			<xs:enumeration value="50"/>
+			<xs:enumeration value="51"/>
+			<xs:enumeration value="52"/>
+			<xs:enumeration value="53"/>
+			<xs:enumeration value="90"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

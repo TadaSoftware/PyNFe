@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.portalfiscal.inf.br/nfe" targetNamespace="http://www.portalfiscal.inf.br/nfe" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema_v1.01.xsd"/>
 	<xs:include schemaLocation="tiposBasico_v1.03.xsd"/>
+	<xs:include schemaLocation="e110130_v1.00.xsd"/>
 	<xs:complexType name="TEvento">
 		<xs:annotation>
 			<xs:documentation>Tipo Evento</xs:documentation>
@@ -12,7 +12,7 @@
 					<xs:sequence>
 						<xs:element name="cOrgao" type="TCOrgaoIBGE">
 							<xs:annotation>
-								<xs:documentation>Código do órgão de recepção do Evento. Utilizar a Tabela do IBGE extendida, utilizar 91 para identificar o Ambiente Nacional</xs:documentation>
+								<xs:documentation>Código do órgão de recepção do Evento. Utilizar a Tabela do IBGE extendida, utilizar 90 para identificar o Ambiente Nacional</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 						<xs:element name="tpAmb" type="TAmb">
@@ -44,7 +44,7 @@
 						</xs:element>
 						<xs:element name="dhEvento" type="TDateTimeUTC">
 							<xs:annotation>
-								<xs:documentation>Data e Hora do Evento, formato UTC (AAAA-MM-DDThh:mm:ssTZD, onde TZD = +hh:mm ou -hh:mm)</xs:documentation>
+								<xs:documentation>Data de emissão no formato UTC.  AAAA-MM-DDThh:mm:ssTZD</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 						<xs:element name="tpEvento">
@@ -55,7 +55,7 @@
 								<xs:restriction base="xs:string">
 									<xs:whiteSpace value="preserve"/>
 									<xs:pattern value="[0-9]{6}"/>
-									<xs:enumeration value="110111"/>
+									<xs:enumeration value="110130"/>
 								</xs:restriction>
 							</xs:simpleType>
 						</xs:element>
@@ -81,44 +81,7 @@
 								</xs:restriction>
 							</xs:simpleType>
 						</xs:element>
-						<xs:element name="detEvento">
-							<xs:annotation>
-								<xs:documentation>Schema XML de validação do evento do cancelamento 1101111</xs:documentation>
-							</xs:annotation>
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="descEvento">
-										<xs:annotation>
-											<xs:documentation>Descrição do Evento - “Cancelamento”</xs:documentation>
-										</xs:annotation>
-										<xs:simpleType>
-											<xs:restriction base="xs:string">
-												<xs:whiteSpace value="preserve"/>
-												<xs:enumeration value="Cancelamento"/>
-											</xs:restriction>
-										</xs:simpleType>
-									</xs:element>
-									<xs:element name="nProt" type="TProt">
-										<xs:annotation>
-											<xs:documentation>Número do Protocolo de Status da NF-e. 1 posição (1 – Secretaria de Fazenda Estadual 2 – Receita Federal); 2 posições ano; 10 seqüencial no ano.</xs:documentation>
-										</xs:annotation>
-									</xs:element>
-									<xs:element name="xJust" type="TJust">
-										<xs:annotation>
-											<xs:documentation>Justificativa do cancelamento</xs:documentation>
-										</xs:annotation>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="versao" use="required">
-									<xs:simpleType>
-										<xs:restriction base="xs:string">
-											<xs:whiteSpace value="preserve"/>
-											<xs:enumeration value="1.00"/>
-										</xs:restriction>
-									</xs:simpleType>
-								</xs:attribute>
-							</xs:complexType>
-						</xs:element>
+						<xs:element ref="detEvento"/>
 					</xs:sequence>
 					<xs:attribute name="Id" use="required">
 						<xs:annotation>
@@ -137,7 +100,16 @@
 		</xs:sequence>
 		<xs:attribute name="versao" type="TVerEvento" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="TRetEvento">
+	<xs:simpleType name="TVerEvento">
+		<xs:annotation>
+			<xs:documentation>Tipo Versão do Evento</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:pattern value="1\.00"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="TretEvento">
 		<xs:annotation>
 			<xs:documentation>Tipo retorno do Evento</xs:documentation>
 		</xs:annotation>
@@ -159,7 +131,7 @@
 						</xs:element>
 						<xs:element name="cOrgao" type="TCOrgaoIBGE">
 							<xs:annotation>
-								<xs:documentation>Código do órgão de recepção do Evento. Utilizar a Tabela do IBGE extendida, utilizar 91 para identificar o Ambiente Nacional</xs:documentation>
+								<xs:documentation>Código do órgão de recepção do Evento. Utilizar a Tabela do IBGE extendida, utilizar 90 para identificar o Ambiente Nacional</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 						<xs:element name="cStat" type="TStat">
@@ -283,6 +255,15 @@
 		</xs:sequence>
 		<xs:attribute name="versao" type="TVerEnvEvento" use="required"/>
 	</xs:complexType>
+	<xs:simpleType name="TVerEnvEvento">
+		<xs:annotation>
+			<xs:documentation>Tipo Versão do EnvEvento</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:pattern value="1\.00"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:complexType name="TRetEnvEvento">
 		<xs:annotation>
 			<xs:documentation> Tipo Retorno de Lote de Envio</xs:documentation>
@@ -323,7 +304,7 @@
 					<xs:documentation>Descrição literal do status do registro do Evento</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="retEvento" type="TRetEvento" minOccurs="0" maxOccurs="20"/>
+			<xs:element name="retEvento" type="TretEvento" minOccurs="0" maxOccurs="20"/>
 		</xs:sequence>
 		<xs:attribute name="versao" type="TVerEnvEvento" use="required"/>
 	</xs:complexType>
@@ -333,26 +314,8 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="evento" type="TEvento"/>
-			<xs:element name="retEvento" type="TRetEvento"/>
+			<xs:element name="retEvento" type="TretEvento"/>
 		</xs:sequence>
 		<xs:attribute name="versao" type="TVerEvento" use="required"/>
 	</xs:complexType>
-	<xs:simpleType name="TVerEnvEvento">
-		<xs:annotation>
-			<xs:documentation>Tipo Versão do EnvEvento</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:whiteSpace value="preserve"/>
-			<xs:pattern value="1\.00"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:simpleType name="TVerEvento">
-		<xs:annotation>
-			<xs:documentation>Tipo Versão do Evento</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:whiteSpace value="preserve"/>
-			<xs:pattern value="1\.00"/>
-		</xs:restriction>
-	</xs:simpleType>
 </xs:schema>
