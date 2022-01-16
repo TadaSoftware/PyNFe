@@ -3,7 +3,8 @@
 
 import unittest
 
-# from lxml import etree
+from lxml import etree
+import io
 
 from pynfe.entidades.cliente import Cliente
 from pynfe.entidades.emitente import Emitente
@@ -16,7 +17,7 @@ from decimal import Decimal
 import datetime
 
 
-class SerializacaoNFeTestCase(unittest.TestCase):
+class SerializacaoNFe(unittest.TestCase):
     """
     Imprimir o XML completo:
         print(etree.tostring(self.xml_assinado))
@@ -28,8 +29,12 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.senha = '123456'
         self.uf = 'pr'
         self.homologacao = True
+
         self.ns = {'ns': NAMESPACE_NFE}
         self.ns_sig = {'ns': NAMESPACE_SIG}
+
+        self.xsd_procNFe = './pynfe/data/XSDs/procNFe_v4.00.xsd'
+        self.xsd_nfe = './pynfe/data/XSDs/nfe_v4.00.xsd'
 
         self.emitente = self.preenche_emitente()
         self.cliente = self.preenche_destinatario()
@@ -312,6 +317,26 @@ class SerializacaoNFeTestCase(unittest.TestCase):
     def test_digestvalue_da_assinatura(self):
         DigestValue = self.xml_assinado.xpath('//ns:Signature//ns:SignedInfo/ns:Reference/ns:DigestValue', namespaces=self.ns_sig)[0].text
         self.assertTrue(len(DigestValue) > 0)
+
+    # def test_validacao_com_xsd_do_arquivo_xml_processado(self):
+    #     xmlschema_doc = etree.parse(self.xsd_procNFe)
+    #     xmlschema = etree.XMLSchema(xmlschema_doc)
+
+    #     with io.StringIO() as buffer:
+    #         buffer.write(etree.tostring(self.xml_processado).decode("utf-8"))
+    #         buffer.seek(0)
+    #         xml = etree.parse(buffer)
+    #         xmlschema.assertValid(xml)
+
+    def test_validacao_com_xsd_do_xml_gerado_sem_processar(self):
+        xmlschema_doc = etree.parse(self.xsd_nfe)
+        xmlschema = etree.XMLSchema(xmlschema_doc)
+
+        with io.StringIO() as buffer:
+            buffer.write(etree.tostring(self.xml_assinado).decode("utf-8"))
+            buffer.seek(0)
+            xml = etree.parse(buffer)
+            xmlschema.assertValid(xml)
 
 
 if __name__ == '__main__':
