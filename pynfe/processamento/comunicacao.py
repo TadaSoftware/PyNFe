@@ -44,18 +44,19 @@ class ComunicacaoSefaz(Comunicacao):
     _versao = VERSAO_PADRAO
     _assinatura = AssinaturaA1
 
-    def autorizacao(self, modelo, nota_fiscal, id_lote=1, ind_sinc=1):
+    def autorizacao(self, modelo, nota_fiscal, id_lote=1, ind_sinc=1, contingencia=False):
         """
         Método para realizar autorização da nota de acordo com o modelo
         :param modelo: Modelo
         :param nota_fiscal: XML assinado
         :param id_lote: Id do lote - numero autoincremental gerado pelo sistema
         :param ind_sinc: Indicador de sincrono e assincrono, 0 para assincrono, 1 para sincrono
+        :param contingencia: Indica se o envio é em contingência ou não
         :return:  Uma tupla que em caso de sucesso, retorna xml com nfe e protocolo de autorização. Caso contrário,
         envia todo o soap de resposta da Sefaz para decisão do usuário.
         """
         # url do serviço
-        url = self._get_url(modelo=modelo, consulta='AUTORIZACAO')
+        url = self._get_url(modelo=modelo, consulta='AUTORIZACAO', contingencia=contingencia)
 
         # Monta XML do corpo da requisição
         raiz = etree.Element('enviNFe', xmlns=NAMESPACE_NFE, versao=VERSAO_PADRAO)
@@ -113,7 +114,7 @@ class ComunicacaoSefaz(Comunicacao):
                     return 0, nrec, nota_fiscal
         return 1, retorno, nota_fiscal
 
-    def consulta_recibo(self, modelo, numero):
+    def consulta_recibo(self, modelo, numero, contingencia=False):
         """
         Este método oferece a consulta do resultado do processamento de um lote de NF-e.
         O aplicativo do Contribuinte deve ser construído de forma a aguardar um tempo mínimo de
@@ -122,11 +123,12 @@ class ComunicacaoSefaz(Comunicacao):
         Processamento".
         :param modelo: Modelo da nota
         :param numero: Número da nota
+        :param contingencia: Indica se o envio é em contingência ou não
         :return: 
         """
 
         # url do serviço
-        url = self._get_url(modelo=modelo, consulta='RECIBO')
+        url = self._get_url(modelo=modelo, consulta='RECIBO', contingencia=contingencia)
 
         # Monta XML do corpo da requisição
         raiz = etree.Element('consReciNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
@@ -137,16 +139,17 @@ class ComunicacaoSefaz(Comunicacao):
         xml = self._construir_xml_soap('NFeRetAutorizacao4', raiz)
         return self._post(url, xml)
 
-    def consulta_nota(self, modelo, chave):
+    def consulta_nota(self, modelo, chave, contingencia=False):
         """
             Este método oferece a consulta da situação da NF-e/NFC-e na Base de Dados do Portal
             da Secretaria de Fazenda Estadual.
         :param modelo: Modelo da nota
         :param chave: Chave da nota
+        :param contingencia: Indica se o envio é em contingência ou não
         :return:
         """
         # url do serviço
-        url = self._get_url(modelo=modelo, consulta='CHAVE')
+        url = self._get_url(modelo=modelo, consulta='CHAVE', contingencia=contingencia)
         # Monta XML do corpo da requisição
         raiz = etree.Element('consSitNFe', versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
@@ -271,7 +274,7 @@ class ComunicacaoSefaz(Comunicacao):
         """
         Serviço destinado ao atendimento de solicitações de inutilização de numeração.
         :param modelo: Modelo da nota
-        :param cnpj: CNPJda empresa
+        :param cnpj: CNPJ ou CPF da empresa
         :param numero_inicial: Número inicial
         :param numero_final: Número final
         :param justificativa: Justificativa
@@ -288,14 +291,19 @@ class ComunicacaoSefaz(Comunicacao):
         uf = CODIGOS_ESTADOS[self.uf.upper()]
         cnpj = so_numeros(cnpj)
 
+        if len(cnpj) == 14:
+            cnpjcpf_chaveacesso = cnpj
+        elif len(cnpj) == 11:
+            cnpjcpf_chaveacesso = str(cnpj).zfill(14)
+
         # Identificador da TAG a ser assinada formada com Código da UF + Ano (2 posições) +
         #  CNPJ + modelo + série + nro inicial e nro final precedida do literal “ID”
         id_unico = 'ID%(uf)s%(ano)s%(cnpj)s%(modelo)s%(serie)s%(num_ini)s%(num_fin)s' % {
             'uf': uf,
             'ano': ano,
-            'cnpj': cnpj,
+            'cnpj': cnpjcpf_chaveacesso,
             'modelo': '55' if modelo == 'nfe' else '65',  # 55=NF-e; 65=NFC-e;
-            'serie': serie.zfill(3),
+            'serie': str(serie).zfill(3),
             'num_ini': str(numero_inicial).zfill(9),
             'num_fin': str(numero_final).zfill(9),
         }
@@ -307,9 +315,12 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(inf_inut, 'xServ').text = 'INUTILIZAR'
         etree.SubElement(inf_inut, 'cUF').text = uf
         etree.SubElement(inf_inut, 'ano').text = ano
-        etree.SubElement(inf_inut, 'CNPJ').text = cnpj
+        if len(cnpj) == 14:
+            etree.SubElement(inf_inut, 'CNPJ').text = cnpj
+        else:
+            etree.SubElement(inf_inut, 'CPF').text = cnpj
         etree.SubElement(inf_inut, 'mod').text = '55' if modelo == 'nfe' else '65'  # 55=NF-e; 65=NFC-e
-        etree.SubElement(inf_inut, 'serie').text = serie
+        etree.SubElement(inf_inut, 'serie').text = str(serie)
         etree.SubElement(inf_inut, 'nNFIni').text = str(numero_inicial)
         etree.SubElement(inf_inut, 'nNFFin').text = str(numero_final)
         etree.SubElement(inf_inut, 'xJust').text = justificativa
@@ -337,8 +348,40 @@ class ComunicacaoSefaz(Comunicacao):
         self.url = ambiente + NFE['AN'][consulta]
         return self.url
 
-    def _get_url(self, modelo, consulta):
+    def _get_url(self, modelo, consulta, contingencia=False):
         """ Retorna a url para comunicação com o webservice """
+        if contingencia:
+            contingencia_svrs = ['AM', 'BA', 'CE', 'GO', 'MA', 'MS', 'MT', 'PE', 'PR']
+            contingencia_svan = ['AC', 'AL', 'AP', 'DF', 'ES', 'MG', 'PA', 'PB', 'PI', 'RJ', 'RN', 'RO', 'RR', 'RS', 'SC', 'SE', 'SP', 'TO']
+
+            if self.uf.upper() in contingencia_svrs:
+                if self._ambiente == 1:
+                    ambiente = 'HTTPS'
+                else:
+                    ambiente = 'HOMOLOGACAO'
+                if modelo == 'nfe':
+                    # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
+                    self.url = NFE['SVRS'][ambiente] + NFE['SVRS'][consulta]
+                elif modelo == 'nfce':
+                    # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
+                    self.url = NFCE['SVRS'][ambiente] + NFCE['SVRS'][consulta]
+                else:
+                    raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
+            elif self.uf.upper() in contingencia_svan:
+                if self._ambiente == 1:
+                    ambiente = 'HTTPS'
+                else:
+                    ambiente = 'HOMOLOGACAO'
+                if modelo == 'nfe':
+                    # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
+                    self.url = NFE['SVAN'][ambiente] + NFE['SVAN'][consulta]
+                elif modelo == 'nfce':
+                    # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
+                    self.url = NFCE['SVRS'][ambiente] + NFCE['SVRS'][consulta]
+                else:
+                    raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
+            return self.url
+
         # estado que implementam webservices proprios
         lista = ['PR', 'MS', 'SP', 'AM', 'CE', 'BA', 'GO', 'MG', 'MT', 'PE', 'RS']
         if self.uf.upper() in lista:
@@ -347,8 +390,12 @@ class ComunicacaoSefaz(Comunicacao):
             else:
                 ambiente = 'HOMOLOGACAO'
             if modelo == 'nfe':
-                # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
-                self.url = NFE[self.uf.upper()][ambiente] + NFE[self.uf.upper()][consulta]
+                # CE é a única UF que possuem NFE SVRS e NFCe próprio
+                if self.uf.upper() == 'CE':
+                    self.url = NFE['SVRS'][ambiente] + NFE['SVRS'][consulta]
+                else:
+                    # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
+                    self.url = NFE[self.uf.upper()][ambiente] + NFE[self.uf.upper()][consulta]
             elif modelo == 'nfce':
                 # PE e BA são as únicas UF'sque possuem NFE proprio e SVRS para NFCe
                 if self.uf.upper() == 'PE' or self.uf.upper() == 'BA':

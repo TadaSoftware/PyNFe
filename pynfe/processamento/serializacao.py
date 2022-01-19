@@ -630,17 +630,20 @@ class SerializacaoXML(Serializacao):
             else:
                 pis_item = etree.SubElement(pis, 'PISOutr')
                 etree.SubElement(pis_item, 'CST').text = produto_servico.pis_modalidade
-
-                # if (PIS.qBCProd + PIS.vAliqProd > 0):
-                #     etree.SubElement(pis_item, 'qBCProd').text = '{:.4f}'.format(produto_servico.quantidade_comercial)
-                #     etree.SubElement(pis_item, 'vAliqProd').text = '{:.4f}'.format(produto_servico.pis_aliquota_percentual or 0)
-                # else:
-                #     etree.SubElement(pis_item, 'vBC').text = '{:.2f}'.format(produto_servico.pis_valor_base_calculo or 0)
-                #     etree.SubElement(pis_item, 'pPIS').text = '{:.2f}'.format(produto_servico.pis_aliquota_percentual or 0)
-
                 etree.SubElement(pis_item, 'vBC').text = '{:.2f}'.format(produto_servico.pis_valor_base_calculo or 0)
                 etree.SubElement(pis_item, 'pPIS').text = '{:.2f}'.format(produto_servico.pis_aliquota_percentual or 0)
+                if produto_servico.pis_modalidade != '99' and produto_servico.pis_modalidade != '49':
+                    etree.SubElement(pis_item, 'qBCProd').text = '{:.4f}'.format(produto_servico.quantidade_comercial)
+                    etree.SubElement(pis_item, 'vAliqProd').text = '{:.4f}'.format(produto_servico.pis_aliquota_percentual or 0)
                 etree.SubElement(pis_item, 'vPIS').text = '{:.2f}'.format(produto_servico.pis_valor_base_calculo or 0)
+
+                ## PISST
+                # pis_item = etree.SubElement(pis, 'PISST')
+                # etree.SubElement(pis_item, 'vBC').text = produto_servico.pis_valor_base_calculo
+                # etree.SubElement(pis_item, 'pPIS').text = produto_servico.pis_aliquota_percentual
+                # etree.SubElement(pis_item, 'qBCProd').text = produto_servico.quantidade_comercial
+                # etree.SubElement(pis_item, 'vAliqProd').text = produto_servico.pis_aliquota_percentual
+                # etree.SubElement(pis_item, 'vPIS').text = produto_servico.pis_valor_base_calculo
 
     def _serializar_imposto_cofins(self, produto_servico, modelo, tag_raiz='imposto', retorna_string=True):
         if modelo == 55:  # apenas nfe
@@ -664,17 +667,20 @@ class SerializacaoXML(Serializacao):
             else:
                 cofins_item = etree.SubElement(cofins, 'COFINSOutr')
                 etree.SubElement(cofins_item, 'CST').text = produto_servico.cofins_modalidade
-
-                # if (COFINS.qBCProd + COFINS.vAliqProd > 0):
-                #     etree.SubElement(cofins_item, 'qBCProd').text = '{:.4f}'.format(produto_servico.quantidade_comercial)
-                #     etree.SubElement(cofins_item, 'vAliqProd').text = '{:.4f}'.format(produto_servico.cofins_aliquota_percentual)
-                # else:
-                #     etree.SubElement(cofins_item, 'vBC').text = '{:.2f}'.format(produto_servico.cofins_valor_base_calculo or 0)
-                #     etree.SubElement(cofins_item, 'pCOFINS').text = '{:.2f}'.format(produto_servico.cofins_aliquota_percentual or 0)
-
                 etree.SubElement(cofins_item, 'vBC').text = '{:.2f}'.format(produto_servico.cofins_valor_base_calculo or 0)
                 etree.SubElement(cofins_item, 'pCOFINS').text = '{:.2f}'.format(produto_servico.cofins_aliquota_percentual or 0)
+                if produto_servico.cofins_modalidade != '99' and produto_servico.cofins_modalidade != '49':
+                    etree.SubElement(cofins_item, 'qBCProd').text = '{:.4f}'.format(produto_servico.quantidade_comercial)
+                    etree.SubElement(cofins_item, 'vAliqProd').text = '{:.4f}'.format(produto_servico.cofins_aliquota_percentual or 0)
                 etree.SubElement(cofins_item, 'vCOFINS').text = '{:.2f}'.format(produto_servico.cofins_valor or 0)
+
+                ## COFINSST
+                # cofins_item = etree.SubElement(cofins, 'COFINSOutr')
+                # etree.SubElement(cofins_item, 'vBC').text = produto_servico.cofins_valor_base_calculo
+                # etree.SubElement(cofins_item, 'pCOFINS').text = produto_servico.cofins_aliquota_percentual
+                # etree.SubElement(cofins_item, 'qBCProd').text = produto_servico.quantidade_comercial
+                # etree.SubElement(cofins_item, 'vAliqProd').text = produto_servico.cofins_aliquota_percentual
+                # etree.SubElement(cofins_item, 'vCOFINS').text = produto_servico.cofins_valor
 
     def _serializar_imposto_importacao(self, produto_servico, modelo, tag_raiz='imposto', retorna_string=True):
         if (produto_servico.imposto_importacao_valor_base_calculo > 0) or\
@@ -721,13 +727,15 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(ide, 'serie').text = nota_fiscal.serie
         etree.SubElement(ide, 'nNF').text = str(nota_fiscal.numero_nf)
         etree.SubElement(ide, 'dhEmi').text = nota_fiscal.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz
-        if nota_fiscal.data_saida_entrada:
-            etree.SubElement(ide, 'dhSaiEnt').text = nota_fiscal.data_saida_entrada.strftime('%Y-%m-%dT%H:%M:%S') + tz
-        """dhCont Data e Hora da entrada em contingência E B01 D 0-1 Formato AAAA-MM-DDThh:mm:ssTZD (UTC - Universal
-            Coordinated Time)
-            Exemplo: no formato UTC para os campos de Data-Hora, "TZD" pode ser -02:00 (Fernando de Noronha), -03:00 (Brasília) ou -04:00 (Manaus), no
-            horário de verão serão -01:00, -02:00 e -03:00. Exemplo: "2010-08-19T13:00:15-03:00".
-        """
+        # Apenas NF-e
+        if nota_fiscal.modelo == 55:
+            if nota_fiscal.data_saida_entrada:
+                etree.SubElement(ide, 'dhSaiEnt').text = nota_fiscal.data_saida_entrada.strftime('%Y-%m-%dT%H:%M:%S') + tz
+            """dhCont Data e Hora da entrada em contingência E B01 D 0-1 Formato AAAA-MM-DDThh:mm:ssTZD (UTC - Universal
+                Coordinated Time)
+                Exemplo: no formato UTC para os campos de Data-Hora, "TZD" pode ser -02:00 (Fernando de Noronha), -03:00 (Brasília) ou -04:00 (Manaus), no
+                horário de verão serão -01:00, -02:00 e -03:00. Exemplo: "2010-08-19T13:00:15-03:00".
+            """
         etree.SubElement(ide, 'tpNF').text = str(nota_fiscal.tipo_documento)  # 0=entrada 1=saida
         """ nfce suporta apenas operação interna
             Identificador de local de destino da operação 1=Operação interna;2=Operação interestadual;3=Operação com exterior.
@@ -762,6 +770,10 @@ class SerializacaoXML(Serializacao):
         else:
             etree.SubElement(ide, 'indFinal').text = str(nota_fiscal.cliente_final)
             etree.SubElement(ide, 'indPres').text = str(nota_fiscal.indicador_presencial)
+        # Rejeição 435: NF-e não pode ter o indicativo do intermediador quando for modelo 55
+        #               e informando o indicativo de presença (indPres) igual a 0, 1 ou 5.
+        if (nota_fiscal.modelo in [55, 65]) and (nota_fiscal.indicador_presencial not in [0, 1, 5]):
+            etree.SubElement(ide, 'indIntermed').text = str(nota_fiscal.indicador_intermediador)
         etree.SubElement(ide, 'procEmi').text = str(nota_fiscal.processo_emissao)
         etree.SubElement(ide, 'verProc').text = '%s %s'%(self._nome_aplicacao, nota_fiscal.versao_processo_emissao)
 
@@ -776,7 +788,7 @@ class SerializacaoXML(Serializacao):
         ### CONTINGENCIA ###
         if self._contingencia != None:
             etree.SubElement(ide, 'dhCont').text = nota_fiscal.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz # Data e Hora da entrada em contingência AAAA-MM-DDThh:mm:ssTZD
-            etree.SubElement(ide, 'xJust').text = nota_fiscal.self._contingencia  # Justificativa da entrada em contingência (min 20, max 256 caracteres)
+            etree.SubElement(ide, 'xJust').text = self._contingencia  # Justificativa da entrada em contingência (min 20, max 256 caracteres)
 
         # Emitente
         raiz.append(self._serializar_emitente(nota_fiscal.emitente, retorna_string=False))
