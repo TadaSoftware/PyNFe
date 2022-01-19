@@ -32,7 +32,7 @@ class CertificadoTestCase(unittest.TestCase):
                 senha=self.senha_incorreto,
                 caminho=self.certificado_incorreto
             )
-        self.assertEqual(str(context.exception), "Falha ao abrir arquivo do certificado digital A1. Verifique local e permissões do arquivo.")
+        self.assertEqual(str(context.exception), "Falha ao abrir arquivo do certificado digital A1. Verifique local e permissoes do arquivo.")
 
     def test_exception_certificado_senha_errada(self):
         with self.assertRaises(Exception) as context:
