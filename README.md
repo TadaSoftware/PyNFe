@@ -104,4 +104,4 @@ Se tiver qualquer problema or sugestão abra uma issue [aqui](https://github.com
 
 Licença
 -----------
-[Licença](LICENSE)
+PyNFe é licenciada sob a [LGPL-3.0](LICENSE).
