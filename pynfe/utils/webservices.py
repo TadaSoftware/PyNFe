@@ -492,3 +492,20 @@ NFSE = {
 		'HOMOLOGACAO':'https://homologacao.ginfes.com.br/ServiceGinfesImpl?wsdl'
 	}
 }
+
+# MDF-e
+MDFE = {
+	# unico autorizador de MDF-e
+	'SVRS': {
+		'RECEPCAO': 'MDFeRecepcao/MDFeRecepcao.asmx',
+		'RECEPCAO_SINC': 'MDFeRecepcaoSinc/MDFeRecepcaoSinc.asmx',
+		'RET_RECEPCAO': 'mdferetrecepcao/MDFeRetRecepcao.asmx',
+		'EVENTOS': 'mdferecepcaoevento/MDFeRecepcaoEvento.asmx',
+		'CONSULTA': 'mdfeconsulta/MDFeConsulta.asmx',
+		'STATUS': 'mdfestatusservico/MDFeStatusServico.asmx',
+		'NAO_ENCERRADOS': 'mdfeconsnaoenc/MDFeConsNaoEnc.asmx',
+		'HTTPS': 'https://mdfe.svrs.rs.gov.br/ws/',
+		'HOMOLOGACAO': 'https://mdfe-homologacao.svrs.rs.gov.br/ws/',
+		'QRCODE': 'https://dfe-portal.svrs.rs.gov.br/mdfe/qrCode'
+	}
+}

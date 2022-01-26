@@ -33,8 +33,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.ns = {'ns': NAMESPACE_NFE}
         self.ns_sig = {'ns': NAMESPACE_SIG}
 
-        self.xsd_procNFe = './pynfe/data/XSDs/procNFe_v4.00.xsd'
-        self.xsd_nfe = './pynfe/data/XSDs/nfe_v4.00.xsd'
+        self.xsd_procNFe = './pynfe/data/XSDs/NF-e/procNFe_v4.00.xsd'
+        self.xsd_nfe = './pynfe/data/XSDs/NF-e/nfe_v4.00.xsd'
 
     def preenche_emitente(self):
         self.emitente = Emitente(
