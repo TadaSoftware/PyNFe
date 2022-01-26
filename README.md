@@ -9,8 +9,8 @@ Biblioteca de interface com os webservices de Nota Fiscal Eletrônica (NF-e) e N
 - A NFC-e visa substituir as notas fiscais modelo 2 e cupom fiscal emitido por ECF.
 - NFS-e padrão Abrasf para autorizadores Ginfes e Betha.
 
-Atualizado para a versão 4.00 NF-e/NFC-e
-Suporte a Python >=3.6
+* Atualizado para a versão 4.00 NF-e/NFC-e
+* Suporte a Python >=3.6
 
 
 Dependências
@@ -81,6 +81,15 @@ con = ComunicacaoSefaz(uf, certificado, senha, homologacao)
 xml = con.status_servico('nfe')
 print(xml.text)
 ```
+
+
+Testes
+-----------
+
+```sh
+python -m unittest
+```
+
 
 Documentação
 -----------

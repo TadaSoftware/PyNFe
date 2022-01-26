@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.portalfiscal.inf.br/nfe" targetNamespace="http://www.portalfiscal.inf.br/nfe" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema_v1.01.xsd"/>
 	<xs:include schemaLocation="tiposBasico_v1.03.xsd"/>
@@ -12,7 +11,7 @@
 					<xs:sequence>
 						<xs:element name="cOrgao" type="TCOrgaoIBGE">
 							<xs:annotation>
-								<xs:documentation>Código do órgão de recepção do Evento. Utilizar a Tabela do IBGE extendida, utilizar 91 para identificar o Ambiente Nacional</xs:documentation>
+								<xs:documentation>Código do órgão de recepção do Evento. Utilizar a Tabela do IBGE extendida, utilizar 90 para identificar o Ambiente Nacional</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 						<xs:element name="tpAmb" type="TAmb">
@@ -44,7 +43,7 @@
 						</xs:element>
 						<xs:element name="dhEvento" type="TDateTimeUTC">
 							<xs:annotation>
-								<xs:documentation>Data e Hora do Evento, formato UTC (AAAA-MM-DDThh:mm:ssTZD, onde TZD = +hh:mm ou -hh:mm)</xs:documentation>
+								<xs:documentation>Data de emissão no formato UTC.  AAAA-MM-DDThh:mm:ssTZD</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 						<xs:element name="tpEvento">
@@ -55,7 +54,7 @@
 								<xs:restriction base="xs:string">
 									<xs:whiteSpace value="preserve"/>
 									<xs:pattern value="[0-9]{6}"/>
-									<xs:enumeration value="110111"/>
+									<xs:enumeration value="990910"/>
 								</xs:restriction>
 							</xs:simpleType>
 						</xs:element>
@@ -83,30 +82,69 @@
 						</xs:element>
 						<xs:element name="detEvento">
 							<xs:annotation>
-								<xs:documentation>Schema XML de validação do evento do cancelamento 1101111</xs:documentation>
+								<xs:documentation>Schema XML de validação do evento do Confirmação de Internalização da Mercadoria na SUFRAMA 990910</xs:documentation>
 							</xs:annotation>
 							<xs:complexType>
 								<xs:sequence>
 									<xs:element name="descEvento">
 										<xs:annotation>
-											<xs:documentation>Descrição do Evento - “Cancelamento”</xs:documentation>
+											<xs:documentation>Descrição do Evento - “Confirmação de Internalização da Mercadoria na SUFRAMA”</xs:documentation>
 										</xs:annotation>
 										<xs:simpleType>
 											<xs:restriction base="xs:string">
 												<xs:whiteSpace value="preserve"/>
-												<xs:enumeration value="Cancelamento"/>
+												<xs:enumeration value="Confirmacao de Internalizacao da Mercadoria na SUFRAMA"/>
 											</xs:restriction>
 										</xs:simpleType>
 									</xs:element>
-									<xs:element name="nProt" type="TProt">
+									<xs:element name="PINe">
 										<xs:annotation>
-											<xs:documentation>Número do Protocolo de Status da NF-e. 1 posição (1 – Secretaria de Fazenda Estadual 2 – Receita Federal); 2 posições ano; 10 seqüencial no ano.</xs:documentation>
+											<xs:documentation>Número do PIN-e -  Protocolo de Internalização de Mercadoria Nacional eletronico</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:whiteSpace value="preserve"/>
+												<xs:pattern value="[0-9]{1,9}"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="dVistoria" type="TDateTimeUTC">
+										<xs:annotation>
+											<xs:documentation>Data de ocorrência da vistoria, formato UTC (AAAA-MM-DDThh:mm:ssTZD, onde TZD = +hh:mm ou -hh:mm)</xs:documentation>
 										</xs:annotation>
 									</xs:element>
-									<xs:element name="xJust" type="TJust">
+									<xs:element name="locVistoria">
 										<xs:annotation>
-											<xs:documentation>Justificativa do cancelamento</xs:documentation>
+											<xs:documentation>Localidade onde ocorreu a vistoria</xs:documentation>
 										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="TString">
+												<xs:minLength value="5"/>
+												<xs:maxLength value="60"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="postoVistoria">
+										<xs:annotation>
+											<xs:documentation>Nome Posto do ponto onde ocorreu a vistoria</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="TString">
+												<xs:minLength value="5"/>
+												<xs:maxLength value="60"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="xHistorico">
+										<xs:annotation>
+											<xs:documentation>Histórico da ocorrência, se existir.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="TString">
+												<xs:minLength value="1"/>
+												<xs:maxLength value="1024"/>
+											</xs:restriction>
+										</xs:simpleType>
 									</xs:element>
 								</xs:sequence>
 								<xs:attribute name="versao" use="required">
@@ -137,7 +175,225 @@
 		</xs:sequence>
 		<xs:attribute name="versao" type="TVerEvento" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="TRetEvento">
+	<xs:element name="descEvento">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="preserve"/>
+				<xs:enumeration value="Registro Passagem NFe"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="cOrgaoAutor" type="TCOrgaoIBGE"/>
+	<xs:element name="cPostoUF">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="preserve"/>
+				<xs:pattern value="[0-9]{4}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="xPostoUF">
+		<xs:simpleType>
+			<xs:restriction base="TString">
+				<xs:minLength value="2"/>
+				<xs:maxLength value="60"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="latGPS">
+		<xs:simpleType>
+			<xs:restriction base="TString">
+				<xs:pattern value="[0-9]\.[0-9]{6}|[1-8][0-9]\.[0-9]{6}|90\.[0-9]{6}|-[0-9]\.[0-9]{6}|-[1-8][0-9]\.[0-9]{6}|-90\.[0-9]{6}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="longGPS">
+		<xs:simpleType>
+			<xs:restriction base="TString">
+				<xs:pattern value="[0-9]\.[0-9]{6}|[1-9][0-9]\.[0-9]{6}|1[0-7][0-9]\.[0-9]{6}|180\.[0-9]{6}|-[0-9]\.[0-9]{6}|-[1-9][0-9]\.[0-9]{6}|-1[0-7][0-9]\.[0-9]{6}|-180\.[0-9]{6}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="CPFOper" type="TCpf"/>
+	<xs:element name="xNomeOper">
+		<xs:simpleType>
+			<xs:restriction base="TString">
+				<xs:minLength value="2"/>
+				<xs:maxLength value="60"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="indOffline">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="preserve"/>
+				<xs:enumeration value="1"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="dhPas" type="TDateTimeUTC"/>
+	<xs:element name="sentidoVia">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="preserve"/>
+				<xs:enumeration value="E"/>
+				<xs:enumeration value="S"/>
+				<xs:enumeration value="I"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="indRet">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="preserve"/>
+				<xs:enumeration value="R"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="UFDest" type="TUf"/>
+	<xs:element name="xObs">
+		<xs:simpleType>
+			<xs:restriction base="TString">
+				<xs:minLength value="1"/>
+				<xs:maxLength value="255"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="chMDFe">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="preserve"/>
+				<xs:pattern value="[0-9]{44}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="chCTe">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="preserve"/>
+				<xs:pattern value="[0-9]{44}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="modalRodov">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="placaVeic" minOccurs="0"/>
+				<xs:element ref="UFVeic" minOccurs="0"/>
+				<xs:element ref="placaCarreta" minOccurs="0"/>
+				<xs:element ref="UFCarreta" minOccurs="0"/>
+				<xs:element ref="placaCarreta2" minOccurs="0"/>
+				<xs:element ref="UFCarreta2" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="placaVeic" type="TPlaca"/>
+	<xs:element name="UFVeic" type="TUf"/>
+	<xs:element name="placaCarreta" type="TPlaca"/>
+	<xs:element name="UFCarreta" type="TUf"/>
+	<xs:element name="placaCarreta2" type="TPlaca"/>
+	<xs:element name="UFCarreta2" type="TUf"/>
+	<xs:element name="modalOutro">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tpModal"/>
+				<xs:element ref="xIdent" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="tpModal">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="preserve"/>
+				<xs:enumeration value="F"/>
+				<xs:enumeration value="D"/>
+				<xs:enumeration value="AE"/>
+				<xs:enumeration value="AQ"/>
+				<xs:enumeration value="O"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="xIdent">
+		<xs:simpleType>
+			<xs:restriction base="TString">
+				<xs:minLength value="1"/>
+				<xs:maxLength value="255"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="ctg">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="nFormSeg" minOccurs="0"/>
+				<xs:element ref="UFDest"/>
+				<xs:element ref="tpEmis"/>
+				<xs:choice>
+					<xs:element ref="CNPJDest"/>
+					<xs:element ref="CPFDest"/>
+				</xs:choice>
+				<xs:element ref="vTotalNFe"/>
+				<xs:element ref="indICMS"/>
+				<xs:element ref="indICMSST"/>
+				<xs:element ref="diaEmi"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="nFormSeg">
+		<xs:simpleType>
+			<xs:restriction base="TString">
+				<xs:minLength value="1"/>
+				<xs:maxLength value="11"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="tpEmis">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="preserve"/>
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="5"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="CNPJDest" type="TCnpj"/>
+	<xs:element name="CPFDest" type="TCpf"/>
+	<xs:element name="vTotalNFe" type="TDec_1302"/>
+	<xs:element name="indICMS">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="preserve"/>
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="indICMSST">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="preserve"/>
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="diaEmi">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="preserve"/>
+				<xs:pattern value="[1-9]|[1][0-9]|[2][0-9]|[3][0-1]?"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:simpleType name="TVerEvento">
+		<xs:annotation>
+			<xs:documentation>Tipo Versão do Evento</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:pattern value="1\.00"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="TretEvento">
 		<xs:annotation>
 			<xs:documentation>Tipo retorno do Evento</xs:documentation>
 		</xs:annotation>
@@ -159,7 +415,7 @@
 						</xs:element>
 						<xs:element name="cOrgao" type="TCOrgaoIBGE">
 							<xs:annotation>
-								<xs:documentation>Código do órgão de recepção do Evento. Utilizar a Tabela do IBGE extendida, utilizar 91 para identificar o Ambiente Nacional</xs:documentation>
+								<xs:documentation>Código do órgão de recepção do Evento. Utilizar a Tabela do IBGE extendida, utilizar 90 para identificar o Ambiente Nacional</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 						<xs:element name="cStat" type="TStat">
@@ -283,6 +539,15 @@
 		</xs:sequence>
 		<xs:attribute name="versao" type="TVerEnvEvento" use="required"/>
 	</xs:complexType>
+	<xs:simpleType name="TVerEnvEvento">
+		<xs:annotation>
+			<xs:documentation>Tipo Versão do EnvEvento</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:pattern value="1\.00"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:complexType name="TRetEnvEvento">
 		<xs:annotation>
 			<xs:documentation> Tipo Retorno de Lote de Envio</xs:documentation>
@@ -323,7 +588,7 @@
 					<xs:documentation>Descrição literal do status do registro do Evento</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="retEvento" type="TRetEvento" minOccurs="0" maxOccurs="20"/>
+			<xs:element name="retEvento" type="TretEvento" minOccurs="0" maxOccurs="20"/>
 		</xs:sequence>
 		<xs:attribute name="versao" type="TVerEnvEvento" use="required"/>
 	</xs:complexType>
@@ -333,26 +598,45 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="evento" type="TEvento"/>
-			<xs:element name="retEvento" type="TRetEvento"/>
+			<xs:element name="retEvento" type="TretEvento"/>
 		</xs:sequence>
 		<xs:attribute name="versao" type="TVerEvento" use="required"/>
 	</xs:complexType>
-	<xs:simpleType name="TVerEnvEvento">
+	<xs:simpleType name="TCOrgaoIBGE">
 		<xs:annotation>
-			<xs:documentation>Tipo Versão do EnvEvento</xs:documentation>
+			<xs:documentation>Tipo Código de orgão (UF da tabela do IBGE + 90 RFB)</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:whiteSpace value="preserve"/>
-			<xs:pattern value="1\.00"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:simpleType name="TVerEvento">
-		<xs:annotation>
-			<xs:documentation>Tipo Versão do Evento</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:whiteSpace value="preserve"/>
-			<xs:pattern value="1\.00"/>
+			<xs:enumeration value="11"/>
+			<xs:enumeration value="12"/>
+			<xs:enumeration value="13"/>
+			<xs:enumeration value="14"/>
+			<xs:enumeration value="15"/>
+			<xs:enumeration value="16"/>
+			<xs:enumeration value="17"/>
+			<xs:enumeration value="21"/>
+			<xs:enumeration value="22"/>
+			<xs:enumeration value="23"/>
+			<xs:enumeration value="24"/>
+			<xs:enumeration value="25"/>
+			<xs:enumeration value="26"/>
+			<xs:enumeration value="27"/>
+			<xs:enumeration value="28"/>
+			<xs:enumeration value="29"/>
+			<xs:enumeration value="31"/>
+			<xs:enumeration value="32"/>
+			<xs:enumeration value="33"/>
+			<xs:enumeration value="35"/>
+			<xs:enumeration value="41"/>
+			<xs:enumeration value="42"/>
+			<xs:enumeration value="43"/>
+			<xs:enumeration value="50"/>
+			<xs:enumeration value="51"/>
+			<xs:enumeration value="52"/>
+			<xs:enumeration value="53"/>
+			<xs:enumeration value="90"/>
+			<xs:enumeration value="91"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>
