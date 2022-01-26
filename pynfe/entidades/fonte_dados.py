@@ -73,7 +73,7 @@ class FonteDados(object):
         removido. Caso o argumento _objeto seja uma lista de objetos, eles serão
         removidos também."""
 
-        from base import Entidade
+        from .base import Entidade
 
         lista = None
 
