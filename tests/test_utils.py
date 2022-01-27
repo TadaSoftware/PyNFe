@@ -10,8 +10,11 @@ from pynfe. utils import (
     obter_codigo_por_municipio,
     obter_municipio_por_codigo,
     obter_uf_por_codigo,
+    formatar_decimal,
     remover_acentos
 )
+from lxml import etree
+from pynfe.utils.descompactar import DescompactaGzip
 
 
 class UtilsTestCase(unittest.TestCase):
@@ -20,14 +23,17 @@ class UtilsTestCase(unittest.TestCase):
     def test_so_numeros_none(self):
         self.assertEqual(so_numeros(None), "")
 
-    def test_so_numeros_float(self):
+    def test_so_numeros_valor_int(self):
         self.assertEqual(so_numeros(223), "223")
 
-    def test_so_numeros_numeric(self):
+    def test_so_numeros_valor_string(self):
         self.assertEqual(so_numeros("223"), "223")
 
-    def test_so_numeros_alphanumeric(self):
+    def test_so_numeros_com_letras_e_numeros(self):
         self.assertEqual(so_numeros("aa223bb"), "223")
+
+    def test_so_numeros_somente_com_letras(self):
+        self.assertEqual(so_numeros("aabbccdd"), "")
 
     # obter_pais_por_codigo
     def test_obter_pais_por_codigo_brasil(self):
@@ -183,6 +189,22 @@ class UtilsTestCase(unittest.TestCase):
     def test_obter_uf_por_codigo_an_91(self):
         self.assertEqual(obter_uf_por_codigo("91"), 'AN')
 
+    # formatar_decimal
+    def test_formatar_decimal_1(self):
+        self.assertEqual(formatar_decimal(1), '1.00')
+
+    def test_formatar_decimal_1_0(self):
+        self.assertEqual(formatar_decimal(1.0), '1.00')
+
+    def test_formatar_decimal_1_00(self):
+        self.assertEqual(formatar_decimal(1.00), '1.00')
+
+    def test_formatar_decimal_1_01(self):
+        self.assertEqual(formatar_decimal(1.01), '1.01')
+
+    def test_formatar_decimal_1_011(self):
+        self.assertEqual(formatar_decimal(1.011), '1.011')
+
     # remover_acentos
     def test_remover_acentos_com_acento(self):
         self.assertEqual(remover_acentos("á"), "a")
@@ -198,6 +220,22 @@ class UtilsTestCase(unittest.TestCase):
         self.assertEqual(remover_acentos("à"), "a")
         self.assertEqual(remover_acentos("ã"), "a")
         self.assertEqual(remover_acentos("õ"), "o")
+
+        self.assertEqual(remover_acentos("a"), "a")
+        self.assertEqual(remover_acentos("b"), "b")
+        self.assertEqual(remover_acentos("c"), "c")
+
+
+class DescompactaGzipUtils(unittest.TestCase):
+
+    def test_descompacta_string_gzip(self):
+        gzip_str = 'H4sIAAAAAAAACrPJS0u1K0ktLklVKKgEsm30QQIABhWzIhYAAAA='
+        esperado = '<nfe>teste pynfe</nfe>'
+
+        descompacta_gzip = DescompactaGzip.descompacta(gzip_str)
+        resultado_str = etree.tostring(descompacta_gzip).decode('utf-8')
+
+        self.assertEqual(resultado_str, esperado)
 
 
 if __name__ == '__main__':

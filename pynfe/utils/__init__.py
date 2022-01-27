@@ -18,9 +18,14 @@ except ImportError:
 
 
 # @memoize
-def so_numeros(texto):
-    """Retorna o texto informado mas somente os numeros"""
-    return "".join(filter(str.isdigit, str(texto)))
+def so_numeros(texto) -> str:
+    """
+    Retorna o texto informado mas somente os numeros
+
+    :param texto: String ou Inteiro a ser analisada
+    :return: String somente com números
+    """
+    return ''.join(filter(str.isdigit, str(texto)))
 
 
 # @memoize
