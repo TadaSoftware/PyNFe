@@ -1,6 +1,6 @@
 ## PyNFe
 
-![status](https://img.shields.io/badge/status-stable-green.svg) ![pyversions](https://img.shields.io/badge/Python-3.6%2B-blue.svg) [![license](https://img.shields.io/github/license/TadaSoftware/PyNFe)](https://github.com/TadaSoftware/PyNFe/blob/master/LICENCE)
+![status](https://img.shields.io/badge/status-stable-green.svg) ![pyversions](https://img.shields.io/badge/Python-3.6%2B-blue.svg) [![license](https://img.shields.io/github/license/TadaSoftware/PyNFe)](https://github.com/TadaSoftware/PyNFe/blob/master/LICENSE)
 
 
 Biblioteca de interface com os webservices de Nota Fiscal Eletrônica (NF-e) e Nota Fiscal de Consumidor Eletrônica (NFC-e) da SEFAZ e Receita Federal do Brasil e Nota Fiscal de Serviço Eletrônica (NFS-e) para Prefeituras.
@@ -81,6 +81,8 @@ con = ComunicacaoSefaz(uf, certificado, senha, homologacao)
 xml = con.status_servico('nfe')
 print(xml.text)
 ```
+
+  Mais exemplos no [Wiki](https://github.com/TadaSoftware/PyNFe/wiki)
 
 
 Testes
