@@ -18,9 +18,14 @@ except ImportError:
 
 
 # @memoize
-def so_numeros(texto):
-    """Retorna o texto informado mas somente os numeros"""
-    return ''.join(filter(lambda c: ord(c) in range(48, 58), texto))
+def so_numeros(texto) -> str:
+    """
+    Retorna o texto informado mas somente os numeros
+
+    :param texto: String ou Inteiro a ser analisada
+    :return: String somente com números
+    """
+    return ''.join(filter(str.isdigit, str(texto)))
 
 
 # @memoize
@@ -98,7 +103,7 @@ def obter_codigo_por_municipio(municipio, uf):
 def obter_municipio_por_codigo(codigo, uf, normalizado=False):
     # TODO: fazer UF ser opcional
     municipios = carregar_arquivo_municipios(uf)
-    municipio = municipios.get(unicode(codigo))
+    municipio = municipios.get(codigo)
     if municipio is None:
         raise ValueError
     if normalizado:
@@ -138,12 +143,12 @@ def formatar_decimal(dec):
 
 
 def obter_uf_por_codigo(codigo_uf):
-    if isinstance(codigo_uf, basestring) and codigo_uf.isalpha():
+    if isinstance(codigo_uf, str) and codigo_uf.isalpha():
         return codigo_uf
 
     estados = {v: k for k, v in flags.CODIGOS_ESTADOS.items()}
-    return estados[unicode(codigo_uf)]
+    return estados[codigo_uf]
 
 
 def remover_acentos(txt):
-    return normalize('NFKD', txt).encode('ASCII','ignore').decode('ASCII')
+    return normalize('NFKD', txt).encode('ASCII', 'ignore').decode('ASCII')
