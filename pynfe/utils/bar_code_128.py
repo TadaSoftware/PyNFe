@@ -162,6 +162,7 @@ class Code128:
       current_charset = None
       pos=sum=0
       skip=False
+      strCode=""
       for c in range(len(code)):
           if skip:
               skip=False
