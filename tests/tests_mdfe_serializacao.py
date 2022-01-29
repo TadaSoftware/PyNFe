@@ -3,9 +3,6 @@
 
 import unittest
 
-from lxml import etree
-import io
-
 from pynfe.entidades.fonte_dados import _fonte_dados
 from pynfe.entidades.manifesto import (
     Manifesto,
@@ -28,8 +25,14 @@ from pynfe.processamento.serializacao import (
     SerializacaoMDFe,
     SerializacaoQrcodeMDFe
 )
-from pynfe.utils.flags import CODIGO_BRASIL, NAMESPACE_MDFE, NAMESPACE_SIG
-
+from pynfe.processamento.validacao import Validacao
+from pynfe.utils.flags import (
+    NAMESPACE_MDFE,
+    NAMESPACE_SIG,
+    XSD_FOLDER_MDFE,
+    XSD_MDFE,
+    XSD_MDFE_PROCESSADA
+)
 from decimal import Decimal
 import datetime
 
@@ -50,8 +53,15 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         self.ns = {'ns': NAMESPACE_MDFE}
         self.ns_sig = {'ns': NAMESPACE_SIG}
 
-        self.xsd_procMDFe = './pynfe/data/XSDs/MDF-e/procMDFe_v3.00.xsd'
-        self.xsd_mdfe = './pynfe/data/XSDs/MDF-e/mdfe_v3.00.xsd'
+        self.validacao = Validacao()
+        self.xsd_procMDFe = self.validacao.get_xsd(
+            xsd_file=XSD_MDFE_PROCESSADA,
+            xsd_folder=XSD_FOLDER_MDFE
+        )
+        self.xsd_mdfe = self.validacao.get_xsd(
+            xsd_file=XSD_MDFE,
+            xsd_folder=XSD_FOLDER_MDFE
+        )
 
     def preenche_manifesto(self):
 
@@ -269,14 +279,10 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         return SerializacaoQrcodeMDFe().gerar_qrcode(assina)
 
     def validacao_com_xsd_do_xml_gerado_sem_processar(self):
-        xmlschema_doc = etree.parse(self.xsd_mdfe)
-        xmlschema = etree.XMLSchema(xmlschema_doc)
-
-        with io.StringIO() as buffer:
-            buffer.write(etree.tostring(self.xml_assinado).decode("utf-8"))
-            buffer.seek(0)
-            xml = etree.parse(buffer)
-            xmlschema.assertValid(xml)
+        self.validacao.validar_etree(
+            xml_doc=self.xml_assinado,
+            xsd_file=self.xsd_mdfe
+        )
 
     def grupo_ide_test(self):
         cUF = self.xml_assinado.xpath('//ns:ide/ns:cUF', namespaces=self.ns)[0].text
