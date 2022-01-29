@@ -55,7 +55,31 @@ class Produto(Entidade):
     # 0=Valor do item (vProd) não compõe o valor total da NF-e 
     # 1=Valor do item (vProd) compõe o valor total da NF-e (vProd)
     ind_total = int()
-    
+
+    # # Grupo de informações de Combustível
+
+    # Código de produto da ANP
+    cProdANP = str()
+
+    # Descrição do produto conforme ANP
+    descANP = str()
+
+    # Percentual de Gás derivado do Petróleo
+    pGLP = Decimal()
+
+    # Percentual de gás natural nacional
+    pGNn = Decimal()
+
+    # Percentual do gás natural importado
+    pGNi = Decimal()
+
+    # Valor de Partida (apenas para GLP)
+    vPart = Decimal()
+
+    # Sigla da UF de consumo – (OBS: Deve ser a Sigla e não o Código da UF)
+    UFCons = str()
+
+
     # # Impostos
 
     # - IPI
