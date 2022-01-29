@@ -1026,7 +1026,7 @@ class SerializacaoQrcode(object):
         # icms = nfe.xpath('ns:infNFe/ns:total/ns:ICMSTot/ns:vICMS/text()', namespaces=ns)[0]
         digest = nfe.xpath('sig:Signature/sig:SignedInfo/sig:Reference/sig:DigestValue/text()', namespaces=sig)[0].encode()
 
-        lista_dia = re.findall("-\d{2}", str(data))
+        lista_dia = re.findall(r"-\d{2}", str(data))
         dia = str(lista_dia[1])
         dia = dia[1:]
         replacements = {'0': ''}
