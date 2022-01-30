@@ -3,16 +3,21 @@
 
 import unittest
 
-from lxml import etree
-import io
-
 from pynfe.entidades.cliente import Cliente
 from pynfe.entidades.emitente import Emitente
 from pynfe.entidades.notafiscal import NotaFiscal
 from pynfe.entidades.fonte_dados import _fonte_dados
 from pynfe.processamento.serializacao import SerializacaoXML
 from pynfe.processamento.assinatura import AssinaturaA1
-from pynfe.utils.flags import CODIGO_BRASIL, NAMESPACE_NFE, NAMESPACE_SIG
+from pynfe.processamento.validacao import Validacao
+from pynfe.utils.flags import (
+    CODIGO_BRASIL,
+    NAMESPACE_NFE,
+    NAMESPACE_SIG,
+    XSD_FOLDER_NFE,
+    XSD_NFE,
+    XSD_NFE_PROCESSADA,
+)
 from decimal import Decimal
 import datetime
 
@@ -33,8 +38,15 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.ns = {'ns': NAMESPACE_NFE}
         self.ns_sig = {'ns': NAMESPACE_SIG}
 
-        self.xsd_procNFe = './pynfe/data/XSDs/NF-e/procNFe_v4.00.xsd'
-        self.xsd_nfe = './pynfe/data/XSDs/NF-e/nfe_v4.00.xsd'
+        self.validacao = Validacao()
+        self.xsd_procNFe = self.validacao.get_xsd(
+            xsd_file=XSD_NFE_PROCESSADA,
+            xsd_folder=XSD_FOLDER_NFE
+        )
+        self.xsd_nfe = self.validacao.get_xsd(
+            xsd_file=XSD_NFE,
+            xsd_folder=XSD_FOLDER_NFE
+        )
 
     def preenche_emitente(self):
         self.emitente = Emitente(
@@ -524,25 +536,11 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         a1 = AssinaturaA1(self.certificado, self.senha)
         return a1.assinar(self.xml)
 
-    # def test_validacao_com_xsd_do_arquivo_xml_processado(self):
-    #     xmlschema_doc = etree.parse(self.xsd_procNFe)
-    #     xmlschema = etree.XMLSchema(xmlschema_doc)
-
-    #     with io.StringIO() as buffer:
-    #         buffer.write(etree.tostring(self.xml_processado).decode("utf-8"))
-    #         buffer.seek(0)
-    #         xml = etree.parse(buffer)
-    #         xmlschema.assertValid(xml)
-
     def validacao_com_xsd_do_xml_gerado_sem_processar(self):
-        xmlschema_doc = etree.parse(self.xsd_nfe)
-        xmlschema = etree.XMLSchema(xmlschema_doc)
-
-        with io.StringIO() as buffer:
-            buffer.write(etree.tostring(self.xml_assinado).decode("utf-8"))
-            buffer.seek(0)
-            xml = etree.parse(buffer)
-            xmlschema.assertValid(xml)
+        self.validacao.validar_etree(
+            xml_doc=self.xml_assinado,
+            xsd_file=self.xsd_nfe
+        )
 
     def grupo_ide_test(self):
         uf = self.xml_assinado.xpath('//ns:ide/ns:cUF', namespaces=self.ns)[0].text

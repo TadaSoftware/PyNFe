@@ -24,6 +24,17 @@ TIPOS_DOCUMENTO = (
     'CPF',
 )
 
+XSD_FOLDER_NFE = "pynfe/data/XSDs/NF-e"
+XSD_NFE = "nfe_v4.00.xsd"
+XSD_NFE_PROCESSADA = "procNFe_v4.00.xsd"
+XSD_PD_CANCELAR_NFE = "procCancNFe_v1.07.xsd"
+XSD_PD_INUTILIZAR_NFE = "procInutNFe_v1.07.xsd"
+
+XSD_FOLDER_MDFE = "pynfe/data/XSDs/MDF-e"
+XSD_MDFE = "mdfe_v3.00.xsd"
+XSD_MDFE_PROCESSADA = "procMDFe_v3.00.xsd"
+
+
 ICMS_TIPOS_TRIBUTACAO = (
     ('00', 'ICMS 00 - Tributada integralmente'),
     ('10', 'ICMS 10 - Tributada com cobranca do ICMS por substituicao tributaria'),
