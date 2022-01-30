@@ -1,17 +1,54 @@
 ## PyNFe
 
-![status](https://img.shields.io/badge/status-stable-green.svg) ![pyversions](https://img.shields.io/badge/Python-3.6%2B-blue.svg) [![license](https://img.shields.io/github/license/TadaSoftware/PyNFe)](https://github.com/TadaSoftware/PyNFe/blob/master/LICENSE)
+![status](https://img.shields.io/badge/status-stable-green.svg) ![https://github.com/TadaSoftware/PyNFe/actions](https://github.com/TadaSoftware/PyNFe/workflows/PyNFe%20CI/badge.svg?branch=master) ![pyversions](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-blue)
 
 
-Biblioteca de interface com os webservices de Nota Fiscal Eletrônica (NF-e) e Nota Fiscal de Consumidor Eletrônica (NFC-e) da SEFAZ e Receita Federal do Brasil e Nota Fiscal de Serviço Eletrônica (NFS-e) para Prefeituras.
+Biblioteca de interface com os webservices de Nota Fiscal Eletrônica (NF-e) e Nota Fiscal de Consumidor Eletrônica (NFC-e) da SEFAZ e Receita Federal do Brasil, Nota Fiscal de Serviço Eletrônica (NFS-e) para Prefeituras e Manifesto de Documentos Fiscais Eletrônicos (MDF-e).
 
-- A NF-e visa substituir as notas fiscais séries 1 e 1A.
-- A NFC-e visa substituir as notas fiscais modelo 2 e cupom fiscal emitido por ECF.
-- NFS-e padrão Abrasf para autorizadores Ginfes e Betha.
+- **NF-e** visa substituir as notas fiscais séries 1 e 1A.
+- **NFC-e** visa substituir as notas fiscais modelo 2 e cupom fiscal emitido por ECF.
+- **NFS-e** padrão Abrasf para autorizadores Ginfes e Betha.
+- **MDF-e** no padrão nacional deverá ser emitido obrigatoriamente no transporte de mercadoria intermunicipais por empresas prestadoras de serviço de transporte ou pelas demais empresas cujo transporte seja realizado em veículos próprios, arrendados ou transportador autônomo.
 
-* Atualizado para a versão 4.00 NF-e/NFC-e
-* Suporte a Python >=3.6
 
+Características
+------------
+
+* NF-e e NFCe:
+    * Atualizado para a versão 4.00
+    * Modelo de Documento fiscal 55 e 65
+    * Configuração para utilização em ambiente de produção e homologação (testes)
+    * Emissão de notas fiscais normal e em contingência
+    * Consulta Status do Serviço
+    * Consultar Cadastro de contribuiente
+    * Consultar nota fiscal pela chave de acesso
+    * Consultar protocolo
+    * Evento de cancelamento de notas
+    * Evento de carta de correção
+    * Evento de inutilizar de notas
+    * Evento de manifestação do destinatário
+    * Consultar Distribuição DF-e
+
+* NFS-e:
+    * Emissão de nota fiscal de serviço eletrônico
+    * Consultar pelo número da NFS-e
+    * Consultar por RPS (recibo provisório de serviço)
+    * Consultar Lote
+    * Cancelar NFS-e
+
+* MDF-e:
+    * Atualizado para a versão 3.00
+    * Modelo de Documento 58
+    * Emissão de Manifesto
+    * Consultar Status do Serviço
+    * Consultar MDF-e pela chave de acesso
+    * Consultar MDF-es não encerrados
+    * Consultar Recibo
+    * Evento de Cancelamento
+    * Evento de Encerramento de viagem
+    * Evento de Inclusão de Condutor
+    * Evento de Inclusão de DF-e
+    * Evento de Pagamento DF-e
 
 Dependências
 ------------
@@ -32,8 +69,9 @@ Dependências
 Referências
 -----------
 
-- Site oficial da Nota Fiscal Eletrônica
-  - http://www.nfe.fazenda.gov.br/
+- Sites oficiais:
+  - NFe: http://www.nfe.fazenda.gov.br/
+  - MDF-e: https://dfe-portal.svrs.rs.gov.br/mdfe
 
 - lxml
   - http://lxml.de/
@@ -44,13 +82,15 @@ Referências
   - https://pypi.python.org/pypi/requests
 
 - Schemas para validação dos arquivos
-  - http://www.nfe.fazenda.gov.br/portal/listaConteudo.aspx?tipoConteudo=/fwLvLUSmU8=
+  - NFe: http://www.nfe.fazenda.gov.br/portal/listaConteudo.aspx?tipoConteudo=BMPFMBoln3w=
+  - MDFe: https://dfe-portal.svrs.rs.gov.br/Mdfe/Documentos
 
 - Validador de XML
-  - https://www.sefaz.rs.gov.br/NFE/NFE-VAL.aspx
+  - NFe: https://www.sefaz.rs.gov.br/NFE/NFE-VAL.aspx
+  - MDFe: https://dfe-portal.svrs.rs.gov.br/MDFE/ValidadorXML
 
 - Validador de assinaturas
-  - https://www.receita.fazenda.gov.br/Aplicacoes/SSL/ATBHE/Assinadoc/ValidadorAssinaturas.app/valida.aspx
+  - https://servicos.receita.fazenda.gov.br/servicos/assinadoc/ValidadorAssinaturas.app/valida.aspx
 
 Instalação
 -----------
