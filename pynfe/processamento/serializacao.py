@@ -997,6 +997,98 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
+    def serializar_evento_mdfe(self, evento, tag_raiz='eventoMDFe', retorna_string=False):
+        tz = datetime.now().astimezone().strftime('%z')
+        tz = "{}:{}".format(tz[:-2], tz[-2:])
+        raiz = etree.Element(tag_raiz, versao=VERSAO_MDFE, xmlns=NAMESPACE_MDFE)
+        e = etree.SubElement(raiz, 'infEvento', Id=evento.identificador)
+        etree.SubElement(e, 'cOrgao').text = CODIGOS_ESTADOS[evento.uf.upper()]
+        etree.SubElement(e, 'tpAmb').text = str(self._ambiente)
+        if len(so_numeros(evento.cnpj)) == 11:
+            etree.SubElement(e, 'CPF').text = evento.cnpj
+        else:
+            etree.SubElement(e, 'CNPJ').text = evento.cnpj
+        etree.SubElement(e, 'chMDFe').text = evento.chave
+        etree.SubElement(e, 'dhEvento').text = evento.data_emissao.strftime('%Y-%m-%dT%H:%M:%S') + tz
+        etree.SubElement(e, 'tpEvento').text = evento.tp_evento
+        etree.SubElement(e, 'nSeqEvento').text = str(evento.n_seq_evento)
+        det = etree.SubElement(e, 'detEvento', versaoEvento=VERSAO_MDFE)
+        if evento.descricao == 'Cancelamento':
+            cancelamento = etree.SubElement(det, 'evCancMDFe')
+            etree.SubElement(cancelamento, 'descEvento').text = evento.descricao
+            etree.SubElement(cancelamento, 'nProt').text = evento.protocolo
+            etree.SubElement(cancelamento, 'xJust').text = evento.justificativa
+        if evento.descricao == 'Encerramento':
+            encerramento = etree.SubElement(det, 'evEncMDFe')
+            etree.SubElement(encerramento, 'descEvento').text = evento.descricao
+            etree.SubElement(encerramento, 'nProt').text = evento.protocolo
+            etree.SubElement(encerramento, 'dtEnc').text = evento.dtenc.strftime('%Y-%m-%d')
+            etree.SubElement(encerramento, 'cUF').text = str(evento.cuf)
+            etree.SubElement(encerramento, 'cMun').text = str(evento.cmun)
+        elif evento.descricao == 'Inclusão Condutor':
+            inclusao = etree.SubElement(det, 'evIncCondutorMDFe')
+            etree.SubElement(inclusao, 'descEvento').text = evento.descricao
+            condutor = etree.SubElement(inclusao, 'condutor')
+            etree.SubElement(condutor, 'xNome').text = evento.nome_motorista
+            etree.SubElement(condutor, 'CPF').text = evento.cpf_motorista
+        elif evento.descricao == 'Inclusao DF-e':
+            inclusao = etree.SubElement(det, 'evIncDFeMDFe')
+            etree.SubElement(inclusao, 'descEvento').text = evento.descricao
+            etree.SubElement(inclusao, 'nProt').text = evento.protocolo
+            etree.SubElement(inclusao, 'cMunCarrega').text = str(evento.cmun_carrega)
+            etree.SubElement(inclusao, 'xMunCarrega').text = evento.xmun_carrega
+            infDoc = etree.SubElement(inclusao, 'infDoc')
+            etree.SubElement(infDoc, 'cMunDescarga').text = str(evento.cmun_descarga)
+            etree.SubElement(infDoc, 'xMunDescarga').text = evento.xmun_descarga
+            etree.SubElement(infDoc, 'chNFe').text = evento.chave_nfe
+        elif evento.descricao == 'Pagamento Operacao MDF-e':
+            pagamento = etree.SubElement(det, 'evPagtoOperMDFe')
+            etree.SubElement(pagamento, 'descEvento').text = evento.descricao
+            etree.SubElement(pagamento, 'nProt').text = evento.protocolo
+
+            # Viagens
+            infViagens = etree.SubElement(pagamento, 'infViagens')
+            etree.SubElement(infViagens, 'qtdViagens').text = evento.qtd_viagens.zfill(5)
+            etree.SubElement(infViagens, 'nroViagem').text = evento.nro_viagens.zfill(5)
+
+            # Informações do pagamento
+            infPag = etree.SubElement(pagamento, 'infPag')
+            etree.SubElement(infPag, 'xNome').text = evento.nome_contratante
+            if len(evento.cpfcnpj_contratante) == 11:
+                etree.SubElement(infPag, 'CPF').text = evento.cpfcnpj_contratante
+            else:
+                etree.SubElement(infPag, 'CNPJ').text = evento.cpfcnpj_contratante
+
+            # Componentes de Pagamento do Frete
+            Comp = etree.SubElement(infPag, 'Comp')
+            etree.SubElement(Comp, 'tpComp').text = evento.tpComp.zfill(2)
+            etree.SubElement(Comp, 'vComp').text = '{:.2f}'.format(evento.vComp)
+
+            # Continuação das Informações do pagamento
+            etree.SubElement(infPag, 'vContrato').text = '{:.2f}'.format(evento.vContrato)
+            etree.SubElement(infPag, 'indPag').text = evento.indPag
+
+            # Se indPag == 1 (0=A vista e 1=A prazo)
+            if evento.indPag != '':
+                if int(evento.indPag) == 1:
+                    infPrazo = etree.SubElement(infPag, 'infPrazo')
+                    etree.SubElement(infPrazo, 'nParcela').text = evento.nParcela.zfill(3)
+                    etree.SubElement(infPrazo, 'dVenc').text = evento.dVenc.strftime('%Y-%m-%d')
+                    etree.SubElement(infPrazo, 'vParcela').text = '{:.2f}'.format(evento.vParcela)
+
+            # Informações bancárias
+            infBanc = etree.SubElement(infPag, 'infBanc')
+            if evento.CNPJIPEF != '':
+                etree.SubElement(infBanc, 'CNPJIPEF').text = evento.CNPJIPEF.zfill(14)
+            else:
+                etree.SubElement(infBanc, 'codBanco').text = evento.codBanco
+                etree.SubElement(infBanc, 'codAgencia').text = evento.codAgencia
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
 
 class SerializacaoQrcode(object):
     """ Classe que gera e serializa o qrcode de NFC-e no xml """
