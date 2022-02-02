@@ -643,7 +643,7 @@ class SerializacaoXML(Serializacao):
                 if produto_servico.pis_modalidade != '99' and produto_servico.pis_modalidade != '49':
                     etree.SubElement(pis_item, 'qBCProd').text = '{:.4f}'.format(produto_servico.quantidade_comercial)
                     etree.SubElement(pis_item, 'vAliqProd').text = '{:.4f}'.format(produto_servico.pis_aliquota_percentual or 0)
-                etree.SubElement(pis_item, 'vPIS').text = '{:.2f}'.format(produto_servico.pis_valor_base_calculo or 0)
+                etree.SubElement(pis_item, 'vPIS').text = '{:.2f}'.format(produto_servico.pis_valor or 0)
 
                 ## PISST
                 # pis_item = etree.SubElement(pis, 'PISST')

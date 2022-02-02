@@ -137,8 +137,14 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             icms_modalidade='00',
             icms_origem=0,
             icms_csosn='400',
-            pis_modalidade='07',
-            cofins_modalidade='07',
+            pis_modalidade='51',
+            cofins_modalidade='51',
+            pis_valor_base_calculo=Decimal('117.00'),
+            pis_aliquota_percentual=Decimal('0.65'),
+            pis_valor=Decimal('0.76'),
+            cofins_valor_base_calculo=Decimal('117.00'),
+            cofins_aliquota_percentual=Decimal('3.00'),
+            cofins_valor=Decimal('3.51'),
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
@@ -700,7 +706,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
     def validacao_com_xsd_do_xml_gerado_sem_processar(self):
         self.validacao.validar_etree(
             xml_doc=self.xml_assinado,
-            xsd_file=self.xsd_nfe
+            xsd_file=self.xsd_nfe,
+            use_assert=True
         )
 
     def grupo_ide_test(self):
@@ -843,6 +850,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(nItemPed, '1')
 
         # Impostos
+        # ICMS
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS00/ns:orig', namespaces=self.ns)[0].text
         CST = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS00/ns:CST', namespaces=self.ns)[0].text
         modBC = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS00/ns:modBC', namespaces=self.ns)[0].text
@@ -864,6 +872,14 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         # self.assertEqual(vFCP, '0.00')
         self.assertEqual(pFCP, None)
         self.assertEqual(vFCP, None)
+
+        # PIS
+        CST_PIS = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:PIS/ns:PISOutr/ns:CST', namespaces=self.ns)[0].text
+        self.assertEqual(CST_PIS, '51')
+
+        # # COFINS
+        CST_COFINS = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:COFINS/ns:COFINSOutr/ns:CST', namespaces=self.ns)[0].text
+        self.assertEqual(CST_COFINS, '51')
 
         # Totalizadores
         vBC = self.xml_assinado.xpath('//ns:total/ns:ICMSTot/ns:vBC', namespaces=self.ns)[0].text
@@ -902,8 +918,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(vII, '0.00')
         self.assertEqual(vIPI, '0.00')
         self.assertEqual(vIPIDevol, '0.00')
-        self.assertEqual(vPIS, '0.00')
-        self.assertEqual(vCOFINS, '0.00')
+        self.assertEqual(vPIS, '0.76')
+        self.assertEqual(vCOFINS, '3.51')
         self.assertEqual(vOutro, '0.00')
         self.assertEqual(vNF, '117.00')
         self.assertEqual(vTotTrib, '21.06')

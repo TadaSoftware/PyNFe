@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from os import path
+import io
 
 try:
     from lxml import etree
@@ -57,5 +58,11 @@ class Validacao(object):
             xsd_doc = etree.parse(xsd_file)
             xsd_schema = etree.XMLSchema(xsd_doc)
             self.MEM_CACHE[xsd_file] = xsd_schema
+
+            with io.StringIO() as buffer:
+                buffer.write(etree.tostring(xml_doc).decode("utf-8"))
+                buffer.seek(0)
+                xml_doc = etree.parse(buffer)
+
         return use_assert and xsd_schema.assertValid(xml_doc) \
                or xsd_schema.validate(xml_doc)
