@@ -207,7 +207,7 @@ class ComunicacaoSefaz(Comunicacao):
         :return:
         """
         # UF que utilizam a SVRS - Sefaz Virtual do RS: Para serviço de Consulta Cadastro: AC, RN, PB, SC 
-        lista_svrs = ['AC', 'RN', 'PB', 'SC', 'PA']
+        lista_svrs = ['AC', 'RN', 'PB', 'SC', 'PA', 'CE']
 
         # RS implementa um método diferente na consulta de cadastro
         # usa o mesmo url para produção e homologação
