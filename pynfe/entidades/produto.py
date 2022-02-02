@@ -122,12 +122,14 @@ class Produto(Entidade):
     pis_valor_base_calculo = str()
     pis_aliquota_percentual = str()
     pis_valor = str()
+    pis_aliquota_reais = str()
 
     # # COFINS
     cofins_modalidade = str()
     cofins_valor_base_calculo = str()
     cofins_aliquota_percentual = str()
     cofins_valor = str()
+    cofins_aliquota_reais = str()
 
     # # Fundo de Combate a Pobreza
     fcp_base_calculo = Decimal()
