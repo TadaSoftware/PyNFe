@@ -1342,16 +1342,14 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS60/ns:orig', namespaces=self.ns)[0].text
         CST = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS60/ns:CST', namespaces=self.ns)[0].text
         vBCSTRet = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS60/ns:vBCSTRet', namespaces=self.ns)[0].text
+        pST = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS60/ns:pST', namespaces=self.ns)[0].text
         vICMSSTRet = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS60/ns:vICMSSTRet', namespaces=self.ns)[0].text
-        vBCSTDest = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS60/ns:vBCSTDest', namespaces=self.ns)[0].text
-        vICMSSTDest = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS60/ns:vICMSSTDest', namespaces=self.ns)[0].text
 
         self.assertEqual(orig, '0')
-        self.assertEqual(CST, '41')
+        self.assertEqual(CST, '60')
         self.assertEqual(vBCSTRet, '0')
+        self.assertEqual(pST, '0.0000')
         self.assertEqual(vICMSSTRet, '0')
-        self.assertEqual(vBCSTDest, '0')
-        self.assertEqual(vICMSSTDest, '0')
 
         # Totalizadores
         vBC = self.xml_assinado.xpath('//ns:total/ns:ICMSTot/ns:vBC', namespaces=self.ns)[0].text
