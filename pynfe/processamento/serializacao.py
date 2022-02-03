@@ -447,11 +447,15 @@ class SerializacaoXML(Serializacao):
         elif produto_servico.icms_modalidade in ['ST', '60']:
             icms_item = etree.SubElement(icms, 'ICMS'+produto_servico.icms_modalidade)
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
-            etree.SubElement(icms_item, 'CST').text = '41'  # Nao tributado
-            etree.SubElement(icms_item, 'vBCSTRet').text = '0'  # Informar o valor da BC do ICMS ST retido na UF remetente
+            etree.SubElement(icms_item, 'CST').text = '60'
+            etree.SubElement(icms_item, 'vBCSTRet').text = '0'
+            etree.SubElement(icms_item, 'pST').text = '{:.4f}'.format(0)
             etree.SubElement(icms_item, 'vICMSSTRet').text = '0'  # Informar o valor do ICMS ST retido na UF remetente
-            etree.SubElement(icms_item, 'vBCSTDest').text = '0'  # Informar o valor da BC do ICMS ST da UF destino
-            etree.SubElement(icms_item, 'vICMSSTDest').text = '0'  # Informar o valor do ICMS ST da UF destino
+
+            if produto_servico.fcp_st_valor:
+                etree.SubElement(icms_item, 'vBCFCPSTRet').text = '{:.2f}'.format(produto_servico.fcp_st_base_calculo or 0)
+                etree.SubElement(icms_item, 'pFCPSTRet').text = '{:.2f}'.format(produto_servico.fcp_st_percentual or 0)
+                etree.SubElement(icms_item, 'vFCPSTRet').text = '{:.2f}'.format(produto_servico.fcp_st_valor or 0)
 
         # 70=Com redução da BC e cobrança do ICMS por substituição tributária
         elif produto_servico.icms_modalidade == '70':
