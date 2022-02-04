@@ -142,6 +142,10 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
+            nfci='123456789012345',
+            informacoes_adicionais='Informações adicionais',
+            ipi_valor_ipi_dev=Decimal('10.00'),
+            pdevol=Decimal('1.00'),
         )
         self.notafiscal.adicionar_nota_fiscal_referenciada(
             chave_acesso='12345678901234567890123456789012345678900001'
@@ -213,6 +217,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
+            nfci='123456789012345',
+            informacoes_adicionais='Informações adicionais',
             icms_desonerado=Decimal('10.00'),
             icms_motivo_desoneracao='90'
         )
@@ -287,6 +293,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
+            nfci='123456789012345',
+            informacoes_adicionais='Informações adicionais',
             icms_desonerado=Decimal('10.00'),
             icms_motivo_desoneracao='90'
         )
@@ -361,6 +369,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
+            nfci='123456789012345',
+            informacoes_adicionais='Informações adicionais',
             icms_desonerado=Decimal('10.00'),
             icms_motivo_desoneracao='90'
         )
@@ -435,6 +445,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
+            nfci='123456789012345',
+            informacoes_adicionais='Informações adicionais',
         )
 
         self.notafiscal.adicionar_nota_fiscal_referenciada(
@@ -507,6 +519,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
+            nfci='123456789012345',
+            informacoes_adicionais='Informações adicionais',
         )
 
         self.notafiscal.adicionar_nota_fiscal_referenciada(
@@ -579,6 +593,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
+            nfci='123456789012345',
+            informacoes_adicionais='Informações adicionais',
             icms_modalidade_determinacao_bc=0,
             icms_valor_base_calculo=Decimal('18.67'),
             icms_percentual_reducao_bc=Decimal('10.00'),
@@ -668,6 +684,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
+            nfci='123456789012345',
+            informacoes_adicionais='Informações adicionais',
             icms_modalidade_determinacao_bc=0,
             icms_valor_base_calculo=Decimal('117.00'),
             icms_percentual_reducao_bc=Decimal('0.00'),
@@ -822,6 +840,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         indTot = self.xml_assinado.xpath('//ns:det/ns:prod/ns:indTot', namespaces=self.ns)[0].text
         xPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:xPed', namespaces=self.ns)[0].text
         nItemPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nItemPed', namespaces=self.ns)[0].text
+        nFCI = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nFCI', namespaces=self.ns)[0].text
 
         self.assertEqual(cProd, '000328')
         self.assertEqual(cEAN, '1234567890121')
@@ -841,6 +860,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
+        self.assertEqual(nFCI, '123456789012345')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS00/ns:orig', namespaces=self.ns)[0].text
@@ -864,6 +884,16 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         # self.assertEqual(vFCP, '0.00')
         self.assertEqual(pFCP, None)
         self.assertEqual(vFCP, None)
+
+        # Impostos - IPI Devolução
+        pDevol = self.xml_assinado.xpath('//ns:det/ns:impostoDevol/ns:pDevol', namespaces=self.ns)[0].text
+        vIPIDevol = self.xml_assinado.xpath('//ns:det/ns:impostoDevol/ns:IPI/ns:vIPIDevol', namespaces=self.ns)[0].text
+        self.assertEqual(pDevol, '1.00')
+        self.assertEqual(vIPIDevol, '10.00')
+
+        # Informações Adicionais do produto
+        infAdProd = self.xml_assinado.xpath('//ns:det/ns:infAdProd', namespaces=self.ns)[0].text
+        self.assertEqual(infAdProd, 'Informacoes adicionais')
 
         # Totalizadores
         vBC = self.xml_assinado.xpath('//ns:total/ns:ICMSTot/ns:vBC', namespaces=self.ns)[0].text
@@ -901,7 +931,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(vDesc, '0.00')
         self.assertEqual(vII, '0.00')
         self.assertEqual(vIPI, '0.00')
-        self.assertEqual(vIPIDevol, '0.00')
+        self.assertEqual(vIPIDevol, '10.00')
         self.assertEqual(vPIS, '0.00')
         self.assertEqual(vCOFINS, '0.00')
         self.assertEqual(vOutro, '0.00')
@@ -930,6 +960,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         indTot = self.xml_assinado.xpath('//ns:det/ns:prod/ns:indTot', namespaces=self.ns)[0].text
         xPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:xPed', namespaces=self.ns)[0].text
         nItemPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nItemPed', namespaces=self.ns)[0].text
+        nFCI = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nFCI', namespaces=self.ns)[0].text
 
         self.assertEqual(cProd, '000328')
         self.assertEqual(cEAN, '1234567890121')
@@ -949,6 +980,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
+        self.assertEqual(nFCI, '123456789012345')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS40/ns:orig', namespaces=self.ns)[0].text
@@ -960,6 +992,10 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(CST, '40')
         self.assertEqual(vICMSDeson, '10.00')
         self.assertEqual(motDesICMS, '90')
+
+        # Informações Adicionais do produto
+        infAdProd = self.xml_assinado.xpath('//ns:det/ns:infAdProd', namespaces=self.ns)[0].text
+        self.assertEqual(infAdProd, 'Informacoes adicionais')
 
         # Totalizadores
         vBC = self.xml_assinado.xpath('//ns:total/ns:ICMSTot/ns:vBC', namespaces=self.ns)[0].text
@@ -1026,6 +1062,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         indTot = self.xml_assinado.xpath('//ns:det/ns:prod/ns:indTot', namespaces=self.ns)[0].text
         xPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:xPed', namespaces=self.ns)[0].text
         nItemPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nItemPed', namespaces=self.ns)[0].text
+        nFCI = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nFCI', namespaces=self.ns)[0].text
 
         self.assertEqual(cProd, '000328')
         self.assertEqual(cEAN, '1234567890121')
@@ -1045,6 +1082,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
+        self.assertEqual(nFCI, '123456789012345')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS40/ns:orig', namespaces=self.ns)[0].text
@@ -1056,6 +1094,10 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(CST, '41')
         self.assertEqual(vICMSDeson, '10.00')
         self.assertEqual(motDesICMS, '90')
+
+        # Informações Adicionais do produto
+        infAdProd = self.xml_assinado.xpath('//ns:det/ns:infAdProd', namespaces=self.ns)[0].text
+        self.assertEqual(infAdProd, 'Informacoes adicionais')
 
         # Totalizadores
         vBC = self.xml_assinado.xpath('//ns:total/ns:ICMSTot/ns:vBC', namespaces=self.ns)[0].text
@@ -1122,6 +1164,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         indTot = self.xml_assinado.xpath('//ns:det/ns:prod/ns:indTot', namespaces=self.ns)[0].text
         xPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:xPed', namespaces=self.ns)[0].text
         nItemPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nItemPed', namespaces=self.ns)[0].text
+        nFCI = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nFCI', namespaces=self.ns)[0].text
 
         self.assertEqual(cProd, '000328')
         self.assertEqual(cEAN, '1234567890121')
@@ -1141,6 +1184,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
+        self.assertEqual(nFCI, '123456789012345')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS40/ns:orig', namespaces=self.ns)[0].text
@@ -1152,6 +1196,10 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(CST, '50')
         self.assertEqual(vICMSDeson, '10.00')
         self.assertEqual(motDesICMS, '90')
+
+        # Informações Adicionais do produto
+        infAdProd = self.xml_assinado.xpath('//ns:det/ns:infAdProd', namespaces=self.ns)[0].text
+        self.assertEqual(infAdProd, 'Informacoes adicionais')
 
         # Totalizadores
         vBC = self.xml_assinado.xpath('//ns:total/ns:ICMSTot/ns:vBC', namespaces=self.ns)[0].text
@@ -1218,6 +1266,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         indTot = self.xml_assinado.xpath('//ns:det/ns:prod/ns:indTot', namespaces=self.ns)[0].text
         xPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:xPed', namespaces=self.ns)[0].text
         nItemPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nItemPed', namespaces=self.ns)[0].text
+        nFCI = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nFCI', namespaces=self.ns)[0].text
 
         self.assertEqual(cProd, '000328')
         self.assertEqual(cEAN, '1234567890121')
@@ -1237,6 +1286,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
+        self.assertEqual(nFCI, '123456789012345')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS51/ns:orig', namespaces=self.ns)[0].text
@@ -1252,6 +1302,10 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         # self.assertEqual(vBCFCP, '0.00')
         # self.assertEqual(pFCP, '0.00')
         # self.assertEqual(vFCP, '0.00')
+
+        # Informações Adicionais do produto
+        infAdProd = self.xml_assinado.xpath('//ns:det/ns:infAdProd', namespaces=self.ns)[0].text
+        self.assertEqual(infAdProd, 'Informacoes adicionais')
 
         # Totalizadores
         vBC = self.xml_assinado.xpath('//ns:total/ns:ICMSTot/ns:vBC', namespaces=self.ns)[0].text
@@ -1318,6 +1372,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         indTot = self.xml_assinado.xpath('//ns:det/ns:prod/ns:indTot', namespaces=self.ns)[0].text
         xPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:xPed', namespaces=self.ns)[0].text
         nItemPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nItemPed', namespaces=self.ns)[0].text
+        nFCI = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nFCI', namespaces=self.ns)[0].text
 
         self.assertEqual(cProd, '000328')
         self.assertEqual(cEAN, '1234567890121')
@@ -1337,6 +1392,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
+        self.assertEqual(nFCI, '123456789012345')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS60/ns:orig', namespaces=self.ns)[0].text
@@ -1350,6 +1406,10 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(vBCSTRet, '0')
         self.assertEqual(pST, '0.0000')
         self.assertEqual(vICMSSTRet, '0')
+
+        # Informações Adicionais do produto
+        infAdProd = self.xml_assinado.xpath('//ns:det/ns:infAdProd', namespaces=self.ns)[0].text
+        self.assertEqual(infAdProd, 'Informacoes adicionais')
 
         # Totalizadores
         vBC = self.xml_assinado.xpath('//ns:total/ns:ICMSTot/ns:vBC', namespaces=self.ns)[0].text
@@ -1416,6 +1476,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         indTot = self.xml_assinado.xpath('//ns:det/ns:prod/ns:indTot', namespaces=self.ns)[0].text
         xPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:xPed', namespaces=self.ns)[0].text
         nItemPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nItemPed', namespaces=self.ns)[0].text
+        nFCI = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nFCI', namespaces=self.ns)[0].text
 
         self.assertEqual(cProd, '000328')
         self.assertEqual(cEAN, '1234567890121')
@@ -1435,6 +1496,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
+        self.assertEqual(nFCI, '123456789012345')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS70/ns:orig', namespaces=self.ns)[0].text
@@ -1479,6 +1541,11 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(pFCPST, '2.00')
         self.assertEqual(vFCPST, '0.02')
 
+        # Informações Adicionais do produto
+        infAdProd = self.xml_assinado.xpath('//ns:det/ns:infAdProd', namespaces=self.ns)[0].text
+        self.assertEqual(infAdProd, 'Informacoes adicionais')
+
+        # Totais
         vBC = self.xml_assinado.xpath('//ns:total/ns:ICMSTot/ns:vBC', namespaces=self.ns)[0].text
         vICMS = self.xml_assinado.xpath('//ns:total/ns:ICMSTot/ns:vICMS', namespaces=self.ns)[0].text
         vICMSDeson = self.xml_assinado.xpath('//ns:total/ns:ICMSTot/ns:vICMSDeson', namespaces=self.ns)[0].text
@@ -1543,6 +1610,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         indTot = self.xml_assinado.xpath('//ns:det/ns:prod/ns:indTot', namespaces=self.ns)[0].text
         xPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:xPed', namespaces=self.ns)[0].text
         nItemPed = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nItemPed', namespaces=self.ns)[0].text
+        nFCI = self.xml_assinado.xpath('//ns:det/ns:prod/ns:nFCI', namespaces=self.ns)[0].text
 
         self.assertEqual(cProd, '000328')
         self.assertEqual(cEAN, '1234567890121')
@@ -1562,6 +1630,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
+        self.assertEqual(nFCI, '123456789012345')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS90/ns:orig', namespaces=self.ns)[0].text
@@ -1587,6 +1656,11 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         # self.assertEqual(pFCP, '0.00')
         # self.assertEqual(vFCP, '0.00')
 
+        # Informações Adicionais do produto
+        infAdProd = self.xml_assinado.xpath('//ns:det/ns:infAdProd', namespaces=self.ns)[0].text
+        self.assertEqual(infAdProd, 'Informacoes adicionais')
+
+        # Totais
         vBC = self.xml_assinado.xpath('//ns:total/ns:ICMSTot/ns:vBC', namespaces=self.ns)[0].text
         vICMS = self.xml_assinado.xpath('//ns:total/ns:ICMSTot/ns:vICMS', namespaces=self.ns)[0].text
         vICMSDeson = self.xml_assinado.xpath('//ns:total/ns:ICMSTot/ns:vICMSDeson', namespaces=self.ns)[0].text

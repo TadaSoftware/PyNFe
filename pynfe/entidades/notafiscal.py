@@ -554,6 +554,9 @@ class NotaFiscalProduto(Entidade):
     #  - Genero
     genero = str()
 
+    # Número de controle da FCI (nFCI) - Ficha de Conteúdo de Importação.
+    nfci = str()
+
     #  - Unidade Comercial (obrigatorio)
     unidade_comercial = str()
 
@@ -741,6 +744,9 @@ class NotaFiscalProduto(Entidade):
 
     #   - Valor do IPI
     ipi_valor_ipi = Decimal()
+
+    # - Percentual Devolucao Produto
+    pdevol = Decimal()
 
     #   - Valor do IPI Devolvido
     ipi_valor_ipi_dev = Decimal()
