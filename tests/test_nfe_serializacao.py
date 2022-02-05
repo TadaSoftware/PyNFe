@@ -148,7 +148,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
-            nfci='123456789012345',
+            nfci='12345678-AAAA-FFFF-1234-000000000000',
             informacoes_adicionais='Informações adicionais',
             ipi_valor_ipi_dev=Decimal('10.00'),
             pdevol=Decimal('1.00'),
@@ -223,7 +223,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
-            nfci='123456789012345',
+            nfci='12345678-AAAA-FFFF-1234-000000000000',
             informacoes_adicionais='Informações adicionais',
             icms_desonerado=Decimal('10.00'),
             icms_motivo_desoneracao='90'
@@ -299,7 +299,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
-            nfci='123456789012345',
+            nfci='12345678-AAAA-FFFF-1234-000000000000',
             informacoes_adicionais='Informações adicionais',
             icms_desonerado=Decimal('10.00'),
             icms_motivo_desoneracao='90'
@@ -375,7 +375,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
-            nfci='123456789012345',
+            nfci='12345678-AAAA-FFFF-1234-000000000000',
             informacoes_adicionais='Informações adicionais',
             icms_desonerado=Decimal('10.00'),
             icms_motivo_desoneracao='90'
@@ -451,7 +451,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
-            nfci='123456789012345',
+            nfci='12345678-AAAA-FFFF-1234-000000000000',
             informacoes_adicionais='Informações adicionais',
         )
 
@@ -525,7 +525,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
-            nfci='123456789012345',
+            nfci='12345678-AAAA-FFFF-1234-000000000000',
             informacoes_adicionais='Informações adicionais',
         )
 
@@ -599,7 +599,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
-            nfci='123456789012345',
+            nfci='12345678-AAAA-FFFF-1234-000000000000',
             informacoes_adicionais='Informações adicionais',
             icms_modalidade_determinacao_bc=0,
             icms_valor_base_calculo=Decimal('18.67'),
@@ -690,7 +690,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_tributos_aprox='21.06',
             numero_pedido='12345',
             numero_item='1',
-            nfci='123456789012345',
+            nfci='12345678-AAAA-FFFF-1234-000000000000',
             informacoes_adicionais='Informações adicionais',
             icms_modalidade_determinacao_bc=0,
             icms_valor_base_calculo=Decimal('117.00'),
@@ -867,7 +867,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
-        self.assertEqual(nFCI, '123456789012345')
+        self.assertEqual(nFCI, '12345678-AAAA-FFFF-1234-000000000000')
 
         # Impostos
         # ICMS
@@ -996,7 +996,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
-        self.assertEqual(nFCI, '123456789012345')
+        self.assertEqual(nFCI, '12345678-AAAA-FFFF-1234-000000000000')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS40/ns:orig', namespaces=self.ns)[0].text
@@ -1098,7 +1098,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
-        self.assertEqual(nFCI, '123456789012345')
+        self.assertEqual(nFCI, '12345678-AAAA-FFFF-1234-000000000000')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS40/ns:orig', namespaces=self.ns)[0].text
@@ -1200,7 +1200,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
-        self.assertEqual(nFCI, '123456789012345')
+        self.assertEqual(nFCI, '12345678-AAAA-FFFF-1234-000000000000')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS40/ns:orig', namespaces=self.ns)[0].text
@@ -1302,7 +1302,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
-        self.assertEqual(nFCI, '123456789012345')
+        self.assertEqual(nFCI, '12345678-AAAA-FFFF-1234-000000000000')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS51/ns:orig', namespaces=self.ns)[0].text
@@ -1408,7 +1408,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
-        self.assertEqual(nFCI, '123456789012345')
+        self.assertEqual(nFCI, '12345678-AAAA-FFFF-1234-000000000000')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS60/ns:orig', namespaces=self.ns)[0].text
@@ -1512,7 +1512,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
-        self.assertEqual(nFCI, '123456789012345')
+        self.assertEqual(nFCI, '12345678-AAAA-FFFF-1234-000000000000')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS70/ns:orig', namespaces=self.ns)[0].text
@@ -1646,7 +1646,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(indTot, '1')
         self.assertEqual(xPed, '12345')
         self.assertEqual(nItemPed, '1')
-        self.assertEqual(nFCI, '123456789012345')
+        self.assertEqual(nFCI, '12345678-AAAA-FFFF-1234-000000000000')
 
         # Impostos
         orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS90/ns:orig', namespaces=self.ns)[0].text
