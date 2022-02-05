@@ -75,6 +75,31 @@ ICMS_MODALIDADES = (
     (3, 'Valor da Operacao'),
 )
 
+ICMS_ST_MODALIDADES = (
+    (0, 'Preço tabelado ou máximo sugerido'),
+    (1, 'Lista Negativa (valor)'),
+    (2, 'Lista Positiva (valor)'),
+    (3, 'Lista Neutra (valor)'),
+    (4, 'Margem Valor Agregado (%)'),
+    (5, 'Pauta (valor)'),
+    (6, 'Valor da Operação'),
+)
+
+ICMS_MOTIVO_DESONERACAO = (
+    (1, 'Táxi'),
+    (3, 'Produtor Agropecuário'),
+    (4, 'Frotista/Locadora'),
+    (5, 'Diplomático/Consular'),
+    (6, 'Utilitários e Motocicletas da Amazônia Ocidental e Áreas de Livre Comércio (Resolução 714/88 e 790/94 – CONTRAN e suas alterações)'),
+    (7, 'SUFRAMA'),
+    (8, 'Venda a órgão Público'),
+    (9, 'Outros'),
+    (10, 'Deficiente Condutor'),
+    (11, 'Deficiente não condutor'),
+    (16, 'Olimpíadas Rio 2016'),
+    (90, 'Solicitado pelo Fisco'),
+)
+
 NF_STATUS = (
     'Em Digitacao',
     'Validada',
@@ -131,6 +156,7 @@ NF_FINALIDADES_EMISSAO = (
     (1, 'NF-e normal'),
     (2, 'NF-e complementar'),
     (3, 'NF-e de ajuste'),
+    (4, 'NF-e de Devolução'),
 )
 
 NF_REFERENCIADA_TIPOS = (

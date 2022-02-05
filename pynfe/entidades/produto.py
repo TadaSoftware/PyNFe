@@ -122,12 +122,14 @@ class Produto(Entidade):
     pis_valor_base_calculo = str()
     pis_aliquota_percentual = str()
     pis_valor = str()
+    pis_aliquota_reais = str()
 
     # # COFINS
     cofins_modalidade = str()
     cofins_valor_base_calculo = str()
     cofins_aliquota_percentual = str()
     cofins_valor = str()
+    cofins_aliquota_reais = str()
 
     # # Fundo de Combate a Pobreza
     fcp_base_calculo = Decimal()
@@ -167,7 +169,7 @@ class ProdutoICMS(Entidade):
     #  - Percentual de reducao da Base de Calculo
     percentual_reducao = Decimal()
 
-    #  - Modalidade de determinacao da Base de Calculo do ICMS ST (seleciona de lista) - ICMS_MODALIDADES
+    #  - Modalidade de determinacao da Base de Calculo do ICMS ST (seleciona de lista) - ICMS_ST_MODALIDADES
     st_modalidade = str()
 
     #  - Aliquota ICMS ST
