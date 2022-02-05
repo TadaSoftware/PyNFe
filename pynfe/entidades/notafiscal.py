@@ -654,19 +654,12 @@ class NotaFiscalProduto(Entidade):
     #    - ICMS Desonerado
     icms_desonerado = Decimal()
 
-    #    - Motivo da desoneração do ICMS
-    # TODO: Criar opções possíveis em flags.py
+    #    - Motivo da desoneração do ICMS (seleciona de lista) - ICMS_MOTIVO_DESONERACAO
     icms_motivo_desoneracao = int()
 
     #   - ICMS ST
-    #    - Modalidade de determinacao da BC ICMS ST
-    # 0=Preço tabelado ou máximo sugerido;
-    # 1=Lista Negativa (valor);
-    # 2=Lista Positiva (valor);
-    # 3=Lista Neutra (valor);
-    # 4=Margem Valor Agregado (%);
-    # 5=Pauta (valor);
-    icms_st_modalidade_determinacao_bc = str()
+    #    - Modalidade de determinacao da BC ICMS ST - ICMS_ST_MODALIDADES
+    icms_st_modalidade_determinacao_bc = int()
 
     #    - Percentual da margem de valor Adicionado do ICMS ST
     icms_st_percentual_adicional = Decimal()

@@ -169,7 +169,7 @@ class ProdutoICMS(Entidade):
     #  - Percentual de reducao da Base de Calculo
     percentual_reducao = Decimal()
 
-    #  - Modalidade de determinacao da Base de Calculo do ICMS ST (seleciona de lista) - ICMS_MODALIDADES
+    #  - Modalidade de determinacao da Base de Calculo do ICMS ST (seleciona de lista) - ICMS_ST_MODALIDADES
     st_modalidade = str()
 
     #  - Aliquota ICMS ST
