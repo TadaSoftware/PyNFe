@@ -290,6 +290,9 @@ class SerializacaoXML(Serializacao):
         # Item do Pedido de Compra. Tam 6
         if produto_servico.numero_item:
             etree.SubElement(prod, 'nItemPed').text = str(produto_servico.numero_item)
+        # nFCI - Número de controle da FCI - Ficha de Conteúdo de Importação.
+        if produto_servico.nfci:
+            etree.SubElement(prod, 'nFCI').text = produto_servico.nfci
 
         # Combustível
         if produto_servico.cProdANP:
@@ -329,6 +332,17 @@ class SerializacaoXML(Serializacao):
         # Imposto de Importação II
         self._serializar_imposto_importacao(
             produto_servico=produto_servico, modelo=modelo, tag_raiz=imposto, retorna_string=False)
+
+        # tag impostoDevol
+        if produto_servico.ipi_valor_ipi_dev:
+            impostodevol = etree.SubElement(raiz, 'impostoDevol')
+            etree.SubElement(impostodevol, 'pDevol').text = '{:.2f}'.format(produto_servico.pdevol or 100)
+            ipidev = etree.SubElement(impostodevol, 'IPI')
+            etree.SubElement(ipidev, 'vIPIDevol').text = '{:.2f}'.format(produto_servico.ipi_valor_ipi_dev or 0)
+
+        # Informações adicionais do produto
+        if produto_servico.informacoes_adicionais:
+            etree.SubElement(raiz, 'infAdProd').text = produto_servico.informacoes_adicionais
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
