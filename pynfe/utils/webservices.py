@@ -116,7 +116,7 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': ''
+	    	'QR': 'http://www.sefaz.pb.gov.br/nfce',
 	    },
 	    'PE': {
 	    	'STATUS': '',
