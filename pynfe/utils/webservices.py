@@ -164,7 +164,7 @@ NFCE = {
 	    	'INUTILIZACAO': 'fazenda.mg.gov.br/nfce/services/NFeInutilizacao4',
 	    	'EVENTOS': 'fazenda.mg.gov.br/nfce/services/NFeRecepcaoEvento4',
 	    	'CADASTRO': 'fazenda.mg.gov.br/nfce/services/CadConsultaCadastro4',
-	    	'QR': 'fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml?',
+			'QR': 'https://portalsped.fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml',
 	    	'HTTPS': 'https://nfce.',
 	    	'HOMOLOGACAO': 'https://hnfce.',
 	    	'URL': 'fazenda.mg.gov.br/portalnfce'
