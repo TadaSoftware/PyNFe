@@ -304,7 +304,7 @@ NFE = {
 	    	'EVENTOS': 'nfe.fazenda.gov.br/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx',	# versao: 4.00
 	    	'DISTRIBUICAO': 'nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx',
 	    	'HTTPS': 'https://www',
-	    	'HOMOLOGACAO': 'https://hom'
+	    	'HOMOLOGACAO': 'https://hom1'
 	    },
 	    'AM': {
 	    	'STATUS': 'nfe.sefaz.am.gov.br/services2/services/NfeStatusServico4',
