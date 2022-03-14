@@ -174,8 +174,11 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
 
         contratante_1 = ManifestoContratante(
             nome='JOAO DA SILVA',
-            cpfcnpj='12345678912'
+            cpfcnpj='12345678912',
+            NroContrato='q26393479sakjd231234',
+            vContratoGlobal=Decimal('2342.64')
         )
+
         contratante_2 = ManifestoContratante(
             nome='JOSE DA SILVA',
             cpfcnpj='12345678911'
@@ -393,11 +396,15 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
     def grupo_contratante(self):
         xNome_1 = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:infContratante/ns:xNome', namespaces=self.ns)[0].text
         CPF_1 = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:infContratante/ns:CPF', namespaces=self.ns)[0].text
+        NroContrato_1 = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:infContratante/ns:infContrato/ns:NroContrato', namespaces=self.ns)[0].text
+        vContratoGlobal_1 = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:infContratante/ns:infContrato/ns:vContratoGlobal', namespaces=self.ns)[0].text
         self.assertEqual(xNome_1, 'JOAO DA SILVA')
         self.assertEqual(CPF_1, '12345678912')
+        self.assertEqual(NroContrato_1, 'q26393479sakjd231234')
+        self.assertEqual(vContratoGlobal_1, '2342.64')
 
         xNome_2 = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:infContratante/ns:xNome', namespaces=self.ns)[1].text
-        CPF_2= self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:infContratante/ns:CPF', namespaces=self.ns)[1].text
+        CPF_2 = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:infContratante/ns:CPF', namespaces=self.ns)[1].text
         self.assertEqual(xNome_2, 'JOSE DA SILVA')
         self.assertEqual(CPF_2, '12345678911')
 

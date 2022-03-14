@@ -262,6 +262,8 @@ class ManifestoPedagio(Entidade):
 class ManifestoContratante(Entidade):
     nome = str()
     cpfcnpj = str()
+    NroContrato = str()
+    vContratoGlobal = Decimal()
 
 
 class ManifestoVeiculoTracao(Entidade):
