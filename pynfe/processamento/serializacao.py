@@ -1184,6 +1184,13 @@ class SerializacaoQrcode(object):
             else:
                 qrcode = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['QR'] + url
             url_chave = url_chave = NFCE[uf.upper()]['URL']
+        # MG tem comportamento distindos qrcode e url
+        elif uf.upper() == 'MG':
+            qrcode = NFCE[uf.upper()]['QR'] + url
+            if tpamb == '1':
+                url_chave = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['URL']
+            else:
+                url_chave = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['URL']
         # AC, AM, RR, PA,
         else:
             if tpamb == '1':
