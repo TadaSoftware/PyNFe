@@ -1440,6 +1440,12 @@ class SerializacaoMDFe(Serializacao):
                 elif len(item.cpfcnpj) == 14:
                     etree.SubElement(infContratante, 'CNPJ').text = item.cpfcnpj
 
+                # Contrato
+                if item.NroContrato != None:
+                    infContrato = etree.SubElement(infContratante, 'infContrato')
+                    etree.SubElement(infContrato, 'NroContrato').text = item.NroContrato
+                    etree.SubElement(infContrato, 'vContratoGlobal').text = '{:.2f}'.format(item.vContratoGlobal or 0)
+
         # Veículo Tração
         if (len(modal_rodoviario.veiculo_tracao) != 1):
             raise f'Permitido somente um único veículo Tração'

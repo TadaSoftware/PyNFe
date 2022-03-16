@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2008 (http://www.altova.com) by sas-softwares@procergs.rs.gov.br (PROCERGS) -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by sas.softwares@procergs.rs.gov.br (PROCERGS) -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.portalfiscal.inf.br/mdfe" targetNamespace="http://www.portalfiscal.inf.br/mdfe" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:simpleType name="TDateTimeUTC">
 		<xs:annotation>
@@ -91,6 +91,7 @@
 			<xs:enumeration value="91"/>
 			<xs:enumeration value="92"/>
 			<xs:enumeration value="93"/>
+			<xs:enumeration value="94"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="TCodUfIBGE_EX">

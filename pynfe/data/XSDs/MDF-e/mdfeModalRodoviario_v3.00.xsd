@@ -223,6 +223,33 @@
 												</xs:simpleType>
 											</xs:element>
 										</xs:choice>
+										<xs:element name="infContrato" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Grupo de informações do contrato entre transportador e contratante</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="NroContrato">
+														<xs:annotation>
+															<xs:documentation>Número do contrato do transportador com o contratante quando este existir para prestações continuadas</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="2"/>
+																<xs:maxLength value="20"/>
+																<xs:whiteSpace value="preserve"/>
+																<xs:enumeration value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="vContratoGlobal" type="TDec_1302Opc">
+														<xs:annotation>
+															<xs:documentation>Valor global do contrato</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
 									</xs:sequence>
 								</xs:complexType>
 							</xs:element>
@@ -349,6 +376,17 @@ Preencher com “1” para indicar operação de transporte de alto desempenho, 
 												<xs:documentation>Valor do Adiantamento (usar apenas em pagamento à Prazo</xs:documentation>
 											</xs:annotation>
 										</xs:element>
+										<xs:element name="indAntecipaAdiant" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Indicador para declarar concordância em antecipar o adiantamento</xs:documentation>
+												<xs:documentation>Informar a tag somente se for autorizado antecipar o adiantamento</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="1"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
 										<xs:element name="infPrazo" minOccurs="0" maxOccurs="unbounded">
 											<xs:annotation>
 												<xs:documentation>Informações do pagamento a prazo. </xs:documentation>
@@ -379,6 +417,23 @@ Preencher com “1” para indicar operação de transporte de alto desempenho, 
 													</xs:element>
 												</xs:sequence>
 											</xs:complexType>
+										</xs:element>
+										<xs:element name="tpAntecip" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Tipo de Permissão em relação a antecipação das parcelas</xs:documentation>
+												<xs:documentation>0 - Não permite antecipar
+
+1 - Permite antecipar as parcelas
+
+2 - Permite antecipar as parcelas mediante confirmação</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="0"/>
+													<xs:enumeration value="1"/>
+													<xs:enumeration value="2"/>
+												</xs:restriction>
+											</xs:simpleType>
 										</xs:element>
 										<xs:element name="infBanc">
 											<xs:annotation>
