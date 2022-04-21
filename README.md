@@ -1,5 +1,6 @@
 ## PyNFe
 
+[![Active Development](https://img.shields.io/badge/Maintenance%20Level-Actively%20Developed-brightgreen.svg)](https://gist.github.com/cheerfulstoic/d107229326a01ff0f333a1d3476e068d)
 ![status](https://img.shields.io/badge/status-stable-green.svg) ![https://github.com/TadaSoftware/PyNFe/actions](https://github.com/TadaSoftware/PyNFe/workflows/PyNFe%20CI/badge.svg?branch=master) ![pyversions](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-blue)
 
 
@@ -142,6 +143,13 @@ Documentação
 Suporte
 -----------
 Se tiver qualquer problema or sugestão abra uma issue [aqui](https://github.com/TadaSoftware/PyNFe/issues) ou inicie uma discussão sobre um assunto [aqui](https://github.com/TadaSoftware/PyNFe/discussions).
+
+
+Quem utiliza PyNFe
+-----------
+Lista de empresas/projetos que utilizam a lib PyNFe 
+- Link da lista [aqui](https://github.com/TadaSoftware/PyNFe/wiki/Quem-utiliza-PyNFe).
+- Sinta-se livre para incluir o nome da empresa/projeto na lista.
 
 
 Licença
