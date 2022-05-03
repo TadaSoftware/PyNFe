@@ -397,7 +397,7 @@ class NotaFiscal(Entidade):
         self.totais_icms_total_frete += obj.total_frete
         self.totais_icms_total_seguro += obj.total_seguro
         self.totais_icms_total_desconto += obj.desconto
-        # self.totais_icms_total_ii += # tem que entender o cálculo
+        self.totais_icms_total_ii += obj.imposto_importacao_valor
         self.totais_icms_total_ipi += obj.ipi_valor_ipi
         self.totais_icms_total_ipi_dev += obj.ipi_valor_ipi_dev
         self.totais_icms_pis += obj.pis_valor
@@ -413,10 +413,19 @@ class NotaFiscal(Entidade):
         ## TODO calcular impostos aproximados
         #self.totais_tributos_aproximado += obj.tributos
 
-        self.totais_icms_total_nota += obj.valor_total_bruto - obj.desconto + \
-                                       obj.icms_desonerado + obj.icms_st_valor + \
-                                       obj.total_frete + obj.total_seguro + \
-                                       obj.outras_despesas_acessorias + obj.ipi_valor_ipi
+        self.totais_icms_total_nota += (
+            obj.valor_total_bruto
+            + obj.icms_st_valor
+            + obj.fcp_st_valor
+            + obj.total_frete
+            + obj.total_seguro
+            + obj.outras_despesas_acessorias
+            + obj.imposto_importacao_valor
+            + obj.ipi_valor_ipi
+            + obj.ipi_valor_ipi_dev
+            - obj.desconto
+            - obj.icms_desonerado
+        )
 
         return obj
 

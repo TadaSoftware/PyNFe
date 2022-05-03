@@ -951,7 +951,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(vPIS, '0.76')
         self.assertEqual(vCOFINS, '3.51')
         self.assertEqual(vOutro, '0.00')
-        self.assertEqual(vNF, '117.00')
+        self.assertEqual(vNF, '127.00')
         self.assertEqual(vTotTrib, '21.06')
 
     def total_e_produto_cst40_test(self):
@@ -1053,7 +1053,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(vPIS, '0.00')
         self.assertEqual(vCOFINS, '0.00')
         self.assertEqual(vOutro, '0.00')
-        self.assertEqual(vNF, '127.00')
+        self.assertEqual(vNF, '107.00')
         self.assertEqual(vTotTrib, '21.06')
 
     def total_e_produto_cst41_test(self):
@@ -1155,7 +1155,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(vPIS, '0.00')
         self.assertEqual(vCOFINS, '0.00')
         self.assertEqual(vOutro, '0.00')
-        self.assertEqual(vNF, '127.00')
+        self.assertEqual(vNF, '107.00')
         self.assertEqual(vTotTrib, '21.06')
 
     def total_e_produto_cst50_test(self):
@@ -1257,7 +1257,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(vPIS, '0.00')
         self.assertEqual(vCOFINS, '0.00')
         self.assertEqual(vOutro, '0.00')
-        self.assertEqual(vNF, '127.00')
+        self.assertEqual(vNF, '107.00')
         self.assertEqual(vTotTrib, '21.06')
 
     def total_e_produto_cst51_test(self):
@@ -1601,7 +1601,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(vPIS, '0.00')
         self.assertEqual(vCOFINS, '0.00')
         self.assertEqual(vOutro, '0.00')
-        self.assertEqual(vNF, '118.44')
+        self.assertEqual(vNF, '118.46')
         self.assertEqual(vTotTrib, '21.06')
 
     def total_e_produto_cst90_test(self):
