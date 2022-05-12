@@ -531,6 +531,9 @@ class NotaFiscalReferenciada(Entidade):
     #   - CNPJ
     cnpj = str()
 
+    #   - IE
+    ie = str()
+
     #   - Serie (XXX)
     serie = str()
 

@@ -700,10 +700,27 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         )
 
         self.notafiscal.adicionar_nota_fiscal_referenciada(
-            chave_acesso='12345678901234567890123456789012345678900001'
+            tipo='Nota Fiscal produtor',
+            chave_acesso='',
+            uf='51',
+            mes_ano_emissao='2205',
+            cnpj='99999999000199',
+            ie='132001280',
+            modelo='04',
+            serie='1',
+            numero='999999998'
         )
+
         self.notafiscal.adicionar_nota_fiscal_referenciada(
-            chave_acesso='12345678901234567890123456789012345678900002'
+            tipo='Nota Fiscal produtor',
+            chave_acesso='',
+            uf='51',
+            mes_ano_emissao='2205',
+            cnpj='99999999000199',
+            ie='132001280',
+            modelo='04',
+            serie='1',
+            numero='999999999'
         )
 
         self.notafiscal.adicionar_responsavel_tecnico(
@@ -1719,6 +1736,13 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(vNF, '117.00')
         self.assertEqual(vTotTrib, '21.06')
 
+    def notas_produtor_referenciadas_test(self):
+        ref_1 = self.xml_assinado.xpath('//ns:ide/ns:NFref/ns:refNFP/ns:nNF', namespaces=self.ns)[0].text
+        ref_2 = self.xml_assinado.xpath('//ns:ide/ns:NFref/ns:refNFP/ns:nNF', namespaces=self.ns)[1].text
+
+        self.assertEqual(ref_1, '999999998')
+        self.assertEqual(ref_2, '999999999')
+
     def notas_referenciadas_test(self):
         chave_1 = self.xml_assinado.xpath('//ns:ide/ns:NFref/ns:refNFe', namespaces=self.ns)[0].text
         chave_2 = self.xml_assinado.xpath('//ns:ide/ns:NFref/ns:refNFe', namespaces=self.ns)[1].text
@@ -1910,7 +1934,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.dados_emitente_test()
         self.dados_destinatario_test()
         self.total_e_produto_cst90_test()
-        self.notas_referenciadas_test()
+        self.notas_produtor_referenciadas_test()
         self.responsavel_tecnico_test()
         self.digestvalue_da_assinatura_test()
 
