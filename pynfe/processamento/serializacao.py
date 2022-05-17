@@ -1448,7 +1448,7 @@ class SerializacaoMDFe(Serializacao):
                     etree.SubElement(infContratante, 'CNPJ').text = item.cpfcnpj
 
                 # Contrato
-                if item.NroContrato != None:
+                if item.NroContrato:
                     infContrato = etree.SubElement(infContratante, 'infContrato')
                     etree.SubElement(infContrato, 'NroContrato').text = item.NroContrato
                     etree.SubElement(infContrato, 'vContratoGlobal').text = '{:.2f}'.format(item.vContratoGlobal or 0)
