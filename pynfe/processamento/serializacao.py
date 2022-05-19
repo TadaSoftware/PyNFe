@@ -828,7 +828,10 @@ class SerializacaoXML(Serializacao):
                         refNFP = etree.SubElement(nfref, 'refNFP')
                         etree.SubElement(refNFP, 'cUF').text = str(refNFe.uf)
                         etree.SubElement(refNFP, 'AAMM').text = str(refNFe.mes_ano_emissao)
-                        etree.SubElement(refNFP, 'CNPJ').text = so_numeros(refNFe.cnpj)
+                        if len(so_numeros(refNFe.cnpj)) == 11:
+                            etree.SubElement(refNFP, 'CPF').text = so_numeros(refNFe.cnpj)
+                        else:
+                            etree.SubElement(refNFP, 'CNPJ').text = so_numeros(refNFe.cnpj)
                         etree.SubElement(refNFP, 'IE').text = so_numeros(refNFe.ie)
                         etree.SubElement(refNFP, 'mod').text = '04'
                         etree.SubElement(refNFP, 'serie').text = str(refNFe.serie)
