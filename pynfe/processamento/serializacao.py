@@ -1441,7 +1441,8 @@ class SerializacaoMDFe(Serializacao):
         rodo = etree.SubElement(raiz, 'rodo')
 
         infANTT = etree.SubElement(rodo, 'infANTT')
-        etree.SubElement(infANTT, 'RNTRC').text = modal_rodoviario.rntrc.zfill(8)
+        if modal_rodoviario.rntrc:
+            etree.SubElement(infANTT, 'RNTRC').text = modal_rodoviario.rntrc.zfill(8)
 
         # CIOT
         if modal_rodoviario.ciot != None:
@@ -1505,7 +1506,8 @@ class SerializacaoMDFe(Serializacao):
                 elif len(item.proprietario.cpfcnpj) == 14:
                     etree.SubElement(prop, 'CNPJ').text = item.proprietario.cpfcnpj
 
-                etree.SubElement(prop, 'RNTRC').text = item.proprietario.rntrc.zfill(8)
+                if item.proprietario.rntrc:
+                    etree.SubElement(prop, 'RNTRC').text = item.proprietario.rntrc.zfill(8)
                 etree.SubElement(prop, 'xNome').text = item.proprietario.nome
                 if item.proprietario.inscricao_estudual != None:
                     etree.SubElement(prop, 'IE').text = item.proprietario.inscricao_estudual
@@ -1547,7 +1549,8 @@ class SerializacaoMDFe(Serializacao):
                     elif len(item_reboque.proprietario.cpfcnpj) == 14:
                         etree.SubElement(prop, 'CNPJ').text = item_reboque.proprietario.cpfcnpj
 
-                    etree.SubElement(prop, 'RNTRC').text = item_reboque.proprietario.rntrc.zfill(8)
+                    if item_reboque.proprietario.rntrc:
+                        etree.SubElement(prop, 'RNTRC').text = item_reboque.proprietario.rntrc.zfill(8)
                     etree.SubElement(prop, 'xNome').text = item_reboque.proprietario.nome
                     if item_reboque.proprietario.inscricao_estudual != None:
                         etree.SubElement(prop, 'IE').text = item_reboque.proprietario.inscricao_estudual

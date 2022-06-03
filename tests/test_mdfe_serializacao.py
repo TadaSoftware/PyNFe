@@ -284,7 +284,8 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
     def validacao_com_xsd_do_xml_gerado_sem_processar(self):
         self.validacao.validar_etree(
             xml_doc=self.xml_assinado,
-            xsd_file=self.xsd_mdfe
+            xsd_file=self.xsd_mdfe,
+            use_assert=True
         )
 
     def grupo_ide_test(self):
@@ -588,6 +589,7 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         self.grupo_percurso()
         self.grupo_emitente()
 
+        self.grupo_inf_antt()
         self.grupo_ciot()
         self.grupo_pedagio()
         self.grupo_contratante()
