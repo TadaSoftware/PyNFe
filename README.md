@@ -97,13 +97,13 @@ Instalação
 -----------
 
 ```sh
-pip3 install --user https://github.com/TadaSoftware/PyNFe/archive/refs/heads/main.zip
+pip install pynfe
 ```
 
 Opcional para NFS-e:
 
 ```sh
-pip3 install --user -r https://github.com/TadaSoftware/PyNFe/blob/main/requirements-nfse.txt
+pip install --user -r https://github.com/TadaSoftware/PyNFe/blob/main/requirements-nfse.txt
 ```
 
 Exemplos de uso
