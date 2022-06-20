@@ -139,7 +139,7 @@ class SerializacaoXML(Serializacao):
     def _serializar_cliente(self, cliente, modelo, tag_raiz='dest', retorna_string=True):
         raiz = etree.Element(tag_raiz)
 
-        # Dados do cliente (distinatario)
+        # Dados do cliente (destinatário)
         etree.SubElement(raiz, cliente.tipo_documento).text = so_numeros(cliente.numero_documento)
         if not self._so_cpf:
             if cliente.razao_social:
