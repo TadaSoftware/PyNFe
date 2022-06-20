@@ -53,7 +53,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             razao_social='NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL',
             nome_fantasia='Nome Fantasia da Empresa',
             cnpj='99999999000199',  # cnpj apenas números
-            codigo_de_regime_tributario='1',  # 1 para simples nacional ou 3 para normal
+            codigo_de_regime_tributario='3',  # 1 para simples nacional ou 3 para normal
             inscricao_estadual='9999999999',  # numero de IE da empresa
             inscricao_municipal='12345',
             cnae_fiscal='9999999',  # cnae apenas números
@@ -136,7 +136,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             ind_total=1,
             icms_modalidade='70',
             icms_origem=0,
-            icms_csosn='400',
+            icms_csosn='',
             pis_modalidade='07',
             cofins_modalidade='07',
             valor_tributos_aprox='21.06',

@@ -53,7 +53,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             razao_social='NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL',
             nome_fantasia='Nome Fantasia da Empresa',
             cnpj='99999999000199',  # cnpj apenas números
-            codigo_de_regime_tributario='3',  # 1 para simples nacional ou 3 para normal
+            codigo_de_regime_tributario='1',  # 1 para simples nacional ou 3 para normal
             inscricao_estadual='9999999999',  # numero de IE da empresa
             inscricao_municipal='12345',
             cnae_fiscal='9999999',  # cnae apenas números
@@ -86,7 +86,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         )
         return self.cliente
 
-    def preenche_notafiscal_produto_cst10(self):
+    def preenche_notafiscal_produto_csosn201(self):
 
         utc = datetime.timezone.utc
         data_emissao = datetime.datetime(2021, 1, 14, 12, 0, 0, tzinfo=utc)
@@ -134,9 +134,20 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             valor_unitario_tributavel=Decimal('9.75'),
             ean_tributavel='SEM GTIN',
             ind_total=1,
-            icms_modalidade='10',
+            icms_modalidade='201',
             icms_origem=0,
-            icms_csosn='',
+            icms_csosn='201',
+            icms_aliquota=Decimal('3.00'),  # Alíquota aplicável de cálculo do crédito (Simples Nacional).
+            icms_credito=Decimal('10.00'),  # Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123 (Simples Nacional)
+            icms_st_modalidade_determinacao_bc='0',
+            icms_st_percentual_adicional=0,
+            icms_st_percentual_reducao_bc=0,
+            icms_st_valor_base_calculo=0,
+            icms_st_aliquota=0,
+            icms_st_valor=0,
+            fcp_st_base_calculo=Decimal('117.00'),
+            fcp_st_percentual=Decimal('0.01'),
+            fcp_st_valor=Decimal('1.17'),
             pis_modalidade='51',
             cofins_modalidade='51',
             pis_valor_base_calculo=Decimal('117.00'),
@@ -152,19 +163,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             informacoes_adicionais='Informações adicionais',
             ipi_valor_ipi_dev=Decimal('0.00'),
             pdevol=Decimal('0.00'),
-        )
-        self.notafiscal.adicionar_nota_fiscal_referenciada(
-            chave_acesso='12345678901234567890123456789012345678900001'
-        )
-        self.notafiscal.adicionar_nota_fiscal_referenciada(
-            chave_acesso='12345678901234567890123456789012345678900002'
-        )
-
-        self.notafiscal.adicionar_responsavel_tecnico(
-            cnpj='99999999000199',
-            contato='Teste PyNFe',
-            email='pynfe@pynfe.io',
-            fone='11912341234'
         )
 
     def serializa_nfe(self):
@@ -182,7 +180,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             use_assert=True
         )
 
-    def total_e_produto_cst10_test(self):
+    def total_e_produto_csosn201_test(self):
         # Produto
         cProd = self.xml_assinado.xpath('//ns:det/ns:prod/ns:cProd', namespaces=self.ns)[0].text
         cEAN = self.xml_assinado.xpath('//ns:det/ns:prod/ns:cEAN', namespaces=self.ns)[0].text
@@ -228,31 +226,39 @@ class SerializacaoNFeTestCase(unittest.TestCase):
 
         # Impostos
         # ICMS
-        orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS10/ns:orig', namespaces=self.ns)[0].text
-        CST = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS10/ns:CST', namespaces=self.ns)[0].text
-        modBC = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS10/ns:modBC', namespaces=self.ns)[0].text
-        vBC = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS10/ns:vBC', namespaces=self.ns)[0].text
-        pICMS = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS10/ns:pICMS', namespaces=self.ns)[0].text
-        vICMS = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMS10/ns:vICMS', namespaces=self.ns)[0].text
-        pFCP = None
-        vFCP = None
+        orig = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMSSN201/ns:orig', namespaces=self.ns)[0].text
+        CSOSN = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMSSN201/ns:CSOSN', namespaces=self.ns)[0].text
+        modBCST = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMSSN201/ns:modBCST', namespaces=self.ns)[0].text
+        pMVAST = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMSSN201/ns:pMVAST', namespaces=self.ns)[0].text
+        pRedBCST = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMSSN201/ns:pRedBCST', namespaces=self.ns)[0].text
+        vBCST = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMSSN201/ns:vBCST', namespaces=self.ns)[0].text
+        pICMSST = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMSSN201/ns:pICMSST', namespaces=self.ns)[0].text
+        vICMSST = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMSSN201/ns:vICMSST', namespaces=self.ns)[0].text
+        vBCFCPST = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMSSN201/ns:vBCFCPST', namespaces=self.ns)[0].text
+        pFCPST = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMSSN201/ns:pFCPST', namespaces=self.ns)[0].text
+        vFCPST = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMSSN201/ns:vFCPST', namespaces=self.ns)[0].text
+        pCredSN = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMSSN201/ns:pCredSN', namespaces=self.ns)[0].text
+        vCredICMSSN = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:ICMS/ns:ICMSSN201/ns:vCredICMSSN', namespaces=self.ns)[0].text
 
         self.assertEqual(orig, '0')
-        self.assertEqual(CST, '10')
-        self.assertEqual(modBC, '0')
-        self.assertEqual(vBC, '0')
-        self.assertEqual(pICMS, '0.00')
-        self.assertEqual(vICMS, '0.00')
-        # self.assertEqual(pFCP, '0.00')
-        # self.assertEqual(vFCP, '0.00')
-        self.assertEqual(pFCP, None)
-        self.assertEqual(vFCP, None)
+        self.assertEqual(CSOSN, '201')
+        self.assertEqual(modBCST, '0')
+        self.assertEqual(pMVAST, '0.00')
+        self.assertEqual(pRedBCST, '0.00')
+        self.assertEqual(vBCST, '0.00')
+        self.assertEqual(pICMSST, '0.00')
+        self.assertEqual(vICMSST, '0.00')
+        self.assertEqual(vBCFCPST, '117.00')
+        self.assertEqual(pFCPST, '0.01')
+        self.assertEqual(vFCPST, '1.17')
+        self.assertEqual(pCredSN, '3.00')
+        self.assertEqual(vCredICMSSN, '10.00')
 
         # PIS
         CST_PIS = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:PIS/ns:PISOutr/ns:CST', namespaces=self.ns)[0].text
         self.assertEqual(CST_PIS, '51')
 
-        # # COFINS
+        # COFINS
         CST_COFINS = self.xml_assinado.xpath('//ns:det/ns:imposto/ns:COFINS/ns:COFINSOutr/ns:CST', namespaces=self.ns)[0].text
         self.assertEqual(CST_COFINS, '51')
 
@@ -288,7 +294,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(vFCP, '0.00')
         self.assertEqual(vBCST, '0.00')
         self.assertEqual(vST, '0.00')
-        self.assertEqual(vFCPST, '0.00')
+        self.assertEqual(vFCPST, '1.17')
         self.assertEqual(vFCPSTRet, '0.00')
         self.assertEqual(vProd, '117.00')
         self.assertEqual(vFrete, '0.00')
@@ -300,21 +306,21 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(vPIS, '0.76')
         self.assertEqual(vCOFINS, '3.51')
         self.assertEqual(vOutro, '0.00')
-        self.assertEqual(vNF, '117.00')
+        self.assertEqual(vNF, '118.17')
         self.assertEqual(vTotTrib, '21.06')
 
-    def test_notafiscal_produto_cst10(self):
+    def test_notafiscal_produto_csosn201(self):
         # Preenche as classes do pynfe
         self.emitente = self.preenche_emitente()
         self.cliente = self.preenche_destinatario()
-        self.notafiscal = self.preenche_notafiscal_produto_cst10()
+        self.notafiscal = self.preenche_notafiscal_produto_csosn201()
 
         # Serializa e assina o XML
         self.xml = self.serializa_nfe()
         self.xml_assinado = self.assina_xml()
 
         # Teste do conteúdo das tags do XML
-        self.total_e_produto_cst10_test()
+        self.total_e_produto_csosn201_test()
 
         # Testa a validação do XML com os schemas XSD
         self.validacao_com_xsd_do_xml_gerado_sem_processar()

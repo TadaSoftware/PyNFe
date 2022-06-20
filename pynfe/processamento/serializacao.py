@@ -139,7 +139,7 @@ class SerializacaoXML(Serializacao):
     def _serializar_cliente(self, cliente, modelo, tag_raiz='dest', retorna_string=True):
         raiz = etree.Element(tag_raiz)
 
-        # Dados do cliente (distinatario)
+        # Dados do cliente (destinatário)
         etree.SubElement(raiz, cliente.tipo_documento).text = so_numeros(cliente.numero_documento)
         if not self._so_cpf:
             if cliente.razao_social:
@@ -547,8 +547,8 @@ class SerializacaoXML(Serializacao):
             icms_item = etree.SubElement(icms, 'ICMSSN'+produto_servico.icms_modalidade)
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, 'CSOSN').text = produto_servico.icms_csosn
-            etree.SubElement(icms_item, 'pCredSN').text = str(produto_servico.icms_aliquota)  # Alíquota aplicável de cálculo do crédito (Simples Nacional).
-            etree.SubElement(icms_item, 'vCredICMSSN').text = str(produto_servico.icms_credito) # Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123 (Simples Nacional)
+            etree.SubElement(icms_item, 'pCredSN').text = '{:.2f}'.format(produto_servico.icms_aliquota)  # Alíquota aplicável de cálculo do crédito (Simples Nacional).
+            etree.SubElement(icms_item, 'vCredICMSSN').text = '{:.2f}'.format(produto_servico.icms_credito) # Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123 (Simples Nacional)
 
         # 102=Tributada pelo Simples Nacional sem permissão de crédito
         # 103=Isenção do ICMS no Simples Nacional para faixa de receita bruta
@@ -563,7 +563,10 @@ class SerializacaoXML(Serializacao):
         # 202=Tributada pelo Simples Nacional sem permissão de crédito e com cobrança do ICMS por substituição tributária
         # 203=Isenção do ICMS no Simples Nacional para faixa de receita bruta e com cobrança do ICMS por substituição tributária
         elif produto_servico.icms_modalidade in ('201', '202', '203'):
-            icms_item = etree.SubElement(icms, 'ICMSSN'+produto_servico.icms_modalidade)
+            if produto_servico.icms_modalidade == '201':
+                icms_item = etree.SubElement(icms, 'ICMSSN201')
+            elif produto_servico.icms_modalidade in ['202', '203']:
+                icms_item = etree.SubElement(icms, 'ICMSSN202')
             etree.SubElement(icms_item, 'orig').text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, 'CSOSN').text = produto_servico.icms_csosn
 
@@ -580,8 +583,8 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(icms_item, 'vFCPST').text = '{:.2f}'.format(produto_servico.fcp_st_valor or 0)
 
             if produto_servico.icms_modalidade == '201':
-                etree.SubElement(icms_item, 'pCredSN').text = str(produto_servico.icms_aliquota)  # Alíquota aplicável de cálculo do crédito (Simples Nacional).
-                etree.SubElement(icms_item, 'vCredICMSSN').text = str(produto_servico.icms_credito) # Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123 (Simples Nacional)
+                etree.SubElement(icms_item, 'pCredSN').text = '{:.2f}'.format(produto_servico.icms_aliquota)  # Alíquota aplicável de cálculo do crédito (Simples Nacional).
+                etree.SubElement(icms_item, 'vCredICMSSN').text = '{:.2f}'.format(produto_servico.icms_credito) # Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123 (Simples Nacional)
 
         # 500=ICMS cobrado anteriormente por substituição tributária (substituído) ou por antecipação
         elif produto_servico.icms_modalidade == '500':
@@ -616,8 +619,8 @@ class SerializacaoXML(Serializacao):
                     etree.SubElement(icms_item, 'vFCPST').text = '{:.2f}'.format(produto_servico.fcp_st_valor or 0)
 
             if produto_servico.icms_aliquota > 0:
-                etree.SubElement(icms_item, 'pCredSN').text = str(produto_servico.icms_aliquota)  # Alíquota aplicável de cálculo do crédito (Simples Nacional).
-                etree.SubElement(icms_item, 'vCredICMSSN').text = str(produto_servico.icms_credito) # Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123 (Simples Nacional)
+                etree.SubElement(icms_item, 'pCredSN').text = '{:.2f}'.format(produto_servico.icms_aliquota)  # Alíquota aplicável de cálculo do crédito (Simples Nacional).
+                etree.SubElement(icms_item, 'vCredICMSSN').text = '{:.2f}'.format(produto_servico.icms_credito) # Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123 (Simples Nacional)
 
         else:
             raise NotImplementedError
