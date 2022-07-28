@@ -230,7 +230,7 @@ NFCE = {
 	    	'CHAVE': '',
 	    	'INUTILIZACAO': '',
 	    	'EVENTOS': '',
-	    	'QR': 'sat.sef.sc.gov.br/nfce/consulta?p=',
+	    	'QR': 'sat.sef.sc.gov.br/nfce/consulta?',
 	    	'HTTPS': 'https://',
 	    	'HOMOLOGACAO': 'https://hom.',
 	    	'URL': 'sat.sef.sc.gov.br/nfce/consulta'

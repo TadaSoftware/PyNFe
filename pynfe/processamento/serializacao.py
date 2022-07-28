@@ -1157,7 +1157,7 @@ class SerializacaoQrcode(object):
         data = nfe.xpath('ns:infNFe/ns:ide/ns:dhEmi/text()', namespaces=ns)[0].encode()
         tpamb = nfe.xpath('ns:infNFe/ns:ide/ns:tpAmb/text()', namespaces=ns)[0]
         cuf = nfe.xpath('ns:infNFe/ns:ide/ns:cUF/text()', namespaces=ns)[0]
-        uf = [key for key, value in CODIGOS_ESTADOS.items() if value == cuf][0]
+        uf = [key for key, value in CODIGOS_ESTADOS.items() if value == cuf][0].upper()
 
         # tenta encontrar a tag cpf
         try:
@@ -1201,45 +1201,46 @@ class SerializacaoQrcode(object):
         # Informar a URL da “Consulta por chave de acesso da NFC-e”.
         # A mesma URL que deve estar informada no DANFE NFC-e para consulta por chave de acesso
         lista_uf_padrao = ['PR', 'CE', 'RS', 'RJ', 'RO', 'DF']
-        if uf.upper() in lista_uf_padrao:
-            qrcode = NFCE[uf.upper()]['QR'] + url
-            url_chave = NFCE[uf.upper()]['URL']
-        elif uf.upper() == 'SP':
+        if uf in lista_uf_padrao:
+            qrcode = NFCE[uf]['QR'] + url
+            url_chave = NFCE[uf]['URL']
+        elif uf == 'SP':
             if tpamb == '1':
-                qrcode = NFCE[uf.upper()]['HTTPS'] + 'www.' + NFCE[uf.upper()]['QR'] + url
-                url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.' + NFCE[uf.upper()]['URL']
+                qrcode = NFCE[uf]['HTTPS'] + 'www.' + NFCE[uf]['QR'] + url
+                url_chave = NFCE[uf]['HTTPS'] + 'www.' + NFCE[uf]['URL']
             else:
-                qrcode = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['QR'] + url
-                url_chave = NFCE[uf.upper()]['HTTPS'] + 'www.homologacao.' + NFCE[uf.upper()]['URL']
+                qrcode = NFCE[uf]['HTTPS'] + 'www.homologacao.' + NFCE[uf]['QR'] + url
+                url_chave = NFCE[uf]['HTTPS'] + 'www.homologacao.' + NFCE[uf]['URL']
         # BA tem comportamento distindo para qrcode e url
-        elif uf.upper() == 'BA':
+        elif uf == 'BA':
             if tpamb == '1':
-                qrcode = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['QR'] + url
+                qrcode = NFCE[uf]['HTTPS'] + NFCE[uf]['QR'] + url
             else:
-                qrcode = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['QR'] + url
-            url_chave = url_chave = NFCE[uf.upper()]['URL']
+                qrcode = NFCE[uf]['HOMOLOGACAO'] + NFCE[uf]['QR'] + url
+            url_chave = url_chave = NFCE[uf]['URL']
         # MG tem comportamento distindos qrcode e url
-        elif uf.upper() == 'MG':
-            qrcode = NFCE[uf.upper()]['QR'] + url
+        elif uf == 'MG':
+            qrcode = NFCE[uf]['QR'] + url
             if tpamb == '1':
-                url_chave = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['URL']
+                url_chave = NFCE[uf]['HTTPS'] + NFCE[uf]['URL']
             else:
-                url_chave = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['URL']
+                url_chave = NFCE[uf]['HOMOLOGACAO'] + NFCE[uf]['URL']
         # AC, AM, RR, PA,
         else:
             if tpamb == '1':
-                qrcode = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['QR'] + url
-                url_chave = NFCE[uf.upper()]['HTTPS'] + NFCE[uf.upper()]['URL']
+                qrcode = NFCE[uf]['HTTPS'] + NFCE[uf]['QR'] + url
+                url_chave = NFCE[uf]['HTTPS'] + NFCE[uf]['URL']
             else:
-                qrcode = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['QR'] + url
-                url_chave = NFCE[uf.upper()]['HOMOLOGACAO'] + NFCE[uf.upper()]['URL']
+                qrcode = NFCE[uf]['HOMOLOGACAO'] + NFCE[uf]['QR'] + url
+                url_chave = NFCE[uf]['HOMOLOGACAO'] + NFCE[uf]['URL']
         # adicionta tag infNFeSupl com qrcode
         info = etree.Element('infNFeSupl')
         etree.SubElement(info, 'qrCode').text = '<![CDATA['+ qrcode.strip() + ']]>'
         etree.SubElement(info, 'urlChave').text = url_chave
         nfe.insert(1, info)
         # correção da tag qrCode, retira caracteres pois e CDATA
-        tnfe = etree.tostring(nfe, encoding='unicode')
+        tnfe = etree.tostring(nfe, encoding='unicode') \
+            .replace('\n','').replace('&lt;','<').replace('&gt;','>').replace('amp;','')
         etree.tostring(nfe.find(".//qrCode"), encoding='unicode') \
             .replace('\n','').replace('&lt;','<').replace('&gt;','>').replace('amp;','')
         nfe = etree.fromstring(tnfe)
