@@ -1,2 +1,2 @@
-graft tests
-include AUTHORS PLANEJAMENTO LICENCE *.py *.sh
+recursive-exclude tests *
+include PLANEJAMENTO LICENCE *.py *.sh
