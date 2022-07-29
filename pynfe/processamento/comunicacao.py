@@ -453,6 +453,9 @@ class ComunicacaoSefaz(Comunicacao):
         if metodo == 'NFeDistribuicaoDFe':
             x = etree.SubElement(body, 'nfeDistDFeInteresse', xmlns=NAMESPACE_METODO+metodo)
             a = etree.SubElement(x, 'nfeDadosMsg')
+        elif metodo == 'CadConsultaCadastro4' and self.uf.upper() == 'MT':
+            x = etree.SubElement(body, 'consultaCadastro', xmlns=NAMESPACE_METODO+metodo)
+            a = etree.SubElement(x, 'nfeDadosMsg')
         else:
             a = etree.SubElement(body, 'nfeDadosMsg', xmlns=NAMESPACE_METODO+metodo)
         a.append(dados)
