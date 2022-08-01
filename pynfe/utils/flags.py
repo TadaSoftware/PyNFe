@@ -276,10 +276,12 @@ COFINS_TIPOS_TRIBUTACAO = (
 COFINS_TIPOS_CALCULO = IPI_TIPOS_CALCULO
 
 MODALIDADES_FRETE = (
-    (0, '0 - Por conta do emitente'),
-    (1, '1 - Por conta do destinatario'),
-    (2, '2 - Por conta de terceiros'),
-    (9, '9 - Sem frete'),
+    (0, '0 - Contratação por conta do Remetente (CIF)'),
+    (1, '1 - Por conta do destinatário'),
+    (2, '2 - Contratação por conta de Terceiros'),
+    (3, '3 - Transporte Próprio por conta do Remetente'),
+    (4, '4 - Transporte Próprio por conta do Destinatário'),
+    (9, '9 - Sem Ocorrência de Transporte')
 )
 
 ORIGENS_PROCESSO = (
