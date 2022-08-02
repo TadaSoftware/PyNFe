@@ -1184,7 +1184,6 @@ class SerializacaoQrcode(object):
             url = '{}|{}|{}|{}'.format(chave,VERSAO_QRCODE, tpamb, token)
         else:
             #versão offline
-            digest = digest.lower()
             digest = digest.hex()
 
             url = '{}|{}|{}|{}|{}|{}|{}'.format(
