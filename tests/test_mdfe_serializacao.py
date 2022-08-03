@@ -166,7 +166,7 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         )
 
         pedagio_1 = ManifestoPedagio(
-            cnpj_fornecedor='04352277000134',
+            cnpj_fornecedor='17060943000102',
             cpfcnpj_pagador='75961547191',
             numero_compra='789',
             valor_pedagio=Decimal('2.64')
@@ -218,10 +218,10 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         )
 
         # Documentos vinculados
-        nfe_1 = ManifestoDocumentosNFe(chave_acesso_nfe='51180904352277000215550010001445371002594517')
-        nfe_2 = ManifestoDocumentosNFe(chave_acesso_nfe='51191204352277000215550010001800551003198999')
-        nfe_3 = ManifestoDocumentosNFe(chave_acesso_nfe='51180904352277000215550010001445371002594517')
-        nfe_4 = ManifestoDocumentosNFe(chave_acesso_nfe='51191204352277000215550010001800551003198999')
+        nfe_1 = ManifestoDocumentosNFe(chave_acesso_nfe='51180917060943000102550010001445371002594517')
+        nfe_2 = ManifestoDocumentosNFe(chave_acesso_nfe='51191217060943000102550010001800551003198999')
+        nfe_3 = ManifestoDocumentosNFe(chave_acesso_nfe='51180917060943000102550010001445371002594517')
+        nfe_4 = ManifestoDocumentosNFe(chave_acesso_nfe='51191217060943000102550010001800551003198999')
 
         manifesto.adicionar_documentos(
             cMunDescarga='3550308',
@@ -242,9 +242,9 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
 
         manifesto.adicionar_seguradora(
             responsavel_seguro='1',
-            cnpj_responsavel='30221703000100',
+            cnpj_responsavel='75512177000176',
             nome_seguradora='TESTE SEGURADORA SA',
-            cnpj_seguradora='30221703000100',
+            cnpj_seguradora='75512177000176',
             numero_apolice='00000',
             averbacoes=[averbacao_1, averbacao_2]
         )
@@ -261,6 +261,149 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         manifesto.adicionar_lacres(nLacre='123')
         manifesto.adicionar_lacres(nLacre='456')
         manifesto.adicionar_lacres(nLacre='789')
+
+        # Responsável técnico
+        manifesto.adicionar_responsavel_tecnico(
+            cnpj='99999999000199',
+            contato='Teste PyNFe',
+            email='pynfe@pynfe.io',
+            fone='11912341234'
+        )
+
+    def preenche_manifesto_sem_rntrc(self):
+
+        utc = datetime.timezone.utc
+        data_emissao = datetime.datetime(2021, 1, 14, 12, 0, 0, tzinfo=utc)
+        data_viagem = datetime.datetime(2021, 1, 14, 13, 10, 20, tzinfo=utc)
+
+        # Emitente
+        emitente = ManifestoEmitente(
+            cpfcnpj='99999999000199',  # cnpj apenas números
+            inscricao_estadual='9999999999',  # numero de IE da empresa
+            razao_social='NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL',
+            nome_fantasia='Nome Fantasia da Empresa',
+            endereco_logradouro='RUA UM',
+            endereco_numero='111',
+            endereco_complemento=None,
+            endereco_bairro='CENTRO',
+            endereco_municipio='CUIABA',
+            endereco_cep='78118000',
+            endereco_uf='MT',
+            endereco_telefone='65999662821',
+            endereco_email='teste@gmail.com'
+        )
+
+        # Totais
+        totais = ManifestoTotais(
+            qCTe=0,
+            qNFe=2,
+            vCarga=1000,
+            cUnid='KG',
+            qCarga=5000
+        )
+
+        # Municípios de carregamento
+        carregamento = ManifestoMunicipioCarrega(
+            cMunCarrega='5105101',
+            xMunCarrega='JUARA'
+        )
+
+        # modal Rodo
+        condutor_1 = ManifestoCondutor(
+            nome_motorista='JOAO DA SILVA',
+            cpf_motorista='12345678912'
+        )
+        condutor_2 = ManifestoCondutor(
+            nome_motorista='JOSE DA SILVA',
+            cpf_motorista='12345678911'
+        )
+
+        veiculo_tracao = []
+        veiculo_tracao.append(
+            ManifestoVeiculoTracao(
+                cInt='001',
+                placa='ABC1234',
+                RENAVAM='123456789',
+                tara=Decimal('5000'),
+                capKG=Decimal('4500'),
+                capM3=Decimal('400'),
+                proprietario=None,
+                condutor=[condutor_1, condutor_2],
+                tpRod='01',
+                tpCar='02',
+                UF='MT'
+            )
+        )
+
+        contratante = ManifestoContratante(
+            nome='JOAO DA SILVA',
+            cpfcnpj='12345678912',
+            NroContrato='q26393479sakjd231234',
+            vContratoGlobal=Decimal('2342.64')
+        )
+
+        modal_rodoviario = ManifestoRodoviario(
+            rntrc=None,
+            ciot=[],
+            pedagio=[],
+            contratante=[contratante],
+            pagamento=None,
+            veiculo_tracao=veiculo_tracao,
+            veiculo_reboque=[]
+        )
+
+        # Manifesto
+        manifesto = Manifesto(
+            uf='MT',
+            tipo_emitente=2,  # 1=Transportadora; 2=Carga própria; 3=CTe Globalizado
+            tipo_transportador=0,  # 0=nenhum; 1=etc; 2=tac; 3=ctc
+            modelo=58,
+            serie='920',
+            numero_mdfe='1',
+            modal=1,
+            data_emissao=data_emissao,
+            forma_emissao='1',  # 1=Emissão normal (não em contingência);
+            processo_emissao='0',  # 0=Emissão de NF-e com aplicativo do contribuinte;
+            UFIni='MT',
+            UFFim='MT',
+            infMunCarrega=[carregamento],
+            infPercurso=[],
+            dhIniViagem=data_viagem,
+            emitente=emitente,
+            modal_rodoviario=modal_rodoviario,
+            totais=totais,
+            informacoes_complementares_interesse_contribuinte='Mensagem complementar'
+        )
+
+        # Documentos vinculados
+        nfe = ManifestoDocumentosNFe(chave_acesso_nfe='51180917060943000102550010001445371002594517')
+
+        manifesto.adicionar_documentos(
+            cMunDescarga='5102637',
+            xMunDescarga='Campo Novo do Parecis',
+            documentos_nfe=[nfe],
+            documentos_cte=[]
+        )
+
+        # Informações do Seguro
+        averbacao = ManifestoAverbacao(numero='00000000000000000000000')
+
+        manifesto.adicionar_seguradora(
+            responsavel_seguro='1',
+            cnpj_responsavel='75512177000176',
+            nome_seguradora='TESTE SEGURADORA SA',
+            cnpj_seguradora='75512177000176',
+            numero_apolice='00000',
+            averbacoes=[averbacao]
+        )
+
+        # Produto Predominante
+        manifesto.adicionar_produto(
+            tipo_carga='01',
+            nome_produto='Descricao do Produto',
+            cean='78967142344650',
+            ncm='01012100'
+        )
 
         # Responsável técnico
         manifesto.adicionar_responsavel_tecnico(
@@ -323,6 +466,37 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         self.assertEqual(UFFim, 'SP')
         self.assertEqual(dhIniViagem, '2021-01-14T13:10:20+00:00')
 
+    def grupo_ide_sem_rntrc_test(self):
+        cUF = self.xml_assinado.xpath('//ns:ide/ns:cUF', namespaces=self.ns)[0].text
+        tpAmb = self.xml_assinado.xpath('//ns:ide/ns:tpAmb', namespaces=self.ns)[0].text
+        tpEmit = self.xml_assinado.xpath('//ns:ide/ns:tpEmit', namespaces=self.ns)[0].text
+        mod = self.xml_assinado.xpath('//ns:ide/ns:mod', namespaces=self.ns)[0].text
+        serie = self.xml_assinado.xpath('//ns:ide/ns:serie', namespaces=self.ns)[0].text
+        nMDF = self.xml_assinado.xpath('//ns:ide/ns:nMDF', namespaces=self.ns)[0].text
+        modal = self.xml_assinado.xpath('//ns:ide/ns:modal', namespaces=self.ns)[0].text
+        dhEmi = self.xml_assinado.xpath('//ns:ide/ns:dhEmi', namespaces=self.ns)[0].text
+        tpEmis = self.xml_assinado.xpath('//ns:ide/ns:tpEmis', namespaces=self.ns)[0].text
+        procEmi = self.xml_assinado.xpath('//ns:ide/ns:procEmi', namespaces=self.ns)[0].text
+        verProc = self.xml_assinado.xpath('//ns:ide/ns:verProc', namespaces=self.ns)[0].text
+        UFIni = self.xml_assinado.xpath('//ns:ide/ns:UFIni', namespaces=self.ns)[0].text
+        UFFim = self.xml_assinado.xpath('//ns:ide/ns:UFFim', namespaces=self.ns)[0].text
+        dhIniViagem = self.xml_assinado.xpath('//ns:ide/ns:dhIniViagem', namespaces=self.ns)[0].text
+
+        self.assertEqual(cUF, '51')
+        self.assertEqual(tpAmb, '2')
+        self.assertEqual(tpEmit, '2')
+        self.assertEqual(mod, '58')
+        self.assertEqual(serie, '920')
+        self.assertEqual(nMDF, '1')
+        self.assertEqual(modal, '1')
+        self.assertEqual(dhEmi, '2021-01-14T12:00:00+00:00')
+        self.assertEqual(tpEmis, '1')
+        self.assertEqual(procEmi, '0')
+        self.assertEqual(verProc, 'PyNFe 0.4')
+        self.assertEqual(UFIni, 'MT')
+        self.assertEqual(UFFim, 'MT')
+        self.assertEqual(dhIniViagem, '2021-01-14T13:10:20+00:00')
+
     def grupo_municipio_carregamento(self):
         cMunCarrega_1 = self.xml_assinado.xpath('//ns:ide/ns:infMunCarrega/ns:cMunCarrega', namespaces=self.ns)[0].text
         xMunCarrega_1 = self.xml_assinado.xpath('//ns:ide/ns:infMunCarrega/ns:xMunCarrega', namespaces=self.ns)[0].text
@@ -335,6 +509,13 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
 
         self.assertEqual(cMunCarrega_2, '5107925')
         self.assertEqual(xMunCarrega_2, 'SORRISO')
+
+    def grupo_municipio_carregamento_sem_rntrc(self):
+        cMunCarrega_1 = self.xml_assinado.xpath('//ns:ide/ns:infMunCarrega/ns:cMunCarrega', namespaces=self.ns)[0].text
+        xMunCarrega_1 = self.xml_assinado.xpath('//ns:ide/ns:infMunCarrega/ns:xMunCarrega', namespaces=self.ns)[0].text
+
+        self.assertEqual(cMunCarrega_1, '5105101')
+        self.assertEqual(xMunCarrega_1, 'JUARA')
 
     def grupo_percurso(self):
         UFPer_1 = self.xml_assinado.xpath('//ns:ide/ns:infPercurso/ns:UFPer', namespaces=self.ns)[0].text
@@ -389,7 +570,7 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         nCompra = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:valePed/ns:disp/ns:nCompra', namespaces=self.ns)[0].text
         vValePed = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:valePed/ns:disp/ns:vValePed', namespaces=self.ns)[0].text
 
-        self.assertEqual(CNPJForn, '04352277000134')
+        self.assertEqual(CNPJForn, '17060943000102')
         self.assertEqual(CPFPg, '75961547191')
         self.assertEqual(nCompra, '789')
         self.assertEqual(vValePed, '2.64')
@@ -408,6 +589,16 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         CPF_2 = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:infContratante/ns:CPF', namespaces=self.ns)[1].text
         self.assertEqual(xNome_2, 'JOSE DA SILVA')
         self.assertEqual(CPF_2, '12345678911')
+
+    def grupo_contratante_sem_rntrc(self):
+        xNome_1 = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:infContratante/ns:xNome', namespaces=self.ns)[0].text
+        CPF_1 = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:infContratante/ns:CPF', namespaces=self.ns)[0].text
+        NroContrato_1 = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:infContratante/ns:infContrato/ns:NroContrato', namespaces=self.ns)[0].text
+        vContratoGlobal_1 = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:infContratante/ns:infContrato/ns:vContratoGlobal', namespaces=self.ns)[0].text
+        self.assertEqual(xNome_1, 'JOAO DA SILVA')
+        self.assertEqual(CPF_1, '12345678912')
+        self.assertEqual(NroContrato_1, 'q26393479sakjd231234')
+        self.assertEqual(vContratoGlobal_1, '2342.64')
 
     def grupo_veiculos_reboque(self):
         cInt = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:veicReboque/ns:cInt', namespaces=self.ns)[1].text
@@ -466,20 +657,20 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
                 <cMunDescarga>3550308</cMunDescarga>
                 <xMunDescarga>Sao Paulo</xMunDescarga>
                 <infNFe>
-                    <chNFe>51180904352277000215550010001445371002594517</chNFe>
+                    <chNFe>51180917060943000102550010001445371002594517</chNFe>
                 </infNFe>
                 <infNFe>
-                    <chNFe>51191204352277000215550010001800551003198999</chNFe>
+                    <chNFe>51191217060943000102550010001800551003198999</chNFe>
                 </infNFe>
             </infMunDescarga>
             <infMunDescarga>
                 <cMunDescarga>3530607</cMunDescarga>
                 <xMunDescarga>Mogi das Cruzes</xMunDescarga>
                 <infNFe>
-                    <chNFe>51180904352277000215550010001445371002594517</chNFe>
+                    <chNFe>51180917060943000102550010001445371002594517</chNFe>
                 </infNFe>
                 <infNFe>
-                    <chNFe>51191204352277000215550010001800551003198999</chNFe>
+                    <chNFe>51191217060943000102550010001800551003198999</chNFe>
                 </infNFe>
             </infMunDescarga>
         </infDoc>
@@ -496,13 +687,22 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
 
         self.assertEqual(cMunDescarga_0, '3550308')
         self.assertEqual(xMunDescarga_0, 'Sao Paulo')
-        self.assertEqual(chNFe_0_0, '51180904352277000215550010001445371002594517')
-        self.assertEqual(chNFe_0_1, '51191204352277000215550010001800551003198999')
+        self.assertEqual(chNFe_0_0, '51180917060943000102550010001445371002594517')
+        self.assertEqual(chNFe_0_1, '51191217060943000102550010001800551003198999')
 
         self.assertEqual(cMunDescarga_1, '3530607')
         self.assertEqual(xMunDescarga_1, 'Mogi das Cruzes')
-        self.assertEqual(chNFe_1_0, '51180904352277000215550010001445371002594517')
-        self.assertEqual(chNFe_1_1, '51191204352277000215550010001800551003198999')
+        self.assertEqual(chNFe_1_0, '51180917060943000102550010001445371002594517')
+        self.assertEqual(chNFe_1_1, '51191217060943000102550010001800551003198999')
+
+    def grupo_informacoes_documentos_nfe_vinculados_sem_rntrc(self):
+        cMunDescarga = self.xml_assinado.xpath('//ns:infMDFe/ns:infDoc/ns:infMunDescarga/ns:cMunDescarga', namespaces=self.ns)[0].text
+        xMunDescarga = self.xml_assinado.xpath('//ns:infMDFe/ns:infDoc/ns:infMunDescarga/ns:xMunDescarga', namespaces=self.ns)[0].text
+        chNFe = self.xml_assinado.xpath('//ns:infMDFe/ns:infDoc/ns:infMunDescarga/ns:infNFe/ns:chNFe', namespaces=self.ns)[0].text
+
+        self.assertEqual(cMunDescarga, '5102637')
+        self.assertEqual(xMunDescarga, 'Campo Novo do Parecis')
+        self.assertEqual(chNFe, '51180917060943000102550010001445371002594517')
 
     def grupo_seguro_averbacao(self):
         respSeg = self.xml_assinado.xpath('//ns:infMDFe/ns:seg/ns:infResp/ns:respSeg', namespaces=self.ns)[0].text
@@ -517,12 +717,29 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         nAver_2 = self.xml_assinado.xpath('//ns:infMDFe/ns:seg/ns:nAver', namespaces=self.ns)[1].text
 
         self.assertEqual(respSeg, '1')
-        self.assertEqual(CNPJ_resp, '30221703000100')
+        self.assertEqual(CNPJ_resp, '75512177000176')
         self.assertEqual(xSeg, 'TESTE SEGURADORA SA')
-        self.assertEqual(CNPJ_seg, '30221703000100')
+        self.assertEqual(CNPJ_seg, '75512177000176')
         self.assertEqual(nApol, '00000')
         self.assertEqual(nAver_1, '00000000000000000000000')
         self.assertEqual(nAver_2, '11111111111111111111111')
+
+    def grupo_seguro_averbacao_sem_rntrc(self):
+        respSeg = self.xml_assinado.xpath('//ns:infMDFe/ns:seg/ns:infResp/ns:respSeg', namespaces=self.ns)[0].text
+        CNPJ_resp = self.xml_assinado.xpath('//ns:infMDFe/ns:seg/ns:infResp/ns:CNPJ', namespaces=self.ns)[0].text
+
+        xSeg = self.xml_assinado.xpath('//ns:infMDFe/ns:seg/ns:infSeg/ns:xSeg', namespaces=self.ns)[0].text
+        CNPJ_seg = self.xml_assinado.xpath('//ns:infMDFe/ns:seg/ns:infSeg/ns:CNPJ', namespaces=self.ns)[0].text
+
+        nApol = self.xml_assinado.xpath('//ns:infMDFe/ns:seg/ns:nApol', namespaces=self.ns)[0].text
+        nAver_1 = self.xml_assinado.xpath('//ns:infMDFe/ns:seg/ns:nAver', namespaces=self.ns)[0].text
+
+        self.assertEqual(respSeg, '1')
+        self.assertEqual(CNPJ_resp, '75512177000176')
+        self.assertEqual(xSeg, 'TESTE SEGURADORA SA')
+        self.assertEqual(CNPJ_seg, '75512177000176')
+        self.assertEqual(nApol, '00000')
+        self.assertEqual(nAver_1, '00000000000000000000000')
 
     def grupo_produto_predominante(self):
         tpCarga = self.xml_assinado.xpath('//ns:infMDFe/ns:prodPred/ns:tpCarga', namespaces=self.ns)[0].text
@@ -604,6 +821,35 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
 
         self.grupo_responsavel_tecnico()
         # self.grupo_qrcode()
+        self.digestvalue_da_assinatura()
+
+        # Testa a validação do XML com os schemas XSD
+        self.validacao_com_xsd_do_xml_gerado_sem_processar()
+
+
+    def test_manifesto_sem_rntrc(self):
+        # Preenche as classes do pynfe
+        self.manifesto = self.preenche_manifesto_sem_rntrc()
+
+        # Serializa e assina o XML
+        self.xml = self.serializa_mdfe()
+        self.xml_assinado = self.assina_xml()
+
+        # Teste do conteúdo das tags do XML
+        self.grupo_ide_sem_rntrc_test()
+        self.grupo_municipio_carregamento_sem_rntrc()
+        self.grupo_emitente()
+
+        # self.grupo_inf_antt()  # não tem o grupo infANTT
+        self.grupo_contratante_sem_rntrc()
+        self.grupo_veiculo_tracao()
+
+        self.grupo_informacoes_documentos_nfe_vinculados_sem_rntrc()
+        self.grupo_seguro_averbacao_sem_rntrc()
+        self.grupo_produto_predominante()
+        self.grupo_totais()
+
+        self.grupo_responsavel_tecnico()
         self.digestvalue_da_assinatura()
 
         # Testa a validação do XML com os schemas XSD
