@@ -51,6 +51,15 @@ Características
     * Evento de Inclusão de DF-e
     * Evento de Pagamento DF-e
 
+* CT-e:
+    * Atualizado para a versão 3.00
+    * Consultar Distribuição DF-e para CT-e
+    * Emissão (A fazer)
+    * Inutilização (A fazer)
+    * Consultar CT-e pela chave de acesso (A fazer)
+    * Consultar Status do Serviço (A fazer)
+    * Eventos relacionados a CT-e (A fazer)
+
 Dependências
 ------------
 
