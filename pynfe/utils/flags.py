@@ -17,6 +17,10 @@ VERSAO_MDFE = '3.00'
 
 VERSAO_PADRAO = '4.00'
 
+NAMESPACE_CTE = 'http://www.portalfiscal.inf.br/cte'
+NAMESPACE_CTE_METODO = 'http://www.portalfiscal.inf.br/cte/wsdl/'
+VERSAO_CTE = '3.00'
+
 VERSAO_QRCODE = '2'
 
 TIPOS_DOCUMENTO = (

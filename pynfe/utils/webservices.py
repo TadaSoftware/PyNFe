@@ -509,3 +509,11 @@ MDFE = {
 		'QRCODE': 'https://dfe-portal.svrs.rs.gov.br/mdfe/qrCode'
 	}
 }
+
+CTE = {
+        'AN': {
+	    	'DISTRIBUICAO': 'cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx',
+	    	'HTTPS': 'https://www1',
+	    	'HOMOLOGACAO': 'https://hom1'
+	    },
+}

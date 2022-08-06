@@ -5,6 +5,7 @@ from .assinatura import AssinaturaA1
 from .comunicacao import (
     ComunicacaoSefaz,
     ComunicacaoNfse,
-    ComunicacaoMDFe
+    ComunicacaoMDFe,
+    ComunicacaoCTe,
 )
 from .danfe import DanfeNfce
