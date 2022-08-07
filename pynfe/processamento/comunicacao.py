@@ -995,7 +995,7 @@ class ComunicacaoCTe(Comunicacao):
     _versao = VERSAO_CTE
     _assinatura = AssinaturaA1
     _namespace = NAMESPACE_CTE
-    _header = False
+    _header = 'cteCabecMsg'
     _envio_mensagem = 'cteDadosMsg'
     _namespace_metodo = NAMESPACE_CTE_METODO
     _accept = False
@@ -1003,6 +1003,20 @@ class ComunicacaoCTe(Comunicacao):
     _namespace_xsi = NAMESPACE_XSI
     _namespace_xsd = NAMESPACE_XSD
     _soap_version = 'soap'
+
+    def status_servico(self):
+        """
+        Verifica status do servidor da receita.
+        :return:
+        """
+        url = self._get_url('STATUS')
+        # Monta XML do corpo da requisição
+        raiz = etree.Element('consStatServ', versao=self._versao, xmlns=NAMESPACE_CTE)
+        etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
+        etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
+        etree.SubElement(raiz, 'xServ').text = 'STATUS'
+        xml = self._construir_xml_soap('CteStatusServico', raiz)
+        return self._post(url, xml)
 
     def consulta_distribuicao(self, cnpj=None, cpf=None, chave=None, nsu=0):
         """ 
@@ -1053,8 +1067,59 @@ class ComunicacaoCTe(Comunicacao):
         self.url = ambiente + CTE['AN'][consulta]
         return self.url
 
+    def _cabecalho_soap(self, metodo):
+        """Monta o XML do cabeçalho da requisição SOAP"""
+
+        raiz = etree.Element(
+            self._header,
+            xmlns=self._namespace_metodo + metodo
+        )
+        etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
+        etree.SubElement(raiz, 'versaoDados').text = '3.00'
+        return raiz
+
+    def _get_url(self, consulta):
+        """ Retorna a url para comunicação com o webservice """
+
+        # Estados que implementam webservices proprios
+        lista = ['MT', 'MS', 'MG', 'PR', 'RS', 'SP']
+        if self.uf.upper() in lista:
+            if self._ambiente == 1:
+                ambiente = 'HTTPS'
+            else:
+                ambiente = 'HOMOLOGACAO'
+            self.url = CTE[self.uf.upper()][ambiente] + CTE[self.uf.upper()][consulta]
+
+        # Estados que utilizam outros ambientes
+        else:
+            lista_svrs = [
+                'AC', 'AL', 'AM', 'BA', 'CE',
+                'DF', 'ES', 'GO', 'MA', 'PA',
+                'PB', 'PI', 'RJ', 'RN', 'RO',
+                'SC', 'SE', 'TO'
+            ]
+            lista_svsp = ['AP', 'PE', 'RR']
+
+            # SVRS
+            if self.uf.upper() in lista_svrs:
+                if self._ambiente == 1:
+                    ambiente = 'HTTPS'
+                else:
+                    ambiente = 'HOMOLOGACAO'
+                self.url = CTE['SVRS'][ambiente] + CTE['SVRS'][consulta]
+            # SVSP
+            elif self.uf.upper() in lista_svsp:
+                if self._ambiente == 1:
+                    ambiente = 'HTTPS'
+                else:
+                    ambiente = 'HOMOLOGACAO'
+                self.url = CTE['SVSP'][ambiente] + CTE['SVSP'][consulta]
+            else:
+                raise Exception(f"Url não encontrada para {modelo} e {consulta} {self.uf.upper()}")
+        return self.url
+
     def _construir_xml_soap(self, metodo, dados, cabecalho=False):
-        """Mota o XML para o envio via SOAP"""
+        """Monta o XML para o envio via SOAP"""
 
         raiz = etree.Element(
             '{%s}Envelope' % NAMESPACE_SOAP,
@@ -1064,6 +1129,12 @@ class ComunicacaoCTe(Comunicacao):
                 'soap': NAMESPACE_SOAP
             }
         )
+
+        if self._header:
+            cabecalho = self._cabecalho_soap(metodo)
+            c = etree.SubElement(raiz, '{%s}Header' % self._namespace_soap)
+            c.append(cabecalho)
+
         body = etree.SubElement(raiz, '{%s}Body' % NAMESPACE_SOAP)
         # distribuição tem um corpo de xml diferente
         if metodo == 'CTeDistribuicaoDFe':
@@ -1080,6 +1151,7 @@ class ComunicacaoCTe(Comunicacao):
             'content-type': 'application/soap+xml; charset=utf-8;',
             'Accept': 'application/soap+xml; charset=utf-8;',
         }
+        response["SOAPAction"] = ""
         return response
 
     def _post(self, url, xml):
