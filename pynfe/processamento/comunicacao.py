@@ -16,9 +16,12 @@ from pynfe.utils.flags import (
     NAMESPACE_SOAP,
     CODIGOS_ESTADOS,
     NAMESPACE_BETHA,
-    NAMESPACE_METODO
+    NAMESPACE_METODO,
+    NAMESPACE_CTE,
+    VERSAO_CTE,
+    NAMESPACE_CTE_METODO
 )
-from pynfe.utils.webservices import NFE, NFCE, NFSE, MDFE
+from pynfe.utils.webservices import NFE, NFCE, NFSE, MDFE, CTE
 from pynfe.entidades.certificado import CertificadoA1
 from .assinatura import AssinaturaA1
 
@@ -984,3 +987,199 @@ class ComunicacaoMDFe(Comunicacao):
 
         self.url = ambiente + MDFE['SVRS'][consulta]
         return self.url
+
+
+class ComunicacaoCTe(Comunicacao):
+    """Classe de comunicação que segue o padrão definido para as SEFAZ dos Estados."""
+
+    _versao = VERSAO_CTE
+    _assinatura = AssinaturaA1
+    _namespace = NAMESPACE_CTE
+    _header = 'cteCabecMsg'
+    _envio_mensagem = 'cteDadosMsg'
+    _namespace_metodo = NAMESPACE_CTE_METODO
+    _accept = False
+    _namespace_soap = NAMESPACE_SOAP
+    _namespace_xsi = NAMESPACE_XSI
+    _namespace_xsd = NAMESPACE_XSD
+    _soap_version = 'soap'
+
+    def status_servico(self):
+        """
+        Verifica status do servidor da receita.
+        :return:
+        """
+        url = self._get_url('STATUS')
+        # Monta XML do corpo da requisição
+        raiz = etree.Element('consStatServ', versao=self._versao, xmlns=NAMESPACE_CTE)
+        etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
+        etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
+        etree.SubElement(raiz, 'xServ').text = 'STATUS'
+        xml = self._construir_xml_soap('CteStatusServico', raiz)
+        return self._post(url, xml)
+
+    def consulta_distribuicao(self, cnpj=None, cpf=None, chave=None, nsu=0):
+        """ 
+            O XML do pedido de distribuição suporta três tipos de consultas que são
+            definidas de acordo com a tag informada no XML. 
+            As tags são distNSU, consNSU e consChCTe.
+            a) distNSU – Distribuição de Conjunto de DF-e a Partir do NSU Informado
+            b) consNSU – Consulta DF-e Vinculado ao NSU Informado
+            c) consChCTe – Consulta de NF-e por Chave de Acesso Informada 
+        :param cnpj: CNPJ do interessado
+        :param cpf: CPF do interessado
+        :param chave: Chave do CT-e a ser consultada
+        :param nsu: Ultimo nsu ou nsu específico para ser consultado.
+        :return: 
+        """
+        # url
+        url = self._get_url_an(consulta='DISTRIBUICAO')
+        # Monta XML para envio da requisição
+        raiz = etree.Element('distDFeInt', versao='1.00', xmlns=NAMESPACE_CTE)
+        etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
+        if self.uf:
+            etree.SubElement(raiz, 'cUFAutor').text = CODIGOS_ESTADOS[self.uf.upper()]
+        if cnpj:
+            etree.SubElement(raiz, 'CNPJ').text = cnpj
+        else:
+            etree.SubElement(raiz, 'CPF').text = cpf
+        if not chave:
+            distNSU = etree.SubElement(raiz, 'distNSU')
+            etree.SubElement(distNSU, 'ultNSU').text = str(nsu).zfill(15)
+        if chave:
+            consChCTe = etree.SubElement(raiz, 'consChCTe')
+            etree.SubElement(consChCTe, 'chCTe').text = chave
+        #Monta XML para envio da requisição
+        xml = self._construir_xml_soap('CTeDistribuicaoDFe', raiz)
+        return self._post(url, xml)
+
+    def _get_url_an(self, consulta):
+        # producao
+        if self._ambiente == 1:
+            if consulta == 'DISTRIBUICAO':
+                ambiente = 'https://www1.'
+            else:
+                ambiente = 'https://www.'
+        # homologacao
+        else:
+            ambiente = 'https://hom.'
+
+        self.url = ambiente + CTE['AN'][consulta]
+        return self.url
+
+    def _cabecalho_soap(self, metodo):
+        """Monta o XML do cabeçalho da requisição SOAP"""
+
+        raiz = etree.Element(
+            self._header,
+            xmlns=self._namespace_metodo + metodo
+        )
+        etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
+        etree.SubElement(raiz, 'versaoDados').text = '3.00'
+        return raiz
+
+    def _get_url(self, consulta):
+        """ Retorna a url para comunicação com o webservice """
+
+        # Estados que implementam webservices proprios
+        lista = ['MT', 'MS', 'MG', 'PR', 'RS', 'SP']
+        if self.uf.upper() in lista:
+            if self._ambiente == 1:
+                ambiente = 'HTTPS'
+            else:
+                ambiente = 'HOMOLOGACAO'
+            self.url = CTE[self.uf.upper()][ambiente] + CTE[self.uf.upper()][consulta]
+
+        # Estados que utilizam outros ambientes
+        else:
+            lista_svrs = [
+                'AC', 'AL', 'AM', 'BA', 'CE',
+                'DF', 'ES', 'GO', 'MA', 'PA',
+                'PB', 'PI', 'RJ', 'RN', 'RO',
+                'SC', 'SE', 'TO'
+            ]
+            lista_svsp = ['AP', 'PE', 'RR']
+
+            # SVRS
+            if self.uf.upper() in lista_svrs:
+                if self._ambiente == 1:
+                    ambiente = 'HTTPS'
+                else:
+                    ambiente = 'HOMOLOGACAO'
+                self.url = CTE['SVRS'][ambiente] + CTE['SVRS'][consulta]
+            # SVSP
+            elif self.uf.upper() in lista_svsp:
+                if self._ambiente == 1:
+                    ambiente = 'HTTPS'
+                else:
+                    ambiente = 'HOMOLOGACAO'
+                self.url = CTE['SVSP'][ambiente] + CTE['SVSP'][consulta]
+            else:
+                raise Exception(f"Url não encontrada para {consulta} {self.uf.upper()}")
+        return self.url
+
+    def _construir_xml_soap(self, metodo, dados, cabecalho=False):
+        """Monta o XML para o envio via SOAP"""
+
+        raiz = etree.Element(
+            '{%s}Envelope' % NAMESPACE_SOAP,
+            nsmap={
+                'xsi': NAMESPACE_XSI,
+                'xsd': NAMESPACE_XSD,
+                'soap': NAMESPACE_SOAP
+            }
+        )
+
+        if self._header:
+            cabecalho = self._cabecalho_soap(metodo)
+            c = etree.SubElement(raiz, '{%s}Header' % self._namespace_soap)
+            c.append(cabecalho)
+
+        body = etree.SubElement(raiz, '{%s}Body' % NAMESPACE_SOAP)
+        # distribuição tem um corpo de xml diferente
+        if metodo == 'CTeDistribuicaoDFe':
+            x = etree.SubElement(body, 'cteDistDFeInteresse', xmlns=NAMESPACE_CTE_METODO+metodo)
+            a = etree.SubElement(x, 'cteDadosMsg')
+        else:
+            a = etree.SubElement(body, 'cteDadosMsg', xmlns=NAMESPACE_CTE_METODO+metodo)
+        a.append(dados)
+        return raiz
+
+    def _post_header(self):
+        """Retorna um dicionário com os atributos para o cabeçalho da requisição HTTP"""
+        response = {
+            'content-type': 'application/soap+xml; charset=utf-8;',
+            'Accept': 'application/soap+xml; charset=utf-8;',
+        }
+        response["SOAPAction"] = ""
+        return response
+
+    def _post(self, url, xml):
+        certificado_a1 = CertificadoA1(self.certificado)
+        chave, cert = certificado_a1.separar_arquivo(self.certificado_senha, caminho=True)
+        chave_cert = (cert, chave)
+        # Abre a conexão HTTPS
+        try:
+            xml_declaration = '<?xml version="1.0" encoding="UTF-8"?>'
+
+            # limpa xml com caracteres bugados para infNFeSupl em NFC-e
+            xml = re.sub(
+                '<qrCode>(.*?)</qrCode>',
+                lambda x: x.group(0).replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', ''),
+                etree.tostring(xml, encoding='unicode').replace('\n', '')
+            )
+            xml = xml_declaration + xml
+
+            print(xml)
+            print('-' * 20)
+
+            # Faz o request com o servidor
+            result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False, timeout=300)
+            result.encoding = 'utf-8'
+            return result
+        except requests.exceptions.Timeout as e:
+            raise e
+        except requests.exceptions.RequestException as e:
+            raise e
+        finally:
+            certificado_a1.excluir()

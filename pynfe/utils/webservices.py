@@ -509,3 +509,51 @@ MDFE = {
 		'QRCODE': 'https://dfe-portal.svrs.rs.gov.br/mdfe/qrCode'
 	}
 }
+
+CTE = {
+    'AN': {
+        'DISTRIBUICAO': 'cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx',
+        'HTTPS': 'https://www1',
+        'HOMOLOGACAO': 'https://hom1'
+    },
+    'MT': {
+        'STATUS': 'sefaz.mt.gov.br/ctews/services/CteStatusServico',
+        'HTTPS': 'https://cte.',
+        'HOMOLOGACAO': 'https://homologacao.'
+    },
+    'MS': {
+        'STATUS': 'cte.ms.gov.br/ws/CteStatusServico',
+        'HTTPS': 'https://producao.',
+        'HOMOLOGACAO': 'https://homologacao.'
+    },
+    'MG': {
+        'STATUS': 'fazenda.mg.gov.br/cte/services/CteStatusServico',
+        'HTTPS': 'https://cte.',
+        'HOMOLOGACAO': 'https://hcte.'
+    },
+    'PR': {
+        'STATUS': 'fazenda.pr.gov.br/cte/CteStatusServico?wsdl',
+        'HTTPS': 'https://cte.',
+        'HOMOLOGACAO': 'https://homologacao.'
+    },
+    'RS': {
+        'STATUS': 'svrs.rs.gov.br/ws/ctestatusservico/CteStatusServico.asmx',
+        'HTTPS': 'https://cte.',
+        'HOMOLOGACAO': 'https://cte-homologacao.'
+    },
+    'SP': {
+        'STATUS': 'fazenda.sp.gov.br/cteWEB/services/cteStatusServico.asmx',
+        'HTTPS': 'https://nfe.',
+        'HOMOLOGACAO': 'https://homologacao.nfe.'
+    },
+    'SVRS': {
+        'STATUS': 'svrs.rs.gov.br/ws/ctestatusservico/CteStatusServico.asmx',
+        'HTTPS': 'https://cte.',
+        'HOMOLOGACAO': 'https://cte-homologacao.'
+    },
+    'SVSP': {
+        'STATUS': 'fazenda.sp.gov.br/cteWEB/services/CteStatusServico.asmx',
+        'HTTPS': 'https://nfe.',
+        'HOMOLOGACAO': 'https://homologacao.nfe.'
+    },
+}
