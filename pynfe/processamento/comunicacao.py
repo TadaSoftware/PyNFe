@@ -1115,7 +1115,7 @@ class ComunicacaoCTe(Comunicacao):
                     ambiente = 'HOMOLOGACAO'
                 self.url = CTE['SVSP'][ambiente] + CTE['SVSP'][consulta]
             else:
-                raise Exception(f"Url não encontrada para {modelo} e {consulta} {self.uf.upper()}")
+                raise Exception(f"Url não encontrada para {consulta} {self.uf.upper()}")
         return self.url
 
     def _construir_xml_soap(self, metodo, dados, cabecalho=False):
