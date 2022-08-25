@@ -154,7 +154,8 @@ class SerializacaoXML(Serializacao):
                 cliente.endereco_municipio, cliente.endereco_uf)
             etree.SubElement(endereco, 'xMun').text = cliente.endereco_municipio
             etree.SubElement(endereco, 'UF').text = cliente.endereco_uf
-            etree.SubElement(endereco, 'CEP').text = so_numeros(cliente.endereco_cep)
+            if cliente.endereco_cep:
+                etree.SubElement(endereco, 'CEP').text = so_numeros(cliente.endereco_cep)
             etree.SubElement(endereco, 'cPais').text = cliente.endereco_pais
             etree.SubElement(endereco, 'xPais').text = obter_pais_por_codigo(cliente.endereco_pais)
             if cliente.endereco_telefone:
@@ -187,13 +188,20 @@ class SerializacaoXML(Serializacao):
         raiz = etree.Element(tag_raiz)
 
         # Dados da transportadora
-        etree.SubElement(raiz, transportadora.tipo_documento.upper()).text = so_numeros(transportadora.numero_documento)
-        etree.SubElement(raiz, 'xNome').text = transportadora.razao_social
-        etree.SubElement(raiz, 'IE').text = transportadora.inscricao_estadual
+        if transportadora.numero_documento:
+            etree.SubElement(raiz, transportadora.tipo_documento.upper()).text = so_numeros(transportadora.numero_documento)
+        if transportadora.razao_social:
+            etree.SubElement(raiz, 'xNome').text = transportadora.razao_social
+        if transportadora.inscricao_estadual:
+            etree.SubElement(raiz, 'IE').text = transportadora.inscricao_estadual
+
         # Endereço
-        etree.SubElement(raiz, 'xEnder').text = transportadora.endereco_logradouro
-        etree.SubElement(raiz, 'xMun').text = transportadora.endereco_municipio
-        etree.SubElement(raiz, 'UF').text = transportadora.endereco_uf
+        if transportadora.endereco_logradouro:
+            etree.SubElement(raiz, 'xEnder').text = transportadora.endereco_logradouro
+        if transportadora.endereco_municipio:
+            etree.SubElement(raiz, 'xMun').text = transportadora.endereco_municipio
+        if transportadora.endereco_uf:
+            etree.SubElement(raiz, 'UF').text = transportadora.endereco_uf
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
@@ -1386,7 +1394,8 @@ class SerializacaoMDFe(Serializacao):
             etree.SubElement(raiz, 'CNPJ').text = so_numeros(emitente.cpfcnpj)
         etree.SubElement(raiz, 'IE').text = emitente.inscricao_estadual
         etree.SubElement(raiz, 'xNome').text = emitente.razao_social
-        etree.SubElement(raiz, 'xFant').text = emitente.nome_fantasia
+        if emitente.nome_fantasia:
+            etree.SubElement(raiz, 'xFant').text = emitente.nome_fantasia
         # Endereço
         endereco = etree.SubElement(raiz, 'enderEmit')
         etree.SubElement(endereco, 'xLgr').text = emitente.endereco_logradouro
