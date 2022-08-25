@@ -166,19 +166,32 @@ class ComunicacaoSefaz(Comunicacao):
         xml = self._construir_xml_soap('NFeConsultaProtocolo4', raiz)
         return self._post(url, xml)
 
-    def consulta_distribuicao(self, cnpj=None, cpf=None, chave=None, nsu=0):
-        """ 
-            O XML do pedido de distribuição suporta três tipos de consultas que são definidas de acordo com a tag
-            informada no XML. As tags são distNSU, consNSU e consChNFe.
-            a) distNSU – Distribuição de Conjunto de DF-e a Partir do NSU Informado
-            b) consNSU – Consulta DF-e Vinculado ao NSU Informado
-            c) consChNFe – Consulta de NF-e por Chave de Acesso Informada 
+    def consulta_distribuicao(self, cnpj=None, cpf=None, chave=None, nsu=0, consulta_nsu_especifico=False):
+        """
+        O XML do pedido de distribuição suporta três tipos de consultas
+        que são definidas de acordo com a tag informada no XML.
+
+        As tags são distNSU, consNSU e consChNFe:
+        a) distNSU – Distribuição de Conjunto de DF-e a Partir do NSU Informado
+        b) consNSU – Consulta DF-e Vinculado ao NSU Informado
+        c) consChNFe – Consulta de NF-e por Chave de Acesso Informada
+
         :param cnpj: CNPJ do interessado
         :param cpf: CPF do interessado
         :param chave: Chave da NF-e a ser consultada
-        :param nsu: Ultimo nsu ou nsu específico para ser consultado.
-        :return: 
+        :param nsu: Ultimo nsu ou nsu específico para ser consultado
+        :param consulta_nsu_especifico:
+            True para consulta por nsu específico
+            False para consulta por nsu último
+        :return: xml do resultado da consulta
+
+        Exemplos de usos:
+        * consChNFe: consulta_distribuicao(cnpj=CNPJ, chave=CHAVE)
+        * distNSU: consulta_distribuicao(cnpj=CNPJ, chave=None, nsu=0, consulta_nsu_especifico=False)
+        * consNSU: consulta_distribuicao(cnpj=CNPJ, chave=None, nsu=10, consulta_nsu_especifico=True)
+
         """
+
         # url
         url = self._get_url_an(consulta='DISTRIBUICAO')
         # Monta XML para envio da requisição
@@ -190,16 +203,20 @@ class ComunicacaoSefaz(Comunicacao):
             etree.SubElement(raiz, 'CNPJ').text = cnpj
         else:
             etree.SubElement(raiz, 'CPF').text = cpf
-        if not chave:
+
+        if not chave and not consulta_nsu_especifico:
             distNSU = etree.SubElement(raiz, 'distNSU')
             etree.SubElement(distNSU, 'ultNSU').text = str(nsu).zfill(15)
         if chave:
             consChNFe = etree.SubElement(raiz, 'consChNFe')
             etree.SubElement(consChNFe, 'chNFe').text = chave
-        #Monta XML para envio da requisição
+        if consulta_nsu_especifico:
+            consNSU = etree.SubElement(raiz, 'consNSU')
+            etree.SubElement(consNSU, 'NSU').text = str(nsu).zfill(15)
+
+        # Monta XML para envio da requisição
         xml = self._construir_xml_soap('NFeDistribuicaoDFe', raiz)
 
-        
         return self._post(url, xml)
 
     def consulta_cadastro(self, modelo, cnpj):
