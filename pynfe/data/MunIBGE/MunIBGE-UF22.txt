@@ -134,7 +134,7 @@
 2206670	Morro do Chapéu do Piauí
 2206696	Murici dos Portelas
 2206704	Nazaré do Piauí
-2206720 Nazária
+2206720	Nazária
 2206753	Nossa Senhora de Nazaré
 2206803	Nossa Senhora dos Remédios
 2206902	Novo Oriente do Piauí
