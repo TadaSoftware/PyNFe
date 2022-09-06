@@ -367,7 +367,10 @@ class ComunicacaoSefaz(Comunicacao):
                 ambiente = 'https://www.'
         # homologacao
         else:
-            ambiente = 'https://hom.'
+            if consulta == 'DISTRIBUICAO':
+                ambiente = 'https://hom1.'
+            else:
+                ambiente = 'https://hom.'
 
         self.url = ambiente + NFE['AN'][consulta]
         return self.url
@@ -1071,15 +1074,9 @@ class ComunicacaoCTe(Comunicacao):
         return self._post(url, xml)
 
     def _get_url_an(self, consulta):
-        # producao
-        if self._ambiente == 1:
-            if consulta == 'DISTRIBUICAO':
-                ambiente = 'https://www1.'
-            else:
-                ambiente = 'https://www.'
-        # homologacao
-        else:
-            ambiente = 'https://hom.'
+        ambiente = 'https://www1.'  # produção
+        if self._ambiente == 2:  # homologacao
+            ambiente = 'https://hom1.'
 
         self.url = ambiente + CTE['AN'][consulta]
         return self.url
