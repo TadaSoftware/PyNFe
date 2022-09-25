@@ -238,7 +238,6 @@
 																<xs:minLength value="2"/>
 																<xs:maxLength value="20"/>
 																<xs:whiteSpace value="preserve"/>
-																<xs:enumeration value="1"/>
 															</xs:restriction>
 														</xs:simpleType>
 													</xs:element>
