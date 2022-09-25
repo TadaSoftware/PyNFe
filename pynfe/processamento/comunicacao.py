@@ -842,7 +842,10 @@ class ComunicacaoMDFe(Comunicacao):
                 rec = prot[1][0]
                 status = rec.xpath("ns:retEnviMDFe/ns:cStat", namespaces=ns)[0].text
                 # Lote Recebido com Sucesso!
-                if status == self._edoc_situacao_arquivo_recebido_com_sucesso:
+                if status in (
+                    self._edoc_situacao_arquivo_recebido_com_sucesso,
+                    self._edoc_situacao_em_processamento
+                ):
                     nrec = rec.xpath("ns:retEnviMDFe/ns:infRec/ns:nRec", namespaces=ns)[0].text
                     return 0, nrec, manifesto
         return 1, retorno, manifesto
@@ -1183,9 +1186,6 @@ class ComunicacaoCTe(Comunicacao):
                 etree.tostring(xml, encoding='unicode').replace('\n', '')
             )
             xml = xml_declaration + xml
-
-            print(xml)
-            print('-' * 20)
 
             # Faz o request com o servidor
             result = requests.post(url, xml, headers=self._post_header(), cert=chave_cert, verify=False, timeout=300)
