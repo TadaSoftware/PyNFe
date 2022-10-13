@@ -989,7 +989,7 @@ class SerializacaoXML(Serializacao):
         Para as notas com finalidade de Ajuste ou Devolução o campo Forma de Pagamento deve ser preenchido com 90=Sem Pagamento. """
         pag = etree.SubElement(raiz, 'pag')
         detpag = etree.SubElement(pag, 'detPag')
-        if nota_fiscal.finalidade_emissao == '3' or nota_fiscal.finalidade_emissao == '4':
+        if str(nota_fiscal.finalidade_emissao) == '3' or str(nota_fiscal.finalidade_emissao) == '4':
             etree.SubElement(detpag, 'tPag').text = '90'
             etree.SubElement(detpag, 'vPag').text = '{:.2f}'.format(0)
         else:
