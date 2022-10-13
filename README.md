@@ -110,6 +110,12 @@ Instalação
 pip install pynfe
 ```
 
+Instalar versão de desenvolvimento:
+
+```sh
+pip install https://github.com/TadaSoftware/PyNFe/archive/refs/heads/main.zip
+```
+
 Opcional para NFS-e:
 
 ```sh
