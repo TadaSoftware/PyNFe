@@ -1503,7 +1503,8 @@ class SerializacaoMDFe(Serializacao):
 
         for num, item in enumerate(modal_rodoviario.veiculo_tracao):
             veicTracao = etree.SubElement(rodo, 'veicTracao')
-            etree.SubElement(veicTracao, 'cInt').text = item.cInt
+            if item.cInt:
+                etree.SubElement(veicTracao, 'cInt').text = item.cInt
             etree.SubElement(veicTracao, 'placa').text = item.placa
             if item.RENAVAM:
                 etree.SubElement(veicTracao, 'RENAVAM').text = item.RENAVAM
@@ -1546,7 +1547,8 @@ class SerializacaoMDFe(Serializacao):
         if modal_rodoviario.veiculo_reboque != None:
             for num, item_reboque in enumerate(modal_rodoviario.veiculo_reboque):
                 veicReboque = etree.SubElement(rodo, 'veicReboque')
-                etree.SubElement(veicReboque, 'cInt').text = item_reboque.cInt
+                if item_reboque.cInt:
+                    etree.SubElement(veicReboque, 'cInt').text = item_reboque.cInt
                 etree.SubElement(veicReboque, 'placa').text = item_reboque.placa
                 if item_reboque.RENAVAM:
                     etree.SubElement(veicReboque, 'RENAVAM').text = item_reboque.RENAVAM
@@ -1649,7 +1651,7 @@ class SerializacaoMDFe(Serializacao):
         elif totais.qNFe > 0:
             etree.SubElement(raiz, 'qNFe').text = str(totais.qNFe)
 
-        etree.SubElement(raiz, 'vCarga').text = str(totais.vCarga)
+        etree.SubElement(raiz, 'vCarga').text = str('{:.2f}').format(totais.vCarga or 0)
         if totais.cUnid == 'KG':
             etree.SubElement(raiz, 'cUnid').text = '01'
         elif totais.cUnid == 'TON':

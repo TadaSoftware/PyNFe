@@ -759,7 +759,7 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         qCarga = self.xml_assinado.xpath('//ns:infMDFe/ns:tot/ns:qCarga', namespaces=self.ns)[0].text
 
         self.assertEqual(qNFe, '2')
-        self.assertEqual(vCarga, '1000')
+        self.assertEqual(vCarga, '1000.00')
         self.assertEqual(cUnid, '01')
         self.assertEqual(qCarga, '5000.0000')
 
