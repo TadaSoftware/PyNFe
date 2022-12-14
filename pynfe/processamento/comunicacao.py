@@ -1034,9 +1034,8 @@ class ComunicacaoCTe(Comunicacao):
         """
         url = self._get_url('STATUS')
         # Monta XML do corpo da requisição
-        raiz = etree.Element('consStatServ', versao=self._versao, xmlns=NAMESPACE_CTE)
+        raiz = etree.Element('consStatServCte', versao=self._versao, xmlns=NAMESPACE_CTE)
         etree.SubElement(raiz, 'tpAmb').text = str(self._ambiente)
-        etree.SubElement(raiz, 'cUF').text = CODIGOS_ESTADOS[self.uf.upper()]
         etree.SubElement(raiz, 'xServ').text = 'STATUS'
         xml = self._construir_xml_soap('CteStatusServico', raiz)
         return self._post(url, xml)
