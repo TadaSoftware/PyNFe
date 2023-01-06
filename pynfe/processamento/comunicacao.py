@@ -103,7 +103,7 @@ class ComunicacaoSefaz(Comunicacao):
                         status = prot_nfe.xpath('ns:infProt/ns:cStat', namespaces=ns)[0].text
                         # autorizado usa da NF-e 
                         # retorna xml final (protNFe+NFe)
-                        if status == '100':
+                        if status in ['100', '150']:
                             raiz = etree.Element('nfeProc', xmlns=NAMESPACE_NFE, versao=VERSAO_PADRAO)
                             raiz.append(nota_fiscal)
                             raiz.append(prot_nfe)
