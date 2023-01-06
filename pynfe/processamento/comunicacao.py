@@ -367,10 +367,7 @@ class ComunicacaoSefaz(Comunicacao):
                 ambiente = 'https://www.'
         # homologacao
         else:
-            if consulta == 'DISTRIBUICAO':
-                ambiente = 'https://hom1.'
-            else:
-                ambiente = 'https://hom.'
+            ambiente = 'https://hom1.'
 
         self.url = ambiente + NFE['AN'][consulta]
         return self.url
