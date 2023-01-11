@@ -276,7 +276,7 @@ para tpEmis diferente de 1</xs:documentation>
 											</xs:simpleType>
 										</xs:element>
 									</xs:sequence>
-									<xs:element name="NFref" minOccurs="0" maxOccurs="500">
+									<xs:element name="NFref" minOccurs="0" maxOccurs="999">
 										<xs:annotation>
 											<xs:documentation>Grupo de infromações da NF referenciada</xs:documentation>
 										</xs:annotation>
@@ -285,6 +285,11 @@ para tpEmis diferente de 1</xs:documentation>
 												<xs:element name="refNFe" type="TChNFe">
 													<xs:annotation>
 														<xs:documentation>Chave de acesso das NF-e referenciadas. Chave de acesso compostas por Código da UF (tabela do IBGE) + AAMM da emissão + CNPJ do Emitente + modelo, série e número da NF-e Referenciada + Código Numérico + DV.</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:element name="refNFeSig" type="TChNFe">
+													<xs:annotation>
+														<xs:documentation>Referencia uma NF-e (modelo 55) emitida anteriormente pela sua Chave de Acesso com código numérico zerado, permitindo manter o sigilo da NF-e referenciada.</xs:documentation>
 													</xs:annotation>
 												</xs:element>
 												<xs:element name="refNF">
@@ -6657,8 +6662,7 @@ alterado para tamanho variavel 1-4. (NT2011/004)</xs:documentation>
 	</xs:complexType>
 	<xs:simpleType name="Torig">
 		<xs:annotation>
-			<xs:documentation>Tipo Origem da mercadoria CST ICMS  origem da mercadoria: 0-Nacional exceto as indicadas nos códigos 3, 4, 5 e 8;
-1-Estrangeira - Importação direta; 2-Estrangeira - Adquirida no mercado interno; 3-Nacional, conteudo superior 40% e inferior ou igual a 70%; 4-Nacional, processos produtivos básicos; 5-Nacional, conteudo inferior 40%; 6-Estrangeira - Importação direta, com similar nacional, lista CAMEX; 7-Estrangeira - mercado interno, sem simular,lista CAMEX;8-Nacional, Conteúdo de Importação superior a 70%.</xs:documentation>
+			<xs:documentation>Tipo Origem da mercadoria CST ICMS  origem da mercadoria: 0-Nacional exceto as indicadas nos códigos 3, 4, 5 e 8;1-Estrangeira - Importação direta; 2-Estrangeira - Adquirida no mercado interno; 3-Nacional, conteudo superior 40% e inferior ou igual a 70%; 4-Nacional, processos produtivos básicos; 5-Nacional, conteudo inferior 40%; 6-Estrangeira - Importação direta, com similar nacional, lista CAMEX; 7-Estrangeira - mercado interno, sem simular,lista CAMEX;8-Nacional, Conteúdo de Importação superior a 70%.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:whiteSpace value="preserve"/>
