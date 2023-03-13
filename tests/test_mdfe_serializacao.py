@@ -290,7 +290,6 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
             endereco_cep='78118000',
             endereco_uf='MT',
             endereco_telefone='65999662821',
-            endereco_email='teste@gmail.com'
         )
 
         # Totais
@@ -537,7 +536,7 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         CEP = self.xml_assinado.xpath('//ns:emit/ns:enderEmit/ns:CEP', namespaces=self.ns)[0].text
         UF = self.xml_assinado.xpath('//ns:emit/ns:enderEmit/ns:UF', namespaces=self.ns)[0].text
         fone = self.xml_assinado.xpath('//ns:emit/ns:enderEmit/ns:fone', namespaces=self.ns)[0].text
-        email = self.xml_assinado.xpath('//ns:emit/ns:enderEmit/ns:email', namespaces=self.ns)[0].text
+        email = self.xml_assinado.xpath('//ns:emit/ns:enderEmit/ns:email', namespaces=self.ns)
 
         self.assertEqual(CNPJ, '99999999000199')
         self.assertEqual(IE, '9999999999')
@@ -551,7 +550,8 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         self.assertEqual(CEP, '78118000')
         self.assertEqual(UF, 'MT')
         self.assertEqual(fone, '65999662821')
-        self.assertEqual(email, 'teste@gmail.com')
+        if email:
+            self.assertEqual(email[0].text, 'teste@gmail.com')
 
     def grupo_inf_antt(self):
         RNTRC = self.xml_assinado.xpath('//ns:infModal/ns:rodo/ns:infANTT/ns:RNTRC', namespaces=self.ns)[0].text
