@@ -1410,7 +1410,8 @@ class SerializacaoMDFe(Serializacao):
         etree.SubElement(endereco, 'UF').text = emitente.endereco_uf
         if emitente.endereco_telefone:
             etree.SubElement(endereco, 'fone').text = emitente.endereco_telefone
-        etree.SubElement(endereco, 'email').text = emitente.endereco_email
+        if emitente.endereco_email:
+            etree.SubElement(endereco, 'email').text = emitente.endereco_email
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
