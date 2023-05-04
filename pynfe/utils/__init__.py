@@ -1,7 +1,7 @@
 # *-* encoding: utf-8 *-*
 
-import os
 import codecs
+import os
 from unicodedata import normalize
 
 try:
@@ -96,7 +96,10 @@ def carregar_arquivo_municipios(uf, reverso=False):
 def obter_codigo_por_municipio(municipio, uf):
     # TODO: fazer UF ser opcional
     municipios = carregar_arquivo_municipios(uf, True)
-    return municipios[normalizar_municipio(municipio)]
+    municipio_normalizado = normalizar_municipio(municipio)
+    if municipio_normalizado not in municipios:
+        raise ValueError("Município inválido %s" % municipio)
+    return municipios[municipio_normalizado]
 
 
 # @memoize
