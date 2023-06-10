@@ -1,4 +1,3 @@
-
 """
     @author: Junior Tada, Leonardo Tada
 
@@ -7,7 +6,8 @@
 """
 
 from suds.transport.http import HttpTransport
-import urllib.request, http.client
+import urllib.request
+import http.client
 
 
 class HTTPSClientAuthHandler(urllib.request.HTTPSHandler):

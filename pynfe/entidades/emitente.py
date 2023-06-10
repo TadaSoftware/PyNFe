@@ -1,6 +1,7 @@
 from .base import Entidade
 from pynfe.utils.flags import CODIGO_BRASIL
 
+
 class Emitente(Entidade):
     # Dados do Emitente
     # - Nome/Razao Social (obrigatorio)

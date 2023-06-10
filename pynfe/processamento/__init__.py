@@ -1,3 +1,5 @@
+# flake8: noqa
+
 from .serializacao import SerializacaoXML
 from .serializacao import SerializacaoNfse
 from .validacao import Validacao

@@ -6,13 +6,13 @@ import io
 try:
     from lxml import etree
 except ImportError:
-    raise Exception('Falhou ao importar modulo lxml')
+    raise Exception("Falhou ao importar modulo lxml")
 
 from pynfe.utils.flags import XSD_FOLDER_NFE
 
 
 class Validacao(object):
-    '''Valida documentos xml a partir do xsd informado.'''
+    """Valida documentos xml a partir do xsd informado."""
 
     def __init__(self):
         self.clear_cache()
@@ -31,29 +31,29 @@ class Validacao(object):
         return path.abspath(path.join(xsd_folder, xsd_file))
 
     def validar_xml(self, xml_path, xsd_file, use_assert=False):
-        '''Valida um arquivo xml.
+        """Valida um arquivo xml.
         Argumentos:
             xml_path - caminho para arquivo xml
             xsd_file - caminho para o arquivo xsd
             use_assert - levantar exceção caso documento não valide?
         Retorno:
             True se validou, False caso contrário
-        '''
+        """
         return self.validar_etree(etree.parse(xml_path), xsd_file, use_assert)
 
     def validar_etree(self, xml_doc, xsd_file, use_assert=False):
-        '''Valida um documento lxml diretamente.
+        """Valida um documento lxml diretamente.
         Argumentos:
             xml_doc - documento etree
             xsd_file - caminho para o arquivo xsd
             use_assert - levantar exceção caso documento não valide?
         Retorno:
             True se validou, False caso contrário
-        '''
+        """
         try:
             # checa se o schema ja existe no cache
             xsd_schema = self.MEM_CACHE[xsd_file]
-        except:
+        except Exception:
             # lê xsd e atualiza cache
             xsd_doc = etree.parse(xsd_file)
             xsd_schema = etree.XMLSchema(xsd_doc)
@@ -64,5 +64,8 @@ class Validacao(object):
                 buffer.seek(0)
                 xml_doc = etree.parse(buffer)
 
-        return use_assert and xsd_schema.assertValid(xml_doc) \
-               or xsd_schema.validate(xml_doc)
+        return (
+            use_assert
+            and xsd_schema.assertValid(xml_doc)
+            or xsd_schema.validate(xml_doc)
+        )

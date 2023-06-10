@@ -4,7 +4,6 @@ from pynfe.utils import etree
 
 
 class RetornoSoap(object):
-
     def __init__(self, webservice, retorno, resposta):
         self.webservice = webservice
         self.resposta = resposta
@@ -12,11 +11,10 @@ class RetornoSoap(object):
 
 
 def analisar_retorno(webservice, retorno, classe_resposta):
-
     # retorno.raise_for_status()
     # print(retorno.text)
 
-    match = re.search('<soap:Body>(.*?)</soap:Body>', retorno.text)
+    match = re.search("<soap:Body>(.*?)</soap:Body>", retorno.text)
 
     if match:
         resultado = etree.tostring(etree.fromstring(match.group(1))[0])

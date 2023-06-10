@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from .base import Entidade
-from pynfe.utils.flags import ICMS_TIPOS_TRIBUTACAO, ICMS_ORIGENS, ICMS_MODALIDADES
 
 from decimal import Decimal
+
 
 class Produto(Entidade):
     """XXX: E provavel que esta entidade sera descartada."""
@@ -51,8 +51,8 @@ class Produto(Entidade):
     # - Valor Unitario Trib.
     valor_unitario_tributavel = Decimal()
 
-    # - indica se valor do item entra no valor total da nota fiscal 
-    # 0=Valor do item (vProd) não compõe o valor total da NF-e 
+    # - indica se valor do item entra no valor total da nota fiscal
+    # 0=Valor do item (vProd) não compõe o valor total da NF-e
     # 1=Valor do item (vProd) compõe o valor total da NF-e (vProd)
     ind_total = int()
 
@@ -78,7 +78,6 @@ class Produto(Entidade):
 
     # Sigla da UF de consumo – (OBS: Deve ser a Sigla e não o Código da UF)
     UFCons = str()
-
 
     # # Impostos
 
@@ -115,7 +114,7 @@ class Produto(Entidade):
     icms_origem = int()
     icms_csosn = str()
     icms_aliquota = Decimal()
-    icms_credito= Decimal()
+    icms_credito = Decimal()
 
     # # PIS
     pis_modalidade = str()
@@ -138,6 +137,7 @@ class Produto(Entidade):
 
     # # - ICMS (lista 1 para * / ManyToManyField)
     icms = None
+
     def adicionar_icms(self, **kwargs):
         """Adiciona uma instancia de ICMS a lista de ICMS do produto"""
         self.icms.append(ProdutoICMS(**kwargs))
@@ -151,7 +151,8 @@ class Produto(Entidade):
         super(Produto, self).__init__(*args, **kwargs)
 
     def __str__(self):
-        return ' '.join([self.codigo, self.descricao])
+        return " ".join([self.codigo, self.descricao])
+
 
 class ProdutoICMS(Entidade):
     #  - Tipo de Tributacao (seleciona de lista) - ICMS_TIPOS_TRIBUTACAO
@@ -169,7 +170,8 @@ class ProdutoICMS(Entidade):
     #  - Percentual de reducao da Base de Calculo
     percentual_reducao = Decimal()
 
-    #  - Modalidade de determinacao da Base de Calculo do ICMS ST (seleciona de lista) - ICMS_ST_MODALIDADES
+    #  - Modalidade de determinacao da Base de Calculo do ICMS ST (seleciona de lista)
+    #  - ICMS_ST_MODALIDADES
     st_modalidade = str()
 
     #  - Aliquota ICMS ST
@@ -180,4 +182,3 @@ class ProdutoICMS(Entidade):
 
     #  - Percentual da margem de Valor Adicionado ICMS ST
     st_percentual_margem_valor_adicionado = Decimal()
-

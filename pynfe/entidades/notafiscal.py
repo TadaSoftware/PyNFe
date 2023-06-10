@@ -10,6 +10,7 @@ from pynfe.utils import so_numeros
 
 from decimal import Decimal
 
+
 class NotaFiscal(Entidade):
     status = NF_STATUS[0]
 
@@ -55,9 +56,10 @@ class NotaFiscal(Entidade):
     # forma_pagamento = int()
 
     # - Tipo de pagamento
-    """ 
-    Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e. 
-    Para as notas com finalidade de Ajuste ou Devolução o campo Forma de Pagamento deve ser preenchido com 90=Sem Pagamento.
+    """
+    Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e.
+    Para as notas com finalidade de Ajuste ou Devolução o campo Forma de Pagamento
+    deve ser preenchido com 90=Sem Pagamento.
     01=Dinheiro
     02=Cheque
     03=Cartão de Crédito
@@ -97,12 +99,14 @@ class NotaFiscal(Entidade):
     # - Indicador de intermediador/marketplace
     """
         0=Operação sem intermediador (em site ou plataforma própria)
-        1=Operação em site ou plataforma de terceiros (intermediadores/marketplace)</xs:documentation>
+        1=Operação em site ou plataforma de terceiros
+        (intermediadores/marketplace)</xs:documentation>
     """
     indicador_intermediador = int()
 
     """ nfce suporta apenas operação interna
-        Identificador de local de destino da operação 1=Operação interna;2=Operação interestadual;3=Operação com exterior.
+        Identificador de local de destino da operação
+        1=Operação interna;2=Operação interestadual;3=Operação com exterior.
     """
     indicador_destino = int()
     # - UF - converter para codigos em CODIGOS_ESTADOS
@@ -193,8 +197,9 @@ class NotaFiscal(Entidade):
     #  - Total do IPI (somente leitura)
     totais_icms_total_ipi = Decimal()
 
-    #  - Valor Total do IPI devolvido 
-    # Deve ser informado quando preenchido o Grupo Tributos Devolvidos na emissão de nota finNFe=4 (devolução) nas operações com não contribuintes do IPI. 
+    #  - Valor Total do IPI devolvido
+    # Deve ser informado quando preenchido o Grupo Tributos Devolvidos na emissão de nota
+    # finNFe=4 (devolução) nas operações com não contribuintes do IPI.
     # Corresponde ao total da soma dos campos id:UA04.
     totais_icms_total_ipi_dev = Decimal()
 
@@ -254,16 +259,16 @@ class NotaFiscal(Entidade):
     # - Valor Total do FCP (Fundo de Combate à Pobreza)
     totais_fcp = Decimal()
 
-    # - Valor total do ICMS relativo Fundo de Combate à Pobreza (FCP) da UF de destino 
+    # - Valor total do ICMS relativo Fundo de Combate à Pobreza (FCP) da UF de destino
     totais_fcp_destino = Decimal()
 
-     # - Valor Total do FCP (Fundo de Combate à Pobreza) retido por substituição tributária
+    # - Valor Total do FCP (Fundo de Combate à Pobreza) retido por substituição tributária
     totais_fcp_st = Decimal()
 
-     # - Valor Total do FCP retido anteriormente por Substituição Tributária
+    # - Valor Total do FCP retido anteriormente por Substituição Tributária
     totais_fcp_st_ret = Decimal()
 
-    # - Valor total do ICMS Interestadual para a UF de destino 
+    # - Valor total do ICMS Interestadual para a UF de destino
     totais_icms_inter_destino = Decimal()
 
     # - Valor total do ICMS Interestadual para a UF do remetente
@@ -371,7 +376,7 @@ class NotaFiscal(Entidade):
         super(NotaFiscal, self).__init__(*args, **kwargs)
 
     def __str__(self):
-        return ' '.join([str(self.modelo), self.serie, self.numero_nf])
+        return " ".join([str(self.modelo), self.serie, self.numero_nf])
 
     def adicionar_autorizados_baixar_xml(self, **kwargs):
         obj = AutorizadosBaixarXML(**kwargs)
@@ -379,13 +384,13 @@ class NotaFiscal(Entidade):
         return obj
 
     def adicionar_nota_fiscal_referenciada(self, **kwargs):
-        u"""Adiciona uma instancia de Nota Fisca referenciada"""
+        """Adiciona uma instancia de Nota Fisca referenciada"""
         obj = NotaFiscalReferenciada(**kwargs)
         self.notas_fiscais_referenciadas.append(obj)
         return obj
 
     def adicionar_produto_servico(self, **kwargs):
-        u"""Adiciona uma instancia de Produto"""
+        """Adiciona uma instancia de Produto"""
         obj = NotaFiscalProduto(**kwargs)
         self.produtos_e_servicos.append(obj)
         self.totais_icms_base_calculo += obj.icms_valor_base_calculo
@@ -410,8 +415,8 @@ class NotaFiscal(Entidade):
         self.totais_fcp_st_ret += obj.fcp_st_ret_valor
         self.totais_icms_inter_destino += obj.icms_inter_destino_valor
         self.totais_icms_inter_remetente += obj.icms_inter_remetente_valor
-        ## TODO calcular impostos aproximados
-        #self.totais_tributos_aproximado += obj.tributos
+        # TODO calcular impostos aproximados
+        # self.totais_tributos_aproximado += obj.tributos
 
         self.totais_icms_total_nota += (
             obj.valor_total_bruto
@@ -430,19 +435,19 @@ class NotaFiscal(Entidade):
         return obj
 
     def adicionar_transporte_volume(self, **kwargs):
-        u"""Adiciona uma instancia de Volume de Transporte"""
+        """Adiciona uma instancia de Volume de Transporte"""
         obj = NotaFiscalTransporteVolume(**kwargs)
         self.transporte_volumes.append(obj)
         return obj
 
     def adicionar_duplicata(self, **kwargs):
-        u"""Adiciona uma instancia de Duplicata"""
+        """Adiciona uma instancia de Duplicata"""
         obj = NotaFiscalCobrancaDuplicata(**kwargs)
         self.duplicatas.append(obj)
         return obj
 
     def adicionar_observacao_contribuinte(self, **kwargs):
-        u"""Adiciona uma instancia de Observacao do Contribuinte"""
+        """Adiciona uma instancia de Observacao do Contribuinte"""
         obj = NotaFiscalObservacaoContribuinte(**kwargs)
         self.observacoes_contribuinte.append(obj)
         return obj
@@ -454,7 +459,7 @@ class NotaFiscal(Entidade):
         return obj
 
     def adicionar_responsavel_tecnico(self, **kwargs):
-        """ Adiciona uma instancia de Responsavel Tecnico """
+        """Adiciona uma instancia de Responsavel Tecnico"""
         obj = NotaFiscalResponsavelTecnico(**kwargs)
         self.responsavel_tecnico.append(obj)
         return obj
@@ -479,8 +484,8 @@ class NotaFiscal(Entidade):
 
         remainder = key_sum % 11
         if remainder == 0 or remainder == 1:
-            self.dv_codigo_numerico_aleatorio = '0'
-            return '0'
+            self.dv_codigo_numerico_aleatorio = "0"
+            return "0"
         self.dv_codigo_numerico_aleatorio = str(11 - remainder)
         return str(self.dv_codigo_numerico_aleatorio)
 
@@ -489,29 +494,33 @@ class NotaFiscal(Entidade):
     def identificador_unico(self):
         # Monta 'Id' da tag raiz <infNFe>
         # Ex.: NFe35080599999090910270550010000000011518005123
-        key = "%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nNF)s%(tpEmis)s%(cNF)s"%{
-                'uf': CODIGOS_ESTADOS[self.uf],
-                'ano': self.data_emissao.strftime('%y'),
-                'mes': self.data_emissao.strftime('%m'),
-                'cnpj': so_numeros(self.emitente.cnpj).zfill(14),
-                'mod': self.modelo,
-                'serie': str(self.serie).zfill(3),
-                'nNF': str(self.numero_nf).zfill(9),
-                'tpEmis': str(self.forma_emissao),
-                'cNF': self._codigo_numerico_aleatorio(),
-                }
-        return "NFe%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nNF)s%(tpEmis)s%(cNF)s%(cDV)s"%{
-                'uf': CODIGOS_ESTADOS[self.uf],
-                'ano': self.data_emissao.strftime('%y'),
-                'mes': self.data_emissao.strftime('%m'),
-                'cnpj': so_numeros(self.emitente.cnpj).zfill(14),
-                'mod': self.modelo,
-                'serie': str(self.serie).zfill(3),
-                'nNF': str(self.numero_nf).zfill(9),
-                'tpEmis': str(self.forma_emissao),
-                'cNF': str(self.codigo_numerico_aleatorio),
-                'cDV': self._dv_codigo_numerico(key),
-                }
+        key = "%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nNF)s%(tpEmis)s%(cNF)s" % {
+            "uf": CODIGOS_ESTADOS[self.uf],
+            "ano": self.data_emissao.strftime("%y"),
+            "mes": self.data_emissao.strftime("%m"),
+            "cnpj": so_numeros(self.emitente.cnpj).zfill(14),
+            "mod": self.modelo,
+            "serie": str(self.serie).zfill(3),
+            "nNF": str(self.numero_nf).zfill(9),
+            "tpEmis": str(self.forma_emissao),
+            "cNF": self._codigo_numerico_aleatorio(),
+        }
+        return (
+            "NFe%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nNF)s%(tpEmis)s%(cNF)s%(cDV)s"
+            % {
+                "uf": CODIGOS_ESTADOS[self.uf],
+                "ano": self.data_emissao.strftime("%y"),
+                "mes": self.data_emissao.strftime("%m"),
+                "cnpj": so_numeros(self.emitente.cnpj).zfill(14),
+                "mod": self.modelo,
+                "serie": str(self.serie).zfill(3),
+                "nNF": str(self.numero_nf).zfill(9),
+                "tpEmis": str(self.forma_emissao),
+                "cNF": str(self.codigo_numerico_aleatorio),
+                "cDV": self._dv_codigo_numerico(key),
+            }
+        )
+
 
 class NotaFiscalReferenciada(Entidade):
     # - Tipo (seleciona de lista) - NF_REFERENCIADA_TIPOS
@@ -542,6 +551,7 @@ class NotaFiscalReferenciada(Entidade):
 
     #   - Modelo
     modelo = str()
+
 
 class NotaFiscalProduto(Entidade):
     # - Dados
@@ -848,7 +858,7 @@ class NotaFiscalProduto(Entidade):
     #    - Valor do COFINS ST
     cofins_st_valor = Decimal()
 
-    #  - ISSQN
+    #   - ISSQN
     #   - Valor da base de calculo
     issqn_valor_base_calculo = Decimal()
 
@@ -856,7 +866,8 @@ class NotaFiscalProduto(Entidade):
     issqn_aliquota = Decimal()
 
     #   - Lista de servico (seleciona de lista)
-    #    - Aceita somente valores maiores que 100, disponiveis no arquivo data/ISSQN/Lista-Servicos.txt
+    #   - Aceita somente valores maiores que 100,
+    #   disponiveis no arquivo data/ISSQN/Lista-Servicos.txt
     issqn_lista_servico = str()
 
     #   - UF
@@ -894,8 +905,9 @@ class NotaFiscalProduto(Entidade):
         super(NotaFiscalProduto, self).__init__(*args, **kwargs)
 
     def adicionar_declaracao_importacao(self, **kwargs):
-        u"""Adiciona uma instancia de Declaracao de Importacao"""
+        """Adiciona uma instancia de Declaracao de Importacao"""
         self.declaracoes_importacao.append(NotaFiscalDeclaracaoImportacao(**kwargs))
+
 
 class NotaFiscalDeclaracaoImportacao(Entidade):
     #  - Numero DI/DSI/DA
@@ -926,8 +938,9 @@ class NotaFiscalDeclaracaoImportacao(Entidade):
         super(NotaFiscalDeclaracaoImportacao, self).__init__(*args, **kwargs)
 
     def adicionar_adicao(self, **kwargs):
-        u"""Adiciona uma instancia de Adicao de Declaracao de Importacao"""
+        """Adiciona uma instancia de Adicao de Declaracao de Importacao"""
         self.adicoes.append(NotaFiscalDeclaracaoImportacaoAdicao(**kwargs))
+
 
 class NotaFiscalDeclaracaoImportacaoAdicao(Entidade):
     #   - Numero
@@ -938,6 +951,7 @@ class NotaFiscalDeclaracaoImportacaoAdicao(Entidade):
 
     #   - Codigo fabricante
     codigo_fabricante = str()
+
 
 class NotaFiscalTransporteVolume(Entidade):
     #  - Quantidade
@@ -967,12 +981,14 @@ class NotaFiscalTransporteVolume(Entidade):
         super(NotaFiscalTransporteVolume, self).__init__(*args, **kwargs)
 
     def adicionar_lacre(self, **kwargs):
-        u"""Adiciona uma instancia de Lacre de Volume de Transporte"""
+        """Adiciona uma instancia de Lacre de Volume de Transporte"""
         self.lacres.append(NotaFiscalTransporteVolumeLacre(**kwargs))
+
 
 class NotaFiscalTransporteVolumeLacre(Entidade):
     #   - Numero de lacres
     numero_lacre = str()
+
 
 class NotaFiscalCobrancaDuplicata(Entidade):
     #  - Numero
@@ -984,12 +1000,14 @@ class NotaFiscalCobrancaDuplicata(Entidade):
     #  - Valor
     valor = Decimal()
 
+
 class NotaFiscalObservacaoContribuinte(Entidade):
     #  - Nome do campo
     nome_campo = str()
 
     #  - Observacao
     observacao = str()
+
 
 class NotaFiscalProcessoReferenciado(Entidade):
     #  - Identificador do processo
@@ -1003,9 +1021,10 @@ class NotaFiscalProcessoReferenciado(Entidade):
     #   - Outros
     origem = str()
 
+
 class NotaFiscalEntregaRetirada(Entidade):
     # - Tipo de Documento (obrigatorio) - default CNPJ
-    tipo_documento = 'CNPJ'
+    tipo_documento = "CNPJ"
 
     # - Numero do Documento (obrigatorio)
     numero_documento = str()
@@ -1041,8 +1060,8 @@ class NotaFiscalEntregaRetirada(Entidade):
     #  - Telefone
     endereco_telefone = str()
 
+
 class NotaFiscalServico(Entidade):
-    
     # id do rps
     identificador = str()
     # tag competencia
@@ -1054,9 +1073,9 @@ class NotaFiscalServico(Entidade):
     # Cliente para quem a NFS-e será emitida
     cliente = None
     # Optante Simples Nacional
-    simples = int()     # 1-Sim; 2-Não
+    simples = int()  # 1-Sim; 2-Não
     # Incentivo Fiscal
-    incentivo = int()   # 1-Sim; 2-Não
+    incentivo = int()  # 1-Sim; 2-Não
     # Serie
     serie = str()
     # Tipo
@@ -1067,11 +1086,11 @@ class NotaFiscalServico(Entidade):
     regime_especial = int()
 
     def __init__(self, *args, **kwargs):
-
         super(NotaFiscalServico, self).__init__(*args, **kwargs)
 
     def __str__(self):
-        return ' '.join([str(self.identificador)])
+        return " ".join([str(self.identificador)])
+
 
 class NotaFiscalResponsavelTecnico(Entidade):
     # NT 2018/003
@@ -1080,6 +1099,7 @@ class NotaFiscalResponsavelTecnico(Entidade):
     email = str()
     fone = str()
     csrt = str()
+
 
 class AutorizadosBaixarXML(Entidade):
     CPFCNPJ = str()

@@ -1,4 +1,3 @@
-
 """
     @author: Lucas Resende
 
@@ -10,6 +9,7 @@ from io import BytesIO
 import base64
 import gzip
 from lxml import etree
+
 
 class DescompactaGzip(object):
     @staticmethod
@@ -26,5 +26,5 @@ class DescompactaGzip(object):
         texto = zip.read()
         arq.close()
         zip.close()
-        descompactado = texto.decode('utf-8')
+        descompactado = texto.decode("utf-8")
         return etree.fromstring(descompactado)

@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 from .base import Entidade
-from pynfe.utils.flags import TIPOS_DOCUMENTO
+
 
 class Transportadora(Entidade):
-
     # Dados da Transportadora
     # - Nome/Razão Social (obrigatorio)
     razao_social = str()
 
     # - Tipo de Documento (obrigatorio) - default CNPJ
-    tipo_documento = 'CNPJ'
+    tipo_documento = "CNPJ"
 
     # - Numero do Documento (obrigatorio)
     numero_documento = str()
@@ -28,5 +27,4 @@ class Transportadora(Entidade):
     endereco_municipio = str()
 
     def __str__(self):
-        return ' '.join([self.tipo_documento, self.numero_documento])
-
+        return " ".join([self.tipo_documento, self.numero_documento])

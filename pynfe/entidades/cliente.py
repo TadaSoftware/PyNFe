@@ -12,14 +12,15 @@ class Cliente(Entidade):
     email = str()
 
     # - Tipo de Documento (obrigatorio) - default CNPJ - TIPOS_DOCUMENTO
-    tipo_documento = 'CNPJ'
+    tipo_documento = "CNPJ"
 
     # - Numero do Documento (obrigatorio)
     numero_documento = str()
 
-    # - Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista; 2 – Contribuinte isento de inscrição; 9 – Não Contribuinte
+    # - Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista;
+    # 2 – Contribuinte isento de inscrição; 9 – Não Contribuinte
     indicador_ie = int()
-    
+
     # - Inscricao Estadual
     inscricao_estadual = str()
 
@@ -64,4 +65,4 @@ class Cliente(Entidade):
     endereco_telefone = str()
 
     def __str__(self):
-        return ' '.join([self.tipo_documento, self.numero_documento])
+        return " ".join([self.tipo_documento, self.numero_documento])
