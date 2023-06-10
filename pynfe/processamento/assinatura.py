@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from pynfe.utils import etree, remover_acentos
+from pynfe.utils import etree, remover_acentos, CustomXMLSigner
 from pynfe.utils.flags import NAMESPACE_SIG
 import subprocess
 import signxml
-from signxml import XMLSigner
 from pynfe.entidades import CertificadoA1
 
 
@@ -37,7 +36,7 @@ class AssinaturaA1(Assinatura):
         xml_str = remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False))
         xml = etree.fromstring(xml_str)
 
-        signer = XMLSigner(
+        signer = CustomXMLSigner(
             method=signxml.methods.enveloped, signature_algorithm="rsa-sha1",
             digest_algorithm='sha1',
             c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315')
