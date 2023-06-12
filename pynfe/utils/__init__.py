@@ -3,6 +3,7 @@
 import codecs
 import os
 from unicodedata import normalize
+from signxml import XMLSigner
 
 try:
     from lxml import etree
@@ -155,3 +156,10 @@ def obter_uf_por_codigo(codigo_uf):
 
 def remover_acentos(txt):
     return normalize('NFKD', txt).encode('ASCII', 'ignore').decode('ASCII')
+
+class CustomXMLSigner(XMLSigner):
+    def __init__(self, method, signature_algorithm, digest_algorithm, c14n_algorithm):
+        super().__init__(method, signature_algorithm, digest_algorithm, c14n_algorithm)
+
+    def check_deprecated_methods(self):
+        pass

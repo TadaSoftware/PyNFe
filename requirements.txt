@@ -2,7 +2,7 @@
 pyopenssl>=23.0.0
 requests
 lxml
-signxml==2.10.1
+signxml
 
 # Opcional para NFS-e
 #-r requirements-nfse.txt

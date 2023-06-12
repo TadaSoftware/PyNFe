@@ -34,7 +34,7 @@ setuptools.setup(
         'pyopenssl>=23.0.0',
         'requests',
         'lxml',
-        'signxml==2.10.1',
+        'signxml',
     ],
     extras_require={
         'nfse': [
