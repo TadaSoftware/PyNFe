@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class Entidade(object):
     _fonte_dados = None
 
@@ -12,16 +13,17 @@ class Entidade(object):
         # Adiciona o objeto à fonte de dados informada
         if not self._fonte_dados:
             from .fonte_dados import _fonte_dados
+
             self._fonte_dados = _fonte_dados
 
         self._fonte_dados.adicionar_objeto(self)
 
     def __str__(self):
         return self.__class__.__name__
-    
+
     def __repr__(self):
-        return '<%s %s>'%(self.__class__.__name__, str(self))
+        return "<%s %s>" % (self.__class__.__name__, str(self))
+
 
 class Lote(object):
     pass
-

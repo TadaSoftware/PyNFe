@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from pynfe.excecoes import NenhumObjetoEncontrado, MuitosObjetosEncontrados
 
+
 class FonteDados(object):
-    u"""Classe responsável por ser o repositório dos objetos em memória e que
+    """Classe responsável por ser o repositório dos objetos em memória e que
     pode ser extendida para persistir esses objetos. Também tem a função de
     memorizar os objetos redundantes como um só e assim otimizar o desempenho."""
 
@@ -14,11 +15,11 @@ class FonteDados(object):
             self._objetos = objetos
         else:
             self._objetos = []
-    
+
     def carregar_objetos(self, **kwargs):
-        u"""Método responsavel por retornar os objetos que casem com os atributos
+        """Método responsavel por retornar os objetos que casem com os atributos
         informados no argumento **kwargs (argumentos nomeados).
-        
+
         Um argumento especial é o '_classe', que representa a classe da entidade
         desejada.
 
@@ -30,10 +31,11 @@ class FonteDados(object):
         def filtrar(obj):
             ret = True
 
-            for k,v in kwargs.items():
+            for k, v in kwargs.items():
                 # Filtra pela classe e pelos atributos
-                ret = (k == '_classe' and isinstance(obj, v)) or\
-                      (k != '_classe' and getattr(obj, k, None) == v)
+                ret = (k == "_classe" and isinstance(obj, v)) or (
+                    k != "_classe" and getattr(obj, k, None) == v
+                )
 
                 if not ret:
                     break
@@ -46,7 +48,7 @@ class FonteDados(object):
         return lista
 
     def adicionar_objeto(self, _objeto):
-        u"""Método responsável por adicionar o(s) objeto(s) informado(s) ao
+        """Método responsável por adicionar o(s) objeto(s) informado(s) ao
         repositorio de objetos da fonte de dados."""
 
         from .base import Entidade
@@ -60,15 +62,15 @@ class FonteDados(object):
             self._objetos += _objeto
 
         else:
-            raise Exception('Objeto informado e invalido!')
+            raise Exception("Objeto informado e invalido!")
 
     def remover_objeto(self, _objeto=None, **kwargs):
-        u"""Método responsavel por remover os objetos que casem com os atributos
+        """Método responsavel por remover os objetos que casem com os atributos
         informados no argumento **kwargs (argumentos nomeados).
-        
+
         Um argumento especial é o '_classe', que representa a classe da entidade
         desejada.
-        
+
         Outro argumetno especial é o '_objeto', que representa o objeto a ser
         removido. Caso o argumento _objeto seja uma lista de objetos, eles serão
         removidos também."""
@@ -90,32 +92,32 @@ class FonteDados(object):
             lista = _objeto
 
         else:
-            raise Exception('Objeto informado e invalido!')
+            raise Exception("Objeto informado e invalido!")
 
         # Efetiva a remoção
         for obj in lista:
             self._objetos.remove(obj)
 
     def obter_objeto(self, **kwargs):
-        u"""Faz a ponte para o método 'carregar_objetos' mas obriga o retorno de
+        """Faz a ponte para o método 'carregar_objetos' mas obriga o retorno de
         apenas um objeto, levantando exceção se nenhum for encontrado ou se forem
         encontrados mais de um."""
-        
+
         lista = self.carregar_objetos(**kwargs)
-        
+
         if len(lista) == 0:
-            raise NenhumObjetoEncontrado('Nenhum objeto foi encontrado!')
+            raise NenhumObjetoEncontrado("Nenhum objeto foi encontrado!")
         elif len(lista) > 1:
-            raise MuitosObjetosEncontrados('Muitos objetos foram encontrados!')
+            raise MuitosObjetosEncontrados("Muitos objetos foram encontrados!")
 
         return lista[0]
-    
+
     def obter_lista(self, **kwargs):
-        u"""Método de proxy, que somente repassa a chamada ao metodo 'carregar_objetos'"""
+        """Método de proxy, que somente repassa a chamada ao metodo 'carregar_objetos'"""
         return self.carregar_objetos(**kwargs)
-    
+
     def contar_objetos(self, **kwargs):
-        u"""Método que repassa a chamada ao metodo 'carregar_objetos' mas retorna
+        """Método que repassa a chamada ao metodo 'carregar_objetos' mas retorna
         somente a quantidade de objetos encontrados."""
 
         if kwargs:
@@ -126,6 +128,6 @@ class FonteDados(object):
     def limpar_dados(self):
         self._objetos.clear()
 
+
 # Instancia da fonte de dados default
 _fonte_dados = FonteDados()
-

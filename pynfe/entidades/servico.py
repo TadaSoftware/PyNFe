@@ -5,8 +5,8 @@
 from .base import Entidade
 from decimal import Decimal
 
-class Servico(Entidade):
 
+class Servico(Entidade):
     valor_servico = Decimal()
     iss_retido = int()
     """ http://www1.receita.fazenda.gov.br/sistemas/nfse/tabelas-de-codigos.htm

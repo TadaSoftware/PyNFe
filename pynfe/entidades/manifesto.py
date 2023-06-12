@@ -121,7 +121,7 @@ class Manifesto(Entidade):
         super(Manifesto, self).__init__(*args, **kwargs)
 
     def __str__(self):
-        return ' '.join([str(self.modelo), self.serie, self.numero_mdfe])
+        return " ".join([str(self.modelo), self.serie, self.numero_mdfe])
 
     def adicionar_municipio_carrega(self, **kwargs):
         obj = ManifestoMunicipioCarrega(**kwargs)
@@ -164,7 +164,7 @@ class Manifesto(Entidade):
         return obj
 
     def adicionar_responsavel_tecnico(self, **kwargs):
-        """ Adiciona uma instancia de Responsavel Tecnico """
+        """Adiciona uma instancia de Responsavel Tecnico"""
         obj = ManifestoResponsavelTecnico(**kwargs)
         self.responsavel_tecnico.append(obj)
         return obj
@@ -189,8 +189,8 @@ class Manifesto(Entidade):
 
         remainder = key_sum % 11
         if remainder == 0 or remainder == 1:
-            self.dv_codigo_numerico_aleatorio = '0'
-            return '0'
+            self.dv_codigo_numerico_aleatorio = "0"
+            return "0"
         self.dv_codigo_numerico_aleatorio = str(11 - remainder)
         return str(self.dv_codigo_numerico_aleatorio)
 
@@ -199,29 +199,35 @@ class Manifesto(Entidade):
     def identificador_unico(self):
         # Monta 'Id' da tag raiz <infMDFe>
         # Ex.: MDFe35080599999090910270580010000000011518005123
-        key = "%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nMDF)s%(tpEmis)s%(cMDF)s"%{
-                'uf': CODIGOS_ESTADOS[self.uf],
-                'ano': self.data_emissao.strftime('%y'),
-                'mes': self.data_emissao.strftime('%m'),
-                'cnpj': so_numeros(self.emitente.cpfcnpj).zfill(14),
-                'mod': self.modelo,
-                'serie': str(self.serie).zfill(3),
-                'nMDF': str(self.numero_mdfe).zfill(9),
-                'tpEmis': str(self.forma_emissao),
-                'cMDF': self._codigo_numerico_aleatorio(),
-                }
-        return "MDFe%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nMDF)s%(tpEmis)s%(cMDF)s%(cDV)s"%{
-                'uf': CODIGOS_ESTADOS[self.uf],
-                'ano': self.data_emissao.strftime('%y'),
-                'mes': self.data_emissao.strftime('%m'),
-                'cnpj': so_numeros(self.emitente.cpfcnpj).zfill(14),
-                'mod': self.modelo,
-                'serie': str(self.serie).zfill(3),
-                'nMDF': str(self.numero_mdfe).zfill(9),
-                'tpEmis': str(self.forma_emissao),
-                'cMDF': str(self.codigo_numerico_aleatorio),
-                'cDV': self._dv_codigo_numerico(key),
-                }
+        key = (
+            "%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nMDF)s%(tpEmis)s%(cMDF)s"
+            % {
+                "uf": CODIGOS_ESTADOS[self.uf],
+                "ano": self.data_emissao.strftime("%y"),
+                "mes": self.data_emissao.strftime("%m"),
+                "cnpj": so_numeros(self.emitente.cpfcnpj).zfill(14),
+                "mod": self.modelo,
+                "serie": str(self.serie).zfill(3),
+                "nMDF": str(self.numero_mdfe).zfill(9),
+                "tpEmis": str(self.forma_emissao),
+                "cMDF": self._codigo_numerico_aleatorio(),
+            }
+        )
+        return (
+            "MDFe%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nMDF)s%(tpEmis)s%(cMDF)s%(cDV)s"
+            % {
+                "uf": CODIGOS_ESTADOS[self.uf],
+                "ano": self.data_emissao.strftime("%y"),
+                "mes": self.data_emissao.strftime("%m"),
+                "cnpj": so_numeros(self.emitente.cpfcnpj).zfill(14),
+                "mod": self.modelo,
+                "serie": str(self.serie).zfill(3),
+                "nMDF": str(self.numero_mdfe).zfill(9),
+                "tpEmis": str(self.forma_emissao),
+                "cMDF": str(self.codigo_numerico_aleatorio),
+                "cDV": self._dv_codigo_numerico(key),
+            }
+        )
 
 
 class ManifestoMunicipioCarrega(Entidade):
@@ -298,7 +304,6 @@ class ManifestoCondutor(Entidade):
 
 
 class ManifestoDocumentos(Entidade):
-
     # Código do municipio de descarga
     cMunDescarga = str()
     # Nome do municipio de descarga
@@ -318,7 +323,6 @@ class ManifestoDocumentosCTe(Entidade):
 
 
 class ManifestoSeguradora(Entidade):
-
     # infResp - Responsavel seguro
     # 1=Emitente; 2=Tomador
     responsavel_seguro = str()
@@ -344,7 +348,6 @@ class ManifestoAverbacao(Entidade):
 
 
 class ManifestoProduto(Entidade):
-
     # Tipo de carga
     #   01=GranelSolido
     #   02=GranelLiquido
@@ -415,7 +418,6 @@ class ManifestoEmitente(Entidade):
 
 
 class ManifestoTotais(Entidade):
-
     # Quantidade total de CT-e relacionados no Manifesto
     qCTe = int()
 

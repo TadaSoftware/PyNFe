@@ -15,7 +15,7 @@ class Certificado(Entidade):
 
     def __new__(cls, *args, **kwargs):
         if cls == Certificado:
-            raise Exception('Esta classe nao pode ser instanciada diretamente!')
+            raise Exception("Esta classe nao pode ser instanciada diretamente!")
         else:
             return super(Certificado, cls).__new__(cls)
 
@@ -31,28 +31,41 @@ class CertificadoA1(Certificado):
         self.arquivos_temp = []
 
     def separar_arquivo(self, senha, caminho=False):
-        """Separa o arquivo de certificado em dois: de chave e de certificado,
-        e retorna a string. Se caminho for True grava na pasta temporaria e retorna
-        o caminho dos arquivos, senao retorna o objeto. Apos o uso devem ser excluidos com o metodo excluir."""
+        """Separa o arquivo de certificado em dois: de chave e de certificado e retorna a string.
+        Se caminho for True grava na pasta temporaria e retorna o caminho dos arquivos,
+        senao retorna o objeto. Apos o uso devem ser excluidos com o metodo excluir.
+        """
 
         try:
             with open(self.caminho_arquivo, "rb") as cert_arquivo:
                 cert_conteudo = cert_arquivo.read()
         except (PermissionError, FileNotFoundError) as exc:
-            raise Exception('Falha ao abrir arquivo do certificado digital A1. Verifique local e permissoes do arquivo.') from exc
+            raise Exception(
+                """Falha ao abrir arquivo do certificado digital A1.
+                Verifique local e permissoes do arquivo."""
+            ) from exc
         except Exception as exc:
-            raise Exception('Falha ao abrir arquivo do certificado digital A1. Causa desconhecida.') from exc
+            raise Exception(
+                "Falha ao abrir arquivo do certificado digital A1. Causa desconhecida."
+            ) from exc
 
         # Carrega o arquivo .pfx, erro pode ocorrer se a senha estiver errada ou formato invalido.
         try:
             pkcs12 = crypto.load_pkcs12(cert_conteudo, senha)
         except crypto.Error as exc:
-            raise Exception('Falha ao carregar certificado digital A1. Verifique a senha do certificado.') from exc
+            raise Exception(
+                "Falha ao carregar certificado digital A1. Verifique a senha do"
+                " certificado."
+            ) from exc
         except Exception as exc:
-            raise Exception('Falha ao carregar certificado digital A1. Causa desconhecida.') from exc
+            raise Exception(
+                "Falha ao carregar certificado digital A1. Causa desconhecida."
+            ) from exc
 
         if caminho:
-            cert = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate())
+            cert = crypto.dump_certificate(
+                crypto.FILETYPE_PEM, pkcs12.get_certificate()
+            )
             chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
             # cria arquivos temporarios
             with tempfile.NamedTemporaryFile(delete=False) as arqcert:
@@ -64,10 +77,12 @@ class CertificadoA1(Certificado):
             return arqchave.name, arqcert.name
         else:
             # Certificado
-            cert = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate()).decode('utf-8')
-            cert = cert.replace('\n', '')
-            cert = cert.replace('-----BEGIN CERTIFICATE-----', '')
-            cert = cert.replace('-----END CERTIFICATE-----', '')
+            cert = crypto.dump_certificate(
+                crypto.FILETYPE_PEM, pkcs12.get_certificate()
+            ).decode("utf-8")
+            cert = cert.replace("\n", "")
+            cert = cert.replace("-----BEGIN CERTIFICATE-----", "")
+            cert = cert.replace("-----END CERTIFICATE-----", "")
 
             # Chave, string decodificada da chave privada
             chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
@@ -80,5 +95,5 @@ class CertificadoA1(Certificado):
             for i in self.arquivos_temp:
                 os.remove(i)
             self.arquivos_temp.clear()
-        except:
+        except Exception:
             pass
