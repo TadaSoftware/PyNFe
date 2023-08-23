@@ -1579,7 +1579,8 @@ class SerializacaoXML(Serializacao):
                 else:
                     etree.SubElement(cartao, "tpIntegra").text = "1"
                     # Informar o CNPJ da Credenciadora de cartão de crédito / débito
-                    etree.SubElement(cartao, 'CNPJ').text = so_numeros(nota_fiscal.cnpj_credenciadora_cartao)
+                    if so_numeros(nota_fiscal.cnpj_credenciadora_cartao):
+                        etree.SubElement(cartao, 'CNPJ').text = so_numeros(nota_fiscal.cnpj_credenciadora_cartao)
                     # 01=Visa 02=Mastercard 03=American Express 04=Sorocred
                     # 05=Diners Club 06=Elo 07=Hipercard 08=Aura 09=Caba 99=Outros
                     etree.SubElement(cartao, 'tBand').text = str(
