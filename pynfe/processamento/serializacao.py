@@ -1571,18 +1571,21 @@ class SerializacaoXML(Serializacao):
                 cartao = etree.SubElement(detpag, "card")
                 """ Tipo de Integração do processo de pagamento com
                     o sistema de automação da empresa:
-                    1=Pagamento integrado com o sistema de automação da empresa
-                    2= Pagamento não integrado com o sistema de automação da empresa
+                    1 = Pagamento integrado com o sistema de automação da empresa
+                    2 = Pagamento não integrado com o sistema de automação da empresa
                 """
-                etree.SubElement(cartao, "tpIntegra").text = "2"
-                # etree.SubElement(cartao, 'CNPJ').text = ''
-                # # Informar o CNPJ da Credenciadora de cartão de crédito / débito
-                # etree.SubElement(cartao, 'tBand').text = ''
-                # # 01=Visa 02=Mastercard 03=American Express 04=Sorocred
-                # 05=Diners Club 06=Elo 07=Hipercard 08=Aura 09=Caba 99=Outros
-                # etree.SubElement(cartao, 'cAut').text = ''
-                # # Identifica o número da autorização da transação da operação
-                # com cartão de crédito e/ou débito
+                if nota_fiscal.integracao_pagamento == 2:
+                    etree.SubElement(cartao, "tpIntegra").text = "2"
+                else:
+                    etree.SubElement(cartao, "tpIntegra").text = "1"
+                    # Informar o CNPJ da Credenciadora de cartão de crédito / débito
+                    etree.SubElement(cartao, 'CNPJ').text = so_numeros(nota_fiscal.cnpj_credenciadora_cartao)
+                    # 01=Visa 02=Mastercard 03=American Express 04=Sorocred
+                    # 05=Diners Club 06=Elo 07=Hipercard 08=Aura 09=Caba 99=Outros
+                    etree.SubElement(cartao, 'tBand').text = nota_fiscal.bandeira_cartao_pagamento
+                    # Identifica o número da autorização da transação da operação
+                    # com cartão de crédito e/ou débito
+                    etree.SubElement(cartao, 'cAut').text = nota_fiscal.numero_autorizacao_pagamento
             # troco
             # etree.SubElement(pag, 'vTroco').text = str('')
 

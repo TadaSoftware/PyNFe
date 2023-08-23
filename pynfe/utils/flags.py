@@ -212,6 +212,39 @@ NF_FORMAS_PAGAMENTO = (
     (2, "Outros"),
 )
 
+NF_TIPO_PAGAMENTO = (
+    (1, "Dinheiro"),
+    (2, "Cheque"),
+    (3, "Cartão de Crédito"),
+    (4, "Cartão de Débito"),
+    (5, "Crédito Loja"),
+    (10, "Vale Alimentação"),
+    (11, "Vale Refeição"),
+    (12, "Vale Presente"),
+    (13, "Vale Combustível"),
+    (14, "Duplicata Mercantil"),
+    (90, "Sem pagamento"),
+    (99, "Outros")
+)
+
+NF_INTEGRACAO_PAGAMENTO = (
+    (1, "Pagamento integrado com o sistema de automação da empresa"),
+    (2, "Pagamento não integrado com o sistema de automação da empresa"),
+)
+
+NF_BANDEIRAS_CARTAO_PAGAMENTO = (
+    (1, "Visa"),
+    (2, "Mastercard"),
+    (3, "American Express"),
+    (4, "Sorocred"),
+    (5, "Diners Club"),
+    (6, "Elo"),
+    (7, "Hipercard"),
+    (8, "Aura"),
+    (9, "Caba"),
+    (99, "Outros")
+)
+
 NF_FORMAS_EMISSAO = (
     (1, "Normal"),
     (2, "Contingencia"),

@@ -55,7 +55,7 @@ class NotaFiscal(Entidade):
     # Removido na NF-e 4.00
     # forma_pagamento = int()
 
-    # - Tipo de pagamento
+    # - Tipo de pagamento - NF_TIPO_PAGAMENTO
     """
     Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e.
     Para as notas com finalidade de Ajuste ou Devolução o campo Forma de Pagamento
@@ -74,6 +74,17 @@ class NotaFiscal(Entidade):
     99=Outros
     """
     tipo_pagamento = int()
+
+    # NF_INTEGRACAO_PAGAMENTO
+    integracao_pagamento = int()
+
+    cnpj_credenciadora_cartao = str()
+
+    # NF_BANDEIRAS_CARTAO_PAGAMENTO
+    bandeira_cartao_pagamento = int()
+
+    # - Identifica o número da autorização da transação da operação com cartão de crédito e/ou débito
+    numero_autorizacao_pagamento = str()
 
     # - Forma de emissao (obrigatorio - seleciona de lista) - NF_FORMAS_EMISSAO
     forma_emissao = str()
