@@ -1582,7 +1582,9 @@ class SerializacaoXML(Serializacao):
                     etree.SubElement(cartao, 'CNPJ').text = so_numeros(nota_fiscal.cnpj_credenciadora_cartao)
                     # 01=Visa 02=Mastercard 03=American Express 04=Sorocred
                     # 05=Diners Club 06=Elo 07=Hipercard 08=Aura 09=Caba 99=Outros
-                    etree.SubElement(cartao, 'tBand').text = nota_fiscal.bandeira_cartao_pagamento
+                    etree.SubElement(cartao, 'tBand').text = str(
+                        nota_fiscal.bandeira_cartao_pagamento
+                    ).zfill(2)
                     # Identifica o número da autorização da transação da operação
                     # com cartão de crédito e/ou débito
                     etree.SubElement(cartao, 'cAut').text = nota_fiscal.numero_autorizacao_pagamento
