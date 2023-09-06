@@ -346,6 +346,8 @@ class NotaFiscal(Entidade):
     # - Processo Referenciado (lista 1 para * / ManyToManyField)
     processos_referenciados = None
 
+    troco = Decimal()
+
     def __init__(self, *args, **kwargs):
         self.autorizados_baixar_xml = []
         self.notas_fiscais_referenciadas = []
