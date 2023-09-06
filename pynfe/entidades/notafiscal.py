@@ -55,37 +55,6 @@ class NotaFiscal(Entidade):
     # Removido na NF-e 4.00
     # forma_pagamento = int()
 
-    # - Tipo de pagamento - NF_TIPO_PAGAMENTO
-    """
-    Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e.
-    Para as notas com finalidade de Ajuste ou Devolução o campo Forma de Pagamento
-    deve ser preenchido com 90=Sem Pagamento.
-    01=Dinheiro
-    02=Cheque
-    03=Cartão de Crédito
-    04=Cartão de Débito
-    05=Crédito Loja
-    10=Vale Alimentação
-    11=Vale Refeição
-    12=Vale Presente
-    13=Vale Combustível
-    14=Duplicata Mercantil
-    90= Sem pagamento
-    99=Outros
-    """
-    tipo_pagamento = int()
-
-    # NF_INTEGRACAO_PAGAMENTO
-    integracao_pagamento = int()
-
-    cnpj_credenciadora_cartao = str()
-
-    # NF_BANDEIRAS_CARTAO_PAGAMENTO
-    bandeira_cartao_pagamento = int()
-
-    # - Identifica o número da autorização da transação da operação com cartão de crédito e/ou débito
-    numero_autorizacao_pagamento = str()
-
     # - Forma de emissao (obrigatorio - seleciona de lista) - NF_FORMAS_EMISSAO
     forma_emissao = str()
 
@@ -383,6 +352,7 @@ class NotaFiscal(Entidade):
         self.observacoes_contribuinte = []
         self.processos_referenciados = []
         self.responsavel_tecnico = []
+        self.pagamentos = []
 
         super(NotaFiscal, self).__init__(*args, **kwargs)
 
@@ -473,6 +443,11 @@ class NotaFiscal(Entidade):
         """Adiciona uma instancia de Responsavel Tecnico"""
         obj = NotaFiscalResponsavelTecnico(**kwargs)
         self.responsavel_tecnico.append(obj)
+        return obj
+
+    def adicionar_pagamento(self, **kwargs):
+        obj = Pagamento(**kwargs)
+        self.pagamentos.append(obj)
         return obj
 
     def _codigo_numerico_aleatorio(self):
@@ -1114,3 +1089,40 @@ class NotaFiscalResponsavelTecnico(Entidade):
 
 class AutorizadosBaixarXML(Entidade):
     CPFCNPJ = str()
+
+
+class Pagamento(Entidade):
+    # - Tipo de pagamento - NF_TIPO_PAGAMENTO
+    """
+    Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e.
+    Para as notas com finalidade de Ajuste ou Devolução o campo Forma de Pagamento
+    deve ser preenchido com 90=Sem Pagamento.
+
+    01=Dinheiro
+    02=Cheque
+    03=Cartão de Crédito
+    04=Cartão de Débito
+    05=Crédito Loja
+    10=Vale Alimentação
+    11=Vale Refeição
+    12=Vale Presente
+    13=Vale Combustível
+    14=Duplicata Mercantil
+    90=Sem pagamento
+    99=Outros
+    """
+    tipo_pagamento = int()
+
+    # Valor pago
+    valor = Decimal()
+
+    # NF_INTEGRACAO_PAGAMENTO
+    integracao_pagamento = int()
+
+    cnpj_credenciadora_cartao = str()
+
+    # NF_BANDEIRAS_CARTAO_PAGAMENTO
+    bandeira_cartao_pagamento = int()
+
+    # - Identifica o número da autorização da transação da operação com cartão de crédito e/ou débito
+    numero_autorizacao_pagamento = str()
