@@ -113,7 +113,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             ind_total=1,
             icms_modalidade="00",
             icms_origem=0,
-            icms_csosn="",
             pis_modalidade="51",
             cofins_modalidade="51",
             pis_valor_base_calculo=Decimal("0.00"),

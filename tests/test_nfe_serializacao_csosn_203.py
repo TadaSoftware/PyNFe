@@ -133,7 +133,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             ind_total=1,
             icms_modalidade="203",
             icms_origem=0,
-            icms_csosn="203",
             icms_st_modalidade_determinacao_bc="0",
             icms_st_percentual_adicional=0,
             icms_st_percentual_reducao_bc=0,

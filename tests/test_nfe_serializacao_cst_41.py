@@ -133,7 +133,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             ind_total=1,
             icms_modalidade="41",
             icms_origem=0,
-            icms_csosn="",
             pis_modalidade="07",
             cofins_modalidade="07",
             valor_tributos_aprox="21.06",

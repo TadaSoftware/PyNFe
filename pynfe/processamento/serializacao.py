@@ -636,7 +636,7 @@ class SerializacaoXML(Serializacao):
                 )
 
         # 40=Isenta / 41=Não tributada / 50=Com suspensão
-        elif produto_servico.icms_modalidade in ["40", "41", "50"]:
+        elif produto_servico.icms_modalidade in ["40", "41", "50", "41_ST"]:
             icms_item = etree.SubElement(icms, "ICMS40")
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, "CST").text = str(
@@ -672,7 +672,7 @@ class SerializacaoXML(Serializacao):
                 )  # Valor Fundo Combate a Pobreza
 
         # 60=ICMS cobrado anteriormente por substituição tributária
-        elif produto_servico.icms_modalidade in ["ST", "60"]:
+        elif produto_servico.icms_modalidade in ["60", "60_ST"]:
             icms_item = etree.SubElement(icms, "ICMS" + produto_servico.icms_modalidade)
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, "CST").text = "60"
@@ -848,7 +848,7 @@ class SerializacaoXML(Serializacao):
                 icms, "ICMSSN" + produto_servico.icms_modalidade
             )
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
-            etree.SubElement(icms_item, "CSOSN").text = produto_servico.icms_csosn
+            etree.SubElement(icms_item, "CSOSN").text = produto_servico.icms_modalidade
             etree.SubElement(icms_item, "pCredSN").text = "{:.2f}".format(
                 produto_servico.icms_aliquota
             )  # Alíquota aplicável de cálculo do crédito (Simples Nacional).
@@ -864,7 +864,7 @@ class SerializacaoXML(Serializacao):
         elif produto_servico.icms_modalidade in ("102", "103", "300", "400"):
             icms_item = etree.SubElement(icms, "ICMSSN102")
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
-            etree.SubElement(icms_item, "CSOSN").text = produto_servico.icms_csosn
+            etree.SubElement(icms_item, "CSOSN").text = produto_servico.icms_modalidade
 
         # 201=Tributada pelo Simples Nacional com permissão de crédito e com cobrança do ICMS
         # 202=Tributada pelo Simples Nacional sem permissão de crédito e com cobrança do ICMS
@@ -875,7 +875,7 @@ class SerializacaoXML(Serializacao):
             elif produto_servico.icms_modalidade in ["202", "203"]:
                 icms_item = etree.SubElement(icms, "ICMSSN202")
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
-            etree.SubElement(icms_item, "CSOSN").text = produto_servico.icms_csosn
+            etree.SubElement(icms_item, "CSOSN").text = produto_servico.icms_modalidade
 
             etree.SubElement(icms_item, "modBCST").text = str(
                 produto_servico.icms_st_modalidade_determinacao_bc
@@ -922,7 +922,7 @@ class SerializacaoXML(Serializacao):
                 icms, "ICMSSN" + produto_servico.icms_modalidade
             )
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
-            etree.SubElement(icms_item, "CSOSN").text = produto_servico.icms_csosn
+            etree.SubElement(icms_item, "CSOSN").text = produto_servico.icms_modalidade
 
         # 900=Outros
         elif produto_servico.icms_modalidade == "900":
@@ -930,7 +930,7 @@ class SerializacaoXML(Serializacao):
                 icms, "ICMSSN" + produto_servico.icms_modalidade
             )
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
-            etree.SubElement(icms_item, "CSOSN").text = produto_servico.icms_csosn
+            etree.SubElement(icms_item, "CSOSN").text = produto_servico.icms_modalidade
 
             if (produto_servico.icms_valor_base_calculo > 0) and (
                     produto_servico.icms_valor > 0

@@ -133,7 +133,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             ind_total=1,
             icms_modalidade="400",
             icms_origem=0,
-            icms_csosn="400",
             icms_aliquota=0,  # Alíquota aplicável de cálculo do crédito (Simples Nacional).
             icms_credito=0,
             pis_modalidade="51",
