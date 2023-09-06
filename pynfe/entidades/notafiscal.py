@@ -142,6 +142,9 @@ class NotaFiscal(Entidade):
     # - Produtos e Servicos (lista 1 para * / ManyToManyField)
     produtos_e_servicos = None
 
+    # - Pagamentos (lista 1 para * / ManyToManyField)
+    tipo_pagamentos = None
+
     # Totais
     # - ICMS
     #  - Base de calculo (somente leitura)
@@ -352,7 +355,7 @@ class NotaFiscal(Entidade):
         self.observacoes_contribuinte = []
         self.processos_referenciados = []
         self.responsavel_tecnico = []
-        self.pagamentos = []
+        self.tipo_pagamentos = []
 
         super(NotaFiscal, self).__init__(*args, **kwargs)
 
@@ -446,8 +449,9 @@ class NotaFiscal(Entidade):
         return obj
 
     def adicionar_pagamento(self, **kwargs):
+        """Adiciona uma instancia de Pagamento"""
         obj = Pagamento(**kwargs)
-        self.pagamentos.append(obj)
+        self.tipo_pagamentos.append(obj)
         return obj
 
     def _codigo_numerico_aleatorio(self):
