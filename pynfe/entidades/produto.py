@@ -34,7 +34,7 @@ class Produto(Entidade):
     # Tabela https://www.confaz.fazenda.gov.br/anexo-i.pdf
     cest = str()
 
-    cbenef = str()
+    codigo_beneficio_fiscal = str()
 
     # - Unid. Com.
     unidade_comercial = str()

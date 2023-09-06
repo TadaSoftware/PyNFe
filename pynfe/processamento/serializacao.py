@@ -299,8 +299,8 @@ class SerializacaoXML(Serializacao):
         # Se a mercadoria se enquadrar em mais de uma codificação,
         # informar até 8 codificações principais.
         # etree.SubElement(prod, 'NVE').text = ''
-        if produto_servico.cbenef:
-            etree.SubElement(prod, "cBenef").text = produto_servico.cbenef
+        if produto_servico.codigo_beneficio_fiscal:
+            etree.SubElement(prod, "cBenef").text = produto_servico.codigo_beneficio_fiscal
 
         etree.SubElement(prod, "CFOP").text = produto_servico.cfop
         etree.SubElement(prod, "uCom").text = produto_servico.unidade_comercial
@@ -319,6 +319,7 @@ class SerializacaoXML(Serializacao):
         """
         if produto_servico.cest:
             etree.SubElement(prod, 'CEST').text = produto_servico.cest
+
         etree.SubElement(prod, "vProd").text = str("{:.2f}").format(
             produto_servico.valor_total_bruto or 0
         )
