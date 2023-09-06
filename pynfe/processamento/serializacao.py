@@ -1199,25 +1199,24 @@ class SerializacaoXML(Serializacao):
             return raiz
 
     def _serializar_pagamento(
-            self, pagamento, finalidade_emissao, tag_raiz="pag", retorna_string=True
+            self, pagamento, finalidade_emissao, tag_raiz="detPag", retorna_string=True
     ):
         raiz = etree.Element(tag_raiz)
 
-        detpag = etree.SubElement(raiz, "detPag")
         if str(finalidade_emissao) == "3" or str(finalidade_emissao) == "4":
-            etree.SubElement(detpag, "tPag").text = "90"
-            etree.SubElement(detpag, "vPag").text = "{:.2f}".format(0)
+            etree.SubElement(raiz, "tPag").text = "90"
+            etree.SubElement(raiz, "vPag").text = "{:.2f}".format(0)
         else:
-            etree.SubElement(detpag, "tPag").text = str(
+            etree.SubElement(raiz, "tPag").text = str(
                 pagamento.tipo_pagamento
             ).zfill(2)
 
-            etree.SubElement(detpag, "vPag").text = "{:.2f}".format(
+            etree.SubElement(raiz, "vPag").text = "{:.2f}".format(
                 pagamento.valor
             )
 
             if pagamento.tipo_pagamento == 3 or pagamento.tipo_pagamento == 4:
-                cartao = etree.SubElement(detpag, "card")
+                cartao = etree.SubElement(raiz, "card")
                 """ Tipo de Integração do processo de pagamento com
                     o sistema de automação da empresa:
                     1 = Pagamento integrado com o sistema de automação da empresa
@@ -1238,8 +1237,6 @@ class SerializacaoXML(Serializacao):
                     # Identifica o número da autorização da transação da operação
                     # com cartão de crédito e/ou débito
                     etree.SubElement(cartao, 'cAut').text = pagamento.numero_autorizacao_pagamento
-            # troco
-            # etree.SubElement(pag, 'vTroco').text = str('')
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
@@ -1597,12 +1594,15 @@ class SerializacaoXML(Serializacao):
                                 ).text = lacre.numero_lacre
 
         # Pagamento
+        pag = etree.SubElement(raiz, "pag")
         for num, item in enumerate(nota_fiscal.tipo_pagamentos):
-            raiz.append(
+            pag.append(
                 self._serializar_pagamento(
                     item, finalidade_emissao=nota_fiscal.finalidade_emissao, retorna_string=False
                 )
             )
+        # troco
+        # etree.SubElement(pag, 'vTroco').text = str('')
 
         # Pagamento
         # """ Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e.
