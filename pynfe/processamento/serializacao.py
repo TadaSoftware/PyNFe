@@ -872,7 +872,7 @@ class SerializacaoXML(Serializacao):
         elif produto_servico.icms_modalidade in ("201", "202", "203"):
             if produto_servico.icms_modalidade == "201":
                 icms_item = etree.SubElement(icms, "ICMSSN201")
-            elif produto_servico.icms_modalidade in ["202", "203"]:
+            else:
                 icms_item = etree.SubElement(icms, "ICMSSN202")
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, "CSOSN").text = produto_servico.icms_modalidade
