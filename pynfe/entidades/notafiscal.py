@@ -399,8 +399,7 @@ class NotaFiscal(Entidade):
         self.totais_fcp_st_ret += obj.fcp_st_ret_valor
         self.totais_icms_inter_destino += obj.icms_inter_destino_valor
         self.totais_icms_inter_remetente += obj.icms_inter_remetente_valor
-        # TODO calcular impostos aproximados
-        # self.totais_tributos_aproximado += obj.tributos
+        self.totais_tributos_aproximado += obj.valor_tributos_aprox
 
         self.totais_icms_total_nota += (
             obj.valor_total_bruto
@@ -577,6 +576,8 @@ class NotaFiscalProduto(Entidade):
 
     #  - Valor Unitario Comercial (obrigatorio)
     valor_unitario_comercial = Decimal()
+
+    valor_tributos_aprox = Decimal()
 
     #  - Unidade Tributavel (obrigatorio)
     unidade_tributavel = str()

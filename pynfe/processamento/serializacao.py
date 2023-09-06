@@ -348,9 +348,9 @@ class SerializacaoXML(Serializacao):
                 produto_servico.desconto
             )
         # outras despesas acessórias
-        if produto_servico.outras_despesas_acessorias:
+        if produto_servico.outras_despesas:
             etree.SubElement(prod, "vOutro").text = "{:.2f}".format(
-                produto_servico.outras_despesas_acessorias
+                produto_servico.outras_despesas
             )
 
         """ Indica se valor do Item (vProd) entra no valor total da NF-e (vProd)
