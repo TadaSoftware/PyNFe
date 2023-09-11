@@ -643,9 +643,12 @@ class SerializacaoXML(Serializacao):
         elif produto_servico.icms_modalidade in ["40", "41", "50", "41_ST"]:
             icms_item = etree.SubElement(icms, "ICMS40")
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
-            etree.SubElement(icms_item, "CST").text = str(
-                produto_servico.icms_modalidade
-            )
+            if produto_servico.icms_modalidade == "41_ST":
+                etree.SubElement(icms_item, "CST").text = str("ST")
+            else:
+                etree.SubElement(icms_item, "CST").text = str(
+                    produto_servico.icms_modalidade
+                )
 
             if produto_servico.icms_desonerado > 0:
                 etree.SubElement(icms_item, "vICMSDeson").text = "{:.2f}".format(
@@ -680,11 +683,15 @@ class SerializacaoXML(Serializacao):
             icms_item = etree.SubElement(icms, "ICMS" + produto_servico.icms_modalidade)
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, "CST").text = "60"
-            etree.SubElement(icms_item, "vBCSTRet").text = "0"
-            etree.SubElement(icms_item, "pST").text = "{:.4f}".format(0)
-            etree.SubElement(
-                icms_item, "vICMSSTRet"
-            ).text = "0"  # Informar o valor do ICMS ST retido na UF remetente
+            etree.SubElement(icms_item, "vBCSTRet").text = "{:.2f}".format(
+                produto_servico.icms_base_calculo_retido_st or 0
+            )
+            etree.SubElement(icms_item, "pST").text = "{:.2f}".format(
+                produto_servico.icms_aliquota_final or 0
+            )
+            etree.SubElement(icms_item, "vICMSSTRet").text = "{:.2f}".format(
+                produto_servico.icms_valor_retido_st or 0
+            )
 
             if produto_servico.fcp_st_valor:
                 etree.SubElement(icms_item, "vBCFCPSTRet").text = "{:.2f}".format(
@@ -696,6 +703,26 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(icms_item, "vFCPSTRet").text = "{:.2f}".format(
                     produto_servico.fcp_st_valor or 0
                 )
+
+            if produto_servico.icms_reducao_base_calculo_efetiva:
+                etree.SubElement(
+                    icms_item, "pRedBCEfet"
+                ).text = produto_servico.icms_reducao_base_calculo_efetiva
+
+            if produto_servico.icms_base_calculo_efetiva:
+                etree.SubElement(
+                    icms_item, "vBCEfet"
+                ).text = produto_servico.icms_base_calculo_efetiva
+
+            if produto_servico.icms_aliquota_efetiva:
+                etree.SubElement(
+                    icms_item, "pICMSEfet"
+                ).text = produto_servico.icms_aliquota_efetiva
+
+            if produto_servico.icms_valor_efetivo:
+                etree.SubElement(
+                    icms_item, "vICMSEfet"
+                ).text = produto_servico.icms_valor_efetivo
 
         # 70=Com redução da BC e cobrança do ICMS por substituição tributária
         elif produto_servico.icms_modalidade == "70":
@@ -927,6 +954,26 @@ class SerializacaoXML(Serializacao):
             )
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, "CSOSN").text = produto_servico.icms_modalidade
+
+            if produto_servico.icms_reducao_base_calculo_efetiva:
+                etree.SubElement(
+                    icms_item, "pRedBCEfet"
+                ).text = produto_servico.icms_reducao_base_calculo_efetiva
+
+            if produto_servico.icms_base_calculo_efetiva:
+                etree.SubElement(
+                    icms_item, "vBCEfet"
+                ).text = produto_servico.icms_base_calculo_efetiva
+
+            if produto_servico.icms_aliquota_efetiva:
+                etree.SubElement(
+                    icms_item, "pICMSEfet"
+                ).text = produto_servico.icms_aliquota_efetiva
+
+            if produto_servico.icms_valor_efetivo:
+                etree.SubElement(
+                    icms_item, "vICMSEfet"
+                ).text = produto_servico.icms_valor_efetivo
 
         # 900=Outros
         elif produto_servico.icms_modalidade == "900":

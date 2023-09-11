@@ -703,10 +703,18 @@ class NotaFiscalProduto(Entidade):
     fcp_st_valor = Decimal()
 
     fcp_destino_valor = Decimal()
-    fcp_st_valor = Decimal()
     fcp_st_ret_valor = Decimal()
     icms_inter_destino_valor = Decimal()
     icms_inter_remetente_valor = Decimal()
+
+    icms_base_calculo_retido_st = Decimal()
+    icms_valor_retido_st = Decimal()
+    icms_aliquota_final = Decimal()
+
+    icms_reducao_base_calculo_efetiva = Decimal()
+    icms_base_calculo_efetiva = Decimal()
+    icms_aliquota_efetiva = Decimal()
+    icms_valor_efetivo = Decimal()
 
     #  - IPI
     #   - Situacao tributaria (seleciona de lista) - IPI_TIPOS_TRIBUTACAO
