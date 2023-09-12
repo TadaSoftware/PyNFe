@@ -36,7 +36,7 @@ class Serializacao(object):
         None  # Justificativa da entrada em contingência (min 20, max 256 caracteres)
     )
     _so_cpf = False  # Destinatário com apenas o cpf do cliente
-    _nome_aplicacao = "PyNFe"
+    _nome_aplicacao = "LeoHub.io"
 
     def __new__(cls, *args, **kwargs):
         if cls == Serializacao:
