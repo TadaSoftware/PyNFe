@@ -1574,7 +1574,7 @@ class SerializacaoXML(Serializacao):
             nota_fiscal.totais_icms_total_nota
         )
         etree.SubElement(icms_total, "vTotTrib").text = "{:.2f}".format(
-            nota_fiscal.valor_tributos_aprox or 0
+            nota_fiscal.totais_tributos_aproximado or 0
         )
 
         # Transporte
