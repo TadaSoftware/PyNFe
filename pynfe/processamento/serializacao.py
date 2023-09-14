@@ -398,10 +398,9 @@ class SerializacaoXML(Serializacao):
 
         # Lei da transparencia
         # Tributos aprox por item
-        if produto_servico.valor_tributos_aprox:
-            etree.SubElement(imposto, "vTotTrib").text = str(
-                produto_servico.valor_tributos_aprox
-            )
+        etree.SubElement(imposto, "vTotTrib").text = "{:.2f}".format(
+            produto_servico.valor_tributos_aprox or 0
+        )
 
         # ICMS
         self._serializar_imposto_icms(
@@ -1574,10 +1573,9 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_total, "vNF").text = str(
             nota_fiscal.totais_icms_total_nota
         )
-        if nota_fiscal.totais_tributos_aproximado:
-            etree.SubElement(icms_total, "vTotTrib").text = "{:.2f}".format(
-                nota_fiscal.totais_tributos_aproximado
-            )
+        etree.SubElement(icms_total, "vTotTrib").text = "{:.2f}".format(
+            nota_fiscal.valor_tributos_aprox or 0
+        )
 
         # Transporte
         transp = etree.SubElement(raiz, "transp")
