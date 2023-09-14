@@ -2105,9 +2105,10 @@ class SerializacaoMDFe(Serializacao):
         if emitente.endereco_complemento:
             etree.SubElement(endereco, "xCpl").text = emitente.endereco_complemento
         etree.SubElement(endereco, "xBairro").text = emitente.endereco_bairro
-        etree.SubElement(endereco, "cMun").text = obter_codigo_por_municipio(
-            emitente.endereco_municipio, emitente.endereco_uf
-        )
+        if emitente.endereco_municipio and emitente.endereco_uf:
+            etree.SubElement(endereco, "cMun").text = obter_codigo_por_municipio(
+                emitente.endereco_municipio, emitente.endereco_uf
+            )
         etree.SubElement(endereco, "xMun").text = emitente.endereco_municipio
         etree.SubElement(endereco, "CEP").text = so_numeros(emitente.endereco_cep)
         etree.SubElement(endereco, "UF").text = emitente.endereco_uf
