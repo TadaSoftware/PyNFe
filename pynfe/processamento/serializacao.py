@@ -159,28 +159,37 @@ class SerializacaoXML(Serializacao):
         if not self._so_cpf:
             if cliente.razao_social:
                 etree.SubElement(raiz, "xNome").text = cliente.razao_social
-            endereco = etree.SubElement(raiz, "enderDest")
-            etree.SubElement(endereco, "xLgr").text = cliente.endereco_logradouro
-            etree.SubElement(endereco, "nro").text = cliente.endereco_numero
-            if cliente.endereco_complemento:
-                etree.SubElement(endereco, "xCpl").text = cliente.endereco_complemento
-            etree.SubElement(endereco, "xBairro").text = cliente.endereco_bairro
-            if cliente.endereco_municipio and cliente.endereco_uf:
-                etree.SubElement(endereco, "cMun").text = obter_codigo_por_municipio(
-                    cliente.endereco_municipio, cliente.endereco_uf
-                )
-            etree.SubElement(endereco, "xMun").text = cliente.endereco_municipio
-            etree.SubElement(endereco, "UF").text = cliente.endereco_uf
-            if cliente.endereco_cep:
-                etree.SubElement(endereco, "CEP").text = so_numeros(
-                    cliente.endereco_cep
-                )
-            etree.SubElement(endereco, "cPais").text = cliente.endereco_pais
-            etree.SubElement(endereco, "xPais").text = obter_pais_por_codigo(
-                cliente.endereco_pais
-            )
-            if cliente.endereco_telefone:
-                etree.SubElement(endereco, "fone").text = cliente.endereco_telefone
+
+            if cliente.endereco_uf and cliente.endereco_pais and cliente.endereco_municipio:
+                endereco = etree.SubElement(raiz, "enderDest")
+                if cliente.endereco_logradouro:
+                    etree.SubElement(endereco, "xLgr").text = cliente.endereco_logradouro
+                if cliente.endereco_numero:
+                    etree.SubElement(endereco, "nro").text = cliente.endereco_numero
+                if cliente.endereco_complemento:
+                    etree.SubElement(endereco, "xCpl").text = cliente.endereco_complemento
+                if cliente.endereco_bairro:
+                    etree.SubElement(endereco, "xBairro").text = cliente.endereco_bairro
+                if cliente.endereco_municipio and cliente.endereco_uf:
+                    etree.SubElement(endereco, "cMun").text = obter_codigo_por_municipio(
+                        cliente.endereco_municipio, cliente.endereco_uf
+                    )
+                if cliente.endereco_municipio:
+                    etree.SubElement(endereco, "xMun").text = cliente.endereco_municipio
+                if cliente.endereco_uf:
+                    etree.SubElement(endereco, "UF").text = cliente.endereco_uf
+                if cliente.endereco_cep:
+                    etree.SubElement(endereco, "CEP").text = so_numeros(
+                        cliente.endereco_cep
+                    )
+                if cliente.endereco_uf and cliente.endereco_pais:
+                    etree.SubElement(endereco, "cPais").text = cliente.endereco_pais
+                    etree.SubElement(endereco, "xPais").text = obter_pais_por_codigo(
+                        cliente.endereco_pais
+                    )
+                if cliente.endereco_telefone:
+                    etree.SubElement(endereco, "fone").text = cliente.endereco_telefone
+
         # Indicador da IE do destinatário:
         # 1 – Contribuinte ICMSpagamento à vista;
         # 2 – Contribuinte isento de inscrição;
@@ -190,12 +199,13 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(raiz, "indIEDest").text = "9"
         elif (
                 cliente.indicador_ie == 2 or cliente.isento_icms
-        ) or cliente.inscricao_estadual.upper() == "ISENTO":
+        ) or (cliente.inscricao_estadual and cliente.inscricao_estadual.upper() == "ISENTO"):
             etree.SubElement(raiz, "indIEDest").text = "2"
         else:
             # Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista;
             etree.SubElement(raiz, "indIEDest").text = str(cliente.indicador_ie)
-            etree.SubElement(raiz, "IE").text = cliente.inscricao_estadual
+            if cliente.inscricao_estadual:
+                etree.SubElement(raiz, "IE").text = cliente.inscricao_estadual
         # Suframa
         if cliente.inscricao_suframa:
             etree.SubElement(raiz, "ISUF").text = cliente.inscricao_suframa
