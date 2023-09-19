@@ -310,6 +310,16 @@ class SerializacaoXML(Serializacao):
         # Se a mercadoria se enquadrar em mais de uma codificação,
         # informar até 8 codificações principais.
         # etree.SubElement(prod, 'NVE').text = ''
+
+        """
+        Código Especificador da Substituição Tributária – CEST,
+        que estabelece a sistemática de uniformização
+        e identificação das mercadorias e bens passíveis de
+        sujeição aos regimes de substituição tributária e de antecipação de recolhimento do ICMS.
+        """
+        if produto_servico.cest:
+            etree.SubElement(prod, 'CEST').text = produto_servico.cest
+
         if produto_servico.codigo_beneficio_fiscal:
             etree.SubElement(prod, "cBenef").text = produto_servico.codigo_beneficio_fiscal
 
@@ -321,15 +331,6 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, "vUnCom").text = str("{:.2f}").format(
             produto_servico.valor_unitario_comercial or 0
         )
-
-        """
-        Código Especificador da Substituição Tributária – CEST,
-        que estabelece a sistemática de uniformização
-        e identificação das mercadorias e bens passíveis de
-        sujeição aos regimes de substituição tributária e de antecipação de recolhimento do ICMS.
-        """
-        if produto_servico.cest:
-            etree.SubElement(prod, 'CEST').text = produto_servico.cest
 
         etree.SubElement(prod, "vProd").text = str("{:.2f}").format(
             produto_servico.valor_total_bruto or 0
