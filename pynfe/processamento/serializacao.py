@@ -318,7 +318,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, "qCom").text = str(
             produto_servico.quantidade_comercial or 0
         )
-        etree.SubElement(prod, "vUnCom").text = str("{:.10f}").format(
+        etree.SubElement(prod, "vUnCom").text = str("{:.2f}").format(
             produto_servico.valor_unitario_comercial or 0
         )
 
@@ -339,7 +339,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(prod, "qTrib").text = str(
             produto_servico.quantidade_tributavel
         )
-        etree.SubElement(prod, "vUnTrib").text = "{:.10f}".format(
+        etree.SubElement(prod, "vUnTrib").text = "{:.2f}".format(
             produto_servico.valor_unitario_tributavel or 0
         )
 
