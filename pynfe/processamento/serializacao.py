@@ -1283,6 +1283,16 @@ class SerializacaoXML(Serializacao):
                 pagamento.valor
             )
 
+            if pagamento.indicador_pagamento:
+                etree.SubElement(raiz, "indPag").text = str(
+                    pagamento.indicador_pagamento
+                )
+
+            if pagamento.tipo_pagamento == 99:
+                etree.SubElement(raiz, "xPag").text = str(
+                    pagamento.descricao_pagamento or "Outros"
+                )
+
             if pagamento.tipo_pagamento == 3 or pagamento.tipo_pagamento == 4:
                 cartao = etree.SubElement(raiz, "card")
                 """ Tipo de Integração do processo de pagamento com

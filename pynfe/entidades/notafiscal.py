@@ -1128,6 +1128,14 @@ class Pagamento(Entidade):
     """
     tipo_pagamento = int()
 
+    """
+    0 - Pagamento a vista
+    1 - Pagamento a prazo
+    """
+    indicador_pagamento = int()
+
+    descricao_pagamento = str()
+
     # Valor pago
     valor = Decimal()
 
