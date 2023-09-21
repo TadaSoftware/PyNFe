@@ -225,6 +225,11 @@ NF_INTEGRACAO_PAGAMENTO = (
     (2, "Pagamento não integrado com o sistema de automação da empresa"),
 )
 
+NF_INDICADOR_PAGAMENTO = (
+    (0, "Pagamento a vista"),
+    (1, "Pagamento a prazo"),
+)
+
 NF_BANDEIRAS_CARTAO_PAGAMENTO = (
     (1, "Visa"),
     (2, "Mastercard"),

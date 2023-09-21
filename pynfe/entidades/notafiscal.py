@@ -1131,6 +1131,8 @@ class Pagamento(Entidade):
     """
     0 - Pagamento a vista
     1 - Pagamento a prazo
+    
+    # NF_INDICADOR_PAGAMENTO
     """
     indicador_pagamento = int()
 
