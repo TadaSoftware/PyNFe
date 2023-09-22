@@ -193,7 +193,7 @@ class NotaFiscal(Entidade):
     totais_icms_cofins = Decimal()
 
     #  - Outras despesas acessorias
-    totais_icms_outras_despesas_acessorias = Decimal()
+    totais_icms_outras_despesas = Decimal()
 
     #  - Total da nota
     totais_icms_total_nota = Decimal()
@@ -393,7 +393,7 @@ class NotaFiscal(Entidade):
         self.totais_icms_total_ipi_dev += obj.ipi_valor_ipi_dev
         self.totais_icms_pis += obj.pis_valor
         self.totais_icms_cofins += obj.cofins_valor
-        self.totais_icms_outras_despesas_acessorias += obj.outras_despesas_acessorias
+        self.totais_icms_outras_despesas += obj.outras_despesas
         # - Valor Total do FCP (Fundo de Combate à Pobreza)
         self.totais_fcp += obj.fcp_valor
         self.totais_fcp_destino += obj.fcp_destino_valor
@@ -409,7 +409,7 @@ class NotaFiscal(Entidade):
             + obj.fcp_st_valor
             + obj.total_frete
             + obj.total_seguro
-            + obj.outras_despesas_acessorias
+            + obj.outras_despesas
             + obj.imposto_importacao_valor
             + obj.ipi_valor_ipi
             + obj.ipi_valor_ipi_dev
@@ -606,7 +606,7 @@ class NotaFiscalProduto(Entidade):
     desconto = Decimal()
 
     # - Outras despesas acessórias
-    outras_despesas_acessorias = Decimal()
+    outras_despesas = Decimal()
 
     # - Indica se valor do Item (vProd) entra no valor total da NF-e
     compoe_valor_total = 1

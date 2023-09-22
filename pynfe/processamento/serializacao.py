@@ -1590,7 +1590,7 @@ class SerializacaoXML(Serializacao):
         )
 
         etree.SubElement(icms_total, "vOutro").text = "{:.2f}".format(
-            nota_fiscal.totais_icms_outras_despesas_acessorias
+            nota_fiscal.totais_icms_outras_despesas
         )
         etree.SubElement(icms_total, "vNF").text = str(
             nota_fiscal.totais_icms_total_nota
