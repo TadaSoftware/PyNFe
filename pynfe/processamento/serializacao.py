@@ -1275,23 +1275,23 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(raiz, "tPag").text = "90"
             etree.SubElement(raiz, "vPag").text = "{:.2f}".format(0)
         else:
-            etree.SubElement(raiz, "tPag").text = str(
-                pagamento.tipo_pagamento
-            ).zfill(2)
-
-            etree.SubElement(raiz, "vPag").text = "{:.2f}".format(
-                pagamento.valor
-            )
-
             if pagamento.indicador_pagamento:
                 etree.SubElement(raiz, "indPag").text = str(
                     pagamento.indicador_pagamento
                 )
 
-            if pagamento.tipo_pagamento == 99:
+            etree.SubElement(raiz, "tPag").text = str(
+                pagamento.tipo_pagamento
+            ).zfill(2)
+
+            if pagamento.tipo_pagamento == "99":
                 etree.SubElement(raiz, "xPag").text = str(
                     pagamento.descricao_pagamento or "Outros"
                 )
+
+            etree.SubElement(raiz, "vPag").text = "{:.2f}".format(
+                pagamento.valor
+            )
 
             if pagamento.tipo_pagamento == 3 or pagamento.tipo_pagamento == 4:
                 cartao = etree.SubElement(raiz, "card")
