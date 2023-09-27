@@ -916,9 +916,6 @@ class NotaFiscalDeclaracaoImportacao(Entidade):
     #  - Data de registro
     data_registro = None
 
-    #  - Codigo exportador
-    codigo_exportador = str()
-
     #  - Desembaraco aduaneiro
     #   - UF
     desembaraco_aduaneiro_uf = str()
@@ -928,6 +925,24 @@ class NotaFiscalDeclaracaoImportacao(Entidade):
 
     #   - Data
     desembaraco_aduaneiro_data = str()
+
+    #   - Via de transporte internacional informada na Declaração de Importação (DI)
+    tipo_via_transporte = str()
+
+    #   - Valor da AFRMM - Adicional ao Frete para Renovação da Marinha Mercante
+    valor_afrmm = Decimal()
+
+    #   - Forma de importação quanto a intermediação
+    tipo_intermediacao = str()
+
+    #   - CNPJ do adquirente ou do encomendante 
+    cnpj_adquirente = str()
+
+    #   - UFTerceiro - Sigla da UF do adquirente ou do encomendante
+    uf_terceiro = str()
+
+    #  - Codigo exportador
+    codigo_exportador = str()
 
     #  - Adicoes (lista 1 para * / ManyToManyField)
     adicoes = None
@@ -947,11 +962,13 @@ class NotaFiscalDeclaracaoImportacaoAdicao(Entidade):
     numero = str()
 
     #   - Desconto
-    desconto = str()
+    desconto = Decimal()
 
     #   - Codigo fabricante
     codigo_fabricante = str()
 
+    #   - Número do ato concessório de Drawback
+    numero_drawback = str()
 
 class NotaFiscalTransporteVolume(Entidade):
     #  - Quantidade
