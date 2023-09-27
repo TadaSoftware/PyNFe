@@ -314,7 +314,8 @@ class SerializacaoXML(Serializacao):
         Código Especificador da Substituição Tributária – CEST,
         que estabelece a sistemática de uniformização
         e identificação das mercadorias e bens passíveis de
-        sujeição aos regimes de substituição tributária e de antecipação de recolhimento do ICMS.
+        sujeição aos regimes de substituição tributária e de
+        antecipação de recolhimento do ICMS.
         """
         # if produto_servico.cest:
         #    etree.SubElement(prod, 'CEST').text = produto_servico.cest
@@ -356,6 +357,10 @@ class SerializacaoXML(Serializacao):
             1=Valor do item (vProd) compõe o valor total da NF-e (vProd) (v2.0)
         """
         etree.SubElement(prod, "indTot").text = str(produto_servico.ind_total)
+
+        # DI - Declaração de Importação
+        self._serializar_declaracao_importacao(
+            produto_servico=produto_servico, tag_raiz=prod, retorna_string=False)
 
         """ Informação de interesse do emissor para controle do B2B.(v2.0) """
         # Número do Pedido de Compra. Tam 1-15
@@ -409,6 +414,14 @@ class SerializacaoXML(Serializacao):
             produto_servico=produto_servico, tag_raiz=imposto, retorna_string=False
         )
 
+        # Imposto de Importação II
+        self._serializar_imposto_importacao(
+            produto_servico=produto_servico,
+            modelo=modelo,
+            tag_raiz=imposto,
+            retorna_string=False,
+        )
+
         # PIS
         self._serializar_imposto_pis(
             produto_servico=produto_servico,
@@ -419,14 +432,6 @@ class SerializacaoXML(Serializacao):
 
         # COFINS
         self._serializar_imposto_cofins(
-            produto_servico=produto_servico,
-            modelo=modelo,
-            tag_raiz=imposto,
-            retorna_string=False,
-        )
-
-        # Imposto de Importação II
-        self._serializar_imposto_importacao(
             produto_servico=produto_servico,
             modelo=modelo,
             tag_raiz=imposto,
@@ -1016,6 +1021,26 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(
                 ipint, "CST"
             ).text = produto_servico.ipi_codigo_enquadramento
+        else:
+            if (produto_servico.ipi_valor_base_calculo > 0) and\
+               (produto_servico.ipi_aliquota > 0) and\
+               (produto_servico.ipi_valor > 0):
+                ipi = etree.SubElement(tag_raiz, 'IPI')
+
+                # Preenchimento conforme Atos Normativos editados pela Receita Federal
+                # (Observação 2)
+                etree.SubElement(ipi, 'cEnq').text = produto_servico.ipi_classe_enquadramento
+                if produto_servico.ipi_classe_enquadramento == '':
+                    etree.SubElement(ipi, 'cEnq').text = '999'
+
+                ipi_item = etree.SubElement(ipi, 'IPITrib')
+                etree.SubElement(ipi_item, 'CST').text = produto_servico.ipi_codigo_enquadramento
+                etree.SubElement(ipi_item, 'vBC').text = '{:.2f}'.format(
+                    produto_servico.ipi_valor_base_calculo or 0)
+                etree.SubElement(ipi_item, 'pIPI').text = '{:.2f}'.format(
+                    produto_servico.ipi_aliquota or 0)
+                etree.SubElement(ipi_item, 'vIPI').text = '{:.2f}'.format(
+                    produto_servico.ipi_valor or 0)
 
     def _serializar_imposto_pis(
         self, produto_servico, modelo, tag_raiz="imposto", retorna_string=True
@@ -1183,6 +1208,54 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(ii, "vIOF").text = "{:.2f}".format(
                 produto_servico.imposto_importacao_valor_iof
             )
+
+    def _serializar_declaracao_importacao(
+            self, produto_servico, tag_raiz='prod', retorna_string=True
+    ):
+        # DI de 0-100
+        if produto_servico.declaracoes_importacao and\
+           len(produto_servico.declaracoes_importacao) > 0:
+            for item_di in produto_servico.declaracoes_importacao:
+                di = etree.SubElement(tag_raiz, 'DI')
+                # Número do Documento de Importação (DI, DSI, DIRE, ...)
+                etree.SubElement(di, 'nDI').text = str(item_di.numero_di_dsi_da)
+                # Data de Registro do documento
+                etree.SubElement(di, 'dDI').text = item_di.data_registro.strftime('%Y-%m-%d')
+                # Local de desembaraço
+                etree.SubElement(di, 'xLocDesemb').text = str(item_di.desembaraco_aduaneiro_local)
+                # UF onde ocorreu o Desembaraço Aduaneiro
+                etree.SubElement(di, 'UFDesemb').text = str(item_di.desembaraco_aduaneiro_uf)
+                # Data do Desembaraço Aduaneiro
+                etree.SubElement(di, 'dDesemb').text = \
+                    item_di.desembaraco_aduaneiro_data.strftime('%Y-%m-%d')
+                # Via de transporte internacional informada na Declaração de Importação (DI)
+                etree.SubElement(di, 'tpViaTransp').text = str(item_di.tipo_via_transporte)
+                # Valor da AFRMM - Adicional ao Frete para Renovação da Marinha Mercante
+                if item_di.valor_afrmm:
+                    etree.SubElement(di, 'vAFRMM').text = '{:.2f}'.format(item_di.valor_afrmm or 0)
+                # tpIntermedio
+                etree.SubElement(di, 'tpIntermedio').text = str(item_di.tipo_intermediacao)
+                # CNPJ
+                if item_di.cnpj_adquirente:
+                    etree.SubElement(di, 'CNPJ').text = so_numeros(item_di.cnpj_adquirente)
+                # UFTerceiro
+                if item_di.uf_terceiro:
+                    etree.SubElement(di, 'UFTerceiro').text = item_di.uf_terceiro
+                # cExportador
+                etree.SubElement(di, 'cExportador').text = str(item_di.codigo_exportador)
+
+                # Adições 1-100
+                for adicao in item_di.adicoes:
+                    adi = etree.SubElement(di, 'adi')
+                    etree.SubElement(adi, 'nAdicao').text = str(adicao.numero)
+                    etree.SubElement(adi, 'nSeqAdic').text = str(adicao.sequencia)
+                    etree.SubElement(adi, 'cFabricante').text = str(adicao.codigo_fabricante)
+                    if adicao.desconto:
+                        etree.SubElement(adi, 'vDescDI').text = \
+                            '{:.2f}'.format(adicao.desconto or 0)
+                    # Número do ato concessório de Drawback
+                    if adicao.numero_drawback:
+                        etree.SubElement(adi, 'nDraw').text = str(adicao.numero_drawback)
 
     def _serializar_responsavel_tecnico(
         self, responsavel_tecnico, tag_raiz="infRespTec", retorna_string=True
