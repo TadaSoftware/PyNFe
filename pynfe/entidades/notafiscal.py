@@ -935,7 +935,7 @@ class NotaFiscalDeclaracaoImportacao(Entidade):
     #   - Forma de importação quanto a intermediação
     tipo_intermediacao = str()
 
-    #   - CNPJ do adquirente ou do encomendante 
+    #   - CNPJ do adquirente ou do encomendante
     cnpj_adquirente = str()
 
     #   - UFTerceiro - Sigla da UF do adquirente ou do encomendante
@@ -969,6 +969,7 @@ class NotaFiscalDeclaracaoImportacaoAdicao(Entidade):
 
     #   - Número do ato concessório de Drawback
     numero_drawback = str()
+
 
 class NotaFiscalTransporteVolume(Entidade):
     #  - Quantidade
