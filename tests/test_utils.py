@@ -12,6 +12,7 @@ from pynfe.utils import (
     obter_uf_por_codigo,
     formatar_decimal,
     remover_acentos,
+    carregar_arquivo_municipios
 )
 from lxml import etree
 from pynfe.utils.descompactar import DescompactaGzip
@@ -239,6 +240,113 @@ class DescompactaGzipUtils(unittest.TestCase):
         resultado_str = etree.tostring(descompacta_gzip).decode("utf-8")
 
         self.assertEqual(resultado_str, esperado)
+
+
+class CidadesTestCase(unittest.TestCase):
+    """
+    Testar quantidade de cidades por UF
+    pelo arquivos MunIBGE-UFXX.txt
+
+    """
+    def test_quantidade_cidades_ac(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=12)), 22)
+
+    def test_quantidade_cidades_al(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=27)), 102)
+
+    def test_quantidade_cidades_ap(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=16)), 16)
+
+    def test_quantidade_cidades_am(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=13)), 62)
+
+    def test_quantidade_cidades_ba(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=29)), 417)
+
+    def test_quantidade_cidades_ce(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=23)), 184)
+
+    def test_quantidade_cidades_df(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=53)), 1)
+
+    def test_quantidade_cidades_es(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=32)), 78)
+
+    def test_quantidade_cidades_go(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=52)), 246)
+
+    def test_quantidade_cidades_ma(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=21)), 217)
+
+    def test_quantidade_cidades_mt(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=51)), 141)
+
+    def test_quantidade_cidades_ms(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=50)), 79)
+
+    def test_quantidade_cidades_mg(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=31)), 853)
+
+    def test_quantidade_cidades_pa(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=15)), 144)
+
+    def test_quantidade_cidades_pb(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=25)), 223)
+
+    def test_quantidade_cidades_pr(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=41)), 399)
+
+    def test_quantidade_cidades_pe(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=26)), 185)
+
+    def test_quantidade_cidades_pi(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=22)), 224)
+
+    def test_quantidade_cidades_rj(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=33)), 92)
+
+    def test_quantidade_cidades_rn(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=24)), 167)
+
+    def test_quantidade_cidades_rs(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=43)), 497)
+
+    def test_quantidade_cidades_ro(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=11)), 52)
+
+    def test_quantidade_cidades_rr(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=14)), 15)
+
+    def test_quantidade_cidades_sc(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=42)), 295)
+
+    def test_quantidade_cidades_sp(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=35)), 645)
+
+    def test_quantidade_cidades_se(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=28)), 75)
+
+    def test_quantidade_cidades_to(self):
+        self.assertEqual(len(carregar_arquivo_municipios(uf=17)), 139)
+
+    def test_quantidade_total_cidades(self):
+        """
+        Carregar todos os arquivos
+        e verificar a quantidade total de cidades
+
+        """
+        total = 0
+        lista_de_codigos_uf = [
+            11, 12, 13, 14, 15, 16, 17,  # Norte
+            21, 22, 23, 24, 25, 26, 27, 28, 29,  # Nordeste
+            31, 32, 33, 35,  # Sudeste
+            41, 42, 43,  # Sul
+            50, 51, 52, 53  # Centro-Oeste
+        ]
+        for uf in lista_de_codigos_uf:
+            total += len(carregar_arquivo_municipios(uf=uf))
+
+        self.assertEqual(total, 5570)
 
 
 if __name__ == "__main__":
