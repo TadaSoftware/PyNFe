@@ -190,6 +190,7 @@
 4212403	Pedras Grandes
 4212502	Penha
 4212601	Peritiba
+4212650	Pescaria Brava
 4212700	Petrolândia
 4212809	Balneário Piçarras
 4212908	Pinhalzinho
@@ -291,3 +292,4 @@
 4219606	Xavantina
 4219705	Xaxim
 4219853	Zortéa
+4220000	Balneário Rincão
