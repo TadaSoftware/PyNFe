@@ -108,20 +108,20 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(raiz, "CPF").text = so_numeros(emitente.cnpj)
         else:
             etree.SubElement(raiz, "CNPJ").text = so_numeros(emitente.cnpj)
-        etree.SubElement(raiz, "xNome").text = emitente.razao_social
-        etree.SubElement(raiz, "xFant").text = emitente.nome_fantasia
+        etree.SubElement(raiz, "xNome").text = emitente.razao_social.strip()
+        etree.SubElement(raiz, "xFant").text = emitente.nome_fantasia.strip()
         # Endereço
         endereco = etree.SubElement(raiz, "enderEmit")
-        etree.SubElement(endereco, "xLgr").text = emitente.endereco_logradouro
+        etree.SubElement(endereco, "xLgr").text = emitente.endereco_logradouro.strip()
         etree.SubElement(endereco, "nro").text = emitente.endereco_numero
         if emitente.endereco_complemento:
-            etree.SubElement(endereco, "xCpl").text = emitente.endereco_complemento
-        etree.SubElement(endereco, "xBairro").text = emitente.endereco_bairro
+            etree.SubElement(endereco, "xCpl").text = emitente.endereco_complemento.strip()
+        etree.SubElement(endereco, "xBairro").text = emitente.endereco_bairro.strip()
         etree.SubElement(endereco, "cMun").text = obter_codigo_por_municipio(
             emitente.endereco_municipio, emitente.endereco_uf
         )
-        etree.SubElement(endereco, "xMun").text = emitente.endereco_municipio
-        etree.SubElement(endereco, "UF").text = emitente.endereco_uf
+        etree.SubElement(endereco, "xMun").text = emitente.endereco_municipio.strip()
+        etree.SubElement(endereco, "UF").text = emitente.endereco_uf.strip()
         etree.SubElement(endereco, "CEP").text = so_numeros(emitente.endereco_cep)
         etree.SubElement(endereco, "cPais").text = emitente.endereco_pais
         etree.SubElement(endereco, "xPais").text = obter_pais_por_codigo(
@@ -158,24 +158,24 @@ class SerializacaoXML(Serializacao):
         )
         if not self._so_cpf:
             if cliente.razao_social:
-                etree.SubElement(raiz, "xNome").text = cliente.razao_social
+                etree.SubElement(raiz, "xNome").text = cliente.razao_social.strip()
 
             if cliente.endereco_uf and cliente.endereco_pais and cliente.endereco_municipio:
                 endereco = etree.SubElement(raiz, "enderDest")
                 if cliente.endereco_logradouro:
-                    etree.SubElement(endereco, "xLgr").text = cliente.endereco_logradouro
+                    etree.SubElement(endereco, "xLgr").text = cliente.endereco_logradouro.strip()
                 if cliente.endereco_numero:
                     etree.SubElement(endereco, "nro").text = cliente.endereco_numero
                 if cliente.endereco_complemento:
-                    etree.SubElement(endereco, "xCpl").text = cliente.endereco_complemento
+                    etree.SubElement(endereco, "xCpl").text = cliente.endereco_complemento.strip()
                 if cliente.endereco_bairro:
-                    etree.SubElement(endereco, "xBairro").text = cliente.endereco_bairro
+                    etree.SubElement(endereco, "xBairro").text = cliente.endereco_bairro.strip()
                 if cliente.endereco_municipio and cliente.endereco_uf:
                     etree.SubElement(endereco, "cMun").text = obter_codigo_por_municipio(
                         cliente.endereco_municipio, cliente.endereco_uf
                     )
                 if cliente.endereco_municipio:
-                    etree.SubElement(endereco, "xMun").text = cliente.endereco_municipio
+                    etree.SubElement(endereco, "xMun").text = cliente.endereco_municipio.strip()
                 if cliente.endereco_uf:
                     etree.SubElement(endereco, "UF").text = cliente.endereco_uf
                 if cliente.endereco_cep:
@@ -188,7 +188,7 @@ class SerializacaoXML(Serializacao):
                         cliente.endereco_pais
                     )
                 if cliente.endereco_telefone:
-                    etree.SubElement(endereco, "fone").text = cliente.endereco_telefone
+                    etree.SubElement(endereco, "fone").text = cliente.endereco_telefone.strip()
 
         # Indicador da IE do destinatário:
         # 1 – Contribuinte ICMSpagamento à vista;
@@ -231,15 +231,15 @@ class SerializacaoXML(Serializacao):
                 raiz, transportadora.tipo_documento.upper()
             ).text = so_numeros(transportadora.numero_documento)
         if transportadora.razao_social:
-            etree.SubElement(raiz, "xNome").text = transportadora.razao_social
+            etree.SubElement(raiz, "xNome").text = transportadora.razao_social.strip()
         if transportadora.inscricao_estadual:
-            etree.SubElement(raiz, "IE").text = transportadora.inscricao_estadual
+            etree.SubElement(raiz, "IE").text = transportadora.inscricao_estadual.strip()
 
         # Endereço
         if transportadora.endereco_logradouro:
-            etree.SubElement(raiz, "xEnder").text = transportadora.endereco_logradouro
+            etree.SubElement(raiz, "xEnder").text = transportadora.endereco_logradouro.strip()
         if transportadora.endereco_municipio:
-            etree.SubElement(raiz, "xMun").text = transportadora.endereco_municipio
+            etree.SubElement(raiz, "xMun").text = transportadora.endereco_municipio.strip()
         if transportadora.endereco_uf:
             etree.SubElement(raiz, "UF").text = transportadora.endereco_uf
 
@@ -1784,7 +1784,7 @@ class SerializacaoXML(Serializacao):
             inclusao = etree.SubElement(det, "evIncCondutorMDFe")
             etree.SubElement(inclusao, "descEvento").text = evento.descricao
             condutor = etree.SubElement(inclusao, "condutor")
-            etree.SubElement(condutor, "xNome").text = evento.nome_motorista
+            etree.SubElement(condutor, "xNome").text = evento.nome_motorista.strip()
             etree.SubElement(condutor, "CPF").text = evento.cpf_motorista
         elif evento.descricao == "Inclusao DF-e":
             inclusao = etree.SubElement(det, "evIncDFeMDFe")
