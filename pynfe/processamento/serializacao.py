@@ -1810,7 +1810,7 @@ class SerializacaoXML(Serializacao):
 
             # Informações do pagamento
             infPag = etree.SubElement(pagamento, "infPag")
-            etree.SubElement(infPag, "xNome").text = evento.nome_contratante.strip()
+            etree.SubElement(infPag, "xNome").text = evento.nome_contratante
             if len(evento.cpfcnpj_contratante) == 11:
                 etree.SubElement(infPag, "CPF").text = evento.cpfcnpj_contratante
             else:
@@ -2116,27 +2116,27 @@ class SerializacaoMDFe(Serializacao):
             etree.SubElement(raiz, "CPF").text = so_numeros(emitente.cpfcnpj)
         else:
             etree.SubElement(raiz, "CNPJ").text = so_numeros(emitente.cpfcnpj)
-        etree.SubElement(raiz, "IE").text = emitente.inscricao_estadual.strip()
-        etree.SubElement(raiz, "xNome").text = emitente.razao_social.strip()
+        etree.SubElement(raiz, "IE").text = emitente.inscricao_estadual
+        etree.SubElement(raiz, "xNome").text = emitente.razao_social
         if emitente.nome_fantasia:
-            etree.SubElement(raiz, "xFant").text = emitente.nome_fantasia.strip()
+            etree.SubElement(raiz, "xFant").text = emitente.nome_fantasia
         # Endereço
         endereco = etree.SubElement(raiz, "enderEmit")
-        etree.SubElement(endereco, "xLgr").text = emitente.endereco_logradouro.strip()
-        etree.SubElement(endereco, "nro").text = emitente.endereco_numero.strip()
+        etree.SubElement(endereco, "xLgr").text = emitente.endereco_logradouro
+        etree.SubElement(endereco, "nro").text = emitente.endereco_numero
         if emitente.endereco_complemento:
-            etree.SubElement(endereco, "xCpl").text = emitente.endereco_complemento.strip()
-        etree.SubElement(endereco, "xBairro").text = emitente.endereco_bairro.strip()
+            etree.SubElement(endereco, "xCpl").text = emitente.endereco_complemento
+        etree.SubElement(endereco, "xBairro").text = emitente.endereco_bairro
         etree.SubElement(endereco, "cMun").text = obter_codigo_por_municipio(
             emitente.endereco_municipio, emitente.endereco_uf
         )
-        etree.SubElement(endereco, "xMun").text = emitente.endereco_municipio.strip()
+        etree.SubElement(endereco, "xMun").text = emitente.endereco_municipio
         etree.SubElement(endereco, "CEP").text = so_numeros(emitente.endereco_cep)
-        etree.SubElement(endereco, "UF").text = emitente.endereco_uf.strip()
+        etree.SubElement(endereco, "UF").text = emitente.endereco_uf
         if emitente.endereco_telefone:
-            etree.SubElement(endereco, "fone").text = emitente.endereco_telefone.strip()
+            etree.SubElement(endereco, "fone").text = emitente.endereco_telefone
         if emitente.endereco_email:
-            etree.SubElement(endereco, "email").text = emitente.endereco_email.strip()
+            etree.SubElement(endereco, "email").text = emitente.endereco_email
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
@@ -2218,7 +2218,7 @@ class SerializacaoMDFe(Serializacao):
         if modal_rodoviario.contratante is not None:
             for num, item in enumerate(modal_rodoviario.contratante):
                 infContratante = etree.SubElement(infANTT, "infContratante")
-                etree.SubElement(infContratante, "xNome").text = item.nome.strip()
+                etree.SubElement(infContratante, "xNome").text = item.nome
                 if len(item.cpfcnpj) == 11:
                     etree.SubElement(infContratante, "CPF").text = item.cpfcnpj
                 elif len(item.cpfcnpj) == 14:
@@ -2264,7 +2264,7 @@ class SerializacaoMDFe(Serializacao):
                     etree.SubElement(
                         prop, "RNTRC"
                     ).text = item.proprietario.rntrc.zfill(8)
-                etree.SubElement(prop, "xNome").text = item.proprietario.nome.strip()
+                etree.SubElement(prop, "xNome").text = item.proprietario.nome
                 if item.proprietario.inscricao_estudual is not None:
                     etree.SubElement(
                         prop, "IE"
@@ -2378,14 +2378,14 @@ class SerializacaoMDFe(Serializacao):
         raiz = etree.Element(tag_raiz)
 
         infResp = etree.SubElement(raiz, "infResp")
-        etree.SubElement(infResp, "respSeg").text = seguradora.responsavel_seguro.strip()
-        etree.SubElement(infResp, "CNPJ").text = seguradora.cnpj_responsavel.strip()
+        etree.SubElement(infResp, "respSeg").text = seguradora.responsavel_seguro
+        etree.SubElement(infResp, "CNPJ").text = seguradora.cnpj_responsavel
 
         infSeg = etree.SubElement(raiz, "infSeg")
-        etree.SubElement(infSeg, "xSeg").text = seguradora.nome_seguradora.strip()
-        etree.SubElement(infSeg, "CNPJ").text = seguradora.cnpj_seguradora.strip()
+        etree.SubElement(infSeg, "xSeg").text = seguradora.nome_seguradora
+        etree.SubElement(infSeg, "CNPJ").text = seguradora.cnpj_seguradora
 
-        etree.SubElement(raiz, "nApol").text = seguradora.numero_apolice.strip()
+        etree.SubElement(raiz, "nApol").text = seguradora.numero_apolice
 
         if len(seguradora.averbacoes) > 0:
             for num, item in enumerate(seguradora.averbacoes):
@@ -2399,9 +2399,9 @@ class SerializacaoMDFe(Serializacao):
     def _serializar_produto(self, produto, tag_raiz="prodPred", retorna_string=True):
         raiz = etree.Element(tag_raiz)
         etree.SubElement(raiz, "tpCarga").text = produto.tipo_carga
-        etree.SubElement(raiz, "xProd").text = produto.nome_produto.strip()
-        etree.SubElement(raiz, "cEAN").text = produto.cean.strip()
-        etree.SubElement(raiz, "NCM").text = produto.ncm.strip()
+        etree.SubElement(raiz, "xProd").text = produto.nome_produto
+        etree.SubElement(raiz, "cEAN").text = produto.cean
+        etree.SubElement(raiz, "NCM").text = produto.ncm
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
@@ -2443,10 +2443,10 @@ class SerializacaoMDFe(Serializacao):
             self, responsavel_tecnico, tag_raiz="infRespTec", retorna_string=True
     ):
         raiz = etree.Element(tag_raiz)
-        etree.SubElement(raiz, "CNPJ").text = responsavel_tecnico.cnpj.strip()
-        etree.SubElement(raiz, "xContato").text = responsavel_tecnico.contato.strip()
-        etree.SubElement(raiz, "email").text = responsavel_tecnico.email.strip()
-        etree.SubElement(raiz, "fone").text = responsavel_tecnico.fone.strip()
+        etree.SubElement(raiz, "CNPJ").text = responsavel_tecnico.cnpj
+        etree.SubElement(raiz, "xContato").text = responsavel_tecnico.contato
+        etree.SubElement(raiz, "email").text = responsavel_tecnico.email
+        etree.SubElement(raiz, "fone").text = responsavel_tecnico.fone
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
