@@ -168,7 +168,8 @@ def carregar_arquivo_pais(codigo):
     with open(caminho_arquivo, "r", encoding="utf-8-sig") as arquivo:
         linhas = arquivo.readlines()
 
-    return {linha.split('\t', maxsplit=1)[0].strip(): linha.split('\t', maxsplit=1)[1].strip() for linha in linhas}
+    return {linha.split('\t', maxsplit=1)[0].strip(): linha.split('\t', maxsplit=1)[1].strip()
+            for linha in linhas}
 
 
 class CustomXMLSigner(XMLSigner):
