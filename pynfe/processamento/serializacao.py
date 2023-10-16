@@ -1024,7 +1024,7 @@ class SerializacaoXML(Serializacao):
         else:
             if (produto_servico.ipi_valor_base_calculo > 0) and\
                (produto_servico.ipi_aliquota > 0) and\
-               (produto_servico.ipi_valor > 0):
+               (produto_servico.ipi_valor_ipi > 0):
                 ipi = etree.SubElement(tag_raiz, 'IPI')
 
                 # Preenchimento conforme Atos Normativos editados pela Receita Federal
@@ -1040,7 +1040,7 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(ipi_item, 'pIPI').text = '{:.2f}'.format(
                     produto_servico.ipi_aliquota or 0)
                 etree.SubElement(ipi_item, 'vIPI').text = '{:.2f}'.format(
-                    produto_servico.ipi_valor or 0)
+                    produto_servico.ipi_valor_ipi or 0)
 
     def _serializar_imposto_pis(
         self, produto_servico, modelo, tag_raiz="imposto", retorna_string=True

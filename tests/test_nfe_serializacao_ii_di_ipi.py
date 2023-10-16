@@ -193,7 +193,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             ipi_codigo_enquadramento='00',
             ipi_valor_base_calculo=Decimal('117.00'),
             ipi_aliquota=Decimal('10.00'),
-            ipi_valor=Decimal('11.70'),
+            ipi_valor_ipi=Decimal('11.70'),
             # ii
             imposto_importacao_valor_base_calculo=Decimal('117.00'),
             imposto_importacao_valor_despesas_aduaneiras=Decimal('0.00'),
@@ -394,12 +394,12 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(vSeg, '0.00')
         self.assertEqual(vDesc, '0.00')
         self.assertEqual(vII, '0.00')
-        self.assertEqual(vIPI, '0.00')
+        self.assertEqual(vIPI, '11.70')
         self.assertEqual(vIPIDevol, '10.00')
         self.assertEqual(vPIS, '0.76')
         self.assertEqual(vCOFINS, '3.51')
         self.assertEqual(vOutro, '0.00')
-        self.assertEqual(vNF, '127.00')
+        self.assertEqual(vNF, '138.70')
         self.assertEqual(vTotTrib, '21.06')
 
     def test_notafiscal_produto_cst00(self):
