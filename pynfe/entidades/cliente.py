@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from .base import Entidade
-from pynfe.utils.flags import CODIGO_BRASIL
 
 
 class Cliente(Entidade):
@@ -50,7 +49,7 @@ class Cliente(Entidade):
     endereco_cep = str()
 
     # - Pais (seleciona de lista)
-    endereco_pais = CODIGO_BRASIL
+    endereco_pais = str()
 
     # - UF (obrigatorio)
     endereco_uf = str()

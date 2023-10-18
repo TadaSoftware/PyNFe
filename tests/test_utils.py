@@ -39,8 +39,20 @@ class UtilsTestCase(unittest.TestCase):
     def test_obter_pais_por_codigo_brasil(self):
         self.assertEqual(obter_pais_por_codigo("1058"), "Brasil")
 
+    def test_obter_pais_por_codigo__informar_vazio_e_retornar_brasil(self):
+        self.assertEqual(obter_pais_por_codigo(""), "Brasil")
+
+    def test_obter_pais_por_codigo__informar_none_e_retornar_brasil(self):
+        self.assertEqual(obter_pais_por_codigo(None), "Brasil")
+
     def test_obter_pais_por_codigo_paisesbaixos(self):
-        self.assertEqual(obter_pais_por_codigo("5738"), None)
+        self.assertEqual(obter_pais_por_codigo("5738"), 'PAISES BAIXOS (HOLANDA)')
+
+    def test_obter_pais_por_codigo_reino_unido(self):
+        self.assertEqual(obter_pais_por_codigo("6289"), 'REINO UNIDO')
+
+    def test_obter_pais_por_codigo_ilhas_cayman(self):
+        self.assertEqual(obter_pais_por_codigo("1376"), 'CAYMAN, ILHAS')
 
     # normalizar_municipio
     def test_normalizar_municipio_acento_til_na_letra_a(self):

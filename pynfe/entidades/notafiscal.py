@@ -3,7 +3,7 @@ import random
 
 from .base import Entidade
 from pynfe import get_version
-from pynfe.utils.flags import NF_STATUS, CODIGO_BRASIL, CODIGOS_ESTADOS
+from pynfe.utils.flags import NF_STATUS, CODIGOS_ESTADOS
 
 # from pynfe.utils import so_numeros, memoize
 from pynfe.utils import so_numeros
@@ -1064,7 +1064,7 @@ class NotaFiscalEntregaRetirada(Entidade):
     endereco_cep = str()
 
     #  - Pais (seleciona de lista)
-    endereco_pais = CODIGO_BRASIL
+    endereco_pais = str()
 
     #  - UF (obrigatorio)
     endereco_uf = str()

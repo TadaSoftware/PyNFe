@@ -29,9 +29,14 @@ def so_numeros(texto) -> str:
 
 # @memoize
 def obter_pais_por_codigo(codigo):
-    # TODO
-    if codigo == "1058":
-        return "Brasil"
+    if codigo == '1058' or codigo == '' or codigo is None:
+        return 'Brasil'
+
+    pais = carregar_arquivo_pais(codigo=codigo)
+    pais = pais.get(codigo)
+    if not pais:
+        raise ValueError
+    return pais
 
 
 CAMINHO_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
@@ -155,6 +160,16 @@ def obter_uf_por_codigo(codigo_uf):
 
 def remover_acentos(txt):
     return normalize("NFKD", txt).encode("ASCII", "ignore").decode("ASCII")
+
+
+def carregar_arquivo_pais(codigo):
+    caminho_arquivo = os.path.join(CAMINHO_MUNICIPIOS, 'PaisIBGE.txt')
+
+    with open(caminho_arquivo, "r", encoding="utf-8-sig") as arquivo:
+        linhas = arquivo.readlines()
+
+    return {linha.split('\t', maxsplit=1)[0].strip(): linha.split('\t', maxsplit=1)[1].strip()
+            for linha in linhas}
 
 
 class CustomXMLSigner(XMLSigner):
