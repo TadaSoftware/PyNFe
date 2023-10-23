@@ -1293,7 +1293,7 @@ class SerializacaoXML(Serializacao):
                 pagamento.valor
             )
 
-            if pagamento.tipo_pagamento == 3 or pagamento.tipo_pagamento == 4:
+            if int(pagamento.tipo_pagamento) == 3 or int(pagamento.tipo_pagamento) == 4:
                 cartao = etree.SubElement(raiz, "card")
                 """ Tipo de Integração do processo de pagamento com
                     o sistema de automação da empresa:
