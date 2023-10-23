@@ -1300,7 +1300,7 @@ class SerializacaoXML(Serializacao):
                     1 = Pagamento integrado com o sistema de automação da empresa
                     2 = Pagamento não integrado com o sistema de automação da empresa
                 """
-                if pagamento.integracao_pagamento == 2:
+                if int(pagamento.integracao_pagamento) == 2:
                     etree.SubElement(cartao, "tpIntegra").text = "2"
                 else:
                     etree.SubElement(cartao, "tpIntegra").text = "1"
