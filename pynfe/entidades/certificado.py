@@ -3,7 +3,12 @@
 import os
 import tempfile
 
-from cryptography.hazmat.primitives.serialization import Encoding, pkcs12
+from cryptography.hazmat.primitives.serialization import (
+    Encoding,
+    NoEncryption,
+    PrivateFormat,
+    pkcs12,
+)
 
 from .base import Entidade
 
@@ -56,8 +61,9 @@ class CertificadoA1(Certificado):
             (
                 chave,
                 cert,
-                _,
-            ) = pkcs12.load_key_and_certificates(cert_conteudo, str.encode(senha))
+            ) = pkcs12.load_key_and_certificates(
+                cert_conteudo, str.encode(senha)
+            )[:2]
         except ValueError as e:
             if "bad decrypt" in str(e).lower():
                 raise Exception(
@@ -74,7 +80,11 @@ class CertificadoA1(Certificado):
             with tempfile.NamedTemporaryFile(delete=False) as arqcert:
                 arqcert.write(cert.public_bytes(Encoding.PEM))
             with tempfile.NamedTemporaryFile(delete=False) as arqchave:
-                arqchave.write(chave.private_bytes(Encoding.PEM))
+                arqchave.write(
+                    chave.private_bytes(
+                        Encoding.PEM, PrivateFormat.TraditionalOpenSSL, NoEncryption()
+                    )
+                )
             self.arquivos_temp.append(arqchave.name)
             self.arquivos_temp.append(arqcert.name)
             return arqchave.name, arqcert.name
@@ -86,7 +96,9 @@ class CertificadoA1(Certificado):
             cert = cert.replace("-----END CERTIFICATE-----", "")
 
             # Chave, string decodificada da chave privada
-            chave = chave.private_bytes(Encoding.PEM)
+            chave = chave.private_bytes(
+                Encoding.PEM, PrivateFormat.TraditionalOpenSSL, NoEncryption()
+            )
 
             return chave, cert
 
