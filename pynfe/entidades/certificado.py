@@ -56,16 +56,19 @@ class CertificadoA1(Certificado):
                 "Falha ao abrir arquivo do certificado digital A1. Causa desconhecida."
             ) from exc
 
+        if not isinstance(senha, bytes):
+            senha = str.encode(senha)
+
         # Carrega o arquivo .pfx, erro pode ocorrer se a senha estiver errada ou formato invalido.
         try:
             (
                 chave,
                 cert,
             ) = pkcs12.load_key_and_certificates(
-                cert_conteudo, str.encode(senha)
+                cert_conteudo, senha
             )[:2]
-        except ValueError as e:
-            if "bad decrypt" in str(e).lower():
+        except Exception as e:
+            if "invalid password" in str(e).lower():
                 raise Exception(
                     "Falha ao carregar certificado digital A1. Verifique a senha do"
                     " certificado."
@@ -82,7 +85,7 @@ class CertificadoA1(Certificado):
             with tempfile.NamedTemporaryFile(delete=False) as arqchave:
                 arqchave.write(
                     chave.private_bytes(
-                        Encoding.PEM, PrivateFormat.TraditionalOpenSSL, NoEncryption()
+                        Encoding.PEM, PrivateFormat.PKCS8, NoEncryption()
                     )
                 )
             self.arquivos_temp.append(arqchave.name)
@@ -97,7 +100,7 @@ class CertificadoA1(Certificado):
 
             # Chave, string decodificada da chave privada
             chave = chave.private_bytes(
-                Encoding.PEM, PrivateFormat.TraditionalOpenSSL, NoEncryption()
+                Encoding.PEM, PrivateFormat.PKCS8, NoEncryption()
             )
 
             return chave, cert
