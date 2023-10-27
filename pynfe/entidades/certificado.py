@@ -57,7 +57,7 @@ class CertificadoA1(Certificado):
                 chave,
                 cert,
                 _,
-            ) = pkcs12.load_key_and_certificates(cert_conteudo, senha)
+            ) = pkcs12.load_key_and_certificates(cert_conteudo, str.encode(senha))
         except ValueError as e:
             if "bad decrypt" in str(e).lower():
                 raise Exception(
