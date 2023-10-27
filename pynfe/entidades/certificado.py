@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from .base import Entidade
-from OpenSSL import crypto
-import tempfile
 import os
+import tempfile
+
+from cryptography.hazmat.primitives.serialization import Encoding, pkcs12
+
+from .base import Entidade
 
 
 class Certificado(Entidade):
@@ -51,41 +53,40 @@ class CertificadoA1(Certificado):
 
         # Carrega o arquivo .pfx, erro pode ocorrer se a senha estiver errada ou formato invalido.
         try:
-            pkcs12 = crypto.load_pkcs12(cert_conteudo, senha)
-        except crypto.Error as exc:
-            raise Exception(
-                "Falha ao carregar certificado digital A1. Verifique a senha do"
-                " certificado."
-            ) from exc
-        except Exception as exc:
-            raise Exception(
-                "Falha ao carregar certificado digital A1. Causa desconhecida."
-            ) from exc
+            (
+                chave,
+                cert,
+                _,
+            ) = pkcs12.load_key_and_certificates(cert_conteudo, senha)
+        except ValueError as e:
+            if "bad decrypt" in str(e).lower():
+                raise Exception(
+                    "Falha ao carregar certificado digital A1. Verifique a senha do"
+                    " certificado."
+                ) from e
+            else:
+                raise Exception(
+                    "Falha ao carregar certificado digital A1. Causa desconhecida."
+                ) from e
 
         if caminho:
-            cert = crypto.dump_certificate(
-                crypto.FILETYPE_PEM, pkcs12.get_certificate()
-            )
-            chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
             # cria arquivos temporarios
             with tempfile.NamedTemporaryFile(delete=False) as arqcert:
-                arqcert.write(cert)
+                arqcert.write(cert.public_bytes(Encoding.PEM))
             with tempfile.NamedTemporaryFile(delete=False) as arqchave:
-                arqchave.write(chave)
+                arqchave.write(chave.private_bytes(Encoding.PEM))
             self.arquivos_temp.append(arqchave.name)
             self.arquivos_temp.append(arqcert.name)
             return arqchave.name, arqcert.name
         else:
             # Certificado
-            cert = crypto.dump_certificate(
-                crypto.FILETYPE_PEM, pkcs12.get_certificate()
-            ).decode("utf-8")
+            cert = cert.public_bytes(Encoding.PEM).decode("utf-8")
             cert = cert.replace("\n", "")
             cert = cert.replace("-----BEGIN CERTIFICATE-----", "")
             cert = cert.replace("-----END CERTIFICATE-----", "")
 
             # Chave, string decodificada da chave privada
-            chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
+            chave = chave.private_bytes(Encoding.PEM)
 
             return chave, cert
 
