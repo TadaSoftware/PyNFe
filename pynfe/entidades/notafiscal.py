@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import random
+from decimal import Decimal
 
-from .base import Entidade
 from pynfe import get_version
-from pynfe.utils.flags import NF_STATUS, CODIGOS_ESTADOS
 
 # from pynfe.utils import so_numeros, memoize
 from pynfe.utils import so_numeros
+from pynfe.utils.flags import CODIGOS_ESTADOS, NF_STATUS
 
-from decimal import Decimal
+from .base import Entidade
 
 
 class NotaFiscal(Entidade):
@@ -465,7 +465,8 @@ class NotaFiscal(Entidade):
         return obj
 
     def _codigo_numerico_aleatorio(self):
-        self.codigo_numerico_aleatorio = str(random.randint(0, 99999999)).zfill(8)
+        if not self.codigo_numerico_aleatorio:
+            self.codigo_numerico_aleatorio = str(random.randint(0, 99999999)).zfill(8)
         return self.codigo_numerico_aleatorio
 
     def _dv_codigo_numerico(self, key):
