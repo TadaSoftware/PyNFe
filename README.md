@@ -150,6 +150,13 @@ Testes
 python -m unittest
 ```
 
+Lint
+-----------
+
+Instalação: `pip install ruff`
+Checar lint: `ruff check .`
+Formatar: `ruff format .`
+
 
 Documentação
 -----------
