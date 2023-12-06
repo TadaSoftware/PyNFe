@@ -122,10 +122,10 @@ class ComunicacaoSefaz(Comunicacao):
                             )
                             raiz.append(nota_fiscal)
                             raiz.append(prot_nfe)
-                            return 0, raiz
+                            return 0, raiz, nota_fiscal, xml
                 except IndexError:
                     # Protocolo com algum erro no Envio
-                    return 1, retorno, nota_fiscal
+                    return 1, retorno, nota_fiscal, xml
             else:
                 # Retorna id do protocolo para posterior consulta em caso de sucesso.
                 rec = prot[0][0]
@@ -135,7 +135,7 @@ class ComunicacaoSefaz(Comunicacao):
                     nrec = rec.xpath("ns:retEnviNFe/ns:infRec/ns:nRec", namespaces=ns)[
                         0
                     ].text
-                    return 0, nrec, nota_fiscal
+                    return 0, nrec, nota_fiscal, xml
         return 1, retorno, nota_fiscal, xml
 
     def consulta_recibo(self, modelo, numero, contingencia=False):
