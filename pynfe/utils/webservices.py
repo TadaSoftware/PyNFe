@@ -252,7 +252,7 @@ NFCE = {
         "CHAVE": "sefaz.ms.gov.br/ws/NFeConsultaProtocolo4?wsdl",
         "INUTILIZACAO": "sefaz.ms.gov.br/ws/NFeInutilizacao4?wsdl",
         "EVENTOS": "sefaz.ms.gov.br/ws/NFeRetAutorizacao4",
-        "QR": "http://www.dfe.ms.gov.br/nfce/qrcode",
+        "QR": "http://www.dfe.ms.gov.br/nfce/qrcode?",
         "URL": "http://www.dfe.ms.gov.br/nfce/consulta",
         "HTTPS": "https://nfce.",
         "HOMOLOGACAO": "https://hom.nfce.",

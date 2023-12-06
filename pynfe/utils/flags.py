@@ -239,7 +239,7 @@ NF_BANDEIRAS_CARTAO_PAGAMENTO = (
     (6, "Elo"),
     (7, "Hipercard"),
     (8, "Aura"),
-    (9, "Caba"),
+    (9, "Cabal"),
     (99, "Outros")
 )
 
