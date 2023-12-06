@@ -1916,7 +1916,7 @@ class SerializacaoQrcode(object):
         # url_chave -Texto com a URL de consulta por chave de acesso a ser impressa no DANFE NFC-e.
         # Informar a URL da “Consulta por chave de acesso da NFC-e”.
         # A mesma URL que deve estar informada no DANFE NFC-e para consulta por chave de acesso
-        lista_uf_padrao = ["PR", "CE", "RS", "RJ", "RO", "DF", "MS"]
+        lista_uf_padrao = ["PR", "CE", "RS", "RJ", "RO", "DF", "MS", "MG"]
         if uf in lista_uf_padrao:
             qrcode = NFCE[uf]["QR"] + url
             url_chave = NFCE[uf]["URL"]
@@ -1934,13 +1934,13 @@ class SerializacaoQrcode(object):
             else:
                 qrcode = NFCE[uf]["HOMOLOGACAO"] + NFCE[uf]["QR"] + url
             url_chave = url_chave = NFCE[uf]["URL"]
-        # MG tem comportamento distinto qrcode e url
-        elif uf == "MG":
-            qrcode = NFCE[uf]["QR"] + url
-            if tpamb == "1":
-                url_chave = NFCE[uf]["HTTPS"] + NFCE[uf]["URL"]
-            else:
-                url_chave = NFCE[uf]["HOMOLOGACAO"] + NFCE[uf]["URL"]
+        # # MG tem comportamento distinto qrcode e url
+        # elif uf == "MG":
+        #     qrcode = NFCE[uf]["QR"] + url
+        #     if tpamb == "1":
+        #         url_chave = NFCE[uf]["HTTPS"] + NFCE[uf]["URL"]
+        #     else:
+        #         url_chave = NFCE[uf]["HOMOLOGACAO"] + NFCE[uf]["URL"]
         # AC, AM, RR, PA,
         else:
             if tpamb == "1":
