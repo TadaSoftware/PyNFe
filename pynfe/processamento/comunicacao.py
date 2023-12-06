@@ -136,7 +136,7 @@ class ComunicacaoSefaz(Comunicacao):
                         0
                     ].text
                     return 0, nrec, nota_fiscal
-        return 1, retorno, nota_fiscal
+        return 1, retorno, nota_fiscal, xml
 
     def consulta_recibo(self, modelo, numero, contingencia=False):
         """
@@ -161,7 +161,8 @@ class ComunicacaoSefaz(Comunicacao):
 
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap("NFeRetAutorizacao4", raiz)
-        return self._post(url, xml)
+
+        return self._post(url, xml), xml
 
     def consulta_nota(self, modelo, chave, contingencia=False):
         """
@@ -181,7 +182,8 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(raiz, "chNFe").text = chave
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap("NFeConsultaProtocolo4", raiz)
-        return self._post(url, xml)
+
+        return self._post(url, xml), xml
 
     def consulta_distribuicao(
         self, cnpj=None, cpf=None, chave=None, nsu=0, consulta_nsu_especifico=False
@@ -237,7 +239,7 @@ class ComunicacaoSefaz(Comunicacao):
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap("NFeDistribuicaoDFe", raiz)
 
-        return self._post(url, xml)
+        return self._post(url, xml), xml
 
     def consulta_cadastro(self, modelo, cnpj):
         """
@@ -272,7 +274,7 @@ class ComunicacaoSefaz(Comunicacao):
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap("CadConsultaCadastro4", raiz)
         # Chama método que efetua a requisição POST no servidor SOAP
-        return self._post(url, xml)
+        return self._post(url, xml), xml
 
     def evento(self, modelo, evento, id_lote=1):
         """
@@ -298,9 +300,12 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(raiz, "idLote").text = str(
             id_lote
         )  # numero autoincremental gerado pelo sistema
+
         raiz.append(evento)
+
         xml = self._construir_xml_soap("NFeRecepcaoEvento4", raiz)
-        return self._post(url, xml)
+
+        return self._post(url, xml), xml
 
     def status_servico(self, modelo):
         """
@@ -315,7 +320,8 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(raiz, "cUF").text = CODIGOS_ESTADOS[self.uf.upper()]
         etree.SubElement(raiz, "xServ").text = "STATUS"
         xml = self._construir_xml_soap("NFeStatusServico4", raiz)
-        return self._post(url, xml)
+
+        return self._post(url, xml), xml
 
     def inutilizacao(
         self,
@@ -393,7 +399,7 @@ class ComunicacaoSefaz(Comunicacao):
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap("NFeInutilizacao4", xml)
         # Faz request no Servidor da Sefaz e retorna resposta
-        return self._post(url, xml)
+        return self._post(url, xml), xml
 
     def _get_url_an(self, consulta):
         # producao
