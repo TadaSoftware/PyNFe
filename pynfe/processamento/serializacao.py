@@ -1726,7 +1726,7 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(e, "CNPJ").text = evento.cnpj
         etree.SubElement(e, "chNFe").text = evento.chave
         etree.SubElement(e, "dhEvento").text = (
-                evento.data_emissao.strftime('%Y-%m-%dT%H:%M:%S%z')
+                evento.data_emissao.strftime('%Y-%m-%dT%H:%M:%S%Z')
         )
         # evento.data_emissao.strftime("%Y-%m-%dT%H:%M:%S") + tz
         etree.SubElement(e, "tpEvento").text = evento.tp_evento
