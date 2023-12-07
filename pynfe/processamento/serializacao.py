@@ -1713,10 +1713,11 @@ class SerializacaoXML(Serializacao):
             return raiz
 
     def serializar_evento(self, evento, tag_raiz="evento", retorna_string=False):
-        # tz = datetime.now().astimezone().strftime("%z")
-        # tz = "{}:{}".format(tz[:-2], tz[-2:])
+        tz = datetime.now().astimezone().strftime("%z")
+        tz = "{}:{}".format(tz[:-2], tz[-2:])
 
-        raiz = etree.Element(tag_raiz, versao="1.00", xmlns=NAMESPACE_NFE)
+        # raiz = etree.Element(tag_raiz, versao="1.00", xmlns=NAMESPACE_NFE)
+        raiz = etree.Element(tag_raiz, versao="1.00")
         e = etree.SubElement(raiz, "infEvento", Id=evento.identificador)
         etree.SubElement(e, "cOrgao").text = CODIGOS_ESTADOS[evento.uf.upper()]
         etree.SubElement(e, "tpAmb").text = str(self._ambiente)
@@ -1726,8 +1727,9 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(e, "CNPJ").text = evento.cnpj
         etree.SubElement(e, "chNFe").text = evento.chave
         etree.SubElement(e, "dhEvento").text = (
-                evento.data_emissao.strftime('%Y-%m-%dT%H:%M:%S%Z').replace("UTC", "")
+               evento.data_emissao.strftime("%Y-%m-%dT%H:%M:%S") + tz
         )
+        # evento.data_emissao.strftime('%Y-%m-%dT%H:%M:%S%Z').replace("UTC", "")
         # evento.data_emissao.strftime("%Y-%m-%dT%H:%M:%S") + tz
         etree.SubElement(e, "tpEvento").text = evento.tp_evento
         etree.SubElement(e, "nSeqEvento").text = str(evento.n_seq_evento)
