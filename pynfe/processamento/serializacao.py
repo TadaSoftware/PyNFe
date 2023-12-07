@@ -1716,8 +1716,8 @@ class SerializacaoXML(Serializacao):
         tz = datetime.now().astimezone().strftime("%z")
         tz = "{}:{}".format(tz[:-2], tz[-2:])
 
-        # raiz = etree.Element(tag_raiz, versao="1.00", xmlns=NAMESPACE_NFE)
-        raiz = etree.Element(tag_raiz, versao="1.00")
+        raiz = etree.Element(tag_raiz, versao="1.00", xmlns=NAMESPACE_NFE)
+        # raiz = etree.Element(tag_raiz, versao="1.00")
         e = etree.SubElement(raiz, "infEvento", Id=evento.identificador)
         etree.SubElement(e, "cOrgao").text = CODIGOS_ESTADOS[evento.uf.upper()]
         etree.SubElement(e, "tpAmb").text = str(self._ambiente)
