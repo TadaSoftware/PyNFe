@@ -108,8 +108,8 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(raiz, "CPF").text = so_numeros(emitente.cnpj)
         else:
             etree.SubElement(raiz, "CNPJ").text = so_numeros(emitente.cnpj)
-        etree.SubElement(raiz, "xNome").text = re.sub('[^A-Za-z0-9]+', '', emitente.razao_social.strip())
-        etree.SubElement(raiz, "xFant").text = re.sub('[^A-Za-z0-9]+', '', emitente.nome_fantasia.strip())
+        etree.SubElement(raiz, "xNome").text = re.sub('[^\w -]+', '', emitente.razao_social.strip())
+        etree.SubElement(raiz, "xFant").text = re.sub('[^\w -]+', '', emitente.nome_fantasia.strip())
         # Endereço
         endereco = etree.SubElement(raiz, "enderEmit")
         etree.SubElement(endereco, "xLgr").text = emitente.endereco_logradouro.strip()
@@ -158,7 +158,7 @@ class SerializacaoXML(Serializacao):
         )
         if not self._so_cpf:
             if cliente.razao_social:
-                etree.SubElement(raiz, "xNome").text = re.sub('[^A-Za-z0-9]+', '', cliente.razao_social.strip())
+                etree.SubElement(raiz, "xNome").text = re.sub('[^\w -]+', '', cliente.razao_social.strip())
 
             if cliente.endereco_uf and cliente.endereco_pais and cliente.endereco_municipio:
                 endereco = etree.SubElement(raiz, "enderDest")
@@ -231,7 +231,7 @@ class SerializacaoXML(Serializacao):
                 raiz, transportadora.tipo_documento.upper()
             ).text = so_numeros(transportadora.numero_documento)
         if transportadora.razao_social:
-            etree.SubElement(raiz, "xNome").text = re.sub('[^A-Za-z0-9]+', '', transportadora.razao_social.strip())
+            etree.SubElement(raiz, "xNome").text = re.sub('[^\w -]+', '', transportadora.razao_social.strip())
         if transportadora.inscricao_estadual:
             etree.SubElement(raiz, "IE").text = transportadora.inscricao_estadual.strip()
 
@@ -2115,9 +2115,9 @@ class SerializacaoMDFe(Serializacao):
         else:
             etree.SubElement(raiz, "CNPJ").text = so_numeros(emitente.cpfcnpj)
         etree.SubElement(raiz, "IE").text = emitente.inscricao_estadual.strip()
-        etree.SubElement(raiz, "xNome").text = re.sub('[^A-Za-z0-9]+', '', emitente.razao_social.strip())
+        etree.SubElement(raiz, "xNome").text = re.sub('[^\w -]+', '', emitente.razao_social.strip())
         if emitente.nome_fantasia:
-            etree.SubElement(raiz, "xFant").text = re.sub('[^A-Za-z0-9]+', '', emitente.nome_fantasia.strip())
+            etree.SubElement(raiz, "xFant").text = re.sub('[^\w -]+', '', emitente.nome_fantasia.strip())
         # Endereço
         endereco = etree.SubElement(raiz, "enderEmit")
         etree.SubElement(endereco, "xLgr").text = emitente.endereco_logradouro.strip()
