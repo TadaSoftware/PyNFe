@@ -275,7 +275,7 @@ class NotaFiscal(Entidade):
     totais_icms_inter_remetente = Decimal()
 
     # - Valor total do qBCMonoRet
-    totais_icms_q_bc_mono_ret_opc = Decimal()
+    totais_icms_q_bc_mono_ret = Decimal()
 
     # - Valor total do vICMSMonoRet
     totais_icms_v_icms_mono_ret = Decimal()
@@ -421,7 +421,7 @@ class NotaFiscal(Entidade):
         self.totais_fcp_st_ret += obj.fcp_st_ret_valor
         self.totais_icms_inter_destino += obj.icms_inter_destino_valor
         self.totais_icms_inter_remetente += obj.icms_inter_remetente_valor
-        self.totais_icms_q_bc_mono_ret_opc += obj.icms_q_bc_mono_ret_opc
+        self.totais_icms_q_bc_mono_ret += obj.icms_q_bc_mono_ret
         self.totais_icms_v_icms_mono_ret += obj.icms_v_icms_mono_ret
         # TODO calcular impostos aproximados
         # self.totais_tributos_aproximado += obj.tributos
@@ -723,7 +723,7 @@ class NotaFiscalProduto(Entidade):
     fcp_st_ret_valor = Decimal()
     icms_inter_destino_valor = Decimal()
     icms_inter_remetente_valor = Decimal()
-    icms_q_bc_mono_ret_opc = Decimal()
+    icms_q_bc_mono_ret = Decimal()
     icms_ad_rem_icms_ret = Decimal()
     icms_v_icms_mono_ret = Decimal()
 

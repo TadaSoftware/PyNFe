@@ -704,8 +704,8 @@ class SerializacaoXML(Serializacao):
             icms_item = etree.SubElement(icms, "ICMS" + produto_servico.icms_modalidade)
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, "CST").text = "61"
-            etree.SubElement(icms_item, "qBCMonoRet_Opc").text = "{:.2f}".format(
-                produto_servico.icms_q_bc_mono_ret_opc or 0
+            etree.SubElement(icms_item, "qBCMonoRet").text = "{:.2f}".format(
+                produto_servico.icms_q_bc_mono_ret or 0
             )
             etree.SubElement(icms_item, "adRemICMSRet").text = "{:.2f}".format(
                 produto_servico.icms_ad_rem_icms_ret or 0
@@ -1510,9 +1510,9 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(icms_total, "vICMSUFRemet").text = "{:.2f}".format(
                 nota_fiscal.totais_icms_remetente
             )
-        if nota_fiscal.totais_icms_q_bc_mono_ret_opc:
+        if nota_fiscal.totais_icms_q_bc_mono_ret:
             etree.SubElement(icms_total, "qBCMonoRet").text = "{:.2f}".format(
-                nota_fiscal.totais_icms_q_bc_mono_ret_opc
+                nota_fiscal.totais_icms_q_bc_mono_ret
             )
         if nota_fiscal.totais_icms_v_icms_mono_ret:
             etree.SubElement(icms_total, "vICMSMonoRet").text = "{:.2f}".format(
