@@ -1,26 +1,27 @@
 # -*- coding: utf-8 -*-
-from pynfe.entidades import NotaFiscal, Manifesto
+import base64
+import hashlib
+import re
+from datetime import datetime
+
+from pynfe.entidades import Manifesto, NotaFiscal
 from pynfe.utils import (
     etree,
-    so_numeros,
+    obter_codigo_por_municipio,
     obter_municipio_por_codigo,
     obter_pais_por_codigo,
-    obter_codigo_por_municipio,
+    so_numeros,
 )
 from pynfe.utils.flags import (
     CODIGOS_ESTADOS,
-    VERSAO_PADRAO,
-    VERSAO_MDFE,
-    NAMESPACE_NFE,
     NAMESPACE_MDFE,
+    NAMESPACE_NFE,
     NAMESPACE_SIG,
+    VERSAO_MDFE,
+    VERSAO_PADRAO,
     VERSAO_QRCODE,
 )
-from pynfe.utils.webservices import NFCE, MDFE
-import base64
-import hashlib
-from datetime import datetime
-import re
+from pynfe.utils.webservices import MDFE, NFCE
 
 
 class Serializacao(object):
@@ -697,6 +698,21 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(icms_item, "vFCPSTRet").text = "{:.2f}".format(
                     produto_servico.fcp_st_valor or 0
                 )
+        
+        # 61=Tributação monofásica sobre combustíveis cobrada anteriormente
+        elif produto_servico.icms_modalidade == "61":
+            icms_item = etree.SubElement(icms, "ICMS" + produto_servico.icms_modalidade)
+            etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
+            etree.SubElement(icms_item, "CST").text = "61"
+            etree.SubElement(icms_item, "qBCMonoRet_Opc").text = "{:.4f}".format(
+                produto_servico.icms_q_bc_mono_ret_opc or 0
+            )
+            etree.SubElement(icms_item, "adRemICMSRet").text = "{:.4f}".format(
+                produto_servico.icms_ad_rem_icms_ret or 0
+            )
+            etree.SubElement(icms_item, "vICMSMonoRet").text = "{:.2f}".format(
+                produto_servico.icms_v_icms_mono_ret or 0
+            )
 
         # 70=Com redução da BC e cobrança do ICMS por substituição tributária
         elif produto_servico.icms_modalidade == "70":

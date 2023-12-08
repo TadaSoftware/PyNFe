@@ -715,6 +715,9 @@ class NotaFiscalProduto(Entidade):
     fcp_st_ret_valor = Decimal()
     icms_inter_destino_valor = Decimal()
     icms_inter_remetente_valor = Decimal()
+    icms_q_bc_mono_ret_opc = Decimal()
+    icms_ad_rem_icms_ret = Decimal()
+    icms_v_icms_mono_ret = Decimal()
 
     #  - IPI
     #   - Situacao tributaria (seleciona de lista) - IPI_TIPOS_TRIBUTACAO
