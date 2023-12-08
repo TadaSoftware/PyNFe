@@ -274,6 +274,12 @@ class NotaFiscal(Entidade):
     # - Valor total do ICMS Interestadual para a UF do remetente
     totais_icms_inter_remetente = Decimal()
 
+    # - Valor total do qBCMonoRet
+    totais_icms_q_bc_mono_ret_opc = Decimal()
+
+    # - Valor total do vICMSMonoRet
+    totais_icms_v_icms_mono_ret = Decimal()
+
     # Transporte
     # - Modalidade do Frete (obrigatorio - seleciona de lista) - MODALIDADES_FRETE
     # 0=Contratação do Frete por conta do Remetente (CIF);
@@ -415,6 +421,8 @@ class NotaFiscal(Entidade):
         self.totais_fcp_st_ret += obj.fcp_st_ret_valor
         self.totais_icms_inter_destino += obj.icms_inter_destino_valor
         self.totais_icms_inter_remetente += obj.icms_inter_remetente_valor
+        self.totais_icms_q_bc_mono_ret_opc += obj.icms_q_bc_mono_ret_opc
+        self.totais_icms_v_icms_mono_ret += obj.icms_v_icms_mono_ret
         # TODO calcular impostos aproximados
         # self.totais_tributos_aproximado += obj.tributos
 

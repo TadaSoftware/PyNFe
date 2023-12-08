@@ -1510,6 +1510,14 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(icms_total, "vICMSUFRemet").text = "{:.2f}".format(
                 nota_fiscal.totais_icms_remetente
             )
+        if nota_fiscal.totais_icms_q_bc_mono_ret_opc:
+            etree.SubElement(icms_total, "qBCMonoRet").text = "{:.2f}".format(
+                nota_fiscal.totais_icms_q_bc_mono_ret_opc
+            )
+        if nota_fiscal.totais_icms_v_icms_mono_ret:
+            etree.SubElement(icms_total, "vICMSMonoRet").text = "{:.2f}".format(
+                nota_fiscal.totais_icms_v_icms_mono_ret
+            )       
         etree.SubElement(icms_total, "vFCP").text = "{:.2f}".format(
             nota_fiscal.totais_fcp
         )
