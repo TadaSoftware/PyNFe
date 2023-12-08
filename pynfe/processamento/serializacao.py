@@ -158,7 +158,7 @@ class SerializacaoXML(Serializacao):
         )
         if not self._so_cpf:
             if cliente.razao_social:
-                etree.SubElement(raiz, "xNome").text = re.sub('[^A-Za-z0-9]+', '', emitente.razao_social.strip())
+                etree.SubElement(raiz, "xNome").text = re.sub('[^A-Za-z0-9]+', '', cliente.razao_social.strip())
 
             if cliente.endereco_uf and cliente.endereco_pais and cliente.endereco_municipio:
                 endereco = etree.SubElement(raiz, "enderDest")
@@ -231,7 +231,7 @@ class SerializacaoXML(Serializacao):
                 raiz, transportadora.tipo_documento.upper()
             ).text = so_numeros(transportadora.numero_documento)
         if transportadora.razao_social:
-            etree.SubElement(raiz, "xNome").text = re.sub('[^A-Za-z0-9]+', '', emitente.razao_social.strip())
+            etree.SubElement(raiz, "xNome").text = re.sub('[^A-Za-z0-9]+', '', transportadora.razao_social.strip())
         if transportadora.inscricao_estadual:
             etree.SubElement(raiz, "IE").text = transportadora.inscricao_estadual.strip()
 
