@@ -1,8 +1,8 @@
 [build-system]
 requires = ["setuptools>=42"]
 build-backend = "setuptools.build_meta"
-[tool.flake8]
-per-file-ignores = [
-    '/pynfe/entidades/__init__.py:F401'
+[tool.ruff]
+exclude = [
+    'pynfe/entidades/__init__.py'
 ]
-max-line-length = 100
+line-length = 100
