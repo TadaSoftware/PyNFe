@@ -704,10 +704,10 @@ class SerializacaoXML(Serializacao):
             icms_item = etree.SubElement(icms, "ICMS" + produto_servico.icms_modalidade)
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, "CST").text = "61"
-            etree.SubElement(icms_item, "qBCMonoRet_Opc").text = "{:.4f}".format(
+            etree.SubElement(icms_item, "qBCMonoRet_Opc").text = "{:.2f}".format(
                 produto_servico.icms_q_bc_mono_ret_opc or 0
             )
-            etree.SubElement(icms_item, "adRemICMSRet").text = "{:.4f}".format(
+            etree.SubElement(icms_item, "adRemICMSRet").text = "{:.2f}".format(
                 produto_servico.icms_ad_rem_icms_ret or 0
             )
             etree.SubElement(icms_item, "vICMSMonoRet").text = "{:.2f}".format(
