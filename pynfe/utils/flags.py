@@ -41,7 +41,9 @@ XSD_MDFE_PROCESSADA = "procMDFe_v3.00.xsd"
 
 ICMS_TIPOS_TRIBUTACAO = (
     ("00", "ICMS 00 - Tributada integralmente"),
+    ("02", "ICMS 02 - Tributação monofásica própria sobre combustíveis"),
     ("10", "ICMS 10 - Tributada com cobranca do ICMS por substituicao tributaria"),
+    ("15", "ICMS 15 - Tributação monofásica própria e com responsabilidade pela retenção sobre combustíveis"),
     ("20", "ICMS 20 - Com reducao da base de calculo"),
     (
         "30",
@@ -54,7 +56,9 @@ ICMS_TIPOS_TRIBUTACAO = (
     ("41", "ICMS 41 - Nao tributada"),
     ("50", "ICMS 50 - Suspensao"),
     ("51", "ICMS 51 - Diferimento"),
+    ("53", "ICMS 53 - Tributação monofásica sobre combustíveis com recolhimento diferido"),
     ("60", "ICMS 60 - Cobrado anteriormente por substituicao tributaria"),
+    ("61", "ICMS 61 - Tributação monofásica sobre combustíveis cobrada anteriormente"),
     (
         "70",
         (

@@ -492,6 +492,16 @@ class SerializacaoXML(Serializacao):
                     produto_servico.fcp_valor or 0
                 )  # Valor Fundo Combate a Pobreza
 
+        # 02=Tributação monofásica própria sobre combustíveis
+        elif produto_servico.icms_modalidade == "02":
+            icms_item = etree.SubElement(icms, "ICMS" + produto_servico.icms_modalidade)
+            etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
+            etree.SubElement(icms_item, "CST").text = produto_servico.icms_modalidade
+
+            etree.SubElement(icms_item, "qBCMono").text = "{:.4f}".format(produto_servico.icms_q_bc_mono or 0)
+            etree.SubElement(icms_item, "adRemICMS").text = "{:.4f}".format(produto_servico.icms_ad_rem_icms or 0)
+            etree.SubElement(icms_item, "vICMSMono").text = "{:.2f}".format(produto_servico.icms_v_icms_mono or 0)
+
         # 10=Tributada e com cobrança do ICMS por substituição tributária
         elif produto_servico.icms_modalidade == "10":
             icms_item = etree.SubElement(icms, "ICMS" + produto_servico.icms_modalidade)
@@ -555,6 +565,24 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(icms_item, "vFCPST").text = "{:.2f}".format(
                     produto_servico.fcp_st_valor or 0
                 )
+
+
+        # 15=Tributação monofásica própria e com responsabilidade pela retenção sobre combustíveis
+        elif produto_servico.icms_modalidade == "15":
+            icms_item = etree.SubElement(icms, "ICMS" + produto_servico.icms_modalidade)
+            etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
+            etree.SubElement(icms_item, "CST").text = produto_servico.icms_modalidade
+
+            etree.SubElement(icms_item, "qBCMono").text = "{:.4f}".format(produto_servico.icms_q_bc_mono or 0)
+            etree.SubElement(icms_item, "adRemICMS").text = "{:.4f}".format(produto_servico.icms_ad_rem_icms or 0)
+            etree.SubElement(icms_item, "vICMSMono").text = "{:.2f}".format(produto_servico.icms_v_icms_mono or 0)
+            etree.SubElement(icms_item, "qBCMonoReten").text = "{:.4f}".format(produto_servico.icms_q_bc_mono_reten or 0)
+            etree.SubElement(icms_item, "adRemICMSReten").text = "{:.4f}".format(produto_servico.icms_ad_rem_icms_reten or 0)
+            etree.SubElement(icms_item, "vICMSMonoReten").text = "{:.2f}".format(produto_servico.icms_v_icms_mono_reten or 0)
+            if produto_servico.icms_p_red_ad_rem:
+                etree.SubElement(icms_item, "pRedAdRem").text = "{:.2f}".format(produto_servico.icms_p_red_ad_rem or 0)
+                etree.SubElement(icms_item, "motRedAdRem").text = str(produto_servico.icms_mot_red_ad_rem)
+
 
         # 20=Com redução de base de cálculo
         elif produto_servico.icms_modalidade == "20":
@@ -677,6 +705,21 @@ class SerializacaoXML(Serializacao):
                     produto_servico.fcp_valor or 0
                 )  # Valor Fundo Combate a Pobreza
 
+
+        # 53=Tributação monofásica sobre combustíveis com recolhimento diferido
+        elif produto_servico.icms_modalidade == "53":
+            icms_item = etree.SubElement(icms, "ICMS" + produto_servico.icms_modalidade)
+            etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
+            etree.SubElement(icms_item, "CST").text = produto_servico.icms_modalidade
+
+            etree.SubElement(icms_item, "qBCMono").text = "{:.4f}".format(produto_servico.icms_q_bc_mono or 0)
+            etree.SubElement(icms_item, "adRemICMS").text = "{:.4f}".format(produto_servico.icms_ad_rem_icms or 0)
+            etree.SubElement(icms_item, "vICMSMonoOp").text = "{:.2f}".format(produto_servico.icms_v_icms_mono_op or 0)
+            etree.SubElement(icms_item, "pDif").text = "{:.4f}".format(produto_servico.icms_p_dif  or 0)
+            etree.SubElement(icms_item, "vICMSMonoDif").text = "{:.4f}".format(produto_servico.icms_v_icms_mono_dif or 0)
+            etree.SubElement(icms_item, "vICMSMono").text = "{:.2f}".format(produto_servico.icms_v_icms_mono or 0)
+
+
         # 60=ICMS cobrado anteriormente por substituição tributária
         elif produto_servico.icms_modalidade in ["ST", "60"]:
             icms_item = etree.SubElement(icms, "ICMS" + produto_servico.icms_modalidade)
@@ -704,10 +747,10 @@ class SerializacaoXML(Serializacao):
             icms_item = etree.SubElement(icms, "ICMS" + produto_servico.icms_modalidade)
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, "CST").text = "61"
-            etree.SubElement(icms_item, "qBCMonoRet").text = "{:.2f}".format(
+            etree.SubElement(icms_item, "qBCMonoRet").text = "{:.4f}".format(
                 produto_servico.icms_q_bc_mono_ret or 0
             )
-            etree.SubElement(icms_item, "adRemICMSRet").text = "{:.2f}".format(
+            etree.SubElement(icms_item, "adRemICMSRet").text = "{:.4f}".format(
                 produto_servico.icms_ad_rem_icms_ret or 0
             )
             etree.SubElement(icms_item, "vICMSMonoRet").text = "{:.2f}".format(
@@ -1510,14 +1553,6 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(icms_total, "vICMSUFRemet").text = "{:.2f}".format(
                 nota_fiscal.totais_icms_remetente
             )
-        if nota_fiscal.totais_icms_q_bc_mono_ret:
-            etree.SubElement(icms_total, "qBCMonoRet").text = "{:.2f}".format(
-                nota_fiscal.totais_icms_q_bc_mono_ret
-            )
-        if nota_fiscal.totais_icms_v_icms_mono_ret:
-            etree.SubElement(icms_total, "vICMSMonoRet").text = "{:.2f}".format(
-                nota_fiscal.totais_icms_v_icms_mono_ret
-            )       
         etree.SubElement(icms_total, "vFCP").text = "{:.2f}".format(
             nota_fiscal.totais_fcp
         )
@@ -1533,6 +1568,21 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_total, "vFCPSTRet").text = "{:.2f}".format(
             nota_fiscal.totais_fcp_st_ret
         )
+
+        # ICMS monofasico
+        if nota_fiscal.totais_icms_q_bc_mono:
+            etree.SubElement(icms_total, "qBCMono").text = "{:.2f}".format(nota_fiscal.totais_icms_q_bc_mono)
+        if nota_fiscal.totais_icms_v_icms_mono:
+            etree.SubElement(icms_total, "vICMSMono").text = "{:.2f}".format(nota_fiscal.totais_icms_v_icms_mono)
+        if nota_fiscal.totais_icms_q_bc_mono_reten:
+            etree.SubElement(icms_total, "qBCMonoReten").text = "{:.2f}".format(nota_fiscal.totais_icms_q_bc_mono_reten)
+        if nota_fiscal.totais_icms_v_icms_mono_reten:
+            etree.SubElement(icms_total, "vICMSMonoReten").text = "{:.2f}".format(nota_fiscal.totais_icms_v_icms_mono_reten)
+        if nota_fiscal.totais_icms_q_bc_mono_ret:
+            etree.SubElement(icms_total, "qBCMonoRet").text = "{:.2f}".format(nota_fiscal.totais_icms_q_bc_mono_ret)
+        if nota_fiscal.totais_icms_v_icms_mono_ret:
+            etree.SubElement(icms_total, "vICMSMonoRet").text = "{:.2f}".format(nota_fiscal.totais_icms_v_icms_mono_ret)
+
         etree.SubElement(icms_total, "vProd").text = str(
             nota_fiscal.totais_icms_total_produtos_e_servicos
         )
