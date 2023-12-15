@@ -813,7 +813,7 @@ class NotaFiscalProduto(Entidade):
     #  - PIS
     #   - PIS
     #    - Situacao tributaria (obrigatorio - seleciona de lista) - PIS_TIPOS_TRIBUTACAO
-    pis_situacao_tributaria = str()
+    pis_modalidade = str()
 
     #    - Tipo de calculo (seleciona de lista) - PIS_TIPOS_CALCULO
     pis_tipo_calculo = str()
