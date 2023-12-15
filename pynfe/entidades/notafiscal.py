@@ -661,6 +661,32 @@ class NotaFiscalProduto(Entidade):
     # Sigla da UF de consumo – (OBS: Deve ser a Sigla e não o Código da UF)
     UFCons = str()
 
+    # Código de autorização / registro do CODI
+    comb_codif = str()
+
+    # Quantidade de combustível faturada à temperatura ambiente.
+    comb_q_temp = str()
+
+    # - Grupo de informações dos encerrantes
+    # Número de identificação do bico utilizado no abastecimento
+    comb_n_bico = int()
+
+    # Número de identificação da bomba ao qual o bico está interligado
+    comb_n_bomba = int()
+
+    # Número de identificação do tanque ao qual o bico está interligado
+    comb_n_tanque = int()
+
+    # Valor do Encerrante no início do abastecimento
+    comb_v_enc_ini = Decimal()
+
+    # Valor do Encerrante no final do abastecimento
+    comb_v_enc_fin = Decimal()
+
+    # Percentual do índice de mistura do Biodiesel (B100) no Óleo Diesel B
+    comb_p_bio = Decimal()
+
+
     # - Tributos
     #  - ICMS
     #   - Situacao tributaria (obrigatorio - seleciona de lista) - ICMS_TIPOS_TRIBUTACAO
