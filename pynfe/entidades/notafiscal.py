@@ -280,6 +280,18 @@ class NotaFiscal(Entidade):
     # - Valor total do vICMSMonoRet
     totais_icms_v_icms_mono_ret = Decimal()
 
+    # - Valor total da quantidade tributada do ICMS monofásico próprio
+    totais_icms_q_bc_mono = Decimal()
+
+    # - Valor total do ICMS monofásico próprio
+    totais_icms_v_icms_mono = Decimal()
+
+    # - Valor total da quantidade tributada do ICMS monofásico sujeito a retenção
+    totais_icms_q_bc_mono_reten = Decimal()
+
+    # - Valor total do ICMS monofásico sujeito a retenção
+    totais_icms_v_icms_mono_reten = Decimal()
+
     # Transporte
     # - Modalidade do Frete (obrigatorio - seleciona de lista) - MODALIDADES_FRETE
     # 0=Contratação do Frete por conta do Remetente (CIF);
@@ -421,8 +433,15 @@ class NotaFiscal(Entidade):
         self.totais_fcp_st_ret += obj.fcp_st_ret_valor
         self.totais_icms_inter_destino += obj.icms_inter_destino_valor
         self.totais_icms_inter_remetente += obj.icms_inter_remetente_valor
+
+        # - ICMS monofasico para combustiveis
+        self.totais_icms_q_bc_mono += obj.icms_q_bc_mono
+        self.totais_icms_v_icms_mono += obj.icms_v_icms_mono
+        self.totais_icms_q_bc_mono_reten += obj.icms_q_bc_mono_reten
+        self.totais_icms_v_icms_mono_reten += obj.icms_v_icms_mono_reten
         self.totais_icms_q_bc_mono_ret += obj.icms_q_bc_mono_ret
         self.totais_icms_v_icms_mono_ret += obj.icms_v_icms_mono_ret
+
         # TODO calcular impostos aproximados
         # self.totais_tributos_aproximado += obj.tributos
 
@@ -723,9 +742,22 @@ class NotaFiscalProduto(Entidade):
     fcp_st_ret_valor = Decimal()
     icms_inter_destino_valor = Decimal()
     icms_inter_remetente_valor = Decimal()
-    icms_q_bc_mono_ret = Decimal()
+
+	#	- ICMS monofásico
+    icms_ad_rem_icms = Decimal()
+    icms_v_icms_mono = Decimal()
+    icms_q_bc_mono = Decimal()
+    icms_ad_rem_icms_reten = Decimal()
+    icms_v_icms_mono_reten = Decimal()
+    icms_q_bc_mono_reten = Decimal()
+    icms_p_red_ad_rem = Decimal()
+    icms_mot_red_ad_rem = int()
+    icms_v_icms_mono_op = Decimal()
+    icms_v_icms_mono_dif = Decimal()
     icms_ad_rem_icms_ret = Decimal()
     icms_v_icms_mono_ret = Decimal()
+    icms_q_bc_mono_ret = Decimal()
+    icms_p_dif = Decimal()
 
     #  - IPI
     #   - Situacao tributaria (seleciona de lista) - IPI_TIPOS_TRIBUTACAO
