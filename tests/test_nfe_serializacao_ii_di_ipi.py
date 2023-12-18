@@ -275,7 +275,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(orig, '0')
         self.assertEqual(CST, '00')
         self.assertEqual(modBC, '0')
-        self.assertEqual(vBC, '0')
+        self.assertEqual(vBC, '0.00')
         self.assertEqual(pICMS, '0.00')
         self.assertEqual(vICMS, '0.00')
         # self.assertEqual(pFCP, '0.00')
