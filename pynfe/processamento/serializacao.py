@@ -1584,7 +1584,7 @@ class SerializacaoXML(Serializacao):
         if nota_fiscal.totais_icms_v_icms_mono_ret:
             etree.SubElement(icms_total, "vICMSMonoRet").text = "{:.2f}".format(nota_fiscal.totais_icms_v_icms_mono_ret)
 
-        etree.SubElement(icms_total, "vProd").text = str(
+        etree.SubElement(icms_total, "vProd").text = "{:.2f}".format(
             nota_fiscal.totais_icms_total_produtos_e_servicos
         )
         etree.SubElement(icms_total, "vFrete").text = "{:.2f}".format(
