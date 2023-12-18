@@ -158,6 +158,7 @@ class SerializacaoXML(Serializacao):
             cliente.numero_documento
         )
         if not self._so_cpf:
+            etree.SubElement(raiz, "xNome").text = cliente.razao_social
             endereco = etree.SubElement(raiz, "enderDest")
             etree.SubElement(endereco, "xLgr").text = cliente.endereco_logradouro
             etree.SubElement(endereco, "nro").text = cliente.endereco_numero
@@ -179,8 +180,7 @@ class SerializacaoXML(Serializacao):
             )
             if cliente.endereco_telefone:
                 etree.SubElement(endereco, "fone").text = cliente.endereco_telefone
-
-        if cliente.razao_social:
+        elif cliente.razao_social:
             etree.SubElement(raiz, "xNome").text = cliente.razao_social
             
         # Indicador da IE do destinatário:

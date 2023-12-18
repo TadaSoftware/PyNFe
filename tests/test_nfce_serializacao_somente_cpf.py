@@ -101,7 +101,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             processo_emissao="0",  # 0=Emissão de NF-e com aplicativo do contribuinte;
             transporte_modalidade_frete=1,
             informacoes_adicionais_interesse_fisco="Mensagem complementar",
-            totais_tributos_aproximado=Decimal("1.01"),
         )
 
         self.notafiscal.adicionar_produto_servico(
@@ -131,7 +130,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             cofins_valor_base_calculo=Decimal("0.00"),
             cofins_aliquota_percentual=Decimal("0.00"),
             cofins_valor=Decimal("0.00"),
-            valor_tributos_aprox="1.01",
+            valor_tributos_aprox=Decimal("1.01"),
             informacoes_adicionais="Informações adicionais",
         )
 

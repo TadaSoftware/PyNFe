@@ -254,7 +254,10 @@ class NotaFiscal(Entidade):
     totais_retencao_retencao_previdencia_social = Decimal()
 
     #  - Valor aproximado total de tributos federais, estaduais e municipais.
-    totais_tributos_aproximado = Decimal()
+    __totais_tributos_aproximado = Decimal()
+    @property
+    def totais_tributos_aproximado(self):
+        return self.__totais_tributos_aproximado
 
     # - Valor Total do FCP (Fundo de Combate à Pobreza)
     totais_fcp = Decimal()
@@ -442,8 +445,7 @@ class NotaFiscal(Entidade):
         self.totais_icms_q_bc_mono_ret += obj.icms_q_bc_mono_ret
         self.totais_icms_v_icms_mono_ret += obj.icms_v_icms_mono_ret
 
-        # TODO calcular impostos aproximados
-        # self.totais_tributos_aproximado += obj.tributos
+        self.__totais_tributos_aproximado += obj.valor_tributos_aprox
 
         self.totais_icms_total_nota += (
             obj.valor_total_bruto
@@ -935,6 +937,8 @@ class NotaFiscalProduto(Entidade):
 
     #   - Valor imposto de importacao
     imposto_importacao_valor = Decimal()
+
+    valor_tributos_aprox = Decimal()
 
     # - Informacoes Adicionais
     #  - Texto livre de informacoes adicionais
