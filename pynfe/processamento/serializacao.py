@@ -477,7 +477,7 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(icms_item, "modBC").text = str(
                 produto_servico.icms_modalidade_determinacao_bc
             )
-            etree.SubElement(icms_item, "vBC").text = str(
+            etree.SubElement(icms_item, "vBC").text = "{:.2f}".format(
                 produto_servico.icms_valor_base_calculo
             )  # Valor da BC do ICMS
             etree.SubElement(icms_item, "pICMS").text = "{:.2f}".format(
@@ -513,7 +513,7 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(icms_item, "modBC").text = str(
                 produto_servico.icms_modalidade_determinacao_bc
             )
-            etree.SubElement(icms_item, "vBC").text = str(
+            etree.SubElement(icms_item, "vBC").text = "{:.2f}".format(
                 produto_servico.icms_valor_base_calculo
             )  # Valor da BC do ICMS
             etree.SubElement(icms_item, "pICMS").text = "{:.2f}".format(
@@ -1617,7 +1617,7 @@ class SerializacaoXML(Serializacao):
         etree.SubElement(icms_total, "vOutro").text = "{:.2f}".format(
             nota_fiscal.totais_icms_outras_despesas_acessorias
         )
-        etree.SubElement(icms_total, "vNF").text = str(
+        etree.SubElement(icms_total, "vNF").text = "{:.2f}".format(
             nota_fiscal.totais_icms_total_nota
         )
         if nota_fiscal.totais_tributos_aproximado:
