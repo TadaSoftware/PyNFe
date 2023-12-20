@@ -222,7 +222,7 @@ def arredondar_valor(value: float, decimal_places: int, suprimir_zeros: bool = F
 
 
 def ajustar_valor(
-    value: float | None, decimal_places: int = 2, min_decimal_places: int = 2, tipo: Literal["ROUND", "TRUNC"] = "ROUND", decimal_separator: str = "."
+    value: float, decimal_places: int = 2, min_decimal_places: int = 2, tipo: Literal["ROUND", "TRUNC"] = "ROUND", decimal_separator: str = "."
 ):
     value = 0 if value is None else value
 
