@@ -5,6 +5,7 @@ import os
 from unicodedata import normalize
 from signxml import XMLSigner
 from typing import Literal
+from decimal import Decimal
 
 try:
     from lxml import etree  # noqa: F401
@@ -192,7 +193,7 @@ def is_empty(value):
     """
     if value is None:
         return True
-    elif isinstance(value, (int, float)) and value == 0:
+    elif isinstance(value, (int, float, Decimal)) and value == Decimal(0):
         # Verifica se o valor numérico é igual a zero.
         return True
     elif isinstance(value, str) and not value.strip():

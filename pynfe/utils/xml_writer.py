@@ -40,7 +40,7 @@ def write_float(root: etree.ElementTree, tag_name: str, value: Decimal, required
     """
 
     # retorna sem gerar nada se a TAG não é obrigatoria
-    if is_empty(value):
+    if is_empty(Decimal(value or '0')):
         if not required:
             return
         raise Exception(f"{tag_name} - Valor requerido e não informado")

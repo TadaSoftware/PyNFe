@@ -1353,8 +1353,7 @@ class SerializacaoXML(Serializacao):
                 pag.append(det)
 
         # troco
-        
-        xmlw.write_float(pag, 'vTroco', valor_troco, True, 2, 2)
+        xmlw.write_float(pag, 'vTroco', valor_troco, False, 2, 2)
 
         if retorna_string:
             return etree.tostring(pag, encoding="unicode", pretty_print=False)
