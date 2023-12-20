@@ -102,7 +102,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             uf='PR',
             natureza_operacao='VENDA',  # venda, compra, transferência, devolução, etc
             forma_pagamento=0,  # 0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros.
-            tipo_pagamento=1,
             modelo=55,  # 55=NF-e; 65=NFC-e
             serie='1',
             numero_nf='111',  # Número do Documento Fiscal.
@@ -199,6 +198,15 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             imposto_importacao_valor_despesas_aduaneiras=Decimal('0.00'),
             imposto_importacao_valor=Decimal('0.00'),
             imposto_importacao_valor_iof=Decimal('1.11'),
+        )
+        
+        self.notafiscal.adicionar_pagamento(
+            t_pag="03",
+            x_pag="Cartao Credito",
+            v_pag=118.70,
+            ind_pag=0,
+            tp_integra="2",
+            t_band="99",
         )
 
     def serializa_nfe(self):

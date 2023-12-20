@@ -55,26 +55,6 @@ class NotaFiscal(Entidade):
     # Removido na NF-e 4.00
     # forma_pagamento = int()
 
-    # - Tipo de pagamento
-    """
-    Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e.
-    Para as notas com finalidade de Ajuste ou Devolução o campo Forma de Pagamento
-    deve ser preenchido com 90=Sem Pagamento.
-    01=Dinheiro
-    02=Cheque
-    03=Cartão de Crédito
-    04=Cartão de Débito
-    05=Crédito Loja
-    10=Vale Alimentação
-    11=Vale Refeição
-    12=Vale Presente
-    13=Vale Combustível
-    14=Duplicata Mercantil
-    90= Sem pagamento
-    99=Outros
-    """
-    tipo_pagamento = int()
-
     # - Forma de emissao (obrigatorio - seleciona de lista) - NF_FORMAS_EMISSAO
     forma_emissao = str()
 
@@ -381,6 +361,11 @@ class NotaFiscal(Entidade):
     # - Processo Referenciado (lista 1 para * / ManyToManyField)
     processos_referenciados = None
 
+    # - pagamentos
+    pagamentos = list()
+    # valor do troco
+    valor_troco = Decimal()
+
     def __init__(self, *args, **kwargs):
         self.autorizados_baixar_xml = []
         self.notas_fiscais_referenciadas = []
@@ -390,11 +375,18 @@ class NotaFiscal(Entidade):
         self.observacoes_contribuinte = []
         self.processos_referenciados = []
         self.responsavel_tecnico = []
+        self.pagamentos = []
 
         super(NotaFiscal, self).__init__(*args, **kwargs)
 
     def __str__(self):
         return " ".join([str(self.modelo), self.serie, self.numero_nf])
+
+    def adicionar_pagamento(self, **kwargs):
+        """Adiciona uma instancia de Responsavel Tecnico"""
+        obj = NotaFiscalPagamentos(**kwargs)
+        self.pagamentos.append(obj)
+        return obj
 
     def adicionar_autorizados_baixar_xml(self, **kwargs):
         obj = AutorizadosBaixarXML(**kwargs)
@@ -1165,3 +1157,21 @@ class NotaFiscalResponsavelTecnico(Entidade):
 
 class AutorizadosBaixarXML(Entidade):
     CPFCNPJ = str()
+
+class NotaFiscalPagamentos(Entidade):
+    # forma de pagamento flag: FORMAS_PAGAMENTO
+    t_pag = str()
+    # descrição da forma de pagametno
+    x_pag = str()
+    # valor
+    v_pag = Decimal() 
+    # tipo de integracao: '', '1' integrado, '2' - não integrado
+    tp_integra = str()
+    # CNPJ da Credenciadora de cartão de crédito e/ou débito
+    cnpj = str()
+    # Bandeira da operadora de cartão de crédito e/ou débito flag: BANDEIRA_CARTAO
+    t_band = int()
+    # Número de autorização da operação cartão de crédito e/ou débito
+    c_aut = str()
+    # Indicador da Forma de Pagamento: 0=à Vista, 1=à Prazo
+    ind_pag = int()

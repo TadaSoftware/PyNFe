@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # *-* encoding: utf8 *-*
-
+from lxml import etree
 import datetime
 import unittest
 from decimal import Decimal
@@ -92,7 +92,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             uf="PR",
             natureza_operacao="VENDA",  # venda, compra, transferência, devolução, etc
             forma_pagamento=0,  # 0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros.
-            tipo_pagamento=1,
             modelo=65,  # 55=NF-e; 65=NFC-e
             serie="1",
             numero_nf="111",  # Número do Documento Fiscal.
@@ -110,6 +109,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             transporte_modalidade_frete=1,
             informacoes_adicionais_interesse_fisco="Mensagem complementar",
             totais_tributos_aproximado=Decimal("1.01"),
+            valor_troco=Decimal('3.24674500'),
         )
 
         self.notafiscal.adicionar_produto_servico(
@@ -149,6 +149,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             email="pynfe@pynfe.io",
             fone="11912341234",
         )
+
+        self.notafiscal.adicionar_pagamento(t_pag="01", x_pag="Dinheiro", v_pag=120.25, ind_pag=0)
 
     def serializa_nfe(self):
         serializador = SerializacaoXML(_fonte_dados, homologacao=self.homologacao)
@@ -491,6 +493,14 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             "//ns:total/ns:ICMSTot/ns:vTotTrib", namespaces=self.ns
         )[0].text
 
+        vTroco = self.xml_assinado.xpath(
+            "//ns:pag/ns:vTroco", namespaces=self.ns
+        )[0].text
+
+        vPag = self.xml_assinado.xpath(
+            "//ns:pag/ns:detPag/ns:vPag", namespaces=self.ns
+        )[0].text
+
         self.assertEqual(vBC, "0.00")
         self.assertEqual(vICMS, "0.00")
         self.assertEqual(vICMSDeson, "0.00")
@@ -511,6 +521,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(vOutro, "0.00")
         self.assertEqual(vNF, "117.00")
         self.assertEqual(vTotTrib, "1.01")
+        self.assertEqual(Decimal(vPag) - Decimal(vTroco), Decimal(vNF))
 
     def test_notafiscal_produto_cst00(self):
         # Preenche as classes do pynfe
