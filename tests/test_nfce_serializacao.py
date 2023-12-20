@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # *-* encoding: utf8 *-*
-from lxml import etree
 import datetime
 import unittest
 from decimal import Decimal
