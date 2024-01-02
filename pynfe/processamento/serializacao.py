@@ -377,23 +377,34 @@ class SerializacaoXML(Serializacao):
         # Combustível
         if produto_servico.cProdANP:
             combustivel = etree.SubElement(prod, "comb")
-            etree.SubElement(combustivel, "cProdANP").text = str(
-                produto_servico.cProdANP
-            )
+            etree.SubElement(combustivel, "cProdANP").text = str(produto_servico.cProdANP)
             etree.SubElement(combustivel, "descANP").text = str(produto_servico.descANP)
-            etree.SubElement(combustivel, "pGLP").text = "{:.4f}".format(
-                produto_servico.pGLP or 0
-            )
-            etree.SubElement(combustivel, "pGNn").text = "{:.4f}".format(
-                produto_servico.pGNn or 0
-            )
-            etree.SubElement(combustivel, "pGNi").text = "{:.4f}".format(
-                produto_servico.pGNi or 0
-            )
-            etree.SubElement(combustivel, "vPart").text = "{:.2f}".format(
-                produto_servico.vPart or 0
-            )
+            if produto_servico.pGLP:
+                etree.SubElement(combustivel, "pGLP").text = "{:.4f}".format(produto_servico.pGLP or 0)
+            if produto_servico.pGNn:
+                etree.SubElement(combustivel, "pGNn").text = "{:.4f}".format(produto_servico.pGNn or 0)
+            if produto_servico.pGNi:
+                etree.SubElement(combustivel, "pGNi").text = "{:.4f}".format(produto_servico.pGNi or 0)
+            if produto_servico.vPart:
+                etree.SubElement(combustivel, "vPart").text = "{:.2f}".format(produto_servico.vPart or 0)
+            if produto_servico.comb_codif:
+                etree.SubElement(combustivel, "CODIF").text = produto_servico.comb_codif
+            if produto_servico.comb_q_temp:
+                etree.SubElement(combustivel, "qTemp").text = produto_servico.comb_q_temp
             etree.SubElement(combustivel, "UFCons").text = str(produto_servico.UFCons)
+
+            # encerrantes
+            if produto_servico.comb_n_bico:
+                encerrante = etree.SubElement(combustivel, "encerrante")
+                etree.SubElement(encerrante, "nBico").text = str(produto_servico.comb_n_bico)
+                if produto_servico.comb_n_bomba:
+                    etree.SubElement(encerrante, "nBomba").text = str(produto_servico.comb_n_bomba)
+                etree.SubElement(encerrante, "nTanque").text = str(produto_servico.comb_n_tanque)
+                etree.SubElement(encerrante, "vEncIni").text = "{:.3f}".format(produto_servico.comb_v_enc_ini)
+                etree.SubElement(encerrante, "vEncFin").text = "{:.3f}".format(produto_servico.comb_v_enc_fin)
+
+            if produto_servico.comb_p_bio:
+                etree.SubElement(combustivel, "pBio").text = "{:.4f}".format(produto_servico.comb_p_bio or 0)
 
         # Imposto
         imposto = etree.SubElement(raiz, "imposto")
