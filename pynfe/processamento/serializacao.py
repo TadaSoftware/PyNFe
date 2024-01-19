@@ -1383,13 +1383,16 @@ class SerializacaoXML(Serializacao):
         if self._contingencia is not None:
             if nota_fiscal.forma_emissao == "1":
                 nota_fiscal.forma_emissao = "9"
+
         etree.SubElement(ide, "tpEmis").text = str(nota_fiscal.forma_emissao)
         etree.SubElement(ide, "cDV").text = nota_fiscal.dv_codigo_numerico_aleatorio
         etree.SubElement(ide, "tpAmb").text = str(self._ambiente)
         etree.SubElement(ide, "finNFe").text = str(nota_fiscal.finalidade_emissao)
         if nota_fiscal.modelo == 65:
             etree.SubElement(ide, "indFinal").text = str(1)
-            etree.SubElement(ide, "indPres").text = str(1)
+            etree.SubElement(ide, "indPres").text = str(
+                nota_fiscal.indicador_presencial
+            )
         else:
             etree.SubElement(ide, "indFinal").text = str(nota_fiscal.cliente_final)
             etree.SubElement(ide, "indPres").text = str(
