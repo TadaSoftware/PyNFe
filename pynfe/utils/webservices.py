@@ -73,13 +73,9 @@ NFCE = {
         "HOMOLOGACAO": "https://www.sefaz.ap.gov.br/nfcehml",
     },
     "TO": {
-        "STATUS": "",
-        "AUTORIZACAO": "",
-        "RECIBO": "",
-        "CHAVE": "",
-        "INUTILIZACAO": "",
-        "EVENTOS": "",
-        "QR": "",
+        "QR": "sefaz.to.gov.br/nfce/qrcode?",
+        "HTTPS": "http://www.",
+        "HOMOLOGACAO": "http://homologacao.",
     },
     "MA": {
         "QR": "nfce.sefaz.ma.gov.br/portal/consultarNFCe.jsp?",
