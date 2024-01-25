@@ -261,8 +261,15 @@ NFCE = {
         "HOMOLOGACAO": "https://hom.nfce.",
     },
     "MT": {
+        "STATUS": "",
+        "AUTORIZACAO": "",
+        "RECIBO": "",
+        "CHAVE": "",
+        "INUTILIZACAO": "",
+        "EVENTOS": "",
         "QR": "sefaz.mt.gov.br/nfce/consultanfce?",
-        "HTTPS": "http://www.",
+        "URL": "sefaz.mt.gov.br/nfce/consultanfce",
+        "HTTPS": "https://www.",
         "HOMOLOGACAO": "http://homologacao.",
     },
     "GO": {
