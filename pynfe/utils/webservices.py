@@ -269,7 +269,7 @@ NFCE = {
         "EVENTOS": "sefaz.mt.gov.br/nfcews/services/RecepcaoEvento4",
         "QR": "https://www.sefaz.mt.gov.br/nfce/consultanfce?",
         "URL": "https://www.sefaz.mt.gov.br/nfce/consultanfce",
-        "HTTPS": "https://nfce",
+        "HTTPS": "https://nfce.",
         "HOMOLOGACAO": "http://homologacao.",
     },
     "GO": {
