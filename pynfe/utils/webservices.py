@@ -117,7 +117,10 @@ NFCE = {
         "CHAVE": "",
         "INUTILIZACAO": "",
         "EVENTOS": "",
-        "QR": "http://www.sefaz.pb.gov.br/nfce",
+        "QR": "?",
+        "URL": "",
+        "HTTPS": "http://www.sefaz.pb.gov.br/nfce",
+        "HOMOLOGACAO": "http://www.sefaz.pb.gov.br/nfcehom",
     },
     "PE": {
         "STATUS": "",
