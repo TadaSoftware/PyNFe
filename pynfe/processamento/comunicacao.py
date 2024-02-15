@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+import os
 import datetime
 import requests
 from pynfe.utils import etree, so_numeros
@@ -24,6 +25,9 @@ from pynfe.utils.webservices import NFE, NFCE, NFSE, MDFE, CTE
 from pynfe.entidades.certificado import CertificadoA1
 from .assinatura import AssinaturaA1
 
+TIMEOUT = os.getenv('TIMEOUT', 5)
+TIMEOUT_MDFE = os.getenv('TIMEOUT_MDFE', 50)
+TIMEOUT_CTE = os.getenv('TIMEOUT_CTE', 300)
 
 class Comunicacao(object):
     """
@@ -613,7 +617,7 @@ class ComunicacaoSefaz(Comunicacao):
             xml = xml_declaration + xml
             # Faz o request com o servidor
             result = requests.post(
-                url, xml, headers=self._post_header(), cert=chave_cert, verify=False
+                url, xml, headers=self._post_header(), cert=chave_cert, verify=False, timeout=TIMEOUT
             )
             result.encoding = "utf-8"
             return result
@@ -1124,7 +1128,7 @@ class ComunicacaoMDFe(Comunicacao):
                 headers=self._post_header(),
                 cert=chave_cert,
                 verify=False,
-                timeout=50,
+                timeout=TIMEOUT_MDFE,
             )
             result.encoding = "utf-8"
             return result
@@ -1322,8 +1326,8 @@ class ComunicacaoCTe(Comunicacao):
         response = {
             "content-type": "application/soap+xml; charset=utf-8;",
             "Accept": "application/soap+xml; charset=utf-8;",
+            "SOAPAction": ""
         }
-        response["SOAPAction"] = ""
         return response
 
     def _post(self, url, xml):
@@ -1354,7 +1358,7 @@ class ComunicacaoCTe(Comunicacao):
                 headers=self._post_header(),
                 cert=chave_cert,
                 verify=False,
-                timeout=300,
+                timeout=TIMEOUT_CTE,
             )
             result.encoding = "utf-8"
             return result
