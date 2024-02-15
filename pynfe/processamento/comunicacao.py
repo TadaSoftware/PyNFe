@@ -25,9 +25,9 @@ from pynfe.utils.webservices import NFE, NFCE, NFSE, MDFE, CTE
 from pynfe.entidades.certificado import CertificadoA1
 from .assinatura import AssinaturaA1
 
-TIMEOUT = os.getenv('TIMEOUT', 5)
-TIMEOUT_MDFE = os.getenv('TIMEOUT_MDFE', 50)
-TIMEOUT_CTE = os.getenv('TIMEOUT_CTE', 300)
+TIMEOUT = int(os.getenv('TIMEOUT', 5))
+TIMEOUT_MDFE = int(os.getenv('TIMEOUT_MDFE', 50))
+TIMEOUT_CTE = int(os.getenv('TIMEOUT_CTE', 300))
 
 class Comunicacao(object):
     """
