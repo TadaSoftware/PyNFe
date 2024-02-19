@@ -669,12 +669,16 @@ class SerializacaoXML(Serializacao):
                     produto_servico.icms_motivo_desoneracao
                 )
 
-            etree.SubElement(icms_item, "vBCSTRet").text = "{:.2f}".format(
-                produto_servico.icms_base_calculo_retido_st or 0
-            )
-            etree.SubElement(icms_item, "vICMSSTRet").text = "{:.2f}".format(
-                produto_servico.icms_valor_retido_st or 0
-            )
+            if produto_servico.icms_base_calculo_retido_st > 0:
+                etree.SubElement(icms_item, "vBCSTRet").text = "{:.2f}".format(
+                    produto_servico.icms_base_calculo_retido_st or 0
+                )
+
+            if produto_servico.icms_valor_retido_st > 0:
+                etree.SubElement(icms_item, "vICMSSTRet").text = "{:.2f}".format(
+                    produto_servico.icms_valor_retido_st or 0
+                )
+
         # 51=Com diferimento
         elif produto_servico.icms_modalidade == "51":
             icms_item = etree.SubElement(icms, "ICMS" + produto_servico.icms_modalidade)
