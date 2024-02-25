@@ -533,21 +533,18 @@ class NotaFiscal(Entidade):
             "tpEmis": str(self.forma_emissao),
             "cNF": self._codigo_numerico_aleatorio(),
         }
-        return (
-            "NFe%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nNF)s%(tpEmis)s%(cNF)s%(cDV)s"
-            % {
-                "uf": CODIGOS_ESTADOS[self.uf],
-                "ano": self.data_emissao.strftime("%y"),
-                "mes": self.data_emissao.strftime("%m"),
-                "cnpj": so_numeros(self.emitente.cnpj).zfill(14),
-                "mod": self.modelo,
-                "serie": str(self.serie).zfill(3),
-                "nNF": str(self.numero_nf).zfill(9),
-                "tpEmis": str(self.forma_emissao),
-                "cNF": str(self.codigo_numerico_aleatorio),
-                "cDV": self._dv_codigo_numerico(key),
-            }
-        )
+        return "NFe%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nNF)s%(tpEmis)s%(cNF)s%(cDV)s" % {
+            "uf": CODIGOS_ESTADOS[self.uf],
+            "ano": self.data_emissao.strftime("%y"),
+            "mes": self.data_emissao.strftime("%m"),
+            "cnpj": so_numeros(self.emitente.cnpj).zfill(14),
+            "mod": self.modelo,
+            "serie": str(self.serie).zfill(3),
+            "nNF": str(self.numero_nf).zfill(9),
+            "tpEmis": str(self.forma_emissao),
+            "cNF": str(self.codigo_numerico_aleatorio),
+            "cDV": self._dv_codigo_numerico(key),
+        }
 
 
 class NotaFiscalReferenciada(Entidade):
@@ -705,7 +702,6 @@ class NotaFiscalProduto(Entidade):
     # Percentual do índice de mistura do Biodiesel (B100) no Óleo Diesel B
     comb_p_bio = Decimal()
 
-
     # - Tributos
     #  - ICMS
     #   - Situacao tributaria (obrigatorio - seleciona de lista) - ICMS_TIPOS_TRIBUTACAO
@@ -769,7 +765,17 @@ class NotaFiscalProduto(Entidade):
     icms_inter_destino_valor = Decimal()
     icms_inter_remetente_valor = Decimal()
 
-	#	- ICMS monofásico
+    #   - ICMS ST Retido
+    #    - Valor da base de calculo
+    icms_st_ret_base_calculo = Decimal()
+
+    #    - Aliquota
+    icms_st_ret_aliquota = Decimal()
+
+    #    - Valor
+    icms_st_ret_valor = Decimal()
+
+    # - ICMS monofásico
     icms_ad_rem_icms = Decimal()
     icms_v_icms_mono = Decimal()
     icms_q_bc_mono = Decimal()

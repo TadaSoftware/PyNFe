@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 # *-* encoding: utf8 *-*
 
+import datetime
 import unittest
+from decimal import Decimal
 
 from pynfe.entidades.cliente import Cliente
 from pynfe.entidades.emitente import Emitente
-from pynfe.entidades.notafiscal import NotaFiscal
 from pynfe.entidades.fonte_dados import _fonte_dados
-from pynfe.processamento.serializacao import SerializacaoXML
+from pynfe.entidades.notafiscal import NotaFiscal
 from pynfe.processamento.assinatura import AssinaturaA1
+from pynfe.processamento.serializacao import SerializacaoXML
 from pynfe.processamento.validacao import Validacao
 from pynfe.utils.flags import (
     CODIGO_BRASIL,
@@ -18,8 +20,6 @@ from pynfe.utils.flags import (
     XSD_NFE,
     XSD_NFE_PROCESSADA,
 )
-from decimal import Decimal
-import datetime
 
 
 class SerializacaoNFeTestCase(unittest.TestCase):
@@ -266,9 +266,9 @@ class SerializacaoNFeTestCase(unittest.TestCase):
 
         self.assertEqual(orig, "0")
         self.assertEqual(CST, "60")
-        self.assertEqual(vBCSTRet, "0")
-        self.assertEqual(pST, "0.0000")
-        self.assertEqual(vICMSSTRet, "0")
+        self.assertEqual(vBCSTRet, "0.00")
+        self.assertEqual(pST, "0.00")
+        self.assertEqual(vICMSSTRet, "0.00")
 
         # Informações Adicionais do produto
         infAdProd = self.xml_assinado.xpath(

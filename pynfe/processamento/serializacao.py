@@ -736,11 +736,11 @@ class SerializacaoXML(Serializacao):
             icms_item = etree.SubElement(icms, "ICMS" + produto_servico.icms_modalidade)
             etree.SubElement(icms_item, "orig").text = str(produto_servico.icms_origem)
             etree.SubElement(icms_item, "CST").text = "60"
-            etree.SubElement(icms_item, "vBCSTRet").text = "0"
-            etree.SubElement(icms_item, "pST").text = "{:.4f}".format(0)
+            etree.SubElement(icms_item, "vBCSTRet").text = "{:.2f}".format(produto_servico.icms_st_ret_base_calculo or 0)
+            etree.SubElement(icms_item, "pST").text = "{:.2f}".format(produto_servico.icms_st_ret_aliquota or 0)
             etree.SubElement(
                 icms_item, "vICMSSTRet"
-            ).text = "0"  # Informar o valor do ICMS ST retido na UF remetente
+            ).text = "{:.2f}".format(produto_servico.icms_st_ret_valor or 0)
 
             if produto_servico.fcp_st_valor:
                 etree.SubElement(icms_item, "vBCFCPSTRet").text = "{:.2f}".format(
