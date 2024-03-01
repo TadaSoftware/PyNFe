@@ -279,9 +279,9 @@ class SerializacaoXML(Serializacao):
             self, uso_livre_contribuinte, tag_raiz="obsCont", retorna_string=True
     ):
         raiz = etree.Element(tag_raiz)
-        raiz.attrib["xCampo"] = uso_livre_contribuinte.x_campo
+        raiz.attrib["xCampo"] = uso_livre_contribuinte['x_campo']
 
-        etree.SubElement(raiz, "xTexto").text = uso_livre_contribuinte.x_texto
+        etree.SubElement(raiz, "xTexto").text = uso_livre_contribuinte['x_texto']
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
@@ -1723,10 +1723,10 @@ class SerializacaoXML(Serializacao):
 
             if nota_fiscal.obs_contribuinte_x_campo and nota_fiscal.obs_contribuinte_x_texto:
                 for i in range(0, 2):
-                    det = self._serializar_campo_uso_livre_contribuinte({
-                        "x_campo": nota_fiscal.obs_contribuinte_x_campo,
-                        "x_texto": nota_fiscal.obs_contribuinte_x_texto
-                    })
+                    det = self._serializar_campo_uso_livre_contribuinte(dict(
+                        x_campo = nota_fiscal.obs_contribuinte_x_campo,
+                        x_texto = nota_fiscal.obs_contribuinte_x_texto
+                    ))
 
                     info_ad.append(det)
 
