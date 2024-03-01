@@ -1724,8 +1724,8 @@ class SerializacaoXML(Serializacao):
             if nota_fiscal.obs_contribuinte_x_campo and nota_fiscal.obs_contribuinte_x_texto:
                 for i in range(0, 2):
                     det = self._serializar_campo_uso_livre_contribuinte({
-                        x_campo: nota_fiscal.obs_contribuinte_x_campo,
-                        x_texto: nota_fiscal.obs_contribuinte_x_texto
+                        "x_campo": nota_fiscal.obs_contribuinte_x_campo,
+                        "x_texto": nota_fiscal.obs_contribuinte_x_texto
                     })
 
                     info_ad.append(det)
