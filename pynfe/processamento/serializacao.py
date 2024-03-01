@@ -279,9 +279,9 @@ class SerializacaoXML(Serializacao):
             self, observacoes_contribuinte, tag_raiz="obsCont", retorna_string=True
     ):
         raiz = etree.Element(tag_raiz)
-        raiz.attrib["xCampo"] = observacoes_contribuinte['x_campo']
+        raiz.attrib["xCampo"] = observacoes_contribuinte.nome_campo
 
-        etree.SubElement(raiz, "xTexto").text = observacoes_contribuinte['x_texto']
+        etree.SubElement(raiz, "xTexto").text = observacoes_contribuinte.observacao
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
@@ -1722,8 +1722,8 @@ class SerializacaoXML(Serializacao):
                 ).text = nota_fiscal.informacoes_complementares_interesse_contribuinte
 
             if nota_fiscal.observacoes_contribuinte:
-                for obs in observacoes_contribuinte:
-                    det = self.observacoes_contribuinte(obs, retorna_string=False)
+                for obs in nota_fiscal.observacoes_contribuinte:
+                    det = self._serializar_observacoes_contribuinte(obs, retorna_string=False)
 
                     info_ad.append(det)
 
