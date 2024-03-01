@@ -340,6 +340,13 @@ class NotaFiscal(Entidade):
     #  - Informacoes complementares de interesse do contribuinte
     informacoes_complementares_interesse_contribuinte = str()
 
+    # - Grupo Campo de uso livre do contribuinte
+    #   - Identificação do campo
+    obs_contribuinte_x_campo = str()
+
+    #   - Conteúdo do campo
+    obs_contribuinte_x_texto = str()
+
     # - Observacoes do Contribuinte (lista 1 para * / ManyToManyField)
     observacoes_contribuinte = None
 
