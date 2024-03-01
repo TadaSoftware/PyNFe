@@ -275,13 +275,13 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
-    def _serializar_campo_uso_livre_contribuinte(
-            self, uso_livre_contribuinte, tag_raiz="obsCont", retorna_string=True
+    def _serializar_observacoes_contribuinte(
+            self, observacoes_contribuinte, tag_raiz="obsCont", retorna_string=True
     ):
         raiz = etree.Element(tag_raiz)
-        raiz.attrib["xCampo"] = uso_livre_contribuinte['x_campo']
+        raiz.attrib["xCampo"] = observacoes_contribuinte['x_campo']
 
-        etree.SubElement(raiz, "xTexto").text = uso_livre_contribuinte['x_texto']
+        etree.SubElement(raiz, "xTexto").text = observacoes_contribuinte['x_texto']
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
@@ -1708,7 +1708,7 @@ class SerializacaoXML(Serializacao):
         if (
                 nota_fiscal.informacoes_adicionais_interesse_fisco
                 or nota_fiscal.informacoes_complementares_interesse_contribuinte
-                or nota_fiscal.obs_contribuinte_x_campo or nota_fiscal.obs_contribuinte_x_texto
+                or nota_fiscal.observacoes_contribuinte
         ):
             info_ad = etree.SubElement(raiz, "infAdic")
             if nota_fiscal.informacoes_adicionais_interesse_fisco:
@@ -1721,28 +1721,11 @@ class SerializacaoXML(Serializacao):
                     info_ad, "infCpl"
                 ).text = nota_fiscal.informacoes_complementares_interesse_contribuinte
 
-            if nota_fiscal.obs_contribuinte_x_campo and nota_fiscal.obs_contribuinte_x_texto:
-                for i in range(0, 2):
-                    det = self._serializar_campo_uso_livre_contribuinte(dict(
-                        x_campo = nota_fiscal.obs_contribuinte_x_campo,
-                        x_texto = nota_fiscal.obs_contribuinte_x_texto
-                    ), retorna_string=False)
+            if nota_fiscal.observacoes_contribuinte:
+                for obs in observacoes_contribuinte:
+                    det = self.observacoes_contribuinte(obs, retorna_string=False)
 
                     info_ad.append(det)
-
-                # obsCont = etree.Element("obsCont")
-                # obsCont.attrib["xCampo"] = nota_fiscal.obs_contribuinte_x_campo
-                #
-                # etree.SubElement(obsCont, "xTexto").text = nota_fiscal.obs_contribuinte_x_texto
-                #
-                # info_ad.append(obsCont)
-                #
-                # obsCont = etree.Element("obsCont")
-                # obsCont.attrib["xCampo"] = nota_fiscal.obs_contribuinte_x_campo
-                #
-                # etree.SubElement(obsCont, "xTexto").text = nota_fiscal.obs_contribuinte_x_texto
-                #
-                # info_ad.append(obsCont)
 
         # Responsavel Tecnico NT2018/003
         if nota_fiscal.responsavel_tecnico:

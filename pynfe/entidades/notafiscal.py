@@ -340,13 +340,6 @@ class NotaFiscal(Entidade):
     #  - Informacoes complementares de interesse do contribuinte
     informacoes_complementares_interesse_contribuinte = str()
 
-    # - Grupo Campo de uso livre do contribuinte
-    #   - Identificação do campo
-    obs_contribuinte_x_campo = str()
-
-    #   - Conteúdo do campo
-    obs_contribuinte_x_texto = str()
-
     # - Observacoes do Contribuinte (lista 1 para * / ManyToManyField)
     observacoes_contribuinte = None
 
@@ -461,6 +454,11 @@ class NotaFiscal(Entidade):
         obj = Pagamento(**kwargs)
         self.tipo_pagamentos.append(obj)
         return obj
+
+    def adicionar_campo_uso_livre_contribuinte(self, **kwargs):
+        """Adiciona uma instancia de Produto"""
+        obj = NotaFiscalProduto(**kwargs)
+        self.produtos_e_servicos.append(obj)
 
     def _codigo_numerico_aleatorio(self):
         self.codigo_numerico_aleatorio = str(random.randint(0, 99999999)).zfill(8)
