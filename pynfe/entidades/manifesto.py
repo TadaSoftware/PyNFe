@@ -109,6 +109,13 @@ class Manifesto(Entidade):
     #  - Informacoes complementares de interesse do contribuinte
     informacoes_complementares_interesse_contribuinte = str()
 
+    # - Grupo Campo de uso livre do contribuinte
+    #   - Identificação do campo
+    obs_contribuinte_x_campo = str()
+
+    #   - Conteúdo do campo
+    obs_contribuinte_x_texto = str()
+
     def __init__(self, *args, **kwargs):
         self.municipio_carrega = []
         self.percurso = []

@@ -1695,16 +1695,23 @@ class SerializacaoXML(Serializacao):
         if (
                 nota_fiscal.informacoes_adicionais_interesse_fisco
                 or nota_fiscal.informacoes_complementares_interesse_contribuinte
+                or nota_fiscal.obs_contribuinte_x_campo or nota_fiscal.obs_contribuinte_x_texto
         ):
             info_ad = etree.SubElement(raiz, "infAdic")
             if nota_fiscal.informacoes_adicionais_interesse_fisco:
                 etree.SubElement(
                     info_ad, "infAdFisco"
                 ).text = nota_fiscal.informacoes_adicionais_interesse_fisco
+
             if nota_fiscal.informacoes_complementares_interesse_contribuinte:
                 etree.SubElement(
                     info_ad, "infCpl"
                 ).text = nota_fiscal.informacoes_complementares_interesse_contribuinte
+
+            if nota_fiscal.obs_contribuinte_x_campo and nota_fiscal.obs_contribuinte_x_texto:
+                obsCont = etree.SubElement(info_ad, "obsCont")
+                etree.SubElement(obsCont, "xCampo").text = nota_fiscal.obs_contribuinte_x_campo
+                etree.SubElement(obsCont, "xTexto").text = nota_fiscal.obs_contribuinte_x_texto
 
         # Responsavel Tecnico NT2018/003
         if nota_fiscal.responsavel_tecnico:
