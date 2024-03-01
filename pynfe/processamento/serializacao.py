@@ -1726,7 +1726,7 @@ class SerializacaoXML(Serializacao):
                     det = self._serializar_campo_uso_livre_contribuinte(dict(
                         x_campo = nota_fiscal.obs_contribuinte_x_campo,
                         x_texto = nota_fiscal.obs_contribuinte_x_texto
-                    ))
+                    ), retorna_string=False)
 
                     info_ad.append(det)
 
