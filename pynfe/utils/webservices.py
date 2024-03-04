@@ -102,15 +102,6 @@ NFCE = {
         "INUTILIZACAO": "sefaz.ce.gov.br/nfce4/services/NFeInutilizacao4",
         "EVENTOS": "sefaz.ce.gov.br/nfce4/services/NFeRecepcaoEvento4",
         "CADASTRO": "sefaz.ce.gov.br/nfce4/services/CadConsultaCadastro4",
-        
-       # <NfeAutorizacao method="nfeAutorizacaoLote" operation="NFeAutorizacao4" version="4.00">https://nfce.sefaz.ce.gov.br/nfce4/services/NFeAutorizacao4</NfeAutorizacao>
-       # <NfeRetAutorizacao method="nfeRetAutorizacaoLote" operation="NFeRetAutorizacao4" version="4.00">https://nfce.sefaz.ce.gov.br/nfce4/services/NFeRetAutorizacao4</NfeRetAutorizacao>
-       # <NfeInutilizacao method="nfeInutilizacaoNF" operation="NFeInutilizacao4" version="4.00">https://nfce.sefaz.ce.gov.br/nfce4/services/NFeInutilizacao4</NfeInutilizacao>
-       # <NfeConsultaProtocolo method="nfeConsultaNF" operation="NFeConsultaProtocolo4" version="4.00">https://nfce.sefaz.ce.gov.br/nfce4/services/NFeConsultaProtocolo4</NfeConsultaProtocolo>
-       # <NfeStatusServico method="nfeStatusServicoNF" operation="NFeStatusServico4" version="4.00">https://nfce.sefaz.ce.gov.br/nfce4/services/NFeStatusServico4</NfeStatusServico>
-       # <RecepcaoEvento method="nfeRecepcaoEvento" operation="NFeRecepcaoEvento4" version="1.00">https://nfce.sefaz.ce.gov.br/nfce4/services/NFeRecepcaoEvento4</RecepcaoEvento>
-       # <NfeConsultaQR method="QR-CODE" operation="NfeConsultaQR" version="200">http://nfce.sefaz.ce.gov.br/pages/ShowNFCe.html</NfeConsultaQR>
-        
         "QR": "http://nfce.sefaz.ce.gov.br/pages/ShowNFCe.html?",
         "URL": "http://nfce.sefaz.ce.gov.br/pages/consultaNota.jsf",
         "HTTPS": "https://nfce.",
