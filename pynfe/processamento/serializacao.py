@@ -1625,17 +1625,17 @@ class SerializacaoXML(Serializacao):
             nota_fiscal.transporte_modalidade_frete
         )
 
+        # Transportadora
+        if nota_fiscal.transporte_transportadora:
+            transp.append(
+                self._serializar_transportadora(
+                    nota_fiscal.transporte_transportadora,
+                    retorna_string=False,
+                )
+            )
+
         # Apenas NF-e
         if nota_fiscal.modelo == 55:
-            # Transportadora
-            if nota_fiscal.transporte_transportadora:
-                transp.append(
-                    self._serializar_transportadora(
-                        nota_fiscal.transporte_transportadora,
-                        retorna_string=False,
-                    )
-                )
-
             # Veículo
             if (
                     nota_fiscal.transporte_veiculo_placa

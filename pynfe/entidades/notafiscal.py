@@ -449,6 +449,12 @@ class NotaFiscal(Entidade):
         self.responsavel_tecnico.append(obj)
         return obj
 
+    def adicionar_transportadora(self, **kwargs):
+        """Adiciona uma instancia de Transportadora"""
+        obj = NotaFiscalTransportadora(**kwargs)
+        self.transporte_transportadora = obj
+        return obj
+
     def adicionar_pagamento(self, **kwargs):
         """Adiciona uma instancia de Pagamento"""
         obj = Pagamento(**kwargs)
@@ -1105,6 +1111,16 @@ class NotaFiscalResponsavelTecnico(Entidade):
     email = str()
     fone = str()
     csrt = str()
+
+
+class NotaFiscalTransportadora(Entidade):
+    numero_documento = str()
+    tipo_documento = str()
+    razao_social = str()
+    inscricao_estadual = str()
+    endereco_logradouro = str()
+    endereco_municipio = str()
+    endereco_uf = str()
 
 
 class AutorizadosBaixarXML(Entidade):
