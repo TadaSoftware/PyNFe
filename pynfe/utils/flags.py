@@ -627,3 +627,8 @@ CODIGOS_ESTADOS = {
     "DF": "53",
     "AN": "91",
 }
+
+NF_TIPO_DOCUMENTO = (
+    "CPF",
+    "CNPJ"
+)
