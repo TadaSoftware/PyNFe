@@ -332,6 +332,10 @@ class NotaFiscal(Entidade):
     # - Duplicatas (lista 1 para * / ManyToManyField)
     duplicatas = None
 
+    informacoes_intermediario_transacao_cnpj = str()
+
+    informacoes_intermediario_transacao_identificador = str()
+
     # Informacoes Adicionais
     # - Informacoes Adicionais
     #  - Informacoes adicionais de interesse do fisco
