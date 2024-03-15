@@ -1709,15 +1709,15 @@ class SerializacaoXML(Serializacao):
                 nota_fiscal.informacoes_intermediario_transacao_cnpj
                 or nota_fiscal.informacoes_intermediario_transacao_identificador
         ):
-            info_ad = etree.SubElement(raiz, "infIntermed")
+            info_intermed = etree.SubElement(raiz, "infIntermed")
             if nota_fiscal.informacoes_intermediario_transacao_cnpj:
                 etree.SubElement(
-                    info_ad, "CNPJ"
+                    info_intermed, "CNPJ"
                 ).text = nota_fiscal.informacoes_intermediario_transacao_cnpj
 
             if nota_fiscal.informacoes_intermediario_transacao_identificador:
                 etree.SubElement(
-                    info_ad, "idCadIntTran"
+                    info_intermed, "idCadIntTran"
                 ).text = nota_fiscal.informacoes_intermediario_transacao_identificador
 
         # Informações adicionais
