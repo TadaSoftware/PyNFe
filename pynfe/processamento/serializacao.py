@@ -2011,21 +2011,11 @@ class SerializacaoQrcode(object):
                 url_chave = NFCE[uf]["HOMOLOGACAO"] + NFCE[uf]["URL"]
         # adicionta tag infNFeSupl com qrcode
         info = etree.Element("infNFeSupl")
-        etree.SubElement(info, "qrCode").text = "<![CDATA[" + qrcode.strip() + "]]>"
+        etree.SubElement(info, "qrCode").text = etree.CDATA(qrcode.strip())
         etree.SubElement(info, "urlChave").text = url_chave
+        
         nfe.insert(1, info)
-        # correção da tag qrCode, retira caracteres pois e CDATA
-        tnfe = (
-            etree.tostring(nfe, encoding="unicode")
-            .replace("\n", "")
-            .replace("&lt;", "<")
-            .replace("&gt;", ">")
-            .replace("amp;", "")
-        )
-        etree.tostring(nfe.find(".//qrCode"), encoding="unicode").replace(
-            "\n", ""
-        ).replace("&lt;", "<").replace("&gt;", ">").replace("amp;", "")
-        nfe = etree.fromstring(tnfe)
+
         # retorna nfe com o qrcode incluido NT2015/002 e qrcode
         if return_qr:
             return nfe, qrcode.strip()
