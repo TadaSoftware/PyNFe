@@ -8,7 +8,7 @@ from pynfe import get_version
 from pynfe.utils import so_numeros
 from pynfe.utils.flags import CODIGOS_ESTADOS, NF_STATUS
 
-from .base import Entidade
+from .base import CampoDeprecated, Entidade
 
 
 class NotaFiscal(Entidade):
@@ -548,6 +548,21 @@ class NotaFiscal(Entidade):
 
 
 class NotaFiscalReferenciada(Entidade):
+
+    # Campos depreciados
+    campos_deprecados = [
+        CampoDeprecated(
+            "fcp_percentual",
+            "fcp_aliquota",
+            "Consistencia de nomes"
+        ),
+        CampoDeprecated(
+            "fcp_st_percentual",
+            "fcp_st_aliquota",
+            "Consistencia de nomes"
+        ),
+    ]
+
     # - Tipo (seleciona de lista) - NF_REFERENCIADA_TIPOS
     tipo = str()
 
