@@ -145,7 +145,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             icms_st_aliquota=0,
             icms_st_valor=0,
             fcp_st_base_calculo=Decimal("117.00"),
-            fcp_st_percentual=Decimal("0.01"),
+            fcp_st_aliquota=Decimal("0.01"),
             fcp_st_valor=Decimal("1.17"),
             pis_modalidade="51",
             cofins_modalidade="51",

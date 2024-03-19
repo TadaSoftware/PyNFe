@@ -752,16 +752,20 @@ class NotaFiscalProduto(Entidade):
 
     #    - Fundo de Combate a Pobreza
     fcp_base_calculo = Decimal()
-    fcp_percentual = Decimal()
+    fcp_aliquota = Decimal()
     fcp_valor = Decimal()
 
+    # FCP ST
     fcp_st_base_calculo = Decimal()
-    fcp_st_percentual = Decimal()
+    fcp_st_aliquota = Decimal()
     fcp_st_valor = Decimal()
-
     fcp_destino_valor = Decimal()
-    fcp_st_valor = Decimal()
+
+    # FCP ST Retido
+    fcp_st_ret_base_calculo = Decimal()
+    fcp_st_ret_aliquota = Decimal()
     fcp_st_ret_valor = Decimal()
+
     icms_inter_destino_valor = Decimal()
     icms_inter_remetente_valor = Decimal()
 
