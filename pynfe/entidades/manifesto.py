@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import random
+from decimal import Decimal
+
+from pynfe import get_version
+from pynfe.utils import so_numeros
+from pynfe.utils.flags import CODIGOS_ESTADOS, MDFE_STATUS
 
 from .base import Entidade
-from pynfe import get_version
-from pynfe.utils.flags import MDFE_STATUS, CODIGOS_ESTADOS
-
-from pynfe.utils import so_numeros
-
-from decimal import Decimal
 
 
 class Manifesto(Entidade):
@@ -174,7 +173,10 @@ class Manifesto(Entidade):
         return self.codigo_numerico_aleatorio
 
     def _dv_codigo_numerico(self, key):
-        assert len(key) == 43
+        if not len(key) == 43:
+            raise ValueError(
+                f"Chave de acesso deve ter 43 caracteres antes de calcular o DV, chave: {key}"
+            )
 
         weights = [2, 3, 4, 5, 6, 7, 8, 9]
         weights_size = len(weights)
@@ -199,20 +201,17 @@ class Manifesto(Entidade):
     def identificador_unico(self):
         # Monta 'Id' da tag raiz <infMDFe>
         # Ex.: MDFe35080599999090910270580010000000011518005123
-        key = (
-            "%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nMDF)s%(tpEmis)s%(cMDF)s"
-            % {
-                "uf": CODIGOS_ESTADOS[self.uf],
-                "ano": self.data_emissao.strftime("%y"),
-                "mes": self.data_emissao.strftime("%m"),
-                "cnpj": so_numeros(self.emitente.cpfcnpj).zfill(14),
-                "mod": self.modelo,
-                "serie": str(self.serie).zfill(3),
-                "nMDF": str(self.numero_mdfe).zfill(9),
-                "tpEmis": str(self.forma_emissao),
-                "cMDF": self._codigo_numerico_aleatorio(),
-            }
-        )
+        key = "%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nMDF)s%(tpEmis)s%(cMDF)s" % {
+            "uf": CODIGOS_ESTADOS[self.uf],
+            "ano": self.data_emissao.strftime("%y"),
+            "mes": self.data_emissao.strftime("%m"),
+            "cnpj": so_numeros(self.emitente.cpfcnpj).zfill(14),
+            "mod": self.modelo,
+            "serie": str(self.serie).zfill(3),
+            "nMDF": str(self.numero_mdfe).zfill(9),
+            "tpEmis": str(self.forma_emissao),
+            "cMDF": self._codigo_numerico_aleatorio(),
+        }
         return (
             "MDFe%(uf)s%(ano)s%(mes)s%(cnpj)s%(mod)s%(serie)s%(nMDF)s%(tpEmis)s%(cMDF)s%(cDV)s"
             % {

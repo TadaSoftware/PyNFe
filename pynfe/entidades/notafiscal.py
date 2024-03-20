@@ -497,7 +497,10 @@ class NotaFiscal(Entidade):
         return self.codigo_numerico_aleatorio
 
     def _dv_codigo_numerico(self, key):
-        assert len(key) == 43
+        if not len(key) == 43:
+            raise ValueError(
+                f"Chave de acesso deve ter 43 caracteres antes de calcular o DV, chave: {key}"
+            )
 
         weights = [2, 3, 4, 5, 6, 7, 8, 9]
         weights_size = len(weights)
@@ -548,19 +551,10 @@ class NotaFiscal(Entidade):
 
 
 class NotaFiscalReferenciada(Entidade):
-
     # Campos depreciados
     campos_deprecados = [
-        CampoDeprecated(
-            "fcp_percentual",
-            "fcp_aliquota",
-            "Consistencia de nomes"
-        ),
-        CampoDeprecated(
-            "fcp_st_percentual",
-            "fcp_st_aliquota",
-            "Consistencia de nomes"
-        ),
+        CampoDeprecated("fcp_percentual", "fcp_aliquota", "Consistencia de nomes"),
+        CampoDeprecated("fcp_st_percentual", "fcp_st_aliquota", "Consistencia de nomes"),
     ]
 
     # - Tipo (seleciona de lista) - NF_REFERENCIADA_TIPOS
