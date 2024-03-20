@@ -8,7 +8,7 @@ from pynfe import get_version
 from pynfe.utils import so_numeros
 from pynfe.utils.flags import CODIGOS_ESTADOS, NF_STATUS
 
-from .base import Entidade
+from .base import CampoDeprecated, Entidade
 
 
 class NotaFiscal(Entidade):
@@ -497,7 +497,10 @@ class NotaFiscal(Entidade):
         return self.codigo_numerico_aleatorio
 
     def _dv_codigo_numerico(self, key):
-        assert len(key) == 43
+        if not len(key) == 43:
+            raise ValueError(
+                f"Chave de acesso deve ter 43 caracteres antes de calcular o DV, chave: {key}"
+            )
 
         weights = [2, 3, 4, 5, 6, 7, 8, 9]
         weights_size = len(weights)
@@ -548,6 +551,12 @@ class NotaFiscal(Entidade):
 
 
 class NotaFiscalReferenciada(Entidade):
+    # Campos depreciados
+    campos_deprecados = [
+        CampoDeprecated("fcp_percentual", "fcp_aliquota", "Consistencia de nomes"),
+        CampoDeprecated("fcp_st_percentual", "fcp_st_aliquota", "Consistencia de nomes"),
+    ]
+
     # - Tipo (seleciona de lista) - NF_REFERENCIADA_TIPOS
     tipo = str()
 
@@ -752,16 +761,20 @@ class NotaFiscalProduto(Entidade):
 
     #    - Fundo de Combate a Pobreza
     fcp_base_calculo = Decimal()
-    fcp_percentual = Decimal()
+    fcp_aliquota = Decimal()
     fcp_valor = Decimal()
 
+    # FCP ST
     fcp_st_base_calculo = Decimal()
-    fcp_st_percentual = Decimal()
+    fcp_st_aliquota = Decimal()
     fcp_st_valor = Decimal()
-
     fcp_destino_valor = Decimal()
-    fcp_st_valor = Decimal()
+
+    # FCP ST Retido
+    fcp_st_ret_base_calculo = Decimal()
+    fcp_st_ret_aliquota = Decimal()
     fcp_st_ret_valor = Decimal()
+
     icms_inter_destino_valor = Decimal()
     icms_inter_remetente_valor = Decimal()
 

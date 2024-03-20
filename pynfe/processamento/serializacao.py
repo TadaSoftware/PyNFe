@@ -497,7 +497,7 @@ class SerializacaoXML(Serializacao):
 
             if produto_servico.fcp_valor:
                 etree.SubElement(icms_item, "pFCP").text = "{:.2f}".format(
-                    produto_servico.fcp_percentual or 0
+                    produto_servico.fcp_aliquota or 0
                 )  # Percentual FCP
                 etree.SubElement(icms_item, "vFCP").text = "{:.2f}".format(
                     produto_servico.fcp_valor or 0
@@ -536,7 +536,7 @@ class SerializacaoXML(Serializacao):
                     produto_servico.fcp_base_calculo or 0
                 )  # Base de calculo FCP
                 etree.SubElement(icms_item, "pFCP").text = "{:.2f}".format(
-                    produto_servico.fcp_percentual or 0
+                    produto_servico.fcp_aliquota or 0
                 )  # Percentual FCP
                 etree.SubElement(icms_item, "vFCP").text = "{:.2f}".format(
                     produto_servico.fcp_valor or 0
@@ -571,7 +571,7 @@ class SerializacaoXML(Serializacao):
                     produto_servico.fcp_st_base_calculo or 0
                 )
                 etree.SubElement(icms_item, "pFCPST").text = "{:.2f}".format(
-                    produto_servico.fcp_st_percentual or 0
+                    produto_servico.fcp_st_aliquota or 0
                 )
                 etree.SubElement(icms_item, "vFCPST").text = "{:.2f}".format(
                     produto_servico.fcp_st_valor or 0
@@ -623,7 +623,7 @@ class SerializacaoXML(Serializacao):
                     produto_servico.fcp_base_calculo or 0
                 )  # Base de calculo FCP
                 etree.SubElement(icms_item, "pFCP").text = "{:.2f}".format(
-                    produto_servico.fcp_percentual or 0
+                    produto_servico.fcp_aliquota or 0
                 )  # Percentual FCP
                 etree.SubElement(icms_item, "vFCP").text = "{:.2f}".format(
                     produto_servico.fcp_valor or 0
@@ -666,7 +666,7 @@ class SerializacaoXML(Serializacao):
                     produto_servico.fcp_st_base_calculo or 0
                 )
                 etree.SubElement(icms_item, "pFCPST").text = "{:.2f}".format(
-                    produto_servico.fcp_st_percentual or 0
+                    produto_servico.fcp_st_aliquota or 0
                 )
                 etree.SubElement(icms_item, "vFCPST").text = "{:.2f}".format(
                     produto_servico.fcp_st_valor or 0
@@ -710,7 +710,7 @@ class SerializacaoXML(Serializacao):
                     produto_servico.fcp_base_calculo or 0
                 )  # Base de calculo FCP
                 etree.SubElement(icms_item, "pFCP").text = "{:.2f}".format(
-                    produto_servico.fcp_percentual or 0
+                    produto_servico.fcp_aliquota or 0
                 )  # Percentual FCP
                 etree.SubElement(icms_item, "vFCP").text = "{:.2f}".format(
                     produto_servico.fcp_valor or 0
@@ -742,15 +742,15 @@ class SerializacaoXML(Serializacao):
                 icms_item, "vICMSSTRet"
             ).text = "{:.2f}".format(produto_servico.icms_st_ret_valor or 0)
 
-            if produto_servico.fcp_st_valor:
+            if produto_servico.fcp_st_ret_valor:
                 etree.SubElement(icms_item, "vBCFCPSTRet").text = "{:.2f}".format(
-                    produto_servico.fcp_st_base_calculo or 0
+                    produto_servico.fcp_st_ret_base_calculo or 0
                 )
                 etree.SubElement(icms_item, "pFCPSTRet").text = "{:.2f}".format(
-                    produto_servico.fcp_st_percentual or 0
+                    produto_servico.fcp_st_ret_aliquota or 0
                 )
                 etree.SubElement(icms_item, "vFCPSTRet").text = "{:.2f}".format(
-                    produto_servico.fcp_st_valor or 0
+                    produto_servico.fcp_st_ret_valor or 0
                 )
         
         # 61=Tributação monofásica sobre combustíveis cobrada anteriormente
@@ -794,7 +794,7 @@ class SerializacaoXML(Serializacao):
                     produto_servico.fcp_base_calculo or 0
                 )  # Base de calculo FCP
                 etree.SubElement(icms_item, "pFCP").text = "{:.2f}".format(
-                    produto_servico.fcp_percentual or 0
+                    produto_servico.fcp_aliquota or 0
                 )  # Percentual FCP
                 etree.SubElement(icms_item, "vFCP").text = "{:.2f}".format(
                     produto_servico.fcp_valor or 0
@@ -824,7 +824,7 @@ class SerializacaoXML(Serializacao):
                     produto_servico.fcp_st_base_calculo or 0
                 )
                 etree.SubElement(icms_item, "pFCPST").text = "{:.2f}".format(
-                    produto_servico.fcp_st_percentual or 0
+                    produto_servico.fcp_st_aliquota or 0
                 )
                 etree.SubElement(icms_item, "vFCPST").text = "{:.2f}".format(
                     produto_servico.fcp_st_valor or 0
@@ -868,7 +868,7 @@ class SerializacaoXML(Serializacao):
                     produto_servico.fcp_base_calculo or 0
                 )  # Base de calculo FCP
                 etree.SubElement(icms_item, "pFCP").text = "{:.2f}".format(
-                    produto_servico.fcp_percentual or 0
+                    produto_servico.fcp_aliquota or 0
                 )  # Percentual FCP
                 etree.SubElement(icms_item, "vFCP").text = "{:.2f}".format(
                     produto_servico.fcp_valor or 0
@@ -901,7 +901,7 @@ class SerializacaoXML(Serializacao):
                     produto_servico.fcp_st_base_calculo or 0
                 )
                 etree.SubElement(icms_item, "pFCPST").text = "{:.2f}".format(
-                    produto_servico.fcp_st_percentual or 0
+                    produto_servico.fcp_st_aliquota or 0
                 )
                 etree.SubElement(icms_item, "vFCPST").text = "{:.2f}".format(
                     produto_servico.fcp_st_valor or 0
@@ -976,7 +976,7 @@ class SerializacaoXML(Serializacao):
                     produto_servico.fcp_st_base_calculo or 0
                 )
                 etree.SubElement(icms_item, "pFCPST").text = "{:.2f}".format(
-                    produto_servico.fcp_st_percentual or 0
+                    produto_servico.fcp_st_aliquota or 0
                 )
                 etree.SubElement(icms_item, "vFCPST").text = "{:.2f}".format(
                     produto_servico.fcp_st_valor or 0
@@ -1053,7 +1053,7 @@ class SerializacaoXML(Serializacao):
                         produto_servico.fcp_st_base_calculo or 0
                     )
                     etree.SubElement(icms_item, "pFCPST").text = "{:.2f}".format(
-                        produto_servico.fcp_st_percentual or 0
+                        produto_servico.fcp_st_aliquota or 0
                     )
                     etree.SubElement(icms_item, "vFCPST").text = "{:.2f}".format(
                         produto_servico.fcp_st_valor or 0
@@ -2011,21 +2011,11 @@ class SerializacaoQrcode(object):
                 url_chave = NFCE[uf]["HOMOLOGACAO"] + NFCE[uf]["URL"]
         # adicionta tag infNFeSupl com qrcode
         info = etree.Element("infNFeSupl")
-        etree.SubElement(info, "qrCode").text = "<![CDATA[" + qrcode.strip() + "]]>"
+        etree.SubElement(info, "qrCode").text = etree.CDATA(qrcode.strip())
         etree.SubElement(info, "urlChave").text = url_chave
+        
         nfe.insert(1, info)
-        # correção da tag qrCode, retira caracteres pois e CDATA
-        tnfe = (
-            etree.tostring(nfe, encoding="unicode")
-            .replace("\n", "")
-            .replace("&lt;", "<")
-            .replace("&gt;", ">")
-            .replace("amp;", "")
-        )
-        etree.tostring(nfe.find(".//qrCode"), encoding="unicode").replace(
-            "\n", ""
-        ).replace("&lt;", "<").replace("&gt;", ">").replace("amp;", "")
-        nfe = etree.fromstring(tnfe)
+
         # retorna nfe com o qrcode incluido NT2015/002 e qrcode
         if return_qr:
             return nfe, qrcode.strip()

@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 # *-* encoding: utf8 *-*
 
+import datetime
 import unittest
+from decimal import Decimal
 
 from pynfe.entidades.cliente import Cliente
 from pynfe.entidades.emitente import Emitente
-from pynfe.entidades.notafiscal import NotaFiscal
 from pynfe.entidades.fonte_dados import _fonte_dados
-from pynfe.processamento.serializacao import SerializacaoXML
+from pynfe.entidades.notafiscal import NotaFiscal
 from pynfe.processamento.assinatura import AssinaturaA1
+from pynfe.processamento.serializacao import SerializacaoXML
 from pynfe.processamento.validacao import Validacao
 from pynfe.utils.flags import (
     CODIGO_BRASIL,
@@ -18,8 +20,6 @@ from pynfe.utils.flags import (
     XSD_NFE,
     XSD_NFE_PROCESSADA,
 )
-from decimal import Decimal
-import datetime
 
 
 class SerializacaoNFeTestCase(unittest.TestCase):
@@ -149,7 +149,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             icms_st_aliquota=Decimal("0.10"),
             icms_st_valor=Decimal("1.17"),
             fcp_st_base_calculo=Decimal("117.00"),
-            fcp_st_percentual=Decimal("0.01"),
+            fcp_st_aliquota=Decimal("0.01"),
             fcp_st_valor=Decimal("1.17"),
             pis_modalidade="51",
             cofins_modalidade="51",

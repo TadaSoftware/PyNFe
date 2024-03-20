@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 # *-* encoding: utf8 *-*
 
+import datetime
 import unittest
+from decimal import Decimal
 
 from pynfe.entidades.cliente import Cliente
 from pynfe.entidades.emitente import Emitente
-from pynfe.entidades.notafiscal import NotaFiscal
 from pynfe.entidades.fonte_dados import _fonte_dados
-from pynfe.processamento.serializacao import SerializacaoXML
+from pynfe.entidades.notafiscal import NotaFiscal
 from pynfe.processamento.assinatura import AssinaturaA1
+from pynfe.processamento.serializacao import SerializacaoXML
 from pynfe.processamento.validacao import Validacao
 from pynfe.utils.flags import (
     CODIGO_BRASIL,
@@ -18,8 +20,6 @@ from pynfe.utils.flags import (
     XSD_NFE,
     XSD_NFE_PROCESSADA,
 )
-from decimal import Decimal
-import datetime
 
 
 class SerializacaoNFeTestCase(unittest.TestCase):
@@ -147,7 +147,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             icms_aliquota=Decimal("18.00"),
             icms_valor=Decimal("3.36"),
             fcp_base_calculo=Decimal("3.36"),
-            fcp_percentual=Decimal("2.00"),
+            fcp_aliquota=Decimal("2.00"),
             fcp_valor=Decimal("0.06"),
             icms_st_modalidade_determinacao_bc=4,
             icms_st_percentual_adicional=Decimal("0.00"),
@@ -156,7 +156,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             icms_st_aliquota=Decimal("18.00"),
             icms_st_valor=Decimal("1.44"),
             fcp_st_base_calculo=Decimal("1.44"),
-            fcp_st_percentual=Decimal("2.00"),
+            fcp_st_aliquota=Decimal("2.00"),
             fcp_st_valor=Decimal("0.02"),
         )
 
