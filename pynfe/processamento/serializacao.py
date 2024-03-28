@@ -1778,7 +1778,7 @@ class SerializacaoXML(Serializacao):
         """ Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e.
         Para as notas com finalidade de Ajuste ou Devolução
         o campo Forma de Pagamento deve ser preenchido com 90=Sem Pagamento. """
-        if (nota_fiscal.tipo_pagamento):
+        if (nota_fiscal.tipo_pagamento is not None):
             warnings.warn(
                 "O campo 'tipo_pagamento' está obsoleto e será removido em versões futuras. "
                 "Utilize o campo 'pagamentos' em seu lugar.",
