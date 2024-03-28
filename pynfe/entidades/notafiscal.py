@@ -83,7 +83,7 @@ class NotaFiscal(Entidade):
     90= Sem pagamento
     99=Outros
     """
-    tipo_pagamento = int()
+    tipo_pagamento = None
 
     # - Forma de emissao (obrigatorio - seleciona de lista) - NF_FORMAS_EMISSAO
     forma_emissao = str()
