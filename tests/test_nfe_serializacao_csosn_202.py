@@ -95,7 +95,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             uf="PR",
             natureza_operacao="VENDA",  # venda, compra, transferência, devolução, etc
             forma_pagamento=0,  # 0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros.
-            tipo_pagamento=1,
             modelo=55,  # 55=NF-e; 65=NFC-e
             serie="1",
             numero_nf="111",  # Número do Documento Fiscal.
@@ -113,6 +112,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             transporte_modalidade_frete=1,
             informacoes_adicionais_interesse_fisco="Mensagem complementar",
             totais_tributos_aproximado=Decimal("21.06"),
+            valor_troco=Decimal('1.83')
         )
 
         self.notafiscal.adicionar_produto_servico(
@@ -157,8 +157,10 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             nfci="12345678-AAAA-FFFF-1234-000000000000",
             informacoes_adicionais="Informações adicionais",
             ipi_valor_ipi_dev=Decimal("0.00"),
-            pdevol=Decimal("0.00"),
+            pdevol=Decimal("0.00")
         )
+
+        self.notafiscal.adicionar_pagamento(t_pag="01", x_pag="Dinheiro", v_pag=120.00, ind_pag=0)
 
     def serializa_nfe(self):
         serializador = SerializacaoXML(_fonte_dados, homologacao=self.homologacao)

@@ -75,7 +75,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             uf="PR",
             natureza_operacao="VENDA",  # venda, compra, transferência, devolução, etc
             forma_pagamento=0,  # 0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros.
-            tipo_pagamento=1,
             modelo=65,  # 55=NF-e; 65=NFC-e
             serie="1",
             numero_nf="111",  # Número do Documento Fiscal.
@@ -93,6 +92,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             transporte_modalidade_frete=1,
             informacoes_adicionais_interesse_fisco="Mensagem complementar",
             totais_tributos_aproximado=Decimal("1.01"),
+            valor_troco=Decimal('3.00'),
         )
 
         self.notafiscal.adicionar_produto_servico(
@@ -132,6 +132,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             email="pynfe@pynfe.io",
             fone="11912341234",
         )
+
+        self.notafiscal.adicionar_pagamento(t_pag="01", x_pag="Dinheiro", v_pag=120.00, ind_pag=0)
 
     def serializa_nfe(self):
         serializador = SerializacaoXML(
