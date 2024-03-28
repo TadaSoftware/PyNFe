@@ -200,6 +200,15 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             imposto_importacao_valor=Decimal('0.00'),
             imposto_importacao_valor_iof=Decimal('1.11'),
         )
+        
+        self.notafiscal.adicionar_pagamento(
+            t_pag="03",
+            x_pag="Cartao Credito",
+            v_pag=118.70,
+            ind_pag=0,
+            tp_integra="2",
+            t_band="99",
+        )
 
     def serializa_nfe(self):
         serializador = SerializacaoXML(_fonte_dados, homologacao=self.homologacao)
