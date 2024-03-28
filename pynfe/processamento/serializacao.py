@@ -2,8 +2,11 @@
 import base64
 import hashlib
 import re
+import warnings
+
 from datetime import datetime
 
+import pynfe.utils.xml_writer as xmlw
 from pynfe.entidades import Manifesto, NotaFiscal
 from pynfe.utils import (
     etree,
@@ -1341,6 +1344,71 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
+    def _serializar_pagamentos_antigo_deprecado(self, tipo_pagamento, finalidade_emissao, totais_icms_total_nota):
+        pag = etree.Element('pag')
+        detpag = etree.SubElement(pag, "detPag")
+        if (
+            str(finalidade_emissao) == "3"
+            or str(finalidade_emissao) == "4"
+        ):
+            etree.SubElement(detpag, "tPag").text = "90"
+            etree.SubElement(detpag, "vPag").text = "{:.2f}".format(0)
+        else:
+            etree.SubElement(detpag, "tPag").text = str(
+                tipo_pagamento
+            ).zfill(2)
+            etree.SubElement(detpag, "vPag").text = "{:.2f}".format(
+                totais_icms_total_nota
+            )
+            if tipo_pagamento == 3 or tipo_pagamento == 4:
+                cartao = etree.SubElement(detpag, "card")
+                """ Tipo de Integração do processo de pagamento com
+                    o sistema de automação da empresa:
+                    1=Pagamento integrado com o sistema de automação da empresa
+                    2= Pagamento não integrado com o sistema de automação da empresa
+                """
+                etree.SubElement(cartao, "tpIntegra").text = "2"
+                # etree.SubElement(cartao, 'CNPJ').text = ''
+                # # Informar o CNPJ da Credenciadora de cartão de crédito / débito
+                # etree.SubElement(cartao, 'tBand').text = ''
+                # # 01=Visa 02=Mastercard 03=American Express 04=Sorocred
+                # 05=Diners Club 06=Elo 07=Hipercard 08=Aura 09=Caba 99=Outros
+                # etree.SubElement(cartao, 'cAut').text = ''
+                # # Identifica o número da autorização da transação da operação
+                # com cartão de crédito e/ou débito
+            # troco
+            # etree.SubElement(pag, 'vTroco').text = str('')
+        return pag
+
+    def _serializar_pagamentos(self, pagamentos: list(), finalidade_emissao='', valor_troco = 0.00, retorna_string=True):
+        pag = etree.Element('pag')
+        if (finalidade_emissao in [3, 4]):
+            detpag = etree.SubElement(pag, "detPag")
+            etree.SubElement(detpag, "tPag").text = "90"
+            etree.SubElement(detpag, "vPag").text = "{:.2f}".format(0)
+        else:
+            for item in pagamentos:
+                det = etree.Element("detPag")
+                xmlw.write_txt(det, "indPag", item.ind_pag, False)
+                xmlw.write_txt(det, "tPag", item.t_pag, True)
+                xmlw.write_txt(det, 'xPag', item.x_pag, False)
+                xmlw.write_float(det, 'vPag', item.v_pag, True, 2, 2)
+                if item.tp_integra:
+                    card = etree.SubElement(det, "card")
+                    xmlw.write_txt(card, "tpIntegra", item.tp_integra, True)
+                    xmlw.write_txt(card, "CNPJ", item.cnpj, False)
+                    xmlw.write_txt(card, "tBand", item.t_band, False)
+                    xmlw.write_txt(card, "cAut", item.c_aut, False)
+                pag.append(det)
+
+        # troco
+        xmlw.write_float(pag, 'vTroco', valor_troco, False, 2, 2)
+
+        if retorna_string:
+            return etree.tostring(pag, encoding="unicode", pretty_print=False)
+        else:
+            return pag
+
     def _serializar_nota_fiscal(
         self, nota_fiscal, tag_raiz="infNFe", retorna_string=True
     ):
@@ -1710,39 +1778,28 @@ class SerializacaoXML(Serializacao):
         """ Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e.
         Para as notas com finalidade de Ajuste ou Devolução
         o campo Forma de Pagamento deve ser preenchido com 90=Sem Pagamento. """
-        pag = etree.SubElement(raiz, "pag")
-        detpag = etree.SubElement(pag, "detPag")
-        if (
-            str(nota_fiscal.finalidade_emissao) == "3"
-            or str(nota_fiscal.finalidade_emissao) == "4"
-        ):
-            etree.SubElement(detpag, "tPag").text = "90"
-            etree.SubElement(detpag, "vPag").text = "{:.2f}".format(0)
-        else:
-            etree.SubElement(detpag, "tPag").text = str(
-                nota_fiscal.tipo_pagamento
-            ).zfill(2)
-            etree.SubElement(detpag, "vPag").text = "{:.2f}".format(
-                nota_fiscal.totais_icms_total_nota
+        if (nota_fiscal.tipo_pagamento is not None):
+            warnings.warn(
+                "O campo 'tipo_pagamento' está obsoleto e será removido em versões futuras. "
+                "Utilize o campo 'pagamentos' em seu lugar.",
+                DeprecationWarning,
             )
-            if nota_fiscal.tipo_pagamento == 3 or nota_fiscal.tipo_pagamento == 4:
-                cartao = etree.SubElement(detpag, "card")
-                """ Tipo de Integração do processo de pagamento com
-                    o sistema de automação da empresa:
-                    1=Pagamento integrado com o sistema de automação da empresa
-                    2= Pagamento não integrado com o sistema de automação da empresa
-                """
-                etree.SubElement(cartao, "tpIntegra").text = "2"
-                # etree.SubElement(cartao, 'CNPJ').text = ''
-                # # Informar o CNPJ da Credenciadora de cartão de crédito / débito
-                # etree.SubElement(cartao, 'tBand').text = ''
-                # # 01=Visa 02=Mastercard 03=American Express 04=Sorocred
-                # 05=Diners Club 06=Elo 07=Hipercard 08=Aura 09=Caba 99=Outros
-                # etree.SubElement(cartao, 'cAut').text = ''
-                # # Identifica o número da autorização da transação da operação
-                # com cartão de crédito e/ou débito
-            # troco
-            # etree.SubElement(pag, 'vTroco').text = str('')
+            raiz.append(
+                self._serializar_pagamentos_antigo_deprecado(
+                    tipo_pagamento=nota_fiscal.tipo_pagamento,
+                    finalidade_emissao=nota_fiscal.finalidade_emissao,
+                    totais_icms_total_nota=nota_fiscal.totais_icms_total_nota,
+                )
+            )
+        else:
+            raiz.append(
+                self._serializar_pagamentos(
+                    pagamentos=nota_fiscal.pagamentos, 
+                    finalidade_emissao=nota_fiscal.finalidade_emissao,
+                    valor_troco=nota_fiscal.valor_troco,
+                    retorna_string=False
+                )
+            )
 
         # Informações adicionais
         if (
