@@ -42,19 +42,22 @@ class CertificadoA1(Certificado):
         Se caminho for True grava na pasta temporaria e retorna o caminho dos arquivos,
         senao retorna o objeto. Apos o uso devem ser excluidos com o metodo excluir.
         """
-
-        try:
-            with open(self.caminho_arquivo, "rb") as cert_arquivo:
-                cert_conteudo = cert_arquivo.read()
-        except (PermissionError, FileNotFoundError) as exc:
-            raise Exception(
-                """Falha ao abrir arquivo do certificado digital A1.
-                Verifique local e permissoes do arquivo."""
-            ) from exc
-        except Exception as exc:
-            raise Exception(
-                "Falha ao abrir arquivo do certificado digital A1. Causa desconhecida."
-            ) from exc
+        
+        if type(self.caminho_arquivo) is bytes:
+            cert_conteudo = self.caminho_arquivo
+        else:            
+            try:
+                with open(self.caminho_arquivo, "rb") as cert_arquivo:
+                    cert_conteudo = cert_arquivo.read()
+            except (PermissionError, FileNotFoundError) as exc:
+                raise Exception(
+                    """Falha ao abrir arquivo do certificado digital A1.
+                    Verifique local e permissoes do arquivo."""
+                ) from exc
+            except Exception as exc:
+                raise Exception(
+                    "Falha ao abrir arquivo do certificado digital A1. Causa desconhecida."
+                ) from exc
 
         if not isinstance(senha, bytes):
             senha = str.encode(senha)
