@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # *-* encoding: utf8 *-*
 
+import datetime
 import unittest
+from decimal import Decimal
 
 from pynfe.entidades.emitente import Emitente
-from pynfe.entidades.notafiscal import NotaFiscal
 from pynfe.entidades.fonte_dados import _fonte_dados
-from pynfe.processamento.serializacao import SerializacaoXML
+from pynfe.entidades.notafiscal import NotaFiscal
 from pynfe.processamento.assinatura import AssinaturaA1
+from pynfe.processamento.serializacao import SerializacaoXML
 from pynfe.processamento.validacao import Validacao
 from pynfe.utils.flags import (
     CODIGO_BRASIL,
@@ -17,8 +19,6 @@ from pynfe.utils.flags import (
     XSD_NFE,
     XSD_NFE_PROCESSADA,
 )
-from decimal import Decimal
-import datetime
 
 
 class SerializacaoNFeTestCase(unittest.TestCase):
@@ -93,6 +93,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             transporte_modalidade_frete=1,
             informacoes_adicionais_interesse_fisco="Mensagem complementar",
             totais_tributos_aproximado=Decimal("1.01"),
+            valor_troco=Decimal('3.00'),
         )
 
         self.notafiscal.adicionar_produto_servico(
@@ -132,6 +133,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             email="pynfe@pynfe.io",
             fone="11912341234",
         )
+
+        self.notafiscal.adicionar_pagamento(t_pag="01", x_pag="Dinheiro", v_pag=120.00, ind_pag=0)
 
     def serializa_nfe(self):
         serializador = SerializacaoXML(

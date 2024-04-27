@@ -166,6 +166,8 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             fone="11912341234",
         )
 
+        self.notafiscal.adicionar_pagamento(t_pag="01", x_pag="Dinheiro", v_pag=117.00, ind_pag=0)
+
     def serializa_nfe(self):
         serializador = SerializacaoXML(_fonte_dados, homologacao=self.homologacao)
         return serializador.exportar()

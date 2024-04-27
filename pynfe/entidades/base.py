@@ -10,6 +10,7 @@ class CampoDeprecated(object):
     anterior: str
     novo: str
     motivo: str
+    apenas_warning: bool = False
 
 
 class Entidade(object):
@@ -53,6 +54,12 @@ class Entidade(object):
                     )
                     setattr(self, campo_deprecado.novo, value)
                     return
+                if campo_deprecado.apenas_warning:
+                    warnings.warn(
+                        f"O campo {campo_deprecado.anterior} foi deprecado e será removido em versões futuras. "
+                        f"Motivo: {campo_deprecado.motivo}",
+                        DeprecationWarning,
+                    )
                 else:
                     raise AttributeError(
                         f"O campo {campo_deprecado.anterior} foi deprecado e removido."
