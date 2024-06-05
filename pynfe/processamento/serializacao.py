@@ -1315,7 +1315,6 @@ class SerializacaoXML(Serializacao):
                     or int(pagamento.tipo_pagamento) == 4
                     or int(pagamento.tipo_pagamento) == 10
                     or int(pagamento.tipo_pagamento) == 11
-                    or int(pagamento.tipo_pagamento) == 99
             ):
                 cartao = etree.SubElement(raiz, "card")
                 """ Tipo de Integração do processo de pagamento com
