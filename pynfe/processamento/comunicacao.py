@@ -1184,7 +1184,7 @@ class ComunicacaoCTe(Comunicacao):
         xml = self._construir_xml_soap("CteStatusServico", raiz)
         return self._post(url, xml)
 
-    def consulta_distribuicao(self, cnpj=None, cpf=None, chave=None, nsu=0):
+    def consulta_distribuicao(self, cnpj=None, cpf=None, chave=None, nsu=0, consulta_nsu_especifico=False):
         """
             O XML do pedido de distribuição suporta três tipos de consultas que são
             definidas de acordo com a tag informada no XML.
@@ -1196,8 +1196,19 @@ class ComunicacaoCTe(Comunicacao):
         :param cpf: CPF do interessado
         :param chave: Chave do CT-e a ser consultada
         :param nsu: Ultimo nsu ou nsu específico para ser consultado.
-        :return:
+        :param consulta_nsu_especifico:
+            True para consulta por nsu específico
+            False para consulta por nsu último
+        :return: xml do resultado da consulta
+
+        Exemplos de usos:
+        * consChNFe: consulta_distribuicao(cnpj=CNPJ, chave=CHAVE)
+        * distNSU: consulta_distribuicao(cnpj=CNPJ, chave=None, nsu=0,
+            consulta_nsu_especifico=False)
+        * consNSU: consulta_distribuicao(cnpj=CNPJ, chave=None, nsu=10,
+            consulta_nsu_especifico=True)
         """
+
         # url
         url = self._get_url_an(consulta="DISTRIBUICAO")
         # Monta XML para envio da requisição
@@ -1209,12 +1220,17 @@ class ComunicacaoCTe(Comunicacao):
             etree.SubElement(raiz, "CNPJ").text = cnpj
         else:
             etree.SubElement(raiz, "CPF").text = cpf
-        if not chave:
+
+        if not chave and not consulta_nsu_especifico:
             distNSU = etree.SubElement(raiz, "distNSU")
             etree.SubElement(distNSU, "ultNSU").text = str(nsu).zfill(15)
         if chave:
             consChCTe = etree.SubElement(raiz, "consChCTe")
             etree.SubElement(consChCTe, "chCTe").text = chave
+        if consulta_nsu_especifico:
+            consNSU = etree.SubElement(raiz, "consNSU")
+            etree.SubElement(consNSU, "NSU").text = str(nsu).zfill(15)
+
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap("CTeDistribuicaoDFe", raiz)
         return self._post(url, xml)
