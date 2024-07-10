@@ -3,7 +3,8 @@ import datetime
 import re
 
 import requests
-
+import gzip
+import base64
 from pynfe.entidades.certificado import CertificadoA1
 from pynfe.utils import etree, so_numeros
 from pynfe.utils.flags import (
@@ -903,13 +904,15 @@ class ComunicacaoMDFe(Comunicacao):
             raise "ind_sinc deve ser 0=assincrono ou 1=sincrono"
 
         # Monta XML do corpo da requisição
-        raiz = etree.Element("enviMDFe", xmlns=NAMESPACE_MDFE, versao=VERSAO_MDFE)
-        etree.SubElement(raiz, "idLote").text = str(
-            id_lote
-        )  # numero autoincremental gerado pelo sistema
+        #raiz = etree.Element("enviMDFe", xmlns=NAMESPACE_MDFE, versao=VERSAO_MDFE)
+        # A informação do Lote não existe no modelo SINCRONO
+        #etree.SubElement(raiz, "idLote").text = str(
+        #    id_lote
+        #)  # numero autoincremental gerado pelo sistema
         # etree.SubElement(raiz, 'indSinc').text = str(ind_sinc)
         # # 0 para assincrono, 1 para sincrono
-        raiz.append(manifesto)
+        #raiz.append(manifesto)
+        raiz = manifesto
 
         # Monta XML para envio da requisição
         if ind_sinc == 0:
@@ -934,33 +937,16 @@ class ComunicacaoMDFe(Comunicacao):
 
             if ind_sinc == 1:
                 try:
-                    # Protocolo com envio OK
-                    inf_prot = prot[1][0]
-                    lote_status = inf_prot.xpath(
-                        "ns:retEnviMDFe/ns:cStat", namespaces=ns
-                    )[0].text
-
-                    # Lote processado
-                    if lote_status == self._edoc_situacao_lote_processado:
-                        prot_mdfe = inf_prot.xpath(
-                            "ns:retEnviMDFe/ns:protMDFe", namespaces=ns
-                        )[0]
-                        status = prot_mdfe.xpath("ns:infProt/ns:cStat", namespaces=ns)[
-                            0
-                        ].text
-
-                        # autorizado uso do MDF-e
-                        # retorna xml final (protMDFe + MDFe)
-                        if (
-                            status in self._edoc_situacao_ja_enviado
-                        ):  # if status == '100':
-                            raiz = etree.Element(
-                                "mdfeProc", xmlns=NAMESPACE_MDFE, versao=VERSAO_MDFE
-                            )
-                            raiz.append(manifesto)
-                            raiz.append(prot_mdfe)
-                            return 0, raiz
-                except IndexError:
+                    namespaces = {
+                        'soap': NAMESPACE_SOAP,
+                        'mdfe': NAMESPACE_MDFE
+                    }
+                    # Extrai o elemento retMDFe (retorno MDF-e)
+                    retMDFe_element = prot.find('.//mdfe:retMDFe', namespaces)
+                       
+                    return 0, retMDFe_element, manifesto
+                except IndexError as e:
+                    print(str(e))
                     # Protocolo com algum erro no Envio
                     return 1, retorno, manifesto
             else:
@@ -1049,13 +1035,12 @@ class ComunicacaoMDFe(Comunicacao):
         raiz = etree.Element(
             "{%s}Envelope" % NAMESPACE_SOAP,
             nsmap={
-                "xsi": self._namespace_xsi,
-                "xsd": self._namespace_xsd,
-                self._soap_version: self._namespace_soap,
+                self._soap_version: self._namespace_soap
             },
-        )
+        ) 
 
-        if self._header:
+        # O cabeçalho não é mais obrigatório no envio Síncrono da MDF-e
+        if metodo != 'MDFeRecepcaoSinc' and self._header:
             cabecalho = self._cabecalho_soap(metodo)
             c = etree.SubElement(raiz, "{%s}Header" % self._namespace_soap)
             c.append(cabecalho)
@@ -1065,12 +1050,27 @@ class ComunicacaoMDFe(Comunicacao):
         a = etree.SubElement(
             body, self._envio_mensagem, xmlns=self._namespace_metodo + metodo
         )
-
-        # if metodo == 'MDFeRecepcaoSinc':
-        #     body_base64 = base64.b16encode(a).decode()
-
-        a.append(dados)
+        if metodo == 'MDFeRecepcaoSinc':
+            dados_comprimidos = self.compress_and_encode_base64(dados)
+            a.text = dados_comprimidos            
+        else:
+            a.append(dados)
         return raiz
+    
+    def compress_and_encode_base64(self, xml_element: etree._Element) -> str:
+        # Converte o elemento XML para uma string
+        xml_string = etree.tostring(xml_element, encoding='utf-8')
+        
+        # Realiza a compressão da string utilizando o GZip
+        compressed_data = gzip.compress(xml_string)
+        
+        # Codifica os dados comprimidos para um Base64
+        base64_encoded_data = base64.b64encode(compressed_data)
+        
+        # Converte o base64 bytes para string
+        base64_string = base64_encoded_data.decode('utf-8')
+        
+        return base64_string
 
     def _post_header(self, soap_webservice_method=False):
         """Retorna um dicionário com os atributos para o cabeçalho da requisição HTTP"""
@@ -1097,17 +1097,16 @@ class ComunicacaoMDFe(Comunicacao):
         chave_cert = (cert, chave)
         # Abre a conexão HTTPS
         try:
-            xml_declaration = '<?xml version="1.0" encoding="UTF-8"?>'
-
-            # limpa xml com caracteres bugados para infMDFeSupl em NFC-e
+            # Converter XML em string
+            xml = etree.tostring(xml, encoding='unicode').replace('\n', '')
+            
+            # Limpa xml com caracteres bugados para infMDFeSupl em NFC-e
             xml = re.sub(
-                "<qrCodMDFe>(.*?)</qrCodMDFe>",
-                lambda x: x.group(0)
-                .replace("&lt;", "<")
-                .replace("&gt;", ">")
-                .replace("amp;", ""),
-                etree.tostring(xml, encoding="unicode").replace("\n", ""),
+                '<qrCodMDFe>(.*?)</qrCodMDFe>',
+                lambda x: x.group(0).replace('&lt;', '<').replace('&gt;', '>').replace('amp;', ''),
+                xml
             )
+            xml_declaration = '<?xml version="1.0" encoding="UTF-8"?>'
             xml = xml_declaration + xml
             xml = xml.encode(
                 "utf8"
