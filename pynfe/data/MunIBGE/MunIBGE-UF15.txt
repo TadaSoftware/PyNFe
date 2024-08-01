@@ -4,6 +4,7 @@
 1500305	Afuá
 1500347	Água Azul do Norte
 1500404	Alenquer
+1504752	Mojuí dos Campos
 1500503	Almeirim
 1500602	Altamira
 1500701	Anajás

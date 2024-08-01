@@ -315,6 +315,7 @@
 4314472	Pinhal Grande
 4314498	Pinheirinho do Vale
 4314506	Pinheiro Machado
+4314548	Pinto Bandeira
 4314555	Pirapó
 4314605	Piratini
 4314704	Planalto

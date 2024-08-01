@@ -55,6 +55,7 @@
 5006002	Nova Alvorada do Sul
 5006200	Nova Andradina
 5006259	Novo Horizonte do Sul
+5006275	Paraíso das Águas
 5006309	Paranaíba
 5006358	Paranhos
 5006408	Pedro Gomes
