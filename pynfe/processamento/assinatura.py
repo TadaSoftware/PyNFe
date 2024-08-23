@@ -51,12 +51,11 @@ class AssinaturaA1(Assinatura):
 
         ns = {"ns": NAMESPACE_SIG}
 
+        # coloca o certificado na tag X509Data/X509Certificate
         cert = self.cert
         cert = cert.replace("\n", "")
         cert = cert.replace("-----BEGIN CERTIFICATE-----", "")
         cert = cert.replace("-----END CERTIFICATE-----", "")
-
-        # coloca o certificado na tag X509Data/X509Certificate
         tagX509Data = signed_root.find(".//ns:X509Data", namespaces=ns)
         etree.SubElement(tagX509Data, "X509Certificate").text = cert
         if retorna_string:
