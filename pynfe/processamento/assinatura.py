@@ -3,7 +3,6 @@ import signxml
 
 from pynfe.entidades import CertificadoA1
 from pynfe.utils import CustomXMLSigner, etree, remover_acentos
-from pynfe.utils.flags import NAMESPACE_SIG
 
 
 class Assinatura(object):
@@ -48,14 +47,6 @@ class AssinaturaA1(Assinatura):
 
         ref_uri = ("#%s" % reference) if reference else None
         signed_root = signer.sign(xml, key=self.key, cert=self.cert, reference_uri=ref_uri)
-
-        ns = {"ns": NAMESPACE_SIG}
-
-        # coloca o certificado na tag X509Data/X509Certificate
-        cert = self.cert
-        cert = cert.replace("\n", "")
-        tagX509Data = signed_root.find(".//ns:X509Data", namespaces=ns)
-        etree.SubElement(tagX509Data, "X509Certificate").text = cert
         if retorna_string:
             return etree.tostring(signed_root, encoding="unicode", pretty_print=False)
         else:
