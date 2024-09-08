@@ -294,7 +294,7 @@ CTD_ANON_._AddElement(
 )
 
 
-def _BuildAutomaton_():
+def _BuildAutomaton_(): # noqa
     # Remove this helper function from the namespace after it is invoked
     global _BuildAutomaton_
     del _BuildAutomaton_
