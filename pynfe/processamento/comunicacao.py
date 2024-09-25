@@ -266,7 +266,9 @@ class ComunicacaoSefaz(Comunicacao):
         info = etree.SubElement(raiz, "infCons")
         etree.SubElement(info, "xServ").text = "CONS-CAD"
         etree.SubElement(info, "UF").text = self.uf.upper()
-
+        
+        # Monta tipo de documento CNPJ, CPF ou IE
+        tipo.upper()
         etree.SubElement(info, tipo).text = documento
         
         # etree.SubElement(info, 'CPF').text = cpf
