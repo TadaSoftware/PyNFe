@@ -238,11 +238,12 @@ class ComunicacaoSefaz(Comunicacao):
 
         return self._post(url, xml)
 
-    def consulta_cadastro(self, modelo, cnpj):
+    def consulta_cadastro(self, modelo, documento, tipo='CNPJ'):
         """
         Consulta de cadastro
         :param modelo: Modelo da nota
-        :param cnpj: CNPJ da empresa
+        :param documento: Documento (CNPJ, CPF ou IE)
+        :tipo do documento: CNPJ, CPF, IE
         :return:
         """
         # UF que utilizam a SVRS - Sefaz Virtual do RS:
@@ -265,7 +266,10 @@ class ComunicacaoSefaz(Comunicacao):
         info = etree.SubElement(raiz, "infCons")
         etree.SubElement(info, "xServ").text = "CONS-CAD"
         etree.SubElement(info, "UF").text = self.uf.upper()
-        etree.SubElement(info, "CNPJ").text = cnpj
+        
+        # Monta tipo de documento CNPJ, CPF ou IE
+        etree.SubElement(info, tipo.upper()).text = documento
+        
         # etree.SubElement(info, 'CPF').text = cpf
 
         # Monta XML para envio da requisição
