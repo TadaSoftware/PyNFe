@@ -268,8 +268,7 @@ class ComunicacaoSefaz(Comunicacao):
         etree.SubElement(info, "UF").text = self.uf.upper()
         
         # Monta tipo de documento CNPJ, CPF ou IE
-        tipo.upper()
-        etree.SubElement(info, tipo).text = documento
+        etree.SubElement(info, tipo.upper()).text = documento
         
         # etree.SubElement(info, 'CPF').text = cpf
 
