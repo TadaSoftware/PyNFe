@@ -37,7 +37,7 @@ class CertificadoA1(Certificado):
         self.caminho_arquivo = caminho_arquivo
         self.arquivos_temp = []
 
-    def separar_arquivo(self, senha, caminho=False):
+    def separar_arquivo(self, senha, caminho=False,replace_data=True):
         """Separa o arquivo de certificado em dois: de chave e de certificado e retorna a string.
         Se caminho for True grava na pasta temporaria e retorna o caminho dos arquivos,
         senao retorna o objeto. Apos o uso devem ser excluidos com o metodo excluir.
@@ -64,11 +64,14 @@ class CertificadoA1(Certificado):
             (
                 chave,
                 cert,
-            ) = pkcs12.load_key_and_certificates(cert_conteudo, senha)[:2]
+            ) = pkcs12.load_key_and_certificates(
+                cert_conteudo, senha
+            )[:2]
         except Exception as e:
             if "invalid password" in str(e).lower():
                 raise Exception(
-                    "Falha ao carregar certificado digital A1. Verifique a senha do" " certificado."
+                    "Falha ao carregar certificado digital A1. Verifique a senha do"
+                    " certificado."
                 ) from e
             else:
                 raise Exception(
@@ -81,7 +84,9 @@ class CertificadoA1(Certificado):
                 arqcert.write(cert.public_bytes(Encoding.PEM))
             with tempfile.NamedTemporaryFile(delete=False) as arqchave:
                 arqchave.write(
-                    chave.private_bytes(Encoding.PEM, PrivateFormat.PKCS8, NoEncryption())
+                    chave.private_bytes(
+                        Encoding.PEM, PrivateFormat.PKCS8, NoEncryption()
+                    )
                 )
             self.arquivos_temp.append(arqchave.name)
             self.arquivos_temp.append(arqcert.name)
@@ -89,8 +94,15 @@ class CertificadoA1(Certificado):
         else:
             # Certificado
             cert = cert.public_bytes(Encoding.PEM).decode("utf-8")
+            if replace_data:
+                cert = cert.replace("\n", "")
+                cert = cert.replace("-----BEGIN CERTIFICATE-----", "")
+                cert = cert.replace("-----END CERTIFICATE-----", "")
+
             # Chave, string decodificada da chave privada
-            chave = chave.private_bytes(Encoding.PEM, PrivateFormat.PKCS8, NoEncryption())
+            chave = chave.private_bytes(
+                Encoding.PEM, PrivateFormat.PKCS8, NoEncryption()
+            )
 
             return chave, cert
 
