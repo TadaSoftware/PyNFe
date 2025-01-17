@@ -238,26 +238,34 @@ class ComunicacaoSefaz(Comunicacao):
 
         return self._post(url, xml)
 
-    def consulta_cadastro(self, modelo, documento, tipo='CNPJ'):
+    def consulta_cadastro(self, modelo, documento, tipo='CNPJ', uf=None):
         """
         Consulta de cadastro
         :param modelo: Modelo da nota
         :param documento: Documento (CNPJ, CPF ou IE)
         :tipo do documento: CNPJ, CPF, IE
+        :param uf: UF
         :return:
         """
         # UF que utilizam a SVRS - Sefaz Virtual do RS:
-        # Para serviço de Consulta Cadastro: AC, RN, PB, SC
-        lista_svrs = ["AC", "RN", "PB", "SC", "PA", "CE"]
+        lista_svrs = ["AC", "AL", "AP", "CE",
+                      "DF", "ES", "PA", "PB",
+                      "PI", "RJ", "RN", "RO",
+                      "RR", "SC", "SE", "TO"]
+
+        # Se não informada UF nos parâmetros da função,
+        # utiliza a UF do construtor
+        if not uf:
+            uf = self.uf
 
         # RS implementa um método diferente na consulta de cadastro
         # usa o mesmo url para produção e homologação
         # não tem url para NFCE
-        if self.uf.upper() == "RS":
+        if uf.upper() == "RS":
             url = NFE["RS"]["CADASTRO"]
-        elif self.uf.upper() in lista_svrs:
+        elif uf.upper() in lista_svrs:
             url = NFE["SVRS"]["CADASTRO"]
-        elif self.uf.upper() == "SVC-RS":
+        elif uf.upper() == "SVC-RS":
             url = NFE["SVC-RS"]["CADASTRO"]
         else:
             url = self._get_url(modelo=modelo, consulta="CADASTRO")
@@ -265,7 +273,7 @@ class ComunicacaoSefaz(Comunicacao):
         raiz = etree.Element("ConsCad", versao="2.00", xmlns=NAMESPACE_NFE)
         info = etree.SubElement(raiz, "infCons")
         etree.SubElement(info, "xServ").text = "CONS-CAD"
-        etree.SubElement(info, "UF").text = self.uf.upper()
+        etree.SubElement(info, "UF").text = uf.upper()
         
         # Monta tipo de documento CNPJ, CPF ou IE
         etree.SubElement(info, tipo.upper()).text = documento
