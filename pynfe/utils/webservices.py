@@ -69,7 +69,7 @@ NFCE = {
         "EVENTOS": "",
         "QR": "/nfcep.php?",
         "URL": "https://www.sefaz.ap.gov.br/sate/seg/SEGf_AcessarFuncao.jsp?cdFuncao=FIS_1261",
-        "HTTPS": "	https://www.sefaz.ap.gov.br/nfce",
+        "HTTPS": "https://www.sefaz.ap.gov.br/nfce",
         "HOMOLOGACAO": "https://www.sefaz.ap.gov.br/nfcehml",
     },
     "TO": {
@@ -174,7 +174,7 @@ NFCE = {
         "CHAVE": "",
         "INUTILIZACAO": "",
         "EVENTOS": "",
-        "QR": "sefaz.es.gov.br/ConsultaNFCe/qrcode.aspx?	",
+        "QR": "sefaz.es.gov.br/ConsultaNFCe/qrcode.aspx?",
         "HTTPS": "http://nfe.",
         "HOMOLOGACAO": "http://homologacao.",
         "URL": "www.sefaz.es.gov.br/nfce/consulta",
