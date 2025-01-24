@@ -1123,9 +1123,7 @@ class SerializacaoXML(Serializacao):
            ((produto_servico.pis_valor_base_calculo == 0) and
             (produto_servico.pis_aliquota_percentual == 0) and
             (produto_servico.pis_valor == 0) and
-            (produto_servico.quantidade_comercial == 0) and
-            (produto_servico.pis_aliquota_reais == 0) and
-            (produto_servico.pis_modalidade not in ["04", "05", "06", "07", "08", "09", "49", "99"])):
+            (produto_servico.pis_modalidade not in ("04", "05", "06", "07", "08", "09", "49", "99"))):
             return
 
         pisnt = ("04", "05", "06", "07", "08", "09")
@@ -1198,9 +1196,7 @@ class SerializacaoXML(Serializacao):
            ((produto_servico.cofins_valor_base_calculo == 0) and
             (produto_servico.cofins_aliquota_percentual == 0) and
             (produto_servico.cofins_valor == 0) and
-            (produto_servico.quantidade_comercial == 0) and
-            (produto_servico.cofins_aliquota_reais == 0) and
-            (produto_servico.cofins_modalidade not in ["04", "05", "06", "07", "08", "09", "49", "99"])):
+            (produto_servico.cofins_modalidade not in ("04", "05", "06", "07", "08", "09", "49", "99"))):
             return
 
         cofinsnt = ("04", "05", "06", "07", "08", "09")
