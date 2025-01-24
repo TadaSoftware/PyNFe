@@ -1118,145 +1118,159 @@ class SerializacaoXML(Serializacao):
     def _serializar_imposto_pis(
         self, produto_servico, modelo, tag_raiz="imposto", retorna_string=True
     ):
-        if modelo == 55:  # apenas nfe
-            pisnt = ("04", "05", "06", "07", "08", "09")
-            pis = etree.SubElement(tag_raiz, "PIS")
-            if produto_servico.pis_modalidade in pisnt:
-                pis_item = etree.SubElement(pis, "PISNT")
-                etree.SubElement(pis_item, "CST").text = produto_servico.pis_modalidade
-            elif (
-                produto_servico.pis_modalidade == "01"
-                or produto_servico.pis_modalidade == "02"
-            ):
-                pis_item = etree.SubElement(pis, "PISAliq")
-                etree.SubElement(pis_item, "CST").text = produto_servico.pis_modalidade
-                etree.SubElement(pis_item, "vBC").text = "{:.2f}".format(
-                    produto_servico.pis_valor_base_calculo or 0
-                )
-                etree.SubElement(pis_item, "pPIS").text = "{:.2f}".format(
-                    produto_servico.pis_aliquota_percentual or 0
-                )
-                etree.SubElement(pis_item, "vPIS").text = "{:.2f}".format(
-                    produto_servico.pis_valor or 0
-                )
-            elif produto_servico.pis_modalidade == "03":
-                pis_item = etree.SubElement(pis, "PISQtde")
-                etree.SubElement(pis_item, "CST").text = produto_servico.pis_modalidade
+        # Para NFC-e (65), o grupo de tributação do PIS/COFINS são opcionais.
+        if (modelo != 55) and \
+           ((produto_servico.pis_valor_base_calculo == 0) and
+            (produto_servico.pis_aliquota_percentual == 0) and
+            (produto_servico.pis_valor == 0) and
+            (produto_servico.pis_modalidade not in ("04", "05", "06", "07", "08", "09", "49", "99"))):
+            return
+
+        pisnt = ("04", "05", "06", "07", "08", "09")
+        pis = etree.SubElement(tag_raiz, "PIS")
+        if produto_servico.pis_modalidade in pisnt:
+            pis_item = etree.SubElement(pis, "PISNT")
+            etree.SubElement(pis_item, "CST").text = produto_servico.pis_modalidade
+        elif (
+            produto_servico.pis_modalidade == "01"
+            or produto_servico.pis_modalidade == "02"
+        ):
+            pis_item = etree.SubElement(pis, "PISAliq")
+            etree.SubElement(pis_item, "CST").text = produto_servico.pis_modalidade
+            etree.SubElement(pis_item, "vBC").text = "{:.2f}".format(
+                produto_servico.pis_valor_base_calculo or 0
+            )
+            etree.SubElement(pis_item, "pPIS").text = "{:.2f}".format(
+                produto_servico.pis_aliquota_percentual or 0
+            )
+            etree.SubElement(pis_item, "vPIS").text = "{:.2f}".format(
+                produto_servico.pis_valor or 0
+            )
+        elif produto_servico.pis_modalidade == "03":
+            pis_item = etree.SubElement(pis, "PISQtde")
+            etree.SubElement(pis_item, "CST").text = produto_servico.pis_modalidade
+            etree.SubElement(pis_item, "qBCProd").text = "{:.4f}".format(
+                produto_servico.quantidade_comercial
+            )
+            etree.SubElement(pis_item, "vAliqProd").text = "{:.4f}".format(
+                produto_servico.pis_aliquota_reais or 0
+            )
+            etree.SubElement(pis_item, "vPIS").text = "{:.2f}".format(
+                produto_servico.pis_valor or 0
+            )
+        else:
+            pis_item = etree.SubElement(pis, "PISOutr")
+            etree.SubElement(pis_item, "CST").text = produto_servico.pis_modalidade
+            if produto_servico.pis_aliquota_reais > 0:
                 etree.SubElement(pis_item, "qBCProd").text = "{:.4f}".format(
                     produto_servico.quantidade_comercial
                 )
                 etree.SubElement(pis_item, "vAliqProd").text = "{:.4f}".format(
                     produto_servico.pis_aliquota_reais or 0
                 )
-                etree.SubElement(pis_item, "vPIS").text = "{:.2f}".format(
-                    produto_servico.pis_valor or 0
-                )
             else:
-                pis_item = etree.SubElement(pis, "PISOutr")
-                etree.SubElement(pis_item, "CST").text = produto_servico.pis_modalidade
-                if produto_servico.pis_aliquota_reais > 0:
-                    etree.SubElement(pis_item, "qBCProd").text = "{:.4f}".format(
-                        produto_servico.quantidade_comercial
-                    )
-                    etree.SubElement(pis_item, "vAliqProd").text = "{:.4f}".format(
-                        produto_servico.pis_aliquota_reais or 0
-                    )
-                else:
-                    etree.SubElement(pis_item, "vBC").text = "{:.2f}".format(
-                        produto_servico.pis_valor_base_calculo or 0
-                    )
-                    etree.SubElement(pis_item, "pPIS").text = "{:.2f}".format(
-                        produto_servico.pis_aliquota_percentual or 0
-                    )
-                etree.SubElement(pis_item, "vPIS").text = "{:.2f}".format(
-                    produto_servico.pis_valor or 0
+                etree.SubElement(pis_item, "vBC").text = "{:.2f}".format(
+                    produto_servico.pis_valor_base_calculo or 0
                 )
+                etree.SubElement(pis_item, "pPIS").text = "{:.2f}".format(
+                    produto_servico.pis_aliquota_percentual or 0
+                )
+            etree.SubElement(pis_item, "vPIS").text = "{:.2f}".format(
+                produto_servico.pis_valor or 0
+            )
 
-                # PISST
-                # pis_item = etree.SubElement(pis, 'PISST')
-                # etree.SubElement(pis_item, 'vBC').text = produto_servico.pis_valor_base_calculo
-                # etree.SubElement(pis_item, 'pPIS').text = produto_servico.pis_aliquota_percentual
-                # etree.SubElement(pis_item, 'qBCProd').text = produto_servico.quantidade_comercial
-                # etree.SubElement(pis_item, 'vAliqProd').text = produto_servico
-                #   .pis_aliquota_percentual
-                # etree.SubElement(pis_item, 'vPIS').text = produto_servico.pis_valor_base_calculo
+            # PISST
+            # pis_item = etree.SubElement(pis, 'PISST')
+            # etree.SubElement(pis_item, 'vBC').text = produto_servico.pis_valor_base_calculo
+            # etree.SubElement(pis_item, 'pPIS').text = produto_servico.pis_aliquota_percentual
+            # etree.SubElement(pis_item, 'qBCProd').text = produto_servico.quantidade_comercial
+            # etree.SubElement(pis_item, 'vAliqProd').text = produto_servico
+            #   .pis_aliquota_percentual
+            # etree.SubElement(pis_item, 'vPIS').text = produto_servico.pis_valor_base_calculo
 
     def _serializar_imposto_cofins(
         self, produto_servico, modelo, tag_raiz="imposto", retorna_string=True
     ):
-        if modelo == 55:  # apenas nfe
-            cofinsnt = ("04", "05", "06", "07", "08", "09")
-            cofins = etree.SubElement(tag_raiz, "COFINS")
-            if produto_servico.cofins_modalidade in cofinsnt:
-                cofins_item = etree.SubElement(cofins, "COFINSNT")
-                etree.SubElement(
-                    cofins_item, "CST"
-                ).text = produto_servico.cofins_modalidade
-            elif (
-                produto_servico.cofins_modalidade == "01"
-                or produto_servico.cofins_modalidade == "02"
-            ):
-                cofins_item = etree.SubElement(cofins, "COFINSAliq")
-                etree.SubElement(
-                    cofins_item, "CST"
-                ).text = produto_servico.cofins_modalidade
+        # Para NFC-e (65), o grupo de tributação do PIS/COFINS são opcionais.
+        if (modelo != 55) and \
+           ((produto_servico.cofins_valor_base_calculo == 0) and
+            (produto_servico.cofins_aliquota_percentual == 0) and
+            (produto_servico.cofins_valor == 0) and
+            (produto_servico.cofins_modalidade not in ("04", "05", "06", "07", "08", "09", "49", "99"))):
+            return
+
+        cofinsnt = ("04", "05", "06", "07", "08", "09")
+        cofins = etree.SubElement(tag_raiz, "COFINS")
+        if produto_servico.cofins_modalidade in cofinsnt:
+            cofins_item = etree.SubElement(cofins, "COFINSNT")
+            etree.SubElement(
+                cofins_item, "CST"
+            ).text = produto_servico.cofins_modalidade
+        elif (
+            produto_servico.cofins_modalidade == "01"
+            or produto_servico.cofins_modalidade == "02"
+        ):
+            cofins_item = etree.SubElement(cofins, "COFINSAliq")
+            etree.SubElement(
+                cofins_item, "CST"
+            ).text = produto_servico.cofins_modalidade
+            etree.SubElement(cofins_item, "vBC").text = "{:.2f}".format(
+                produto_servico.cofins_valor_base_calculo or 0
+            )
+            etree.SubElement(cofins_item, "pCOFINS").text = "{:.2f}".format(
+                produto_servico.cofins_aliquota_percentual or 0
+            )
+            etree.SubElement(cofins_item, "vCOFINS").text = "{:.2f}".format(
+                produto_servico.cofins_valor
+            )
+        elif produto_servico.cofins_modalidade == "03":
+            cofins_item = etree.SubElement(cofins, "COFINSQtde")
+            etree.SubElement(
+                cofins_item, "CST"
+            ).text = produto_servico.cofins_modalidade
+            etree.SubElement(cofins_item, "qBCProd").text = "{:.4f}".format(
+                produto_servico.quantidade_comercial
+            )
+            etree.SubElement(cofins_item, "vAliqProd").text = "{:.4f}".format(
+                produto_servico.cofins_aliquota_reais
+            )
+            etree.SubElement(cofins_item, "vCOFINS").text = "{:.2f}".format(
+                produto_servico.cofins_valor
+            )
+        else:
+            cofins_item = etree.SubElement(cofins, "COFINSOutr")
+            etree.SubElement(
+                cofins_item, "CST"
+            ).text = produto_servico.cofins_modalidade
+            if produto_servico.cofins_aliquota_reais > 0:
+                etree.SubElement(cofins_item, "qBCProd").text = "{:.4f}".format(
+                    produto_servico.quantidade_comercial
+                )
+                etree.SubElement(cofins_item, "vAliqProd").text = "{:.4f}".format(
+                    produto_servico.cofins_aliquota_reais or 0
+                )
+            else:
                 etree.SubElement(cofins_item, "vBC").text = "{:.2f}".format(
                     produto_servico.cofins_valor_base_calculo or 0
                 )
                 etree.SubElement(cofins_item, "pCOFINS").text = "{:.2f}".format(
                     produto_servico.cofins_aliquota_percentual or 0
                 )
-                etree.SubElement(cofins_item, "vCOFINS").text = "{:.2f}".format(
-                    produto_servico.cofins_valor
-                )
-            elif produto_servico.cofins_modalidade == "03":
-                cofins_item = etree.SubElement(cofins, "COFINSQtde")
-                etree.SubElement(
-                    cofins_item, "CST"
-                ).text = produto_servico.cofins_modalidade
-                etree.SubElement(cofins_item, "qBCProd").text = "{:.4f}".format(
-                    produto_servico.quantidade_comercial
-                )
-                etree.SubElement(cofins_item, "vAliqProd").text = "{:.4f}".format(
-                    produto_servico.cofins_aliquota_reais
-                )
-                etree.SubElement(cofins_item, "vCOFINS").text = "{:.2f}".format(
-                    produto_servico.cofins_valor
-                )
-            else:
-                cofins_item = etree.SubElement(cofins, "COFINSOutr")
-                etree.SubElement(
-                    cofins_item, "CST"
-                ).text = produto_servico.cofins_modalidade
-                if produto_servico.cofins_aliquota_reais > 0:
-                    etree.SubElement(cofins_item, "qBCProd").text = "{:.4f}".format(
-                        produto_servico.quantidade_comercial
-                    )
-                    etree.SubElement(cofins_item, "vAliqProd").text = "{:.4f}".format(
-                        produto_servico.cofins_aliquota_reais or 0
-                    )
-                else:
-                    etree.SubElement(cofins_item, "vBC").text = "{:.2f}".format(
-                        produto_servico.cofins_valor_base_calculo or 0
-                    )
-                    etree.SubElement(cofins_item, "pCOFINS").text = "{:.2f}".format(
-                        produto_servico.cofins_aliquota_percentual or 0
-                    )
-                etree.SubElement(cofins_item, "vCOFINS").text = "{:.2f}".format(
-                    produto_servico.cofins_valor or 0
-                )
+            etree.SubElement(cofins_item, "vCOFINS").text = "{:.2f}".format(
+                produto_servico.cofins_valor or 0
+            )
 
-                # COFINSST
-                # cofins_item = etree.SubElement(cofins, 'COFINSOutr')
-                # etree.SubElement(cofins_item, 'vBC').text = produto_servico
-                #   .cofins_valor_base_calculo
-                # etree.SubElement(cofins_item, 'pCOFINS').text = produto_servico
-                #   .cofins_aliquota_percentual
-                # etree.SubElement(cofins_item, 'qBCProd').text = produto_servico
-                #   .quantidade_comercial
-                # etree.SubElement(cofins_item, 'vAliqProd').text = produto_servico
-                #   .cofins_aliquota_percentual
-                # etree.SubElement(cofins_item, 'vCOFINS').text = produto_servico.cofins_valor
+            # COFINSST
+            # cofins_item = etree.SubElement(cofins, 'COFINSOutr')
+            # etree.SubElement(cofins_item, 'vBC').text = produto_servico
+            #   .cofins_valor_base_calculo
+            # etree.SubElement(cofins_item, 'pCOFINS').text = produto_servico
+            #   .cofins_aliquota_percentual
+            # etree.SubElement(cofins_item, 'qBCProd').text = produto_servico
+            #   .quantidade_comercial
+            # etree.SubElement(cofins_item, 'vAliqProd').text = produto_servico
+            #   .cofins_aliquota_percentual
+            # etree.SubElement(cofins_item, 'vCOFINS').text = produto_servico.cofins_valor
 
     def _serializar_imposto_importacao(
         self, produto_servico, modelo, tag_raiz="imposto", retorna_string=True
