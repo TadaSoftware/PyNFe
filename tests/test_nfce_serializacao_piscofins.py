@@ -204,7 +204,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
                 "//ns:det/ns:imposto/ns:PIS/ns:PISOutr/ns:CST",
                 namespaces=self.ns
             )[0].text
-        except:
+        except BaseException:
             CST_PIS = None
         self.assertEqual(CST_PIS, None)
 
@@ -213,7 +213,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
                 "//ns:det/ns:imposto/ns:PIS/ns:PISOutr/ns:vPIS",
                 namespaces=self.ns
             )[0].text
-        except:
+        except BaseException:
             vPIS = None
         self.assertEqual(vPIS, None)
 
@@ -223,7 +223,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
                 "//ns:det/ns:imposto/ns:COFINS/ns:COFINSOutr/ns:CST",
                 namespaces=self.ns
             )[0].text
-        except:
+        except BaseException:
             CST_COFINS = None
         self.assertEqual(CST_COFINS, None)
 
@@ -232,7 +232,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
                 "//ns:det/ns:imposto/ns:COFINS/ns:COFINSOutr/ns:vCOFINS",
                 namespaces=self.ns
             )[0].text
-        except:
+        except BaseException:
             vCOFINS = None
         self.assertEqual(vCOFINS, None)
 
