@@ -3,6 +3,7 @@
 
 import unittest
 
+from pynfe import get_version
 from pynfe.entidades.cliente import Cliente
 from pynfe.entidades.emitente import Emitente
 from pynfe.entidades.notafiscal import NotaFiscal
@@ -263,6 +264,9 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         processo_emissao = self.xml_assinado.xpath(
             "//ns:ide/ns:procEmi", namespaces=self.ns
         )[0].text
+        versao_processo_emissao = self.xml_assinado.xpath(
+            "//ns:ide/ns:verProc", namespaces=self.ns
+        )[0].text
 
         self.assertEqual(uf, "41")
         self.assertEqual(natureza_operacao, "VENDA")
@@ -281,6 +285,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(cliente_final, "1")
         self.assertEqual(indicador_presencial, "1")
         self.assertEqual(processo_emissao, "0")
+        self.assertEqual(versao_processo_emissao, f'PyNFe {get_version()}')
 
     def dados_emitente_test(self):
         razao_social = self.xml_assinado.xpath(
