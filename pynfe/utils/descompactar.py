@@ -26,5 +26,5 @@ class DescompactaGzip(object):
         texto = zip.read()
         arq.close()
         zip.close()
-        descompactado = texto.decode("utf-8")
+        descompactado = texto.decode("utf-8").encode()
         return etree.fromstring(descompactado)
