@@ -3,6 +3,7 @@
 
 import unittest
 
+from pynfe import get_version
 from pynfe.entidades.fonte_dados import _fonte_dados
 from pynfe.entidades.manifesto import (
     Manifesto,
@@ -448,7 +449,7 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         self.assertEqual(dhEmi, "2021-01-14T12:00:00+00:00")
         self.assertEqual(tpEmis, "1")
         self.assertEqual(procEmi, "0")
-        self.assertEqual(verProc, "PyNFe 0.4")
+        self.assertEqual(verProc, f"PyNFe {get_version()}")
         self.assertEqual(UFIni, "MT")
         self.assertEqual(UFFim, "SP")
         self.assertEqual(dhIniViagem, "2021-01-14T13:10:20+00:00")
@@ -489,7 +490,7 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         self.assertEqual(dhEmi, "2021-01-14T12:00:00+00:00")
         self.assertEqual(tpEmis, "1")
         self.assertEqual(procEmi, "0")
-        self.assertEqual(verProc, "PyNFe 0.4")
+        self.assertEqual(verProc, f"PyNFe {get_version()}")
         self.assertEqual(UFIni, "MT")
         self.assertEqual(UFFim, "MT")
         self.assertEqual(dhIniViagem, "2021-01-14T13:10:20+00:00")
