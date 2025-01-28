@@ -1788,6 +1788,34 @@ class SerializacaoXML(Serializacao):
                                     lacres, "nLacre"
                                 ).text = lacre.numero_lacre
 
+        # Cobrança
+        if (nota_fiscal.fatura_numero) or (nota_fiscal.duplicatas and len(nota_fiscal.duplicatas) > 0):
+            cobr = etree.SubElement(raiz, "cobr")
+
+            # Fatura 0-1
+            if nota_fiscal.fatura_numero:
+                fat = etree.SubElement(cobr, "fat")
+                etree.SubElement(fat, "nFat").text = nota_fiscal.fatura_numero
+                etree.SubElement(fat, "vOrig").text = "{:.2f}".format(
+                    nota_fiscal.fatura_valor_original
+                )
+                etree.SubElement(fat, "vDesc").text = "{:.2f}".format(
+                    nota_fiscal.fatura_valor_desconto
+                )
+                etree.SubElement(fat, "vLiq").text = "{:.2f}".format(
+                    nota_fiscal.fatura_valor_liquido
+                )
+
+            # Duplicata 0-N
+            if nota_fiscal.duplicatas and len(nota_fiscal.duplicatas) > 0:
+                for num, item in enumerate(nota_fiscal.duplicatas):
+                    dup = etree.SubElement(cobr, "dup")
+                    etree.SubElement(dup, "nDup").text = item.numero
+                    etree.SubElement(dup, "dVenc").text = item.data_vencimento.strftime(
+                        "%Y-%m-%d"
+                    )
+                    etree.SubElement(dup, "vDup").text = "{:.2f}".format(item.valor)
+
         # Pagamento
         """ Obrigatório o preenchimento do Grupo Informações de Pagamento para NF-e e NFC-e.
         Para as notas com finalidade de Ajuste ou Devolução
