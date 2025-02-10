@@ -1317,7 +1317,7 @@ class ComunicacaoCTe(Comunicacao):
                 raise Exception(f"Url não encontrada para {consulta} {self.uf.upper()}")
         return self.url
     
-    def evento(self, modelo, evento):
+    def evento(self, evento):
         """
         Envia eventos do MDFe como:
             Comprovante de Entrega do CT-e
@@ -1334,8 +1334,7 @@ class ComunicacaoCTe(Comunicacao):
         url = self._get_url("EVENTOS")
 
         # Monta XML do corpo da requisição
-        raiz = etree.Element(evento, versao="1.00", xmlns=NAMESPACE_CTE)
-        xml = self._construir_xml_soap("CTeRecepcaoEventoV4", raiz)
+        xml = self._construir_xml_soap("CTeRecepcaoEventoV4", evento)
         return self._post(url, xml)
     
 

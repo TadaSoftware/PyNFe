@@ -17,9 +17,11 @@ from pynfe.utils import (
 )
 from pynfe.utils.flags import (
     CODIGOS_ESTADOS,
+    NAMESPACE_CTE,
     NAMESPACE_MDFE,
     NAMESPACE_NFE,
     NAMESPACE_SIG,
+    VERSAO_CTE,
     VERSAO_MDFE,
     VERSAO_PADRAO,
     VERSAO_QRCODE,
@@ -2038,17 +2040,50 @@ class SerializacaoXML(Serializacao):
         # AJUSTAR AQUI TODOS OS CAMPOS PRA CADA EVENTO
         if evento.descricao == "Comprovante de Entrega do CT-e":
             etree.Subelement(det, "nProt").text = evento.protocolo
+            # Data e hora de conclusão da entrega da NF-e, Formato AAAA-MM-DDTHH:MM:DD TZD, <xs:restriction base="TDateTimeUTC"/>
+            etree.SubElement(det, "dhEntrega").text = evento.data_hora
+            etree.SubElement(det, "nDoc").text = evento.documento_recebedor
+            etree.SubElement(det, "xNome").text = evento.nome_recebedor
+            etree.SubElement(det, "latitude").text = evento.latitude
+            etree.SubElement(det, "longitude").text = evento.longitude
+            etree.SubElement(det, "hashEntrega").text = evento.hash_entrega
+            #Hash (SHA1) no formato Base64 resultante da concatenação: Chave de acesso do CT-e + Base64 da imagem capturada da entrega (Exemplo: imagem capturada da assinatura eletrônica, digital do recebedor, foto, etc)</xs:documentation>
+			#<xs:documentation>O hashCSRT é o resultado das funções SHA-1 e base64 do token CSRT fornecido pelo fisco + chave de acesso do DF-e. (Implementação em futura NT)
+            #Observação: 28 caracteres são representados no schema como 20 bytes do tipo base64Binary
+            etree.SubElement(det, "dhHashEntrega").text = evento.datahora_hash #Formato AAAA-MM-DDTHH:MM:DD TZD
+            etree.SubElement(det, "infEntrega").text = evento.informacao_entrega #apenas para CT-e com tipo de serviço Normal
+            etree.SubElement(det, "chNFe").text = evento.chave_acesso #chave de acesso da NF-e entregue
         elif evento.descricao == "Cancelamento do Comprovante de Entrega do CT-e":
-            etree.Subelement(det, "nProt").text = evento.protocolo
+            etree.Subelement(det, "nProt").text = evento.protocolo #Número do Protocolo de autorização do CT-e
+            etree.SubElement(det, "nProtCE").text = evento.protocolo_evento #Número do Protocolo de autorização do evento a ser cancelado
         elif evento.descricao == "Insucesso na Entrega do CT-e":
             etree.Subelement(det, "nProt").text = evento.protocolo
-            etree.SubElement(det, "xJust").text = evento.justificativa
+            etree.SubElement(det, "dhTentativaEntrega").text = evento.data_hora_tentativa #Formato AAAA-MM-DDTHH:MM:DD TZD
+            etree.SubElement(det, "nTentativa").text = evento.numero_tentativa
+            etree.SubElement(det, "tpMotivo").text = evento.tipo_motivo 
+            #Motivo do insucesso: 
+            # 1- Recebedor não encontrado; 
+            # 2- Recusa do recebedor; 
+            # 3- Endereço inexistente; 
+            # 4- Outros (exige informar justificativa)
+            etree.SubElement(det, "xJustMotivo").text = evento.justificativa #apenas para tpMotivo = 4, 15-256 caracteres
+            etree.SubElement(det, "latitude").text = evento.latitude
+            etree.SubElement(det, "longitude").text = evento.longitude
+            etree.SubElement(det, "hashTentativaEntrega").text = evento.hash_entrega
+            # Hash (SHA1) no formato Base64 resultante da concatenação: Chave de acesso do CT-e + Base64 da imagem capturada da tentativa com insucesso da entrega (Exemplo: foto do local que não recebeu a entrega ou do local sem recebedor)</xs:documentation>
+			# <xs:documentation>O hashCSRT é o resultado das funções SHA-1 e base64 do token CSRT fornecido pelo fisco + chave de acesso do DF-e. (Implementação em futura NT)
+            # Observação: 28 caracteres são representados no schema como 20 bytes do tipo base64Binary
+            etree.SubElement(det, "dhHashTentativaEntrega").text = evento.datahora_hash #Formato AAAA-MM-DDTHH:MM:DD TZD
+            etree.SubElement(det, "infEntrega").text = evento.informacao_entrega #apenas para CT-e com tipo de serviço Normal
+            etree.SubElement(det, "chNFe").text = evento.chave_acesso #chave de acesso da NF-e com insucesso na entrega
         elif evento.descricao == "Cancelamento do Insucesso de Entrega do CT-e":
             etree.Subelement(det, "nProt").text = evento.protocolo
+            etree.Subelement(det, "nProtIE").text = evento.protocolo_evento
         elif evento.descricao == "Prestação do Serviço em Desacordo":
-            etree.Subelement(det, "nProt").text = evento.protocolo
+            etree.Subelement(det, "indDesacordoOper").text = evento.indicador_desacordo #Indicador de operação em desacordo
+            etree.Subelement(det, "xObs").text = evento.observacao
         elif evento.descricao == "Cancelamento Prestação do Serviço em Desacordo":
-            etree.Subelement(det, "nProt").text = evento.protocolo
+            etree.Subelement(det, "nProtEvPrestDes").text = evento.protocolo_evento
 
         if retorna_string:
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
