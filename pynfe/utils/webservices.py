@@ -576,6 +576,7 @@ CTE = {
         "HOMOLOGACAO": "https://cte-homologacao.",
     },
     "SP": {
+        "EVENTOS": "fazenda.sp.gov.br/CTeWS/WS/CTeRecepcaoEventoV4.asmx",
         "STATUS": "fazenda.sp.gov.br/cteWEB/services/cteStatusServico.asmx",
         "HTTPS": "https://nfe.",
         "HOMOLOGACAO": "https://homologacao.nfe.",

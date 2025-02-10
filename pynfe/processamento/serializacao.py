@@ -2014,6 +2014,48 @@ class SerializacaoXML(Serializacao):
             return raiz
 
 
+    def serializar_evento_cte(self, evento, tag_raiz="eventoCTe", retorna_string=False):
+        tz = datetime.now().astimezone().strftime("%z")
+        tz = "{}:{}".format(tz[:-2], tz[-2:])
+        raiz = etree.Element(tag_raiz, versao=VERSAO_CTE, xmlns=NAMESPACE_CTE)
+        e = etree.SubElement(raiz, "infEvento", Id=evento.identificador)
+        etree.SubElement(e, "cOrgao").text = CODIGOS_ESTADOS[evento.uf.upper()]
+        etree.SubElement(e, "tpAmb").text = str(self._ambiente)
+        if len(so_numeros(evento.cnpj)) == 11:
+            etree.SubElement(e, "CPF").text = evento.cnpj
+        else:
+            etree.SubElement(e, "CNPJ").text = evento.cnpj
+        etree.SubElement(e, "chCTe").text = evento.chave  
+        etree.SubElement(e, "dhEvento").text = (
+            evento.data_emissao.strftime("%Y-%m-%dT%H:%M:%S") + tz
+        )
+        etree.SubElement(e, "tpEvento").text = evento.tp_evento
+        etree.SubElement(e, "nSeqEvento").text = str(evento.n_seq_evento)
+        #etree.SubElement(e, "verEvento").text = "1.00"  #comentei pq no mdfe tava versão cte direto sem essa linha
+        det = etree.SubElement(e, "detEvento", versao=VERSAO_CTE)
+        etree.SubElement(det, "descEvento").text = evento.descricao
+
+        # AJUSTAR AQUI TODOS OS CAMPOS PRA CADA EVENTO
+        if evento.descricao == "Comprovante de Entrega do CT-e":
+            etree.Subelement(det, "nProt").text = evento.protocolo
+        elif evento.descricao == "Cancelamento do Comprovante de Entrega do CT-e":
+            etree.Subelement(det, "nProt").text = evento.protocolo
+        elif evento.descricao == "Insucesso na Entrega do CT-e":
+            etree.Subelement(det, "nProt").text = evento.protocolo
+            etree.SubElement(det, "xJust").text = evento.justificativa
+        elif evento.descricao == "Cancelamento do Insucesso de Entrega do CT-e":
+            etree.Subelement(det, "nProt").text = evento.protocolo
+        elif evento.descricao == "Prestação do Serviço em Desacordo":
+            etree.Subelement(det, "nProt").text = evento.protocolo
+        elif evento.descricao == "Cancelamento Prestação do Serviço em Desacordo":
+            etree.Subelement(det, "nProt").text = evento.protocolo
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+
 class SerializacaoQrcode(object):
     """Classe que gera e serializa o qrcode de NFC-e no xml"""
 

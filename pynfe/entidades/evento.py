@@ -10,14 +10,14 @@ from .base import Entidade
 
 class Evento(Entidade):
     # - Identificador da TAG a ser assinada, a regra de formação do Id é:
-    # “ID” + tpEvento + chave da NF-e + nSeqEvento
+    # “ID” + tpEvento + chave da NF-e ou do CT-e + nSeqEvento
     id = str()
     # - Código do órgão de recepção do Evento.
     # Utilizar a Tabela do IBGE, utilizar 91 para identificar o Ambiente Nacional.
     orgao = str()
     # - CNPJ (obrigatorio)
     cnpj = str()
-    # - Chave de Acesso da NF-e vinculada ao Evento
+    # - Chave de Acesso da NF-e ou CT-e vinculada ao Evento
     chave = str()
     # - Data e hora do evento no formato AAAA-MM-DDThh:mm:ssTZD
     data_emissao = None
@@ -235,3 +235,57 @@ class EventoInclusaoPagamento(Evento):
     codBanco = str()
     # - Código da Agência
     codAgencia = str()
+
+
+class EventoManifestacaoDestCTe(Evento):
+    """Este serviço permite que o destinatário do Conhecimento de Transporte eletrônico confirme a sua
+    participação na operação acobertada pelo Conhecimento de Transporte eletrônico emitida para o seu CNPJ
+    """
+
+    def __init__(self, *args, **kwargs):
+        super(EventoManifestacaoDestCTe, self).__init__(*args, **kwargs)
+        # - numero da operacao
+        # 1=Comprovante de Entrega do CT-e
+        # 2=Cancelamento do Comprovante de Entrega do CT-e
+        # 3=Insucesso na Entrega do CT-e
+        # 4=Cancelamento do Insucesso de Entrega do CT-e
+        # 5=Prestação do Serviço em Desacordo
+        # 6=Cancelamento Prestação do Serviço em Desacordo
+        dict_tp_evento = {1: "110180", 2: "110181", 3: "110190", 4: "110191", 5: "610110", 6: "610111"}
+        """ Código do evento
+            110180 – Comprovante de Entrega do CT-e
+            110181 – Cancelamento do Comprovante de Entrega do CT-e
+            110190 – Insucesso na Entrega do CT-e
+            110191 – Cancelamento do Insucesso de Entrega do CT-e
+            610110 – Prestação do Serviço em Desacordo
+            610111 – Cancelamento Prestação do Serviço em Desacordo """
+        self.tp_evento = dict_tp_evento[self.operacao]
+        # - numero da operacao
+        # 1=Comprovante de Entrega do CT-e
+        # 2=Cancelamento do Comprovante de Entrega do CT-e
+        # 3=Insucesso na Entrega do CT-e
+        # 4=Cancelamento do Insucesso de Entrega do CT-e
+        # 5=Prestação do Serviço em Desacordo
+        # 6=Cancelamento Prestação do Serviço em Desacordo
+        dict_descricao = {
+            1: "Comprovante de Entrega do CT-e",
+            2: "Cancelamento do Comprovante de Entrega do CT-e",
+            3: "Insucesso na Entrega do CT-e",
+            4: "Cancelamento do Insucesso de Entrega do CT-e",
+            5: "Prestação do Serviço em Desacordo",
+            6: "Cancelamento Prestação do Serviço em Desacordo",
+        }
+        """ Informar a descrição do evento:
+            Comprovante de Entrega do CT-e
+            Cancelamento do Comprovante de Entrega do CT-e
+            Insucesso na Entrega do CT-e
+            Cancelamento do Insucesso de Entrega do CT-e
+            Prestação do Serviço em Desacordo
+            Cancelamento Prestação do Serviço em Desacordo """
+        self.descricao = dict_descricao[self.operacao]
+
+    # - Informar a justificativa porque a operação não foi realizada,
+    # este campo deve ser informado somente no evento de Insucesso na Entrega do CT-e.
+    # (min 15 max 255 caracteres)
+    justificativa = str()
+

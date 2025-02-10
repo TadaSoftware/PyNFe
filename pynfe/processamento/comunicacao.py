@@ -1316,6 +1316,28 @@ class ComunicacaoCTe(Comunicacao):
             else:
                 raise Exception(f"Url não encontrada para {consulta} {self.uf.upper()}")
         return self.url
+    
+    def evento(self, modelo, evento):
+        """
+        Envia eventos do MDFe como:
+            Comprovante de Entrega do CT-e
+            Cancelamento do Comprovante de Entrega do CT-e
+            Insucesso na Entrega do CT-e
+            Cancelamento do Insucesso de Entrega do CT-e
+            Prestação do Serviço em Desacordo
+            Cancelamento Prestação do Serviço em Desacordo
+        :param evento: Nome do Evento
+        :return:
+        """
+
+        # url do serviço
+        url = self._get_url("EVENTOS")
+
+        # Monta XML do corpo da requisição
+        raiz = etree.Element(evento, versao="1.00", xmlns=NAMESPACE_CTE)
+        xml = self._construir_xml_soap("CTeRecepcaoEventoV4", raiz)
+        return self._post(url, xml)
+    
 
     def _construir_xml_soap(self, metodo, dados, cabecalho=False):
         """Monta o XML para o envio via SOAP"""
@@ -1391,3 +1413,5 @@ class ComunicacaoCTe(Comunicacao):
             raise e
         finally:
             certificado_a1.excluir()
+
+
