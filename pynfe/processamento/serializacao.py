@@ -2079,7 +2079,7 @@ class SerializacaoXML(Serializacao):
         #     etree.SubElement(det, "nProt").text = evento.protocolo
         #     etree.SubElement(det, "nProtIE").text = evento.protocolo_evento
         if evento.descricao == "Prestação do Serviço em Desacordo":
-            etree.SubElement(det, "indDesacordoOper").text = 1 #Indicador de operação em desacordo
+            etree.SubElement(det, "indDesacordoOper").text = "1" #Indicador de operação em desacordo
             etree.SubElement(det, "xObs").text = evento.observacao
         elif evento.descricao == "Cancelamento Prestação do Serviço em Desacordo":
             etree.SubElement(det, "nProtEvPrestDes").text = evento.protocolo_evento

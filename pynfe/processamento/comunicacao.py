@@ -1319,7 +1319,7 @@ class ComunicacaoCTe(Comunicacao):
     
     def evento(self, evento):
         """
-        Envia eventos do MDFe como:
+        Envia eventos do CTe como:
             Comprovante de Entrega do CT-e
             Cancelamento do Comprovante de Entrega do CT-e
             Insucesso na Entrega do CT-e
