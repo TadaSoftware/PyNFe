@@ -2019,7 +2019,7 @@ class SerializacaoXML(Serializacao):
     def serializar_evento_cte(self, evento, tag_raiz="eventoCTe", retorna_string=False):
         tz = datetime.now().astimezone().strftime("%z")
         tz = "{}:{}".format(tz[:-2], tz[-2:])
-        raiz = etree.Element(tag_raiz, versao="4.0", xmlns=NAMESPACE_CTE)
+        raiz = etree.Element(tag_raiz, versao=VERSAO_CTE, xmlns=NAMESPACE_CTE)
         e = etree.SubElement(raiz, "infEvento", Id=evento.identificador)
         etree.SubElement(e, "cOrgao").text = CODIGOS_ESTADOS[evento.uf.upper()]
         etree.SubElement(e, "tpAmb").text = str(self._ambiente)
@@ -2033,7 +2033,7 @@ class SerializacaoXML(Serializacao):
         )
         etree.SubElement(e, "tpEvento").text = evento.tp_evento
         etree.SubElement(e, "nSeqEvento").text = str(evento.n_seq_evento)
-        det = etree.SubElement(e, "detEvento", versaoEvento="4.0")
+        det = etree.SubElement(e, "detEvento", versaoEvento=VERSAO_CTE)
         # EVENTOS COMENTADOS NÂO TESTADOS
         # if evento.descricao == "Comprovante de Entrega do CT-e":
         #     etree.Subelement(det, "nProt").text = evento.protocolo
