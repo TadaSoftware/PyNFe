@@ -162,7 +162,6 @@ Lint
 Documentação
 -----------
 - https://github.com/TadaSoftware/PyNFe/wiki
-- http://pynfe.readthedocs.org/pt/latest/
 
 
 Suporte
