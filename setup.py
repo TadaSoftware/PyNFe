@@ -40,6 +40,9 @@ setuptools.setup(
             "suds-jurko",
             "pyxb==1.2.4",
         ],
+        "impressao": [
+            "brazilfiscalreport[damdfe]"
+        ]
     },
     zip_safe=False,
     python_requires=">=3.8",
