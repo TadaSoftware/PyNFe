@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 import setuptools
 
+from pynfe import __version__
+
+
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="PyNFe",
-    version="0.5.2",
+    version=__version__,
     author="TadaSoftware",
     author_email="tadasoftware@gmail.com",
     description="Interface library with the Brazilian Electronic Invoice web services",
