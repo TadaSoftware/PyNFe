@@ -103,6 +103,25 @@
 					</xs:attribute>
 				</xs:complexType>
 			</xs:element>
+			<xs:element name="procInfraSA" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Grupo de informações do compartilhamento do MDFe com InfraSA para geração do DTe</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="nProtDTe" type="TProt">
+							<xs:annotation>
+								<xs:documentation>Número do Protocolo de geração do DTe</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="dhProt" type="TDateTimeUTC">
+							<xs:annotation>
+								<xs:documentation>Data e hora de geração do protocolo, no formato AAAA-MM-DDTHH:MM:SS TZD.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="versao" type="TVerConsSitMDFe" use="required"/>
 	</xs:complexType>
