@@ -17,7 +17,7 @@
 <!-- PL_009l_NT2023_002_v100 - Alteração de Schema para evitar caracteres inválidos  -->
 <!-- PL_009m_NT2019_001_v155 - Inclusão de campos para Crédito Presumido e Redução da base de cálculo -->
 <!-- PL_009m_NT2023_004_v101 - Informações de Pagamentos e Outros -->
-<!-- PL_009p_NT2024_003_v101 - Produtos agropecuários -->
+<!-- PL_009p_NT2024_003_v103 - Produtos agropecuários -->
 <xs:schema xmlns="http://www.portalfiscal.inf.br/nfe" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:editix="http://www.portalfiscal.inf.br/nfe" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.portalfiscal.inf.br/nfe" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema_v1.01.xsd"/>
 	<xs:include schemaLocation="tiposBasico_v4.00.xsd"/>
@@ -6292,7 +6292,7 @@ tipo de ato concessório:
 							</xs:annotation>
 							<xs:complexType>
 								<xs:choice>
-									<xs:element name="defensivo">
+									<xs:element name="defensivo" maxOccurs="20">
 										<xs:annotation>
 											<xs:documentation>Defensivo Agrícola / Agrotóxico</xs:documentation>
 										</xs:annotation>
@@ -6303,8 +6303,8 @@ tipo de ato concessório:
 														<xs:documentation>Número do Receituário ou Receita do Defensivo / Agrotóxico</xs:documentation>
 													</xs:annotation>
 													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:maxLength value="20"/>
+														<xs:restriction base="TString">
+															<xs:maxLength value="30"/>
 															<xs:minLength value="1"/>
 														</xs:restriction>
 													</xs:simpleType>
@@ -6340,7 +6340,7 @@ tipo de ato concessório:
 														</xs:restriction>
 													</xs:simpleType>
 												</xs:element>
-												<xs:element name="UFGuia" type="TUfEmi" minOccurs="0"/>
+												<xs:element name="UFGuia" type="TUfEmi"/>
 												<xs:element name="serieGuia" minOccurs="0">
 													<xs:annotation>
 														<xs:documentation>Série da Guia</xs:documentation>
