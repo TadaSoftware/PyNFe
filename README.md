@@ -74,7 +74,7 @@ Dependências
   - Biblioteca para manuseio do certificado digital
 - requests
   - Biblioteca para a comunicação com os webservices da SEFAZ
-- suds-jurko (*apenas para NFS-e)
+- suds-community (*apenas para NFS-e)
   - Biblioteca para a comunicação com os webservices via wsdl
 - pyxb (*apenas para NFS-e)
   - Biblioteca para geração de bindings a partir de XML Schema(xsd)

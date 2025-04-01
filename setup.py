@@ -37,7 +37,7 @@ setuptools.setup(
     ],
     extras_require={
         "nfse": [
-            "suds-jurko",
+            "suds-community",
             "pyxb==1.2.4",
         ],
         "impressao": [
