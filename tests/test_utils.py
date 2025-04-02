@@ -94,9 +94,7 @@ class UtilsTestCase(unittest.TestCase):
         self.assertEqual(normalizar_municipio("Lambari D'Oeste"), "LAMBARI DOESTE")
 
     def test_normalizar_municipio_boa_esperanca_do_norte(self):
-        self.assertEqual(normalizar_municipio("Boa Esperança do Norte"), 
-                               "BOA ESPERANCA DO NORTE")
-
+        self.assertEqual(normalizar_municipio("Boa Esperança do Norte"),"BOA ESPERANCA DO NORTE")
 
     # obter_codigo_por_municipio
     def test_obter_codigo_por_municipio_saopaulo_3550308(self):
