@@ -15,8 +15,8 @@
 5101605	Barão de Melgaço
 5101704	Barra do Bugres
 5101803	Barra do Garças
+5101837 Boa Esperança do Norte
 5101852	Bom Jesus do Araguaia
-5108404	Boa Esperança do Norte
 5101902	Brasnorte
 5102504	Cáceres
 5102603	Campinápolis
