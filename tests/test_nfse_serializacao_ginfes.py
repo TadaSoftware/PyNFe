@@ -20,7 +20,7 @@ class SerializacaoNFSeGinfesTestCase(unittest.TestCase):
         result = self._get_nfse_esperada(nfse)
 
         nfse_xml = self._ajusta_xml_test(nfse_xml)
-        result = self._ajusta_xml_test(nfse_xml)
+        result = self._ajusta_xml_test(result)
 
         # Teste do conteúdo das tags do XML
         self.assertEqual(nfse_xml, result)
