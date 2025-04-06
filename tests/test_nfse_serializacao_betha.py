@@ -2,14 +2,13 @@ import unittest
 
 from pynfe.entidades.notafiscal import NotaFiscalServico
 
-from pynfe.processamento.serializacao import SerializacaoNfse
 from tests.test_nfse_serializacao import SerializacaoNFSeTest
 
 
 class SerializacaoNFSeBethaTestCase(unittest.TestCase):
     def test_notafiscal_geral(self):
         nfse = self._get_notafiscal_servico()
-        nfse_xml = self.serializa_nfse(nfse)
+        nfse_xml = SerializacaoNFSeTest.serializa_nfse(nfse, 'betha')
 
         # TODO: assinatura digital
         # config = SerializacaoNFSeTest.get_config()
@@ -30,12 +29,6 @@ class SerializacaoNFSeBethaTestCase(unittest.TestCase):
         # )
 
         SerializacaoNFSeTest.limpa_namespace()
-
-    def serializa_nfse(self, nfse: NotaFiscalServico) -> str:
-        serializador = SerializacaoNfse('betha')
-        xml = serializador.gerar(nfse)
-
-        return xml
 
     def _get_notafiscal_servico(self) -> NotaFiscalServico:
         nota_fiscal = SerializacaoNFSeTest.get_notafiscal_servico()

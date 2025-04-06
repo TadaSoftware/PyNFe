@@ -81,7 +81,7 @@ class SerializacaoNFSeTest:
     @staticmethod
     def serializa_nfse(nfse: NotaFiscalServico, autorizador: str) -> str:
         serializador = SerializacaoNfse(autorizador)
-        xml = serializador.gerar_lote(nfse)
+        xml = serializador.gerar(nfse)
         return xml
 
     # TODO: assinatura digital

@@ -4,13 +4,14 @@ import re
 import pyxb.namespace
 
 from pynfe.entidades.notafiscal import NotaFiscalServico
+from pynfe.processamento.serializacao import SerializacaoNfse
 from tests.test_nfse_serializacao import SerializacaoNFSeTest
 
 
 class SerializacaoNFSeGinfesTestCase(unittest.TestCase):
     def test_notafiscal_geral(self):
         nfse = SerializacaoNFSeTest.get_notafiscal_servico()
-        nfse_xml = SerializacaoNFSeTest.serializa_nfse(nfse, 'ginfes')
+        nfse_xml = self._serializa_nfse(nfse)
 
         # TODO: assinatura digital
         # config = SerializacaoNFSeTest.get_config()
@@ -35,6 +36,12 @@ class SerializacaoNFSeGinfesTestCase(unittest.TestCase):
 
         # Limpa o Namespace para não gerar conflito com outros testes
         pyxb.namespace.Namespace._Namespace__Registry.clear()
+
+    def _serializa_nfse(self, nfse: NotaFiscalServico) -> str:
+        serializador = SerializacaoNfse('ginfes')
+        xml = serializador.gerar_lote(nfse)
+
+        return xml
 
     # a serialização gera os atributos xmlns:ns1 e xmlns:ns2
     # da tag ns1:EnviarLoteRpsEnvio em ordem randômica (!!!)
