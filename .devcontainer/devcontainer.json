@@ -1,6 +1,8 @@
 {
     "name": "PyNFe",
-    "image": "python:3.12",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
     "features": {
         "ghcr.io/devcontainers/features/python:1": {
             "version": "3.12",
