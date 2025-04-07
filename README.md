@@ -167,6 +167,12 @@ Lint
 * Formatar: `ruff format .`
 
 
+Bindings XSD
+-----------
+
+Para atualizar os bindings XSD da NFSe, execute o script `gerarnfsebindings.sh`.
+
+
 Documentação
 -----------
 - https://github.com/TadaSoftware/PyNFe/wiki
