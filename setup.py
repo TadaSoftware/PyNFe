@@ -38,7 +38,7 @@ setuptools.setup(
     extras_require={
         "nfse": [
             "suds-community",
-            "pyxb==1.2.4",
+            "PyXB-X==1.2.6.3",
         ],
         "impressao": [
             "brazilfiscalreport[damdfe]"

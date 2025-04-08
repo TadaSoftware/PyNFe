@@ -76,7 +76,7 @@ Dependências
   - Biblioteca para a comunicação com os webservices da SEFAZ
 - suds-community (*apenas para NFS-e)
   - Biblioteca para a comunicação com os webservices via wsdl
-- pyxb (*apenas para NFS-e)
+- PyXB-X (*apenas para NFS-e)
   - Biblioteca para geração de bindings a partir de XML Schema(xsd)
 - brazilfiscalreport (*apenas para Impressão)
   - Biblioteca para impressão de DANFE e DAMDFE
