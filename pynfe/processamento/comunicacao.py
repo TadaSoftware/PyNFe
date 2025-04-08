@@ -1246,6 +1246,17 @@ class ComunicacaoCTe(Comunicacao):
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap("CTeDistribuicaoDFe", raiz)
         return self._post(url, xml)
+    
+    def consulta(self, chave):
+        url = self._get_url("CONSULTA")
+        # Monta XML do corpo da requisição
+        raiz = etree.Element("consSitCTe", versao=self._versao, xmlns=NAMESPACE_CTE)
+        etree.SubElement(raiz, "tpAmb").text = str(self._ambiente)
+        etree.SubElement(raiz, "xServ").text = "CONSULTAR"
+        etree.SubElement(raiz, "chCTe").text = chave
+        # Monta XML para envio da requisição
+        xml = self._construir_xml_soap("cteConsultaCT", raiz)
+        return self._post(url, xml)
 
     def _get_url_an(self, consulta):
         ambiente = "https://www1."  # produção
