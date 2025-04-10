@@ -4,6 +4,7 @@ from pynfe.entidades.cliente import Cliente
 from pynfe.entidades.emitente import Emitente
 from pynfe.entidades.notafiscal import NotaFiscalServico
 from pynfe.entidades.servico import Servico
+from pynfe.processamento.assinatura import AssinaturaA1
 from pynfe.processamento.serializacao import SerializacaoNfse
 from pynfe.utils import obter_codigo_por_municipio
 from pynfe.utils.flags import (
@@ -12,6 +13,7 @@ from pynfe.utils.flags import (
 from decimal import Decimal
 import datetime
 import re
+from lxml import etree
 
 
 class SerializacaoNFSeConfigTest:
@@ -22,14 +24,7 @@ class SerializacaoNFSeConfigTest:
 
 
 class SerializacaoNFSeTest:
-
-    @staticmethod
-    def get_config() -> SerializacaoNFSeConfigTest:
-        return SerializacaoNFSeConfigTest(
-            "./tests/certificado.pfx",
-            bytes("123456", "utf-8"),
-            True
-        )
+    data_hora = "2025-04-10T09:45:29"
 
     @staticmethod
     def get_notafiscal_servico() -> NotaFiscalServico:
@@ -61,7 +56,8 @@ class SerializacaoNFSeTest:
 
         return NotaFiscalServico(
             identificador='50',
-            data_emissao=datetime.datetime.now(),
+            data_emissao=datetime.datetime.strptime(
+                SerializacaoNFSeTest.data_hora, "%Y-%m-%dT%H:%M:%S"),
             servico=servico,
             emitente=SerializacaoNFSeTest._get_emitente(),
             cliente=SerializacaoNFSeTest._get_destinatario(),
@@ -85,11 +81,16 @@ class SerializacaoNFSeTest:
         return xml
 
     # TODO: assinatura digital
-    # @staticmethod
-    # def assina_xml(config: SerializacaoNFSeConfigTest, nfse_xml: str):
-    #     a1 = AssinaturaA1(config.certificado, config.senha)
-    #     xml = a1.assinar(nfse_xml, True)
-    #     return xml
+    @staticmethod
+    def assina_xml(xml: str) -> str:
+        config = SerializacaoNFSeTest._get_config()
+        nfse = etree.fromstring(xml)
+
+        a1 = AssinaturaA1(config.certificado, config.senha)
+        xml_assinado = a1.assinar(nfse, True)
+        xml_assinado = xml_assinado.replace("\n", "")
+
+        return xml_assinado
 
     @staticmethod
     def strip_xml(xml: str) -> str:
@@ -113,6 +114,14 @@ class SerializacaoNFSeTest:
     #         # TODO: assinatura digital
     #         xml_doc=nfse_xml_assinado, xsd_file=xsd_nfse, use_assert=True
     #     )
+
+    @staticmethod
+    def _get_config() -> SerializacaoNFSeConfigTest:
+        return SerializacaoNFSeConfigTest(
+            "./tests/certificado.pfx",
+            bytes("123456", "utf-8"),
+            True
+        )
 
     @staticmethod
     def _get_emitente() -> Emitente:

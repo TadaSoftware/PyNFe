@@ -1,7 +1,6 @@
 import unittest
 
 from pynfe.entidades.notafiscal import NotaFiscalServico
-
 from tests.test_nfse_serializacao import SerializacaoNFSeTest
 
 
@@ -10,15 +9,12 @@ class SerializacaoNFSeBethaTestCase(unittest.TestCase):
         nfse = self._get_notafiscal_servico()
         nfse_xml = SerializacaoNFSeTest.serializa_nfse(nfse, 'betha')
 
-        # TODO: assinatura digital
-        # config = SerializacaoNFSeTest.get_config()
-        # nfse_xml_assinado = SerializacaoNFSeTest.assina_xml(config, nfse_xml)
-
-        self.maxDiff = None
-        result = self._get_nfse_esperada(nfse)
+        nfse_xml_assinado = SerializacaoNFSeTest.assina_xml(nfse_xml)
+        nfse_esperada = self._get_nfse_esperada()
 
         # Teste do conteúdo das tags do XML
-        self.assertEqual(nfse_xml, result)
+        self.maxDiff = None
+        self.assertEqual(nfse_xml_assinado, nfse_esperada)
 
         # TODO: Testa a validação do XML com os schemas XSD
         # SerializacaoNFSeTest.validacao_com_xsd_do_xml_gerado_sem_processar(
@@ -36,9 +32,8 @@ class SerializacaoNFSeBethaTestCase(unittest.TestCase):
 
         return nota_fiscal
 
-    def _get_nfse_esperada(self, nfse: NotaFiscalServico) -> str:
+    def _get_nfse_esperada(self) -> str:
         return SerializacaoNFSeTest.strip_xml(f"""
-            <?xml version="1.0" ?>
             <GerarNfseEnvio xmlns:ns1="http://www.betha.com.br/e-nota-contribuinte-ws">
                 <ns1:Rps>
                     <ns1:InfDeclaracaoPrestacaoServico Id="50">
@@ -48,10 +43,10 @@ class SerializacaoNFSeBethaTestCase(unittest.TestCase):
                                 <ns1:Serie>A1</ns1:Serie>
                                 <ns1:Tipo>1</ns1:Tipo>
                             </ns1:IdentificacaoRps>
-                            <ns1:DataEmissao>{nfse.data_emissao.strftime("%Y-%m-%d")}</ns1:DataEmissao>
+                            <ns1:DataEmissao>{SerializacaoNFSeTest.data_hora[:10]}</ns1:DataEmissao>
                             <ns1:Status>1</ns1:Status>
                         </ns1:Rps>
-                        <ns1:Competencia>{nfse.data_emissao.strftime("%Y-%m-%d")}</ns1:Competencia>
+                        <ns1:Competencia>{SerializacaoNFSeTest.data_hora[:10]}</ns1:Competencia>
                         <ns1:Servico>
                             <ns1:Valores>
                                 <ns1:ValorServicos>100.0</ns1:ValorServicos>
@@ -85,8 +80,27 @@ class SerializacaoNFSeBethaTestCase(unittest.TestCase):
                         <ns1:IncentivoFiscal>2</ns1:IncentivoFiscal>
                     </ns1:InfDeclaracaoPrestacaoServico>
                 </ns1:Rps>
-            </GerarNfseEnvio>
-        """)
+                <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+                    <SignedInfo>
+                        <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+                        <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+                        <Reference URI="#50">
+                            <Transforms>
+                                <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+                                <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+                            </Transforms>
+                            <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+                            <DigestValue>xzbAflAhVih7JNxmSa2ZJ1rMpzw=</DigestValue>
+                        </Reference>
+                    </SignedInfo>
+                    <SignatureValue>W6Ys1KHIbz9BDtG+ej++ROAkqZTtSgYH2cplorcxxOZ2VJG3KKWnasyLghEIJfcXtss4kjblgdGOf3IJVgaDuub4GyYPkEzCxnGEr1nQXw74rDmGLwZg1vPBUdHsIbcw8wvAoUOW6zfMI5ljr61Rz5CCytBu4IqpUFCQzWguiG8=</SignatureValue>
+                    <KeyInfo>
+                        <X509Data>
+                            <X509Certificate>MIICMTCCAZqgAwIBAgIQfYOsIEVuAJ1FwwcTrY0t1DANBgkqhkiG9w0BAQUFADBXMVUwUwYDVQQDHkwAewA1ADkARgAxAEUANAA2ADEALQBEAEQARQA1AC0ANABEADIARgAtAEEAMAAxAEEALQA4ADMAMwAyADIAQQA5AEUAQgA4ADMAOAB9MB4XDTE1MDYxNTA1NDc1N1oXDTE2MDYxNDExNDc1N1owVzFVMFMGA1UEAx5MAHsANQA5AEYAMQBFADQANgAxAC0ARABEAEUANQAtADQARAAyAEYALQBBADAAMQBBAC0AOAAzADMAMgAyAEEAOQBFAEIAOAAzADgAfTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAk41GnqXXLaiOC/y0/cA4tbS+NZCqI+x4EsztgDFvPPlHstiVYcLRkni4i93gK9zoC6g0mh66HMVzAfE8vRNwW5b7m6nWS1SiHBon7/Mqsw4MIq3SC+J/fTbKpqwyfAuH2YZlAiQuQc85fyllAMLh2WrA7JgOLR/5tF3kLtpbHdECAwEAATANBgkqhkiG9w0BAQUFAAOBgQArdh+RyT6VxKGsXk1zhHsgwXfToe6GpTF4W8PHI1+T0WIsNForDhvst6nmQtgAhuZM9rxpOJuNKc+pM29EixpAiZZiRMCSWEItNyEVdUIi+YnKBcAHd88TwO86d126MWQ2O8cu5W1VoDp7hYBYKOnLbYi11/StO+0rzK+oPYAvIw==</X509Certificate>
+                        </X509Data>
+                    </KeyInfo>
+                </Signature>
+            </GerarNfseEnvio>""")
 
 
 if __name__ == "__main__":
