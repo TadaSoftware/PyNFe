@@ -1,4 +1,4 @@
-﻿5100102	Acorizal
+5100102	Acorizal
 5100201	Água Boa
 5100250	Alta Floresta
 5100300	Alto Araguaia
@@ -15,6 +15,7 @@
 5101605	Barão de Melgaço
 5101704	Barra do Bugres
 5101803	Barra do Garças
+5101837	Boa Esperança do Norte
 5101852	Bom Jesus do Araguaia
 5101902	Brasnorte
 5102504	Cáceres
@@ -139,3 +140,4 @@
 5108857	Nova Marilândia
 5108907	Nova Maringá
 5108956	Nova Monte Verde
+
