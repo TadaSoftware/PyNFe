@@ -80,7 +80,6 @@ class SerializacaoNFSeTest:
         xml = serializador.gerar(nfse)
         return xml
 
-    # TODO: assinatura digital
     @staticmethod
     def assina_xml(xml: str) -> str:
         config = SerializacaoNFSeTest._get_config()
