@@ -25,7 +25,7 @@ class CertificadoTestCase(unittest.TestCase):
         self.a1.excluir()
 
     def test_exception_certificado_filenotfounderror(self):
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(FileNotFoundError) as context:
             self.a1 = CertificadoA1(self.certificado_incorreto)
             self.a1.separar_arquivo(
                 senha=self.senha_incorreto, caminho=self.certificado_incorreto
@@ -33,8 +33,7 @@ class CertificadoTestCase(unittest.TestCase):
         self.assertEqual(
             str(context.exception),
             (
-                """Falha ao abrir arquivo do certificado digital A1.
-                Verifique local e permissoes do arquivo."""
+                "Falha ao abrir arquivo do certificado digital A1. Verifique o local do arquivo."
             ),
         )
 
