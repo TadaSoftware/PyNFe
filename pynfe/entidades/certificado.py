@@ -48,13 +48,11 @@ class CertificadoA1(Certificado):
                 cert_conteudo = cert_arquivo.read()
         except FileNotFoundError as exc:
             raise FileNotFoundError(
-                """Falha ao abrir arquivo do certificado digital A1.
-                Verifique o local do arquivo."""
+                "Falha ao abrir arquivo do certificado digital A1. Verifique o local do arquivo."
             ) from exc
         except PermissionError as exc:
             raise PermissionError(
-                """Falha ao abrir arquivo do certificado digital A1.
-                Verifique as permissoes do arquivo."""
+                "Falha ao abrir arquivo do certificado digital A1. Verifique as permissoes do arquivo."
             ) from exc
         except Exception as exc:
             raise Exception(

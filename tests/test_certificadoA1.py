@@ -33,8 +33,7 @@ class CertificadoTestCase(unittest.TestCase):
         self.assertEqual(
             str(context.exception),
             (
-                """Falha ao abrir arquivo do certificado digital A1.
-                Verifique o local do arquivo."""
+                "Falha ao abrir arquivo do certificado digital A1. Verifique o local do arquivo."
             ),
         )
 
