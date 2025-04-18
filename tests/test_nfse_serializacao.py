@@ -87,13 +87,12 @@ class SerializacaoNFSeTest:
 
         a1 = AssinaturaA1(config.certificado, config.senha)
         xml_assinado = a1.assinar(nfse, True)
-        xml_assinado = xml_assinado.replace("\n", "")
 
         return xml_assinado
 
     @staticmethod
     def strip_xml(xml: str) -> str:
-        return re.sub(r">\s+<", "><", xml.replace("\n", "").strip())
+        return re.sub(r">\s+<", "><", xml.strip())
 
     @staticmethod
     def limpa_namespace() -> None:
