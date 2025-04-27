@@ -84,7 +84,14 @@ class SerializacaoBetha(InterfaceAutorizador):
         gnfse = nfse_schema.GerarNfseEnvio()
         gnfse.Rps = declaracao_servico
 
-        return gnfse.toxml(element_name="GerarNfseEnvio")
+        gnfse = (
+            gnfse.toxml(element_name="GerarNfseEnvio")
+            .replace("ns1:", "")
+            .replace(":ns1", "")
+            .replace('<?xml version="1.0" ?>', "")
+        )
+
+        return gnfse
 
     def consultar_rps(self, nfse):
         """Retorna string de um XML gerado a partir do
