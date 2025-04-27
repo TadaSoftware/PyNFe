@@ -124,7 +124,7 @@ class SerializacaoNFSeTest:
     @staticmethod
     def _get_emitente() -> Emitente:
         return Emitente(
-            cnpj='99999999999999',
+            cnpj='45111111111100',
             inscricao_municipal='000000'
         )
 

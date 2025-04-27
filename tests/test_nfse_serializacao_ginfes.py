@@ -48,7 +48,7 @@ class SerializacaoNFSeGinfesTestCase(unittest.TestCase):
                 xmlns:ns2="http://www.ginfes.com.br/tipos_v03.xsd">
                 <ns1:LoteRps Id="1">
                     <ns2:NumeroLote>1</ns2:NumeroLote>
-                    <ns2:Cnpj>99999999999999</ns2:Cnpj>
+                    <ns2:Cnpj>45111111111100</ns2:Cnpj>
                     <ns2:InscricaoMunicipal>000000</ns2:InscricaoMunicipal>
                     <ns2:QuantidadeRps>1</ns2:QuantidadeRps>
                     <ns2:ListaRps>
@@ -90,7 +90,7 @@ class SerializacaoNFSeGinfesTestCase(unittest.TestCase):
                                     <ns2:CodigoMunicipio>3149309</ns2:CodigoMunicipio>
                                 </ns2:Servico>
                                 <ns2:Prestador>
-                                    <ns2:Cnpj>99999999999999</ns2:Cnpj>
+                                    <ns2:Cnpj>45111111111100</ns2:Cnpj>
                                     <ns2:InscricaoMunicipal>000000</ns2:InscricaoMunicipal>
                                 </ns2:Prestador>
                                 <ns2:Tomador>
@@ -129,10 +129,10 @@ class SerializacaoNFSeGinfesTestCase(unittest.TestCase):
                                 <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
                             </Transforms>
                             <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-                            <DigestValue>qFoEQUv7n6YrTR3yg3zBBtTR/VU=</DigestValue>
+                            <DigestValue>1KzhiSjBh9Ka3slT/bpIlKyPEcI=</DigestValue>
                         </Reference>
                     </SignedInfo>
-                    <SignatureValue>fM8cbCN5s31qeu2Oy89keXXh01l9x8gHpQYXrdjz6jtt0CDZ3fBMb7PwDZjUFVKM5U33IeBX8m0RRKJXZuQWWFCI1vux+uoVG7JWhYXfPysjGUNz7LNfr5FkjVWWobI5YzZitY15aDkzwYyeGt/h22dDZim5CooEs4AUI63fwKM=</SignatureValue>
+                    <SignatureValue>ZwLBWwIgp1UmNnNi1M1Eqeym1L3hc6Y4iaQlQE8qQnF+l5y0V0l78cbqnqnhhJ4Aus/g89UajSr/6pAKHJf242nWBjD7A4KYH9bbSkAh12W4n1wf5gpUrMPyQUlDhgCLOfCpOyzWnhofy+f7Tm1/Qws82JFUWs1jyJ9A5UyTbrU=</SignatureValue>
                     <KeyInfo>
                         <X509Data>
                             <X509Certificate>MIICMTCCAZqgAwIBAgIQfYOsIEVuAJ1FwwcTrY0t1DANBgkqhkiG9w0BAQUFADBX\nMVUwUwYDVQQDHkwAewA1ADkARgAxAEUANAA2ADEALQBEAEQARQA1AC0ANABEADIA\nRgAtAEEAMAAxAEEALQA4ADMAMwAyADIAQQA5AEUAQgA4ADMAOAB9MB4XDTE1MDYx\nNTA1NDc1N1oXDTE2MDYxNDExNDc1N1owVzFVMFMGA1UEAx5MAHsANQA5AEYAMQBF\nADQANgAxAC0ARABEAEUANQAtADQARAAyAEYALQBBADAAMQBBAC0AOAAzADMAMgAy\nAEEAOQBFAEIAOAAzADgAfTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAk41G\nnqXXLaiOC/y0/cA4tbS+NZCqI+x4EsztgDFvPPlHstiVYcLRkni4i93gK9zoC6g0\nmh66HMVzAfE8vRNwW5b7m6nWS1SiHBon7/Mqsw4MIq3SC+J/fTbKpqwyfAuH2YZl\nAiQuQc85fyllAMLh2WrA7JgOLR/5tF3kLtpbHdECAwEAATANBgkqhkiG9w0BAQUF\nAAOBgQArdh+RyT6VxKGsXk1zhHsgwXfToe6GpTF4W8PHI1+T0WIsNForDhvst6nm\nQtgAhuZM9rxpOJuNKc+pM29EixpAiZZiRMCSWEItNyEVdUIi+YnKBcAHd88TwO86\nd126MWQ2O8cu5W1VoDp7hYBYKOnLbYi11/StO+0rzK+oPYAvIw==\n</X509Certificate>
