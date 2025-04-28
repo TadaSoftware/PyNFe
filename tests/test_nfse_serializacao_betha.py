@@ -34,52 +34,52 @@ class SerializacaoNFSeBethaTestCase(unittest.TestCase):
 
     def _get_nfse_esperada(self) -> str:
         return SerializacaoNFSeTest.strip_xml(f"""
-            <GerarNfseEnvio xmlns:ns1="http://www.betha.com.br/e-nota-contribuinte-ws">
-                <ns1:Rps>
-                    <ns1:InfDeclaracaoPrestacaoServico Id="50">
-                        <ns1:Rps>
-                            <ns1:IdentificacaoRps>
-                                <ns1:Numero>50</ns1:Numero>
-                                <ns1:Serie>A1</ns1:Serie>
-                                <ns1:Tipo>1</ns1:Tipo>
-                            </ns1:IdentificacaoRps>
-                            <ns1:DataEmissao>{SerializacaoNFSeTest.data_hora[:10]}</ns1:DataEmissao>
-                            <ns1:Status>1</ns1:Status>
-                        </ns1:Rps>
-                        <ns1:Competencia>{SerializacaoNFSeTest.data_hora[:10]}</ns1:Competencia>
-                        <ns1:Servico>
-                            <ns1:Valores>
-                                <ns1:ValorServicos>100.0</ns1:ValorServicos>
-                            </ns1:Valores>
-                            <ns1:IssRetido>1</ns1:IssRetido>
-                            <ns1:ItemListaServico>0101</ns1:ItemListaServico>
-                            <ns1:Discriminacao>Mensalidade</ns1:Discriminacao>
-                            <ns1:CodigoMunicipio>3149309</ns1:CodigoMunicipio>
-                            <ns1:ExigibilidadeISS>0</ns1:ExigibilidadeISS>
-                            <ns1:MunicipioIncidencia>3149309</ns1:MunicipioIncidencia>
-                        </ns1:Servico>
-                        <ns1:Prestador>
-                            <ns1:CpfCnpj>
-                                <ns1:Cnpj>99999999999999</ns1:Cnpj>
-                            </ns1:CpfCnpj>
-                            <ns1:InscricaoMunicipal>000000</ns1:InscricaoMunicipal>
-                        </ns1:Prestador>
-                        <ns1:Tomador>
-                            <ns1:RazaoSocial>NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</ns1:RazaoSocial>
-                            <ns1:Endereco>
-                                <ns1:Endereco>Rua tal</ns1:Endereco>
-                                <ns1:Numero>0</ns1:Numero>
-                                <ns1:Bairro>Centro</ns1:Bairro>
-                                <ns1:CodigoMunicipio>123</ns1:CodigoMunicipio>
-                                <ns1:Uf>MG</ns1:Uf>
-                                <ns1:CodigoPais>1058</ns1:CodigoPais>
-                                <ns1:Cep>33257010</ns1:Cep>
-                            </ns1:Endereco>
-                        </ns1:Tomador>
-                        <ns1:OptanteSimplesNacional>1</ns1:OptanteSimplesNacional>
-                        <ns1:IncentivoFiscal>2</ns1:IncentivoFiscal>
-                    </ns1:InfDeclaracaoPrestacaoServico>
-                </ns1:Rps>
+            <GerarNfseEnvio xmlns="http://www.betha.com.br/e-nota-contribuinte-ws">
+                <Rps>
+                    <InfDeclaracaoPrestacaoServico Id="50">
+                        <Rps>
+                            <IdentificacaoRps>
+                                <Numero>50</Numero>
+                                <Serie>A1</Serie>
+                                <Tipo>1</Tipo>
+                            </IdentificacaoRps>
+                            <DataEmissao>{SerializacaoNFSeTest.data_hora[:10]}</DataEmissao>
+                            <Status>1</Status>
+                        </Rps>
+                        <Competencia>{SerializacaoNFSeTest.data_hora[:10]}</Competencia>
+                        <Servico>
+                            <Valores>
+                                <ValorServicos>100.0</ValorServicos>
+                            </Valores>
+                            <IssRetido>1</IssRetido>
+                            <ItemListaServico>0101</ItemListaServico>
+                            <Discriminacao>Mensalidade</Discriminacao>
+                            <CodigoMunicipio>3149309</CodigoMunicipio>
+                            <ExigibilidadeISS>1</ExigibilidadeISS>
+                            <MunicipioIncidencia>3149309</MunicipioIncidencia>
+                        </Servico>
+                        <Prestador>
+                            <CpfCnpj>
+                                <Cnpj>45111111111100</Cnpj>
+                            </CpfCnpj>
+                            <InscricaoMunicipal>000000</InscricaoMunicipal>
+                        </Prestador>
+                        <Tomador>
+                            <RazaoSocial>NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</RazaoSocial>
+                            <Endereco>
+                                <Endereco>Rua tal</Endereco>
+                                <Numero>0</Numero>
+                                <Bairro>Centro</Bairro>
+                                <CodigoMunicipio>123</CodigoMunicipio>
+                                <Uf>MG</Uf>
+                                <CodigoPais>1058</CodigoPais>
+                                <Cep>33257010</Cep>
+                            </Endereco>
+                        </Tomador>
+                        <OptanteSimplesNacional>1</OptanteSimplesNacional>
+                        <IncentivoFiscal>2</IncentivoFiscal>
+                    </InfDeclaracaoPrestacaoServico>
+                </Rps>
                 <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
                     <SignedInfo>
                         <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
@@ -90,10 +90,10 @@ class SerializacaoNFSeBethaTestCase(unittest.TestCase):
                                 <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
                             </Transforms>
                             <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-                            <DigestValue>xzbAflAhVih7JNxmSa2ZJ1rMpzw=</DigestValue>
+                            <DigestValue>zKwAgg0wya+wUPDgBq7Uvtv4Q+k=</DigestValue>
                         </Reference>
                     </SignedInfo>
-                    <SignatureValue>W6Ys1KHIbz9BDtG+ej++ROAkqZTtSgYH2cplorcxxOZ2VJG3KKWnasyLghEIJfcXtss4kjblgdGOf3IJVgaDuub4GyYPkEzCxnGEr1nQXw74rDmGLwZg1vPBUdHsIbcw8wvAoUOW6zfMI5ljr61Rz5CCytBu4IqpUFCQzWguiG8=</SignatureValue>
+                    <SignatureValue>ak3Ze/cqE4FXmXt0BrUOz7FWOBDH6i2V6ADeF9p8qTBdYCZa5hKFJoQkYpmd8T4lgtn6W4SDDsh0aXvhPn4UXGt5qOulfzBWrlU5+ohldDo60SBZ4gP2DVVtjmGqP0GtdBGp2U+1y75+8brJIUzgGQQxw9fArdlPyB6D6x/GEYo=</SignatureValue>
                     <KeyInfo>
                         <X509Data>
                             <X509Certificate>MIICMTCCAZqgAwIBAgIQfYOsIEVuAJ1FwwcTrY0t1DANBgkqhkiG9w0BAQUFADBX\nMVUwUwYDVQQDHkwAewA1ADkARgAxAEUANAA2ADEALQBEAEQARQA1AC0ANABEADIA\nRgAtAEEAMAAxAEEALQA4ADMAMwAyADIAQQA5AEUAQgA4ADMAOAB9MB4XDTE1MDYx\nNTA1NDc1N1oXDTE2MDYxNDExNDc1N1owVzFVMFMGA1UEAx5MAHsANQA5AEYAMQBF\nADQANgAxAC0ARABEAEUANQAtADQARAAyAEYALQBBADAAMQBBAC0AOAAzADMAMgAy\nAEEAOQBFAEIAOAAzADgAfTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAk41G\nnqXXLaiOC/y0/cA4tbS+NZCqI+x4EsztgDFvPPlHstiVYcLRkni4i93gK9zoC6g0\nmh66HMVzAfE8vRNwW5b7m6nWS1SiHBon7/Mqsw4MIq3SC+J/fTbKpqwyfAuH2YZl\nAiQuQc85fyllAMLh2WrA7JgOLR/5tF3kLtpbHdECAwEAATANBgkqhkiG9w0BAQUF\nAAOBgQArdh+RyT6VxKGsXk1zhHsgwXfToe6GpTF4W8PHI1+T0WIsNForDhvst6nm\nQtgAhuZM9rxpOJuNKc+pM29EixpAiZZiRMCSWEItNyEVdUIi+YnKBcAHd88TwO86\nd126MWQ2O8cu5W1VoDp7hYBYKOnLbYi11/StO+0rzK+oPYAvIw==\n</X509Certificate>

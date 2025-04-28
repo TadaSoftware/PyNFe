@@ -752,7 +752,8 @@ class ComunicacaoNfse(Comunicacao):
             nsmap={"ns2": self._namespace, "xsi": NAMESPACE_XSI},
             versao=self._versao,
         )
-        etree.SubElement(raiz, "versaoDados").text = self._versao
+        etree.SubElement(
+            raiz, "{%s}versaoDados" % self._namespace).text = self._versao
 
         if retorna_string:
             cabecalho = etree.tostring(

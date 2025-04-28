@@ -31,6 +31,7 @@ class SerializacaoNFSeTest:
         servico = Servico(
             valor_servico=Decimal('100.00'),
             iss_retido=1,  # 1 - Sim; 2 - Não
+            exigibilidade=1,
             item_lista='0101',
             discriminacao='Mensalidade',
             codigo_municipio=obter_codigo_por_municipio(
@@ -124,7 +125,7 @@ class SerializacaoNFSeTest:
     @staticmethod
     def _get_emitente() -> Emitente:
         return Emitente(
-            cnpj='99999999999999',
+            cnpj='45111111111100',
             inscricao_municipal='000000'
         )
 
