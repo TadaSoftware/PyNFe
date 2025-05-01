@@ -39,7 +39,7 @@ class Serializacao(object):
     _contingencia = (
         None  # Justificativa da entrada em contingência (min 20, max 256 caracteres)
     )
-    _so_cpf = False  # Destinatário com apenas o cpf do cliente
+    _so_cpf = True  # Destinatário com apenas o cpf do cliente
     _nome_aplicacao = "PyNFe"
 
     def __new__(cls, *args, **kwargs):
@@ -48,7 +48,7 @@ class Serializacao(object):
         else:
             return super(Serializacao, cls).__new__(cls)
 
-    def __init__(self, fonte_dados, homologacao=False, contingencia=None, so_cpf=False):
+    def __init__(self, fonte_dados, homologacao=False, contingencia=None, so_cpf=True):
         self._fonte_dados = fonte_dados
         self._ambiente = homologacao and 2 or 1
         self._contingencia = contingencia
@@ -184,6 +184,8 @@ class SerializacaoXML(Serializacao):
             )
             if cliente.endereco_telefone:
                 etree.SubElement(endereco, "fone").text = cliente.endereco_telefone
+        if cliente.razao_social:
+                etree.SubElement(raiz, "xNome").text = cliente.razao_social
         # Indicador da IE do destinatário:
         # 1 – Contribuinte ICMSpagamento à vista;
         # 2 – Contribuinte isento de inscrição;
