@@ -7,7 +7,7 @@ from tests.test_nfse_serializacao import SerializacaoNFSeTest
 class SerializacaoNFSeBethaTestCase(unittest.TestCase):
     def test_notafiscal_geral(self):
         nfse = self._get_notafiscal_servico()
-        nfse_xml = SerializacaoNFSeTest.serializa_nfse(nfse, 'betha')
+        nfse_xml = SerializacaoNFSeTest.serializa_nfse(nfse, "betha")
 
         nfse_xml_assinado = SerializacaoNFSeTest.assina_xml(nfse_xml)
         nfse_esperada = self._get_nfse_esperada()

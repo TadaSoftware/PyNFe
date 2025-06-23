@@ -1,7 +1,7 @@
 """
-    @author: Lucas Resende
+@author: Lucas Resende
 
-    classe que descompacta o gzip recebido pela consulta distribuicao
+classe que descompacta o gzip recebido pela consulta distribuicao
 
 """
 

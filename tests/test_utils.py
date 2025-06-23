@@ -12,7 +12,7 @@ from pynfe.utils import (
     obter_uf_por_codigo,
     formatar_decimal,
     remover_acentos,
-    carregar_arquivo_municipios
+    carregar_arquivo_municipios,
 )
 from lxml import etree
 from pynfe.utils.descompactar import DescompactaGzip
@@ -46,13 +46,13 @@ class UtilsTestCase(unittest.TestCase):
         self.assertEqual(obter_pais_por_codigo(None), "Brasil")
 
     def test_obter_pais_por_codigo_paisesbaixos(self):
-        self.assertEqual(obter_pais_por_codigo("5738"), 'PAISES BAIXOS (HOLANDA)')
+        self.assertEqual(obter_pais_por_codigo("5738"), "PAISES BAIXOS (HOLANDA)")
 
     def test_obter_pais_por_codigo_reino_unido(self):
-        self.assertEqual(obter_pais_por_codigo("6289"), 'REINO UNIDO')
+        self.assertEqual(obter_pais_por_codigo("6289"), "REINO UNIDO")
 
     def test_obter_pais_por_codigo_ilhas_cayman(self):
-        self.assertEqual(obter_pais_por_codigo("1376"), 'CAYMAN, ILHAS')
+        self.assertEqual(obter_pais_por_codigo("1376"), "CAYMAN, ILHAS")
 
     # normalizar_municipio
     def test_normalizar_municipio_acento_til_na_letra_a(self):
@@ -86,9 +86,7 @@ class UtilsTestCase(unittest.TestCase):
         )
 
     def test_normalizar_municipio_acento_circunflexo_na_letra_o(self):
-        self.assertEqual(
-            normalizar_municipio("Santo Antônio de Posse"), "SANTO ANTONIO DE POSSE"
-        )
+        self.assertEqual(normalizar_municipio("Santo Antônio de Posse"), "SANTO ANTONIO DE POSSE")
 
     def test_normalizar_municipio_apostrofo(self):
         self.assertEqual(normalizar_municipio("Lambari D'Oeste"), "LAMBARI DOESTE")
@@ -260,6 +258,7 @@ class CidadesTestCase(unittest.TestCase):
     pelo arquivos MunIBGE-UFXX.txt
 
     """
+
     def test_quantidade_cidades_ac(self):
         self.assertEqual(len(carregar_arquivo_municipios(uf=12)), 22)
 
@@ -349,11 +348,33 @@ class CidadesTestCase(unittest.TestCase):
         """
         total = 0
         lista_de_codigos_uf = [
-            11, 12, 13, 14, 15, 16, 17,  # Norte
-            21, 22, 23, 24, 25, 26, 27, 28, 29,  # Nordeste
-            31, 32, 33, 35,  # Sudeste
-            41, 42, 43,  # Sul
-            50, 51, 52, 53  # Centro-Oeste
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,  # Norte
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,  # Nordeste
+            31,
+            32,
+            33,
+            35,  # Sudeste
+            41,
+            42,
+            43,  # Sul
+            50,
+            51,
+            52,
+            53,  # Centro-Oeste
         ]
         for uf in lista_de_codigos_uf:
             total += len(carregar_arquivo_municipios(uf=uf))
