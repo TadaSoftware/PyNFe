@@ -3,5 +3,6 @@ requests
 lxml
 signxml
 cryptography
+pytz
 # Opcional para NFS-e
 #-r requirements-nfse.txt

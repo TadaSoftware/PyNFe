@@ -34,6 +34,7 @@ setuptools.setup(
         "requests",
         "lxml",
         "signxml",
+        "pytz"
     ],
     extras_require={
         "nfse": [

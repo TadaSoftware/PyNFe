@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import re
+import pytz
 
 import requests
 
@@ -54,7 +55,7 @@ class ComunicacaoSefaz(Comunicacao):
     _assinatura = AssinaturaA1
 
     def autorizacao(
-        self, modelo, nota_fiscal, id_lote=1, ind_sinc=1, contingencia=False, timeout=None
+            self, modelo, nota_fiscal, id_lote=1, ind_sinc=1, contingencia=False, timeout=None
     ):
         """
         Método para realizar autorização da nota de acordo com o modelo
@@ -183,7 +184,7 @@ class ComunicacaoSefaz(Comunicacao):
         return self._post(url, xml)
 
     def consulta_distribuicao(
-        self, cnpj=None, cpf=None, chave=None, nsu=0, consulta_nsu_especifico=False
+            self, cnpj=None, cpf=None, chave=None, nsu=0, consulta_nsu_especifico=False
     ):
         """
         O XML do pedido de distribuição suporta três tipos de consultas
@@ -274,10 +275,10 @@ class ComunicacaoSefaz(Comunicacao):
         info = etree.SubElement(raiz, "infCons")
         etree.SubElement(info, "xServ").text = "CONS-CAD"
         etree.SubElement(info, "UF").text = uf.upper()
-        
+
         # Monta tipo de documento CNPJ, CPF ou IE
         etree.SubElement(info, tipo.upper()).text = documento
-        
+
         # etree.SubElement(info, 'CPF').text = cpf
 
         # Monta XML para envio da requisição
@@ -329,14 +330,14 @@ class ComunicacaoSefaz(Comunicacao):
         return self._post(url, xml, timeout)
 
     def inutilizacao(
-        self,
-        modelo,
-        cnpj,
-        numero_inicial,
-        numero_final,
-        justificativa="",
-        ano=None,
-        serie="1",
+            self,
+            modelo,
+            cnpj,
+            numero_inicial,
+            numero_final,
+            justificativa="",
+            ano=None,
+            serie="1",
     ):
         """
         Serviço destinado ao atendimento de solicitações de inutilização de numeração.
@@ -366,16 +367,16 @@ class ComunicacaoSefaz(Comunicacao):
         # Identificador da TAG a ser assinada formada com Código da UF + Ano (2 posições) +
         #  CNPJ + modelo + série + nro inicial e nro final precedida do literal “ID”
         id_unico = (
-            "ID%(uf)s%(ano)s%(cnpj)s%(modelo)s%(serie)s%(num_ini)s%(num_fin)s"
-            % {
-                "uf": uf,
-                "ano": ano,
-                "cnpj": cnpjcpf_chaveacesso,
-                "modelo": "55" if modelo == "nfe" else "65",  # 55=NF-e; 65=NFC-e;
-                "serie": str(serie).zfill(3),
-                "num_ini": str(numero_inicial).zfill(9),
-                "num_fin": str(numero_final).zfill(9),
-            }
+                "ID%(uf)s%(ano)s%(cnpj)s%(modelo)s%(serie)s%(num_ini)s%(num_fin)s"
+                % {
+                    "uf": uf,
+                    "ano": ano,
+                    "cnpj": cnpjcpf_chaveacesso,
+                    "modelo": "55" if modelo == "nfe" else "65",  # 55=NF-e; 65=NFC-e;
+                    "serie": str(serie).zfill(3),
+                    "num_ini": str(numero_inicial).zfill(9),
+                    "num_fin": str(numero_final).zfill(9),
+                }
         )
 
         # Monta XML do corpo da requisição # FIXME
@@ -491,7 +492,7 @@ class ComunicacaoSefaz(Comunicacao):
                 else:
                     # nfe Ex: https://nfe.fazenda.pr.gov.br/nfe/NFeStatusServico3
                     self.url = (
-                        NFE[self.uf.upper()][ambiente] + NFE[self.uf.upper()][consulta]
+                            NFE[self.uf.upper()][ambiente] + NFE[self.uf.upper()][consulta]
                     )
             elif modelo == "nfce":
                 # PE e BA são as únicas UF'sque possuem NFE proprio e SVRS para NFCe
@@ -500,8 +501,8 @@ class ComunicacaoSefaz(Comunicacao):
                 else:
                     # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
                     self.url = (
-                        NFCE[self.uf.upper()][ambiente]
-                        + NFCE[self.uf.upper()][consulta]
+                            NFCE[self.uf.upper()][ambiente]
+                            + NFCE[self.uf.upper()][consulta]
                     )
             else:
                 raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
@@ -965,7 +966,7 @@ class ComunicacaoMDFe(Comunicacao):
                         # autorizado uso do MDF-e
                         # retorna xml final (protMDFe + MDFe)
                         if (
-                            status in self._edoc_situacao_ja_enviado
+                                status in self._edoc_situacao_ja_enviado
                         ):  # if status == '100':
                             raiz = etree.Element(
                                 "mdfeProc", xmlns=NAMESPACE_MDFE, versao=VERSAO_MDFE
@@ -982,8 +983,8 @@ class ComunicacaoMDFe(Comunicacao):
                 status = rec.xpath("ns:retEnviMDFe/ns:cStat", namespaces=ns)[0].text
                 # Lote Recebido com Sucesso!
                 if status in (
-                    self._edoc_situacao_arquivo_recebido_com_sucesso,
-                    self._edoc_situacao_em_processamento,
+                        self._edoc_situacao_arquivo_recebido_com_sucesso,
+                        self._edoc_situacao_em_processamento,
                 ):
                     nrec = rec.xpath("ns:retEnviMDFe/ns:infRec/ns:nRec", namespaces=ns)[
                         0
@@ -1094,7 +1095,7 @@ class ComunicacaoMDFe(Comunicacao):
         # PE é a únca UF que exige SOAPAction no header
         if soap_webservice_method:
             header[b"SOAPAction"] = (
-                self._namespace_metodo + soap_webservice_method
+                    self._namespace_metodo + soap_webservice_method
             ).encode("utf-8")
 
         if self._accept:
@@ -1247,7 +1248,7 @@ class ComunicacaoCTe(Comunicacao):
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap("CTeDistribuicaoDFe", raiz)
         return self._post(url, xml)
-    
+
     def consulta(self, chave):
         url = self._get_url("CONSULTA")
         # Monta XML do corpo da requisição
@@ -1257,7 +1258,53 @@ class ComunicacaoCTe(Comunicacao):
         etree.SubElement(raiz, "chCTe").text = chave
         # Monta XML para envio da requisição
         xml = self._construir_xml_soap("cteConsultaCT", raiz)
-        return self._post(url, xml)
+
+        # Monta a SOAPAction com o namespace correto
+        soap_action = f"{self._namespace_metodo}ConsultaV4/cteConsultaCT"
+
+        return self._post(url, xml, soap_action)
+
+    def prestacao_em_desacordo(self, chave_cte, cnpj, id_lote=1):
+        codigo_estado = chave_cte[0:2]
+
+        fuso_horario = pytz.timezone('America/Sao_Paulo')
+        dt_com_fuso = datetime.datetime.now(fuso_horario)
+        data_hora_evento_str = dt_com_fuso.strftime('%Y-%m-%dT%H:%M:%S%z')
+        data_hora = data_hora_evento_str[:-2] + ':' + data_hora_evento_str[-2:]
+        id_evento = f"ID610110{chave_cte}{str('1').zfill(3)}"  # 610110 é o código do evento de prestacao de servico em desacordo
+
+        evento_root = etree.Element("eventoCTe", versao="4.00", xmlns=NAMESPACE_CTE)
+        inf_evento = etree.SubElement(evento_root, "infEvento", Id=id_evento)
+
+        etree.SubElement(inf_evento, "cOrgao").text = CODIGOS_ESTADOS[self.uf.upper()]  # Código IBGE da UF
+        etree.SubElement(inf_evento, "tpAmb").text = str(self._ambiente)
+        etree.SubElement(inf_evento, "CNPJ").text = cnpj  # CNPJ do autor do evento
+        etree.SubElement(inf_evento, "chCTe").text = chave_cte
+        etree.SubElement(inf_evento,
+                         "dhEvento").text = data_hora
+        etree.SubElement(inf_evento, "tpEvento").text = "610110"  # Código do evento
+        etree.SubElement(inf_evento, "nSeqEvento").text = "001"  # Sequencial do evento para a mesma chave
+
+        det_evento = etree.SubElement(inf_evento, "detEvento", versaoEvento="4.00")
+
+        ev_prest_desacordo = etree.SubElement(det_evento, "evPrestDesacordo", xmlns=NAMESPACE_CTE)
+        etree.SubElement(ev_prest_desacordo, "descEvento").text = "Prestacao do Servico em Desacordo"
+        etree.SubElement(ev_prest_desacordo, "indDesacordoOper").text = "1"
+        etree.SubElement(ev_prest_desacordo,
+                         "xObs").text = "O servico de transporte foi prestado com avarias na mercadoria."
+        a1 = AssinaturaA1(self.certificado, self.certificado_senha)
+        xml = a1.assinar(evento_root)
+
+        return self.evento(xml, id_lote, codigo_estado)
+
+    def evento(self, evento_xml, id_lote=1, codigo_estado='43'):
+        self.uf = [key for key, value in CODIGOS_ESTADOS.items() if value == codigo_estado][0]
+        url = self._get_url("RECEPCAO_EVENTO")
+        raiz = evento_xml
+        xml_soap = self._construir_xml_soap("CTeRecepcaoEventoV4", raiz, False, "4.00")
+        soap_action = f"{self._namespace_metodo}CTeRecepcaoEventoV4/cteRecepcaoEvento"
+
+        return self._post(url, xml_soap, soap_action)
 
     def _get_url_an(self, consulta):
         ambiente = "https://www1."  # produção
@@ -1267,12 +1314,12 @@ class ComunicacaoCTe(Comunicacao):
         self.url = ambiente + CTE["AN"][consulta]
         return self.url
 
-    def _cabecalho_soap(self, metodo):
+    def _cabecalho_soap(self, metodo, versao_dados):
         """Monta o XML do cabeçalho da requisição SOAP"""
 
         raiz = etree.Element(self._header, xmlns=self._namespace_metodo + metodo)
         etree.SubElement(raiz, "cUF").text = CODIGOS_ESTADOS[self.uf.upper()]
-        etree.SubElement(raiz, "versaoDados").text = "3.00"
+        etree.SubElement(raiz, "versaoDados").text = versao_dados
         return raiz
 
     def _get_url(self, consulta):
@@ -1329,7 +1376,7 @@ class ComunicacaoCTe(Comunicacao):
                 raise Exception(f"Url não encontrada para {consulta} {self.uf.upper()}")
         return self.url
 
-    def _construir_xml_soap(self, metodo, dados, cabecalho=False):
+    def _construir_xml_soap(self, metodo, dados, cabecalho=False, versao_dados="3.00"):
         """Monta o XML para o envio via SOAP"""
 
         raiz = etree.Element(
@@ -1338,7 +1385,7 @@ class ComunicacaoCTe(Comunicacao):
         )
 
         if self._header:
-            cabecalho = self._cabecalho_soap(metodo)
+            cabecalho = self._cabecalho_soap(metodo, versao_dados)
             c = etree.SubElement(raiz, "{%s}Header" % self._namespace_soap)
             c.append(cabecalho)
 
@@ -1349,6 +1396,10 @@ class ComunicacaoCTe(Comunicacao):
                 body, "cteDistDFeInteresse", xmlns=NAMESPACE_CTE_METODO + metodo
             )
             a = etree.SubElement(x, "cteDadosMsg")
+        elif metodo == 'CTeRecepcaoEventoV4':
+            a = etree.SubElement(
+                body, "cteDadosMsg", xmlns=NAMESPACE_CTE_METODO + metodo
+            )
         else:
             a = etree.SubElement(
                 body, "cteDadosMsg", xmlns=NAMESPACE_CTE_METODO + metodo
@@ -1356,21 +1407,23 @@ class ComunicacaoCTe(Comunicacao):
         a.append(dados)
         return raiz
 
-    def _post_header(self):
-        """Retorna um dicionário com os atributos para o cabeçalho da requisição HTTP"""
-        response = {
-            "content-type": "application/soap+xml; charset=utf-8;",
-            "Accept": "application/soap+xml; charset=utf-8;",
+    def _post_header(self, soap_action=None):
+        headers = {
+            'Content-Type': 'application/soap+xml; charset=utf-8;',
+            'Accept': 'application/soap+xml; charset=utf-8;',
         }
-        response["SOAPAction"] = ""
-        return response
+        if soap_action:
+            headers['Content-Type'] = headers.get('Content-Type') + f'action={soap_action}'
 
-    def _post(self, url, xml):
+        return headers
+
+    def _post(self, url, xml, soap_action=None):
         certificado_a1 = CertificadoA1(self.certificado)
         chave, cert = certificado_a1.separar_arquivo(
             self.certificado_senha, caminho=True
         )
         chave_cert = (cert, chave)
+        request_headers = self._post_header(soap_action)
         # Abre a conexão HTTPS
         try:
             xml_declaration = '<?xml version="1.0" encoding="UTF-8"?>'
@@ -1390,7 +1443,7 @@ class ComunicacaoCTe(Comunicacao):
             result = requests.post(
                 url,
                 xml,
-                headers=self._post_header(),
+                headers=request_headers,
                 cert=chave_cert,
                 verify=False,
                 timeout=300,
