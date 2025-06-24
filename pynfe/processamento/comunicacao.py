@@ -1274,8 +1274,6 @@ class ComunicacaoCTe(Comunicacao):
         id_evento = f"ID610110{chave_cte}{str('1').zfill(3)}"  # 610110 é o código do evento de prestacao de servico em desacordo
 
         evento_root = etree.Element("eventoCTe", versao="4.00", xmlns=NAMESPACE_CTE)
-        # etree.SubElement(evento_root,"idLote").text = "1"
-        evento = etree.Element("evento", versao="4.00")
         inf_evento = etree.SubElement(evento_root, "infEvento", Id=id_evento)
 
         etree.SubElement(inf_evento, "cOrgao").text = CODIGOS_ESTADOS[self.uf.upper()]  # Código IBGE da UF
