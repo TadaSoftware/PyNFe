@@ -55,9 +55,7 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         self.xsd_procMDFe = self.validacao.get_xsd(
             xsd_file=XSD_MDFE_PROCESSADA, xsd_folder=XSD_FOLDER_MDFE
         )
-        self.xsd_mdfe = self.validacao.get_xsd(
-            xsd_file=XSD_MDFE, xsd_folder=XSD_FOLDER_MDFE
-        )
+        self.xsd_mdfe = self.validacao.get_xsd(xsd_file=XSD_MDFE, xsd_folder=XSD_FOLDER_MDFE)
 
     def preenche_manifesto(self):
         utc = datetime.timezone.utc
@@ -85,24 +83,16 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         totais = ManifestoTotais(qCTe=0, qNFe=2, vCarga=1000, cUnid="KG", qCarga=5000)
 
         # Municípios de carregamento
-        carregamento_1 = ManifestoMunicipioCarrega(
-            cMunCarrega="5105101", xMunCarrega="JUARA"
-        )
-        carregamento_2 = ManifestoMunicipioCarrega(
-            cMunCarrega="5107925", xMunCarrega="SORRISO"
-        )
+        carregamento_1 = ManifestoMunicipioCarrega(cMunCarrega="5105101", xMunCarrega="JUARA")
+        carregamento_2 = ManifestoMunicipioCarrega(cMunCarrega="5107925", xMunCarrega="SORRISO")
 
         # UFs percurso
         percurso_1 = ManifestoPercurso(UFPer="MS")
         percurso_2 = ManifestoPercurso(UFPer="GO")
 
         # modal Rodo
-        condutor_1 = ManifestoCondutor(
-            nome_motorista="JOAO DA SILVA", cpf_motorista="12345678912"
-        )
-        condutor_2 = ManifestoCondutor(
-            nome_motorista="JOSE DA SILVA", cpf_motorista="12345678911"
-        )
+        condutor_1 = ManifestoCondutor(nome_motorista="JOAO DA SILVA", cpf_motorista="12345678912")
+        condutor_2 = ManifestoCondutor(nome_motorista="JOSE DA SILVA", cpf_motorista="12345678911")
 
         veiculo_tracao = []
         veiculo_tracao.append(
@@ -161,9 +151,7 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
             vContratoGlobal=Decimal("2342.64"),
         )
 
-        contratante_2 = ManifestoContratante(
-            nome="JOSE DA SILVA", cpfcnpj="12345678911"
-        )
+        contratante_2 = ManifestoContratante(nome="JOSE DA SILVA", cpfcnpj="12345678911")
 
         modal_rodoviario = ManifestoRodoviario(
             rntrc="12345678",
@@ -284,17 +272,11 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         totais = ManifestoTotais(qCTe=0, qNFe=2, vCarga=1000, cUnid="KG", qCarga=5000)
 
         # Municípios de carregamento
-        carregamento = ManifestoMunicipioCarrega(
-            cMunCarrega="5105101", xMunCarrega="JUARA"
-        )
+        carregamento = ManifestoMunicipioCarrega(cMunCarrega="5105101", xMunCarrega="JUARA")
 
         # modal Rodo
-        condutor_1 = ManifestoCondutor(
-            nome_motorista="JOAO DA SILVA", cpf_motorista="12345678912"
-        )
-        condutor_2 = ManifestoCondutor(
-            nome_motorista="JOSE DA SILVA", cpf_motorista="12345678911"
-        )
+        condutor_1 = ManifestoCondutor(nome_motorista="JOAO DA SILVA", cpf_motorista="12345678912")
+        condutor_2 = ManifestoCondutor(nome_motorista="JOSE DA SILVA", cpf_motorista="12345678911")
 
         veiculo_tracao = []
         veiculo_tracao.append(
@@ -412,9 +394,7 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
     def grupo_ide_test(self):
         cUF = self.xml_assinado.xpath("//ns:ide/ns:cUF", namespaces=self.ns)[0].text
         tpAmb = self.xml_assinado.xpath("//ns:ide/ns:tpAmb", namespaces=self.ns)[0].text
-        tpEmit = self.xml_assinado.xpath("//ns:ide/ns:tpEmit", namespaces=self.ns)[
-            0
-        ].text
+        tpEmit = self.xml_assinado.xpath("//ns:ide/ns:tpEmit", namespaces=self.ns)[0].text
         mod = self.xml_assinado.xpath("//ns:ide/ns:mod", namespaces=self.ns)[0].text
         serie = self.xml_assinado.xpath("//ns:ide/ns:serie", namespaces=self.ns)[0].text
         nMDF = self.xml_assinado.xpath("//ns:ide/ns:nMDF", namespaces=self.ns)[0].text
@@ -422,20 +402,12 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         # cDV = self.xml_assinado.xpath('//ns:ide/ns:cDV', namespaces=self.ns)[0].text
         modal = self.xml_assinado.xpath("//ns:ide/ns:modal", namespaces=self.ns)[0].text
         dhEmi = self.xml_assinado.xpath("//ns:ide/ns:dhEmi", namespaces=self.ns)[0].text
-        tpEmis = self.xml_assinado.xpath("//ns:ide/ns:tpEmis", namespaces=self.ns)[
-            0
-        ].text
-        procEmi = self.xml_assinado.xpath("//ns:ide/ns:procEmi", namespaces=self.ns)[
-            0
-        ].text
-        verProc = self.xml_assinado.xpath("//ns:ide/ns:verProc", namespaces=self.ns)[
-            0
-        ].text
+        tpEmis = self.xml_assinado.xpath("//ns:ide/ns:tpEmis", namespaces=self.ns)[0].text
+        procEmi = self.xml_assinado.xpath("//ns:ide/ns:procEmi", namespaces=self.ns)[0].text
+        verProc = self.xml_assinado.xpath("//ns:ide/ns:verProc", namespaces=self.ns)[0].text
         UFIni = self.xml_assinado.xpath("//ns:ide/ns:UFIni", namespaces=self.ns)[0].text
         UFFim = self.xml_assinado.xpath("//ns:ide/ns:UFFim", namespaces=self.ns)[0].text
-        dhIniViagem = self.xml_assinado.xpath(
-            "//ns:ide/ns:dhIniViagem", namespaces=self.ns
-        )[0].text
+        dhIniViagem = self.xml_assinado.xpath("//ns:ide/ns:dhIniViagem", namespaces=self.ns)[0].text
 
         self.assertEqual(cUF, "51")
         self.assertEqual(tpAmb, "2")
@@ -457,28 +429,18 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
     def grupo_ide_sem_rntrc_test(self):
         cUF = self.xml_assinado.xpath("//ns:ide/ns:cUF", namespaces=self.ns)[0].text
         tpAmb = self.xml_assinado.xpath("//ns:ide/ns:tpAmb", namespaces=self.ns)[0].text
-        tpEmit = self.xml_assinado.xpath("//ns:ide/ns:tpEmit", namespaces=self.ns)[
-            0
-        ].text
+        tpEmit = self.xml_assinado.xpath("//ns:ide/ns:tpEmit", namespaces=self.ns)[0].text
         mod = self.xml_assinado.xpath("//ns:ide/ns:mod", namespaces=self.ns)[0].text
         serie = self.xml_assinado.xpath("//ns:ide/ns:serie", namespaces=self.ns)[0].text
         nMDF = self.xml_assinado.xpath("//ns:ide/ns:nMDF", namespaces=self.ns)[0].text
         modal = self.xml_assinado.xpath("//ns:ide/ns:modal", namespaces=self.ns)[0].text
         dhEmi = self.xml_assinado.xpath("//ns:ide/ns:dhEmi", namespaces=self.ns)[0].text
-        tpEmis = self.xml_assinado.xpath("//ns:ide/ns:tpEmis", namespaces=self.ns)[
-            0
-        ].text
-        procEmi = self.xml_assinado.xpath("//ns:ide/ns:procEmi", namespaces=self.ns)[
-            0
-        ].text
-        verProc = self.xml_assinado.xpath("//ns:ide/ns:verProc", namespaces=self.ns)[
-            0
-        ].text
+        tpEmis = self.xml_assinado.xpath("//ns:ide/ns:tpEmis", namespaces=self.ns)[0].text
+        procEmi = self.xml_assinado.xpath("//ns:ide/ns:procEmi", namespaces=self.ns)[0].text
+        verProc = self.xml_assinado.xpath("//ns:ide/ns:verProc", namespaces=self.ns)[0].text
         UFIni = self.xml_assinado.xpath("//ns:ide/ns:UFIni", namespaces=self.ns)[0].text
         UFFim = self.xml_assinado.xpath("//ns:ide/ns:UFFim", namespaces=self.ns)[0].text
-        dhIniViagem = self.xml_assinado.xpath(
-            "//ns:ide/ns:dhIniViagem", namespaces=self.ns
-        )[0].text
+        dhIniViagem = self.xml_assinado.xpath("//ns:ide/ns:dhIniViagem", namespaces=self.ns)[0].text
 
         self.assertEqual(cUF, "51")
         self.assertEqual(tpAmb, "2")
@@ -528,12 +490,12 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         self.assertEqual(xMunCarrega_1, "JUARA")
 
     def grupo_percurso(self):
-        UFPer_1 = self.xml_assinado.xpath(
-            "//ns:ide/ns:infPercurso/ns:UFPer", namespaces=self.ns
-        )[0].text
-        UFPer_2 = self.xml_assinado.xpath(
-            "//ns:ide/ns:infPercurso/ns:UFPer", namespaces=self.ns
-        )[1].text
+        UFPer_1 = self.xml_assinado.xpath("//ns:ide/ns:infPercurso/ns:UFPer", namespaces=self.ns)[
+            0
+        ].text
+        UFPer_2 = self.xml_assinado.xpath("//ns:ide/ns:infPercurso/ns:UFPer", namespaces=self.ns)[
+            1
+        ].text
 
         self.assertEqual(UFPer_1, "MS")
         self.assertEqual(UFPer_2, "GO")
@@ -541,45 +503,23 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
     def grupo_emitente(self):
         CNPJ = self.xml_assinado.xpath("//ns:emit/ns:CNPJ", namespaces=self.ns)[0].text
         IE = self.xml_assinado.xpath("//ns:emit/ns:IE", namespaces=self.ns)[0].text
-        xNome = self.xml_assinado.xpath("//ns:emit/ns:xNome", namespaces=self.ns)[
+        xNome = self.xml_assinado.xpath("//ns:emit/ns:xNome", namespaces=self.ns)[0].text
+        xFant = self.xml_assinado.xpath("//ns:emit/ns:xFant", namespaces=self.ns)[0].text
+        xLgr = self.xml_assinado.xpath("//ns:emit/ns:enderEmit/ns:xLgr", namespaces=self.ns)[0].text
+        nro = self.xml_assinado.xpath("//ns:emit/ns:enderEmit/ns:nro", namespaces=self.ns)[0].text
+        xBairro = self.xml_assinado.xpath("//ns:emit/ns:enderEmit/ns:xBairro", namespaces=self.ns)[
             0
         ].text
-        xFant = self.xml_assinado.xpath("//ns:emit/ns:xFant", namespaces=self.ns)[
-            0
-        ].text
-        xLgr = self.xml_assinado.xpath(
-            "//ns:emit/ns:enderEmit/ns:xLgr", namespaces=self.ns
-        )[0].text
-        nro = self.xml_assinado.xpath(
-            "//ns:emit/ns:enderEmit/ns:nro", namespaces=self.ns
-        )[0].text
-        xBairro = self.xml_assinado.xpath(
-            "//ns:emit/ns:enderEmit/ns:xBairro", namespaces=self.ns
-        )[0].text
-        cMun = self.xml_assinado.xpath(
-            "//ns:emit/ns:enderEmit/ns:cMun", namespaces=self.ns
-        )[0].text
-        xMun = self.xml_assinado.xpath(
-            "//ns:emit/ns:enderEmit/ns:xMun", namespaces=self.ns
-        )[0].text
-        CEP = self.xml_assinado.xpath(
-            "//ns:emit/ns:enderEmit/ns:CEP", namespaces=self.ns
-        )[0].text
-        UF = self.xml_assinado.xpath(
-            "//ns:emit/ns:enderEmit/ns:UF", namespaces=self.ns
-        )[0].text
-        fone = self.xml_assinado.xpath(
-            "//ns:emit/ns:enderEmit/ns:fone", namespaces=self.ns
-        )[0].text
-        email = self.xml_assinado.xpath(
-            "//ns:emit/ns:enderEmit/ns:email", namespaces=self.ns
-        )
+        cMun = self.xml_assinado.xpath("//ns:emit/ns:enderEmit/ns:cMun", namespaces=self.ns)[0].text
+        xMun = self.xml_assinado.xpath("//ns:emit/ns:enderEmit/ns:xMun", namespaces=self.ns)[0].text
+        CEP = self.xml_assinado.xpath("//ns:emit/ns:enderEmit/ns:CEP", namespaces=self.ns)[0].text
+        UF = self.xml_assinado.xpath("//ns:emit/ns:enderEmit/ns:UF", namespaces=self.ns)[0].text
+        fone = self.xml_assinado.xpath("//ns:emit/ns:enderEmit/ns:fone", namespaces=self.ns)[0].text
+        email = self.xml_assinado.xpath("//ns:emit/ns:enderEmit/ns:email", namespaces=self.ns)
 
         self.assertEqual(CNPJ, "99999999000199")
         self.assertEqual(IE, "9999999999")
-        self.assertEqual(
-            xNome, "NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL"
-        )
+        self.assertEqual(xNome, "NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL")
         self.assertEqual(xFant, "Nome Fantasia da Empresa")
         self.assertEqual(xLgr, "RUA UM")
         self.assertEqual(nro, "111")
@@ -876,23 +816,21 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
             "//ns:infMDFe/ns:seg/ns:infResp/ns:CNPJ", namespaces=self.ns
         )[0].text
 
-        xSeg = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:seg/ns:infSeg/ns:xSeg", namespaces=self.ns
-        )[0].text
+        xSeg = self.xml_assinado.xpath("//ns:infMDFe/ns:seg/ns:infSeg/ns:xSeg", namespaces=self.ns)[
+            0
+        ].text
         CNPJ_seg = self.xml_assinado.xpath(
             "//ns:infMDFe/ns:seg/ns:infSeg/ns:CNPJ", namespaces=self.ns
         )[0].text
 
-        nApol = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:seg/ns:nApol", namespaces=self.ns
-        )[0].text
+        nApol = self.xml_assinado.xpath("//ns:infMDFe/ns:seg/ns:nApol", namespaces=self.ns)[0].text
 
-        nAver_1 = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:seg/ns:nAver", namespaces=self.ns
-        )[0].text
-        nAver_2 = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:seg/ns:nAver", namespaces=self.ns
-        )[1].text
+        nAver_1 = self.xml_assinado.xpath("//ns:infMDFe/ns:seg/ns:nAver", namespaces=self.ns)[
+            0
+        ].text
+        nAver_2 = self.xml_assinado.xpath("//ns:infMDFe/ns:seg/ns:nAver", namespaces=self.ns)[
+            1
+        ].text
 
         self.assertEqual(respSeg, "1")
         self.assertEqual(CNPJ_resp, "75512177000176")
@@ -910,19 +848,17 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
             "//ns:infMDFe/ns:seg/ns:infResp/ns:CNPJ", namespaces=self.ns
         )[0].text
 
-        xSeg = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:seg/ns:infSeg/ns:xSeg", namespaces=self.ns
-        )[0].text
+        xSeg = self.xml_assinado.xpath("//ns:infMDFe/ns:seg/ns:infSeg/ns:xSeg", namespaces=self.ns)[
+            0
+        ].text
         CNPJ_seg = self.xml_assinado.xpath(
             "//ns:infMDFe/ns:seg/ns:infSeg/ns:CNPJ", namespaces=self.ns
         )[0].text
 
-        nApol = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:seg/ns:nApol", namespaces=self.ns
-        )[0].text
-        nAver_1 = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:seg/ns:nAver", namespaces=self.ns
-        )[0].text
+        nApol = self.xml_assinado.xpath("//ns:infMDFe/ns:seg/ns:nApol", namespaces=self.ns)[0].text
+        nAver_1 = self.xml_assinado.xpath("//ns:infMDFe/ns:seg/ns:nAver", namespaces=self.ns)[
+            0
+        ].text
 
         self.assertEqual(respSeg, "1")
         self.assertEqual(CNPJ_resp, "75512177000176")
@@ -935,15 +871,13 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         tpCarga = self.xml_assinado.xpath(
             "//ns:infMDFe/ns:prodPred/ns:tpCarga", namespaces=self.ns
         )[0].text
-        xProd = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:prodPred/ns:xProd", namespaces=self.ns
-        )[0].text
-        cEAN = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:prodPred/ns:cEAN", namespaces=self.ns
-        )[0].text
-        NCM = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:prodPred/ns:NCM", namespaces=self.ns
-        )[0].text
+        xProd = self.xml_assinado.xpath("//ns:infMDFe/ns:prodPred/ns:xProd", namespaces=self.ns)[
+            0
+        ].text
+        cEAN = self.xml_assinado.xpath("//ns:infMDFe/ns:prodPred/ns:cEAN", namespaces=self.ns)[
+            0
+        ].text
+        NCM = self.xml_assinado.xpath("//ns:infMDFe/ns:prodPred/ns:NCM", namespaces=self.ns)[0].text
 
         self.assertEqual(tpCarga, "01")
         self.assertEqual(xProd, "Descricao do Produto")
@@ -951,18 +885,14 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         self.assertEqual(NCM, "01012100")
 
     def grupo_totais(self):
-        qNFe = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:tot/ns:qNFe", namespaces=self.ns
-        )[0].text
-        vCarga = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:tot/ns:vCarga", namespaces=self.ns
-        )[0].text
-        cUnid = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:tot/ns:cUnid", namespaces=self.ns
-        )[0].text
-        qCarga = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:tot/ns:qCarga", namespaces=self.ns
-        )[0].text
+        qNFe = self.xml_assinado.xpath("//ns:infMDFe/ns:tot/ns:qNFe", namespaces=self.ns)[0].text
+        vCarga = self.xml_assinado.xpath("//ns:infMDFe/ns:tot/ns:vCarga", namespaces=self.ns)[
+            0
+        ].text
+        cUnid = self.xml_assinado.xpath("//ns:infMDFe/ns:tot/ns:cUnid", namespaces=self.ns)[0].text
+        qCarga = self.xml_assinado.xpath("//ns:infMDFe/ns:tot/ns:qCarga", namespaces=self.ns)[
+            0
+        ].text
 
         self.assertEqual(qNFe, "2")
         self.assertEqual(vCarga, "1000.00")
@@ -970,33 +900,25 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         self.assertEqual(qCarga, "5000.0000")
 
     def grupo_lacres(self):
-        nLacre_1 = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:lacres/ns:nLacre", namespaces=self.ns
-        )[0].text
-        nLacre_2 = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:lacres/ns:nLacre", namespaces=self.ns
-        )[1].text
-        nLacre_3 = self.xml_assinado.xpath(
-            "//ns:infMDFe/ns:lacres/ns:nLacre", namespaces=self.ns
-        )[2].text
+        nLacre_1 = self.xml_assinado.xpath("//ns:infMDFe/ns:lacres/ns:nLacre", namespaces=self.ns)[
+            0
+        ].text
+        nLacre_2 = self.xml_assinado.xpath("//ns:infMDFe/ns:lacres/ns:nLacre", namespaces=self.ns)[
+            1
+        ].text
+        nLacre_3 = self.xml_assinado.xpath("//ns:infMDFe/ns:lacres/ns:nLacre", namespaces=self.ns)[
+            2
+        ].text
 
         self.assertEqual(nLacre_1, "123")
         self.assertEqual(nLacre_2, "456")
         self.assertEqual(nLacre_3, "789")
 
     def grupo_responsavel_tecnico(self):
-        cnpj = self.xml_assinado.xpath("//ns:infRespTec/ns:CNPJ", namespaces=self.ns)[
-            0
-        ].text
-        contato = self.xml_assinado.xpath(
-            "//ns:infRespTec/ns:xContato", namespaces=self.ns
-        )[0].text
-        email = self.xml_assinado.xpath("//ns:infRespTec/ns:email", namespaces=self.ns)[
-            0
-        ].text
-        fone = self.xml_assinado.xpath("//ns:infRespTec/ns:fone", namespaces=self.ns)[
-            0
-        ].text
+        cnpj = self.xml_assinado.xpath("//ns:infRespTec/ns:CNPJ", namespaces=self.ns)[0].text
+        contato = self.xml_assinado.xpath("//ns:infRespTec/ns:xContato", namespaces=self.ns)[0].text
+        email = self.xml_assinado.xpath("//ns:infRespTec/ns:email", namespaces=self.ns)[0].text
+        fone = self.xml_assinado.xpath("//ns:infRespTec/ns:fone", namespaces=self.ns)[0].text
 
         self.assertEqual(cnpj, "99999999000199")
         self.assertEqual(contato, "Teste PyNFe")
@@ -1011,9 +933,9 @@ class SerializacaoMDFeTestCase(unittest.TestCase):
         self.assertTrue(len(DigestValue) > 0)
 
     def grupo_qrcode(self):
-        qrCodMDFe = self.xml_assinado.xpath(
-            "//ns:infMDFeSupl/ns:qrCodMDFe", namespaces=self.ns
-        )[0].text
+        qrCodMDFe = self.xml_assinado.xpath("//ns:infMDFeSupl/ns:qrCodMDFe", namespaces=self.ns)[
+            0
+        ].text
         self.assertTrue(len(qrCodMDFe) > 0)
 
     def test_manifesto(self):

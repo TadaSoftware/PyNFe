@@ -32,7 +32,7 @@ class SerializacaoNFSeGinfesTestCase(unittest.TestCase):
         SerializacaoNFSeTest.limpa_namespace()
 
     def _serializa_nfse(self, nfse: NotaFiscalServico) -> str:
-        serializador = SerializacaoNfse('ginfes')
+        serializador = SerializacaoNfse("ginfes")
         xml = serializador.gerar_lote(nfse)
 
         return xml
@@ -40,7 +40,7 @@ class SerializacaoNFSeGinfesTestCase(unittest.TestCase):
     # a serialização gera os atributos xmlns:ns1 e xmlns:ns2
     # da tag ns1:EnviarLoteRpsEnvio em ordem randômica (!!!)
     def _ajusta_xml_test(self, xml: str) -> str:
-        return re.sub(r'<(ns1:EnviarLoteRpsEnvio)[^>]*>', r'<\1>', xml)
+        return re.sub(r"<(ns1:EnviarLoteRpsEnvio)[^>]*>", r"<\1>", xml)
 
     def _get_nfse_esperada(self) -> str:
         return SerializacaoNFSeTest.strip_xml(f"""
