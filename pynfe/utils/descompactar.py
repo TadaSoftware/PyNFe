@@ -12,7 +12,7 @@ from lxml import etree
 
 class DescompactaGzip(object):
     @staticmethod
-    def descompacta(stringZipada: bytes):
+    def descompacta(stringZipada: str):
         """
         :paramn stringZipada: String
 
