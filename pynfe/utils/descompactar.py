@@ -4,6 +4,7 @@
 classe que descompacta o gzip recebido pela consulta distribuicao
 
 """
+
 import base64
 import gzip
 from lxml import etree
@@ -11,12 +12,12 @@ from lxml import etree
 
 class DescompactaGzip(object):
     @staticmethod
-    def descompacta(stringZipada:bytes):
+    def descompacta(stringZipada: bytes):
         """
         :paramn stringZipada: String
 
         :return : Etree
         """
-        decoded = b64decode(stringZipada)
+        decoded = base64.b64decode(stringZipada)
         decompress_nfe = gzip.decompress(decoded).decode("utf8")
         return etree.fromstring(decompress_nfe)
