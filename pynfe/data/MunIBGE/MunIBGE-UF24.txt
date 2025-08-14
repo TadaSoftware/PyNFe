@@ -10,7 +10,7 @@
 2401008	Apodi
 2401107	Areia Branca
 2401206	Arês
-2401305	Augusto Severo
+2401305	Campo Grande
 2401404	Baía Formosa
 2401453	Baraúna
 2401503	Barcelona
@@ -89,7 +89,7 @@
 2408102	Natal
 2408201	Nísia Floresta
 2408300	Nova Cruz
-2408409	Olho-d'Água do Borges
+2408409	Olho d'Água do Borges
 2408508	Ouro Branco
 2408607	Paraná
 2408706	Paraú
@@ -110,7 +110,7 @@
 2410108	Poço Branco
 2410207	Portalegre
 2410256	Porto do Mangue
-2410306	Presidente Juscelino
+2410306	Serra Caiada
 2410405	Pureza
 2410504	Rafael Fernandes
 2410603	Rafael Godeiro
