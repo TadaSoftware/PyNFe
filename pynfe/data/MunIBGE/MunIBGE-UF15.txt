@@ -4,7 +4,6 @@
 1500305	Afuá
 1500347	Água Azul do Norte
 1500404	Alenquer
-1504752	Mojuí dos Campos
 1500503	Almeirim
 1500602	Altamira
 1500701	Anajás
@@ -45,7 +44,7 @@
 1502855	Curuá
 1502905	Curuçá
 1502939	Dom Eliseu
-1502954	Eldorado dos Carajás
+1502954	Eldorado do Carajás
 1503002	Faro
 1503044	Floresta do Araguaia
 1503077	Garrafão do Norte
@@ -72,6 +71,7 @@
 1504505	Melgaço
 1504604	Mocajuba
 1504703	Moju
+1504752	Mojuí dos Campos
 1504802	Monte Alegre
 1504901	Muaná
 1504950	Nova Esperança do Piriá
@@ -106,7 +106,7 @@
 1506302	Salvaterra
 1506351	Santa Bárbara do Pará
 1506401	Santa Cruz do Arari
-1506500	Santa Isabel do Pará
+1506500	Santa Izabel do Pará
 1506559	Santa Luzia do Pará
 1506583	Santa Maria das Barreiras
 1506609	Santa Maria do Pará

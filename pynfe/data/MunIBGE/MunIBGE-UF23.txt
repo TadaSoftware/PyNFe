@@ -52,7 +52,7 @@
 2304236	Croatá
 2304251	Cruz
 2304269	Deputado Irapuan Pinheiro
-2304277	Ererê
+2304277	Ereré
 2304285	Eusébio
 2304301	Farias Brito
 2304350	Forquilha
@@ -84,7 +84,7 @@
 2306108	Irauçuba
 2306207	Itaiçaba
 2306256	Itaitinga
-2306306	Itapagé
+2306306	Itapajé
 2306405	Itapipoca
 2306504	Itapiúna
 2306553	Itarema

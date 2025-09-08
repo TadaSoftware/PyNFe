@@ -38,7 +38,7 @@
 1705508	Colinas do Tocantins
 1705557	Combinado
 1705607	Conceição do Tocantins
-1706001	Couto de Magalhães
+1706001	Couto Magalhães
 1706100	Cristalândia
 1706258	Crixás do Tocantins
 1706506	Darcinópolis
@@ -51,7 +51,7 @@
 1707652	Figueirópolis
 1707702	Filadélfia
 1708205	Formoso do Araguaia
-1708254	Fortaleza do Tabocão
+1708254	Tabocão
 1708304	Goianorte
 1709005	Goiatins
 1709302	Guaraí
@@ -123,7 +123,7 @@
 1720200	São Miguel do Tocantins
 1720259	São Salvador do Tocantins
 1720309	São Sebastião do Tocantins
-1720499	São Valério da Natividade
+1720499	São Valério
 1720655	Silvanópolis
 1720804	Sítio Novo do Tocantins
 1720853	Sucupira

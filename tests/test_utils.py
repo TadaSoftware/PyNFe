@@ -290,7 +290,7 @@ class CidadesTestCase(unittest.TestCase):
         self.assertEqual(len(carregar_arquivo_municipios(uf=21)), 217)
 
     def test_quantidade_cidades_mt(self):
-        self.assertEqual(len(carregar_arquivo_municipios(uf=51)), 141)
+        self.assertEqual(len(carregar_arquivo_municipios(uf=51)), 142)
 
     def test_quantidade_cidades_ms(self):
         self.assertEqual(len(carregar_arquivo_municipios(uf=50)), 79)
@@ -379,7 +379,7 @@ class CidadesTestCase(unittest.TestCase):
         for uf in lista_de_codigos_uf:
             total += len(carregar_arquivo_municipios(uf=uf))
 
-        self.assertEqual(total, 5570)
+        self.assertEqual(total, 5571)
 
 
 if __name__ == "__main__":

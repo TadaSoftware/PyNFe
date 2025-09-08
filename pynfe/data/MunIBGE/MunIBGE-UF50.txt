@@ -1,6 +1,6 @@
 ﻿5000203	Água Clara
 5000252	Alcinópolis
-5000609	Amambaí
+5000609	Amambai
 5000708	Anastácio
 5000807	Anaurilândia
 5000856	Angélica
