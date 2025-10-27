@@ -14,11 +14,14 @@ import pyxb.utils.utility
 import pyxb.utils.domutils
 import sys
 import pyxb.utils.six as _six
+
 # Unique identifier for bindings created at the same time
-_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:0e2620f4-a7e2-497f-ac67-2bf21c9dfe3d')
+_GenerationUID = pyxb.utils.utility.UniqueIdentifier(
+    "urn:uuid:0e2620f4-a7e2-497f-ac67-2bf21c9dfe3d"
+)
 
 # Version of PyXB used to generate the bindings
-_PyXBVersion = '1.2.6'
+_PyXBVersion = "1.2.6"
 
 # A holder for module-level binding classes so we can access them from
 # inside class definitions where property names may conflict.
@@ -29,10 +32,15 @@ from pynfe.utils.nfse.ginfes import _tipos as _ImportedBinding__tipos
 import pyxb.binding.datatypes
 
 # NOTE: All namespace declarations are reserved within the binding
-Namespace = pyxb.namespace.NamespaceForURI('http://www.ginfes.com.br/cabecalho_v03.xsd', create_if_missing=True)
-Namespace.configureCategories(['typeBinding', 'elementBinding'])
+Namespace = pyxb.namespace.NamespaceForURI(
+    "http://www.ginfes.com.br/cabecalho_v03.xsd", create_if_missing=True
+)
+Namespace.configureCategories(["typeBinding", "elementBinding"])
 
-def CreateFromDocument (xml_text, fallback_namespace=None, location_base=None, default_namespace=None):
+
+def CreateFromDocument(
+    xml_text, fallback_namespace=None, location_base=None, default_namespace=None
+):
     """Parse the given XML and use the document element to create a
     Python instance.
 
@@ -63,7 +71,9 @@ def CreateFromDocument (xml_text, fallback_namespace=None, location_base=None, d
         fallback_namespace = default_namespace
     if fallback_namespace is None:
         fallback_namespace = Namespace.fallbackNamespace()
-    saxer = pyxb.binding.saxer.make_parser(fallback_namespace=fallback_namespace, location_base=location_base)
+    saxer = pyxb.binding.saxer.make_parser(
+        fallback_namespace=fallback_namespace, location_base=location_base
+    )
     handler = saxer.getContentHandler()
     xmld = xml_text
     if isinstance(xmld, _six.text_type):
@@ -72,7 +82,8 @@ def CreateFromDocument (xml_text, fallback_namespace=None, location_base=None, d
     instance = handler.rootObject()
     return instance
 
-def CreateFromDOM (node, fallback_namespace=None, default_namespace=None):
+
+def CreateFromDOM(node, fallback_namespace=None, default_namespace=None):
     """Create a Python instance from the given DOM node.
     The node tag must correspond to an element declaration in this module.
 
@@ -85,48 +96,80 @@ def CreateFromDOM (node, fallback_namespace=None, default_namespace=None):
 
 
 # Complex type [anonymous] with content type ELEMENT_ONLY
-class CTD_ANON (pyxb.binding.basis.complexTypeDefinition):
+class CTD_ANON(pyxb.binding.basis.complexTypeDefinition):
     """Complex type [anonymous] with content type ELEMENT_ONLY"""
+
     _TypeDefinition = None
     _ContentTypeTag = pyxb.binding.basis.complexTypeDefinition._CT_ELEMENT_ONLY
     _Abstract = False
     _ExpandedName = None
-    _XSDLocation = pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/cabecalho_v03.xsd', 8, 2)
+    _XSDLocation = pyxb.utils.utility.Location(
+        "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/cabecalho_v03.xsd", 8, 2
+    )
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
-    # Element versaoDados uses Python identifier versaoDados
-    __versaoDados = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(None, 'versaoDados'), 'versaoDados', '__httpwww_ginfes_com_brcabecalho_v03_xsd_CTD_ANON_versaoDados', False, pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/cabecalho_v03.xsd', 10, 4), )
 
-    
+    # Element versaoDados uses Python identifier versaoDados
+    __versaoDados = pyxb.binding.content.ElementDeclaration(
+        pyxb.namespace.ExpandedName(None, "versaoDados"),
+        "versaoDados",
+        "__httpwww_ginfes_com_brcabecalho_v03_xsd_CTD_ANON_versaoDados",
+        False,
+        pyxb.utils.utility.Location(
+            "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/cabecalho_v03.xsd", 10, 4
+        ),
+    )
+
     versaoDados = property(__versaoDados.value, __versaoDados.set, None, None)
 
-    
     # Attribute versao uses Python identifier versao
-    __versao = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'versao'), 'versao', '__httpwww_ginfes_com_brcabecalho_v03_xsd_CTD_ANON_versao', _ImportedBinding__tipos.tsVersao, required=True)
-    __versao._DeclarationLocation = pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/cabecalho_v03.xsd', 13, 3)
-    __versao._UseLocation = pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/cabecalho_v03.xsd', 13, 3)
-    
+    __versao = pyxb.binding.content.AttributeUse(
+        pyxb.namespace.ExpandedName(None, "versao"),
+        "versao",
+        "__httpwww_ginfes_com_brcabecalho_v03_xsd_CTD_ANON_versao",
+        _ImportedBinding__tipos.tsVersao,
+        required=True,
+    )
+    __versao._DeclarationLocation = pyxb.utils.utility.Location(
+        "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/cabecalho_v03.xsd", 13, 3
+    )
+    __versao._UseLocation = pyxb.utils.utility.Location(
+        "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/cabecalho_v03.xsd", 13, 3
+    )
+
     versao = property(__versao.value, __versao.set, None, None)
 
-    _ElementMap.update({
-        __versaoDados.name() : __versaoDados
-    })
-    _AttributeMap.update({
-        __versao.name() : __versao
-    })
+    _ElementMap.update({__versaoDados.name(): __versaoDados})
+    _AttributeMap.update({__versao.name(): __versao})
+
+
 _module_typeBindings.CTD_ANON = CTD_ANON
 
 
-cabecalho = pyxb.binding.basis.element(pyxb.namespace.ExpandedName(Namespace, 'cabecalho'), CTD_ANON, location=pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/cabecalho_v03.xsd', 7, 1))
-Namespace.addCategoryObject('elementBinding', cabecalho.name().localName(), cabecalho)
+cabecalho = pyxb.binding.basis.element(
+    pyxb.namespace.ExpandedName(Namespace, "cabecalho"),
+    CTD_ANON,
+    location=pyxb.utils.utility.Location(
+        "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/cabecalho_v03.xsd", 7, 1
+    ),
+)
+Namespace.addCategoryObject("elementBinding", cabecalho.name().localName(), cabecalho)
 
 
+CTD_ANON._AddElement(
+    pyxb.binding.basis.element(
+        pyxb.namespace.ExpandedName(None, "versaoDados"),
+        _ImportedBinding__tipos.tsVersao,
+        scope=CTD_ANON,
+        location=pyxb.utils.utility.Location(
+            "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/cabecalho_v03.xsd", 10, 4
+        ),
+    )
+)
 
-CTD_ANON._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(None, 'versaoDados'), _ImportedBinding__tipos.tsVersao, scope=CTD_ANON, location=pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/cabecalho_v03.xsd', 10, 4)))
 
-def _BuildAutomaton ():
+def _BuildAutomaton():
     # Remove this helper function from the namespace after it is invoked
     global _BuildAutomaton
     del _BuildAutomaton
@@ -135,11 +178,19 @@ def _BuildAutomaton ():
     counters = set()
     states = []
     final_update = set()
-    symbol = pyxb.binding.content.ElementUse(CTD_ANON._UseForTag(pyxb.namespace.ExpandedName(None, 'versaoDados')), pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/cabecalho_v03.xsd', 10, 4))
-    st_0 = fac.State(symbol, is_initial=True, final_update=final_update, is_unordered_catenation=False)
+    symbol = pyxb.binding.content.ElementUse(
+        CTD_ANON._UseForTag(pyxb.namespace.ExpandedName(None, "versaoDados")),
+        pyxb.utils.utility.Location(
+            "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/cabecalho_v03.xsd", 10, 4
+        ),
+    )
+    st_0 = fac.State(
+        symbol, is_initial=True, final_update=final_update, is_unordered_catenation=False
+    )
     states.append(st_0)
     transitions = []
     st_0._set_transitionSet(transitions)
     return fac.Automaton(states, counters, False, containing_state=None)
-CTD_ANON._Automaton = _BuildAutomaton()
 
+
+CTD_ANON._Automaton = _BuildAutomaton()

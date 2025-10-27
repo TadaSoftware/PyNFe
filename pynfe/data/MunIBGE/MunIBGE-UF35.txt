@@ -72,7 +72,7 @@
 3506359	Bertioga
 3506409	Bilac
 3506508	Birigui
-3506607	Biritiba-Mirim
+3506607	Biritiba Mirim
 3506706	Boa Esperança do Sul
 3506805	Bocaina
 3506904	Bofete
@@ -182,7 +182,7 @@
 3515806	Flora Rica
 3515905	Floreal
 3516002	Flórida Paulista
-3516101	Florínia
+3516101	Florínea
 3516200	Franca
 3516309	Francisco Morato
 3516408	Franco da Rocha
@@ -251,7 +251,7 @@
 3521903	Itajobi
 3522000	Itaju
 3522109	Itanhaém
-3522158	Itaóca
+3522158	Itaoca
 3522208	Itapecerica da Serra
 3522307	Itapetininga
 3522406	Itapeva
@@ -343,7 +343,7 @@
 3530508	Mococa
 3530607	Mogi das Cruzes
 3530706	Mogi Guaçu
-3530805	Moji Mirim
+3530805	Mogi Mirim
 3530904	Mombuca
 3531001	Monções
 3531100	Mongaguá
@@ -557,7 +557,7 @@
 3549805	São José do Rio Preto
 3549904	São José dos Campos
 3549953	São Lourenço da Serra
-3550001	São Luís do Paraitinga
+3550001	São Luiz do Paraitinga
 3550100	São Manuel
 3550209	São Miguel Arcanjo
 3550308	São Paulo

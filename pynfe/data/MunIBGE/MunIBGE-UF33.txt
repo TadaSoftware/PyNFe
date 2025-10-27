@@ -50,7 +50,7 @@
 3303500	Nova Iguaçu
 3303609	Paracambi
 3303708	Paraíba do Sul
-3303807	Parati
+3303807	Paraty
 3303856	Paty do Alferes
 3303906	Petrópolis
 3303955	Pinheiral
@@ -84,7 +84,7 @@
 3305703	Sumidouro
 3305752	Tanguá
 3305802	Teresópolis
-3305901	Trajano de Morais
+3305901	Trajano de Moraes
 3306008	Três Rios
 3306107	Valença
 3306156	Varre-Sai

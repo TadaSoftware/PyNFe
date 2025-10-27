@@ -216,7 +216,7 @@
 5220009	São João d'Aliança
 5220058	São João da Paraúna
 5220108	São Luís de Montes Belos
-5220157	São Luíz do Norte
+5220157	São Luiz do Norte
 5220207	São Miguel do Araguaia
 5220264	São Miguel do Passa Quatro
 5220280	São Patrício

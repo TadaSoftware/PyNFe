@@ -71,7 +71,7 @@ class CertificadoA1(Certificado):
         except Exception as e:
             if "invalid password" in str(e).lower():
                 raise Exception(
-                    "Falha ao carregar certificado digital A1. Verifique a senha do" " certificado."
+                    "Falha ao carregar certificado digital A1. Verifique a senha do certificado."
                 ) from e
             else:
                 raise Exception(

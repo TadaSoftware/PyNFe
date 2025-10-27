@@ -57,7 +57,7 @@
 3105202	Bandeira
 3105301	Bandeira do Sul
 3105400	Barão de Cocais
-3105509	Barão de Monte Alto
+3105509	Barão do Monte Alto
 3105608	Barbacena
 3105707	Barra Longa
 3105905	Barroso
@@ -93,7 +93,7 @@
 3108602	Brasília de Minas
 3108701	Brás Pires
 3108800	Braúnas
-3108909	Brasópolis
+3108909	Brazópolis
 3109006	Brumadinho
 3109105	Bueno Brandão
 3109204	Buenópolis
@@ -253,7 +253,7 @@
 3122603	Dom Joaquim
 3122702	Dom Silvério
 3122801	Dom Viçoso
-3122900	Dona Eusébia
+3122900	Dona Euzébia
 3123007	Dores de Campos
 3123106	Dores de Guanhães
 3123205	Dores do Indaiá
@@ -555,7 +555,7 @@
 3147501	Passabém
 3147600	Passa Quatro
 3147709	Passa Tempo
-3147808	Passa-Vinte
+3147808	Passa Vinte
 3147907	Passos
 3147956	Patis
 3148004	Patos de Minas
@@ -762,7 +762,7 @@
 3164902	São Sebastião do Rio Verde
 3165008	São Tiago
 3165107	São Tomás de Aquino
-3165206	São Thomé das Letras
+3165206	São Tomé das Letras
 3165305	São Vicente de Minas
 3165404	Sapucaí-Mirim
 3165503	Sardoá

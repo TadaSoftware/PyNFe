@@ -41,9 +41,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.xsd_procNFe = self.validacao.get_xsd(
             xsd_file=XSD_NFE_PROCESSADA, xsd_folder=XSD_FOLDER_NFE
         )
-        self.xsd_nfe = self.validacao.get_xsd(
-            xsd_file=XSD_NFE, xsd_folder=XSD_FOLDER_NFE
-        )
+        self.xsd_nfe = self.validacao.get_xsd(xsd_file=XSD_NFE, xsd_folder=XSD_FOLDER_NFE)
 
     def preenche_emitente(self):
         self.emitente = Emitente(
@@ -92,7 +90,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             transporte_modalidade_frete=1,
             informacoes_adicionais_interesse_fisco="Mensagem complementar",
             totais_tributos_aproximado=Decimal("1.01"),
-            valor_troco=Decimal('3.00'),
+            valor_troco=Decimal("3.00"),
         )
 
         self.notafiscal.adicionar_produto_servico(
@@ -103,9 +101,9 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             ean="1234567890121",
             cfop="5102",
             unidade_comercial="UN",
-            quantidade_comercial=Decimal(quantidade), 
+            quantidade_comercial=Decimal(quantidade),
             valor_unitario_comercial=Decimal(valorUnitario),
-            valor_total_bruto=Decimal(valorTotal), 
+            valor_total_bruto=Decimal(valorTotal),
             unidade_tributavel="UN",
             quantidade_tributavel=Decimal(quantidade),
             valor_unitario_tributavel=Decimal(valorUnitario),
@@ -141,14 +139,12 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         )
 
     def total_test(self, valorEsperado):
-        vProd = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vProd", namespaces=self.ns
-        )[0].text
-       
-        vNF = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vNF", namespaces=self.ns
-        )[0].text
-       
+        vProd = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vProd", namespaces=self.ns)[
+            0
+        ].text
+
+        vNF = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vNF", namespaces=self.ns)[0].text
+
         self.assertEqual(vProd, valorEsperado)
         self.assertEqual(vNF, valorEsperado)
 
@@ -167,6 +163,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
 
         self.assertEqual(valorUnitario * quantidade, valorTotal)
         self.total_test(valorEsperado)
+
 
 if __name__ == "__main__":
     unittest.main()

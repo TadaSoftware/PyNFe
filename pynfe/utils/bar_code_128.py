@@ -542,9 +542,7 @@ class Code128:
             elif (
                 self.CharSetB in (code[c])
                 and current_charset != self.CharSetB
-                and not (
-                    self.CharSetA in (code[c]) and current_charset == self.CharSetA
-                )
+                and not (self.CharSetA in (code[c]) and current_charset == self.CharSetA)
             ):
                 # If char in chrset A = current, then just keep that
                 # Switching to Character set B
@@ -559,9 +557,7 @@ class Code128:
             elif (
                 self.CharSetA in (code[c])
                 and current_charset != self.CharSetA
-                and not (
-                    self.CharSetB in (code[c]) and current_charset == self.CharSetB
-                )
+                and not (self.CharSetB in (code[c]) and current_charset == self.CharSetB)
             ):
                 # if char in chrset B== current, then just keep that
                 # Switching to Character set A
@@ -633,9 +629,7 @@ class Code128:
         # Draw the bar codes
         for bit in range(len(bits)):
             if bits[bit] == "1":
-                draw.rectangle(
-                    ((bit + position, 0), (bit + position, height - 10)), fill=0
-                )
+                draw.rectangle(((bit + position, 0), (bit + position, height - 10)), fill=0)
 
         # Save the result image
         im.save(value + "." + lower(extension), upper(extension))

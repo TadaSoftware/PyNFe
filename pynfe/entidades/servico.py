@@ -1,5 +1,5 @@
 """
-    @author: Junior Tada, Leonardo Tada
+@author: Junior Tada, Leonardo Tada
 """
 
 from .base import Entidade

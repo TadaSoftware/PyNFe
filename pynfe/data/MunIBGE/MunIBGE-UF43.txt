@@ -236,7 +236,7 @@
 4311627	Lindolfo Collor
 4311643	Linha Nova
 4311700	Machadinho
-4311718	Maçambara
+4311718	Maçambará
 4311734	Mampituba
 4311759	Manoel Viana
 4311775	Maquiné
@@ -339,7 +339,7 @@
 4315354	Quinze de Novembro
 4315404	Redentora
 4315453	Relvado
-4315503	Restinga Seca
+4315503	Restinga Sêca
 4315552	Rio dos Índios
 4315602	Rio Grande
 4315701	Rio Pardo
@@ -366,7 +366,7 @@
 4316956	Santa Maria do Herval
 4316972	Santa Margarida do Sul
 4317004	Santana da Boa Vista
-4317103	Santana do Livramento
+4317103	Sant'Ana do Livramento
 4317202	Santa Rosa
 4317251	Santa Tereza
 4317301	Santa Vitória do Palmar
@@ -480,7 +480,7 @@
 4322608	Venâncio Aires
 4322707	Vera Cruz
 4322806	Veranópolis
-4322855	Vespasiano Correa
+4322855	Vespasiano Corrêa
 4322905	Viadutos
 4323002	Viamão
 4323101	Vicente Dutra
@@ -493,5 +493,5 @@
 4323606	Vista Alegre do Prata
 4323705	Vista Gaúcha
 4323754	Vitória das Missões
-4323770	Westfalia
+4323770	Westfália
 4323804	Xangri-lá

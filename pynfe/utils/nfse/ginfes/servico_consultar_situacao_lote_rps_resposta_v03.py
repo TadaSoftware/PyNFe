@@ -14,11 +14,14 @@ import pyxb.utils.utility
 import pyxb.utils.domutils
 import sys
 import pyxb.utils.six as _six
+
 # Unique identifier for bindings created at the same time
-_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:fbc5e3c4-ae85-46e7-94d3-4eb6e03e8f0c')
+_GenerationUID = pyxb.utils.utility.UniqueIdentifier(
+    "urn:uuid:fbc5e3c4-ae85-46e7-94d3-4eb6e03e8f0c"
+)
 
 # Version of PyXB used to generate the bindings
-_PyXBVersion = '1.2.6'
+_PyXBVersion = "1.2.6"
 
 # A holder for module-level binding classes so we can access them from
 # inside class definitions where property names may conflict.
@@ -29,12 +32,18 @@ from pynfe.utils.nfse.ginfes import _tipos as _ImportedBinding__tipos
 import pyxb.binding.datatypes
 
 # NOTE: All namespace declarations are reserved within the binding
-Namespace = pyxb.namespace.NamespaceForURI('http://www.ginfes.com.br/servico_consultar_situacao_lote_rps_resposta_v03.xsd', create_if_missing=True)
-Namespace.configureCategories(['typeBinding', 'elementBinding'])
+Namespace = pyxb.namespace.NamespaceForURI(
+    "http://www.ginfes.com.br/servico_consultar_situacao_lote_rps_resposta_v03.xsd",
+    create_if_missing=True,
+)
+Namespace.configureCategories(["typeBinding", "elementBinding"])
 _Namespace_tipos = _ImportedBinding__tipos.Namespace
-_Namespace_tipos.configureCategories(['typeBinding', 'elementBinding'])
+_Namespace_tipos.configureCategories(["typeBinding", "elementBinding"])
 
-def CreateFromDocument (xml_text, fallback_namespace=None, location_base=None, default_namespace=None):
+
+def CreateFromDocument(
+    xml_text, fallback_namespace=None, location_base=None, default_namespace=None
+):
     """Parse the given XML and use the document element to create a
     Python instance.
 
@@ -65,7 +74,9 @@ def CreateFromDocument (xml_text, fallback_namespace=None, location_base=None, d
         fallback_namespace = default_namespace
     if fallback_namespace is None:
         fallback_namespace = Namespace.fallbackNamespace()
-    saxer = pyxb.binding.saxer.make_parser(fallback_namespace=fallback_namespace, location_base=location_base)
+    saxer = pyxb.binding.saxer.make_parser(
+        fallback_namespace=fallback_namespace, location_base=location_base
+    )
     handler = saxer.getContentHandler()
     xmld = xml_text
     if isinstance(xmld, _six.text_type):
@@ -74,7 +85,8 @@ def CreateFromDocument (xml_text, fallback_namespace=None, location_base=None, d
     instance = handler.rootObject()
     return instance
 
-def CreateFromDOM (node, fallback_namespace=None, default_namespace=None):
+
+def CreateFromDOM(node, fallback_namespace=None, default_namespace=None):
     """Create a Python instance from the given DOM node.
     The node tag must correspond to an element declaration in this module.
 
@@ -87,60 +99,135 @@ def CreateFromDOM (node, fallback_namespace=None, default_namespace=None):
 
 
 # Complex type [anonymous] with content type ELEMENT_ONLY
-class CTD_ANON (pyxb.binding.basis.complexTypeDefinition):
+class CTD_ANON(pyxb.binding.basis.complexTypeDefinition):
     """Complex type [anonymous] with content type ELEMENT_ONLY"""
+
     _TypeDefinition = None
     _ContentTypeTag = pyxb.binding.basis.complexTypeDefinition._CT_ELEMENT_ONLY
     _Abstract = False
     _ExpandedName = None
-    _XSDLocation = pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd', 6, 2)
+    _XSDLocation = pyxb.utils.utility.Location(
+        "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd",
+        6,
+        2,
+    )
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-    
-    # Element {http://www.ginfes.com.br/servico_consultar_situacao_lote_rps_resposta_v03.xsd}NumeroLote uses Python identifier NumeroLote
-    __NumeroLote = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'NumeroLote'), 'NumeroLote', '__httpwww_ginfes_com_brservico_consultar_situacao_lote_rps_resposta_v03_xsd_CTD_ANON_httpwww_ginfes_com_brservico_consultar_situacao_lote_rps_resposta_v03_xsdNumeroLote', False, pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd', 9, 5), )
 
-    
+    # Element {http://www.ginfes.com.br/servico_consultar_situacao_lote_rps_resposta_v03.xsd}NumeroLote uses Python identifier NumeroLote
+    __NumeroLote = pyxb.binding.content.ElementDeclaration(
+        pyxb.namespace.ExpandedName(Namespace, "NumeroLote"),
+        "NumeroLote",
+        "__httpwww_ginfes_com_brservico_consultar_situacao_lote_rps_resposta_v03_xsd_CTD_ANON_httpwww_ginfes_com_brservico_consultar_situacao_lote_rps_resposta_v03_xsdNumeroLote",
+        False,
+        pyxb.utils.utility.Location(
+            "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd",
+            9,
+            5,
+        ),
+    )
+
     NumeroLote = property(__NumeroLote.value, __NumeroLote.set, None, None)
 
-    
     # Element {http://www.ginfes.com.br/servico_consultar_situacao_lote_rps_resposta_v03.xsd}Situacao uses Python identifier Situacao
-    __Situacao = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(Namespace, 'Situacao'), 'Situacao', '__httpwww_ginfes_com_brservico_consultar_situacao_lote_rps_resposta_v03_xsd_CTD_ANON_httpwww_ginfes_com_brservico_consultar_situacao_lote_rps_resposta_v03_xsdSituacao', False, pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd', 10, 5), )
+    __Situacao = pyxb.binding.content.ElementDeclaration(
+        pyxb.namespace.ExpandedName(Namespace, "Situacao"),
+        "Situacao",
+        "__httpwww_ginfes_com_brservico_consultar_situacao_lote_rps_resposta_v03_xsd_CTD_ANON_httpwww_ginfes_com_brservico_consultar_situacao_lote_rps_resposta_v03_xsdSituacao",
+        False,
+        pyxb.utils.utility.Location(
+            "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd",
+            10,
+            5,
+        ),
+    )
 
-    
     Situacao = property(__Situacao.value, __Situacao.set, None, None)
 
-    
     # Element {http://www.ginfes.com.br/tipos_v03.xsd}ListaMensagemRetorno uses Python identifier ListaMensagemRetorno
-    __ListaMensagemRetorno = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(_Namespace_tipos, 'ListaMensagemRetorno'), 'ListaMensagemRetorno', '__httpwww_ginfes_com_brservico_consultar_situacao_lote_rps_resposta_v03_xsd_CTD_ANON_httpwww_ginfes_com_brtipos_v03_xsdListaMensagemRetorno', False, pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/tipos_v03.xsd', 508, 1), )
+    __ListaMensagemRetorno = pyxb.binding.content.ElementDeclaration(
+        pyxb.namespace.ExpandedName(_Namespace_tipos, "ListaMensagemRetorno"),
+        "ListaMensagemRetorno",
+        "__httpwww_ginfes_com_brservico_consultar_situacao_lote_rps_resposta_v03_xsd_CTD_ANON_httpwww_ginfes_com_brtipos_v03_xsdListaMensagemRetorno",
+        False,
+        pyxb.utils.utility.Location(
+            "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/tipos_v03.xsd", 508, 1
+        ),
+    )
 
-    
-    ListaMensagemRetorno = property(__ListaMensagemRetorno.value, __ListaMensagemRetorno.set, None, None)
+    ListaMensagemRetorno = property(
+        __ListaMensagemRetorno.value, __ListaMensagemRetorno.set, None, None
+    )
 
-    _ElementMap.update({
-        __NumeroLote.name() : __NumeroLote,
-        __Situacao.name() : __Situacao,
-        __ListaMensagemRetorno.name() : __ListaMensagemRetorno
-    })
-    _AttributeMap.update({
-        
-    })
+    _ElementMap.update(
+        {
+            __NumeroLote.name(): __NumeroLote,
+            __Situacao.name(): __Situacao,
+            __ListaMensagemRetorno.name(): __ListaMensagemRetorno,
+        }
+    )
+    _AttributeMap.update({})
+
+
 _module_typeBindings.CTD_ANON = CTD_ANON
 
 
-ConsultarSituacaoLoteRpsResposta = pyxb.binding.basis.element(pyxb.namespace.ExpandedName(Namespace, 'ConsultarSituacaoLoteRpsResposta'), CTD_ANON, location=pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd', 5, 1))
-Namespace.addCategoryObject('elementBinding', ConsultarSituacaoLoteRpsResposta.name().localName(), ConsultarSituacaoLoteRpsResposta)
+ConsultarSituacaoLoteRpsResposta = pyxb.binding.basis.element(
+    pyxb.namespace.ExpandedName(Namespace, "ConsultarSituacaoLoteRpsResposta"),
+    CTD_ANON,
+    location=pyxb.utils.utility.Location(
+        "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd",
+        5,
+        1,
+    ),
+)
+Namespace.addCategoryObject(
+    "elementBinding",
+    ConsultarSituacaoLoteRpsResposta.name().localName(),
+    ConsultarSituacaoLoteRpsResposta,
+)
 
 
+CTD_ANON._AddElement(
+    pyxb.binding.basis.element(
+        pyxb.namespace.ExpandedName(Namespace, "NumeroLote"),
+        _ImportedBinding__tipos.tsNumeroLote,
+        scope=CTD_ANON,
+        location=pyxb.utils.utility.Location(
+            "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd",
+            9,
+            5,
+        ),
+    )
+)
 
-CTD_ANON._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(Namespace, 'NumeroLote'), _ImportedBinding__tipos.tsNumeroLote, scope=CTD_ANON, location=pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd', 9, 5)))
+CTD_ANON._AddElement(
+    pyxb.binding.basis.element(
+        pyxb.namespace.ExpandedName(Namespace, "Situacao"),
+        _ImportedBinding__tipos.tsSituacaoLoteRps,
+        scope=CTD_ANON,
+        location=pyxb.utils.utility.Location(
+            "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd",
+            10,
+            5,
+        ),
+    )
+)
 
-CTD_ANON._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(Namespace, 'Situacao'), _ImportedBinding__tipos.tsSituacaoLoteRps, scope=CTD_ANON, location=pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd', 10, 5)))
+CTD_ANON._AddElement(
+    pyxb.binding.basis.element(
+        pyxb.namespace.ExpandedName(_Namespace_tipos, "ListaMensagemRetorno"),
+        _ImportedBinding__tipos.CTD_ANON,
+        scope=CTD_ANON,
+        location=pyxb.utils.utility.Location(
+            "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/tipos_v03.xsd", 508, 1
+        ),
+    )
+)
 
-CTD_ANON._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(_Namespace_tipos, 'ListaMensagemRetorno'), _ImportedBinding__tipos.CTD_ANON, scope=CTD_ANON, location=pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/tipos_v03.xsd', 508, 1)))
 
-def _BuildAutomaton ():
+def _BuildAutomaton():
     # Remove this helper function from the namespace after it is invoked
     global _BuildAutomaton
     del _BuildAutomaton
@@ -149,25 +236,52 @@ def _BuildAutomaton ():
     counters = set()
     states = []
     final_update = None
-    symbol = pyxb.binding.content.ElementUse(CTD_ANON._UseForTag(pyxb.namespace.ExpandedName(Namespace, 'NumeroLote')), pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd', 9, 5))
-    st_0 = fac.State(symbol, is_initial=True, final_update=final_update, is_unordered_catenation=False)
+    symbol = pyxb.binding.content.ElementUse(
+        CTD_ANON._UseForTag(pyxb.namespace.ExpandedName(Namespace, "NumeroLote")),
+        pyxb.utils.utility.Location(
+            "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd",
+            9,
+            5,
+        ),
+    )
+    st_0 = fac.State(
+        symbol, is_initial=True, final_update=final_update, is_unordered_catenation=False
+    )
     states.append(st_0)
     final_update = set()
-    symbol = pyxb.binding.content.ElementUse(CTD_ANON._UseForTag(pyxb.namespace.ExpandedName(Namespace, 'Situacao')), pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd', 10, 5))
-    st_1 = fac.State(symbol, is_initial=False, final_update=final_update, is_unordered_catenation=False)
+    symbol = pyxb.binding.content.ElementUse(
+        CTD_ANON._UseForTag(pyxb.namespace.ExpandedName(Namespace, "Situacao")),
+        pyxb.utils.utility.Location(
+            "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd",
+            10,
+            5,
+        ),
+    )
+    st_1 = fac.State(
+        symbol, is_initial=False, final_update=final_update, is_unordered_catenation=False
+    )
     states.append(st_1)
     final_update = set()
-    symbol = pyxb.binding.content.ElementUse(CTD_ANON._UseForTag(pyxb.namespace.ExpandedName(_Namespace_tipos, 'ListaMensagemRetorno')), pyxb.utils.utility.Location('/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd', 12, 4))
-    st_2 = fac.State(symbol, is_initial=True, final_update=final_update, is_unordered_catenation=False)
+    symbol = pyxb.binding.content.ElementUse(
+        CTD_ANON._UseForTag(pyxb.namespace.ExpandedName(_Namespace_tipos, "ListaMensagemRetorno")),
+        pyxb.utils.utility.Location(
+            "/workspaces/PyNFe/pynfe/data/XSDs/NFS-e/Ginfes/servico_consultar_situacao_lote_rps_resposta_v03.xsd",
+            12,
+            4,
+        ),
+    )
+    st_2 = fac.State(
+        symbol, is_initial=True, final_update=final_update, is_unordered_catenation=False
+    )
     states.append(st_2)
     transitions = []
-    transitions.append(fac.Transition(st_1, [
-         ]))
+    transitions.append(fac.Transition(st_1, []))
     st_0._set_transitionSet(transitions)
     transitions = []
     st_1._set_transitionSet(transitions)
     transitions = []
     st_2._set_transitionSet(transitions)
     return fac.Automaton(states, counters, False, containing_state=None)
-CTD_ANON._Automaton = _BuildAutomaton()
 
+
+CTD_ANON._Automaton = _BuildAutomaton()

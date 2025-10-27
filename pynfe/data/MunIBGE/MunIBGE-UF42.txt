@@ -95,7 +95,7 @@
 4205803	Garuva
 4205902	Gaspar
 4206009	Governador Celso Ramos
-4206108	Grão Pará
+4206108	Grão-Pará
 4206207	Gravatal
 4206306	Guabiruba
 4206405	Guaraciaba
@@ -142,7 +142,7 @@
 4209409	Laguna
 4209458	Lajeado Grande
 4209508	Laurentino
-4209607	Lauro Muller
+4209607	Lauro Müller
 4209706	Lebon Régis
 4209805	Leoberto Leal
 4209854	Lindóia do Sul
@@ -238,7 +238,7 @@
 4215802	São Bento do Sul
 4215901	São Bonifácio
 4216008	São Carlos
-4216057	São Cristovão do Sul
+4216057	São Cristóvão do Sul
 4216107	São Domingos
 4216206	São Francisco do Sul
 4216255	São João do Oeste

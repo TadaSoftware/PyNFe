@@ -5,3 +5,5 @@ signxml
 cryptography
 # Opcional para NFS-e
 #-r requirements-nfse.txt
+# Opcional para Desenvolvimento (Pytest, Ruff, MyPy, etc)
+#-r requirements-dev.txt
