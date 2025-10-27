@@ -24,7 +24,7 @@ Características
     * Configuração para utilização em ambiente de produção e homologação (testes)
     * Emissão de notas fiscais normal e em contingência
     * Consulta Status do Serviço
-    * Consultar Cadastro de contribuiente
+    * Consultar Cadastro de contribuinte
     * Consultar nota fiscal pela chave de acesso
     * Consultar protocolo
     * Evento de cancelamento de notas
@@ -180,7 +180,10 @@ Documentação
 
 Suporte
 -----------
-Se tiver qualquer problema or sugestão abra uma issue [aqui](https://github.com/TadaSoftware/PyNFe/issues) ou inicie uma discussão sobre um assunto [aqui](https://github.com/TadaSoftware/PyNFe/discussions).
+Se tiver qualquer problema or sugestão procure um dos canais abaixo:
+* Caso encontre um problema, abra uma Issue para ser implementada https://github.com/TadaSoftware/PyNFe/issues
+* Inicie uma discussão sobre um assunto https://github.com/TadaSoftware/PyNFe/discussions
+* Para dúvidas e conversas com a comunidade, acesse o servidor do projeto `pynfe` no Discord pelo link https://discord.gg/kZyWrmY9hJ
 
 
 Quem utiliza PyNFe
