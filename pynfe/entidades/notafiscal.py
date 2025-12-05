@@ -1009,14 +1009,32 @@ class NotaFiscalProduto(Entidade):
     # - Declaracao de Importacao (lista 1 para * / ManyToManyField)
     declaracoes_importacao = None
 
+    # Grupo K - Detalhamento Específico de Medicamentos
+    # K01a - Código de Produto da ANVISA (ou "ISENTO" para medicamentos isentos)
+    med_cProdANVISA = str()
+    # K01b - Motivo da isenção da ANVISA (opcional, para medicamentos isentos)
+    med_xMotivoIsencao = str()
+    # K06 - Preço máximo consumidor
+    med_vPMC = Decimal()
+
+    # Grupo I80 - Rastreabilidade de produto (lista 0 para 500)
+    rastro = None
+
     def __init__(self, *args, **kwargs):
         self.declaracoes_importacao = []
+        self.rastro = []
 
         super(NotaFiscalProduto, self).__init__(*args, **kwargs)
 
     def adicionar_declaracao_importacao(self, **kwargs):
         """Adiciona uma instancia de Declaracao de Importacao"""
         self.declaracoes_importacao.append(NotaFiscalDeclaracaoImportacao(**kwargs))
+
+    def adicionar_rastro(self, **kwargs):
+        """Adiciona uma instância de Rastreabilidade do Produto"""
+        obj = NotaFiscalRastro(**kwargs)
+        self.rastro.append(obj)
+        return obj
 
 
 class NotaFiscalDeclaracaoImportacao(Entidade):
@@ -1079,6 +1097,28 @@ class NotaFiscalDeclaracaoImportacaoAdicao(Entidade):
 
     #   - Número do ato concessório de Drawback
     numero_drawback = str()
+
+
+class NotaFiscalRastro(Entidade):
+    """Grupo I80 - Rastreabilidade de produto
+
+    Detalhes de rastreabilidade para produtos que necessitam de
+    controle de lote (ex: medicamentos, alimentos, etc.)
+    """
+    # I81 - Número do lote do produto
+    nLote = str()
+
+    # I82 - Quantidade de produto no lote
+    qLote = Decimal()
+
+    # I83 - Data de fabricação (formato AAAA-MM-DD)
+    dFab = None
+
+    # I84 - Data de validade (formato AAAA-MM-DD)
+    dVal = None
+
+    # I85 - Código de Agregação (opcional)
+    cAgreg = str()
 
 
 class NotaFiscalTransporteVolume(Entidade):

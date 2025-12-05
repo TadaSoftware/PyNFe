@@ -377,6 +377,23 @@ class SerializacaoXML(Serializacao):
         if produto_servico.nfci:
             etree.SubElement(prod, "nFCI").text = produto_servico.nfci
 
+        # Grupo I80 - Rastreabilidade de produto (rastro)
+        if produto_servico.rastro:
+            for rastro_item in produto_servico.rastro:
+                rastro = etree.SubElement(prod, "rastro")
+                etree.SubElement(rastro, "nLote").text = str(rastro_item.nLote)
+                etree.SubElement(rastro, "qLote").text = "{:.3f}".format(
+                    rastro_item.qLote or 0
+                )
+                etree.SubElement(rastro, "dFab").text = rastro_item.dFab.strftime(
+                    "%Y-%m-%d"
+                )
+                etree.SubElement(rastro, "dVal").text = rastro_item.dVal.strftime(
+                    "%Y-%m-%d"
+                )
+                if rastro_item.cAgreg:
+                    etree.SubElement(rastro, "cAgreg").text = str(rastro_item.cAgreg)
+
         # Combustível
         if produto_servico.cProdANP:
             combustivel = etree.SubElement(prod, "comb")
@@ -408,6 +425,21 @@ class SerializacaoXML(Serializacao):
 
             if produto_servico.comb_p_bio:
                 etree.SubElement(combustivel, "pBio").text = "{:.4f}".format(produto_servico.comb_p_bio or 0)
+
+        # Grupo K - Detalhamento Específico de Medicamentos (med)
+        # Note: med is inside prod, as a product-specific group alternative to comb, veicProd, arma
+        if produto_servico.med_cProdANVISA:
+            med = etree.SubElement(prod, "med")
+            etree.SubElement(med, "cProdANVISA").text = str(
+                produto_servico.med_cProdANVISA
+            )
+            if produto_servico.med_xMotivoIsencao:
+                etree.SubElement(med, "xMotivoIsencao").text = str(
+                    produto_servico.med_xMotivoIsencao
+                )
+            etree.SubElement(med, "vPMC").text = "{:.2f}".format(
+                produto_servico.med_vPMC or 0
+            )
 
         # Imposto
         imposto = etree.SubElement(raiz, "imposto")
