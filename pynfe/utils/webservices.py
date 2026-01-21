@@ -141,6 +141,7 @@ NFCE = {
         "QR": "nfe.se.gov.br/portal/consultarNFCe.jsp?",
         "HTTPS": "https://www.",
         "HOMOLOGACAO": "http://www.hom.",
+        "URL": "nfe.se.gov.br/nfce/consulta"
     },
     "BA": {
         "STATUS": "",
