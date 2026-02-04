@@ -2041,7 +2041,7 @@ class SerializacaoQrcode(object):
                 url_chave = NFCE[uf]["HTTPS"] + NFCE[uf]["URL"]
             else:
                 url_chave = NFCE[uf]["HOMOLOGACAO"] + NFCE[uf]["URL"]
-        # AC, AM, RR, PA,
+        # AC, AM, RR, PA, SE
         else:
             if tpamb == "1":
                 qrcode = NFCE[uf]["HTTPS"] + NFCE[uf]["QR"] + url
