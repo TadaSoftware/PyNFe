@@ -48,7 +48,13 @@ class AssinaturaA1(Assinatura):
 
         ref_uri = ("#%s" % reference) if reference else None
         signed_root = signer.sign(xml, key=self.key, cert=self.cert, reference_uri=ref_uri)
+
+        # Reparse to ensure namespaces are correctly associated with elements
+        # This is required for lxml 6.x compatibility when using default namespace (None prefix)
+        signed_xml_str = etree.tostring(signed_root, encoding="unicode", pretty_print=False)
+        signed_root = etree.fromstring(signed_xml_str)
+
         if retorna_string:
-            return etree.tostring(signed_root, encoding="unicode", pretty_print=False)
+            return signed_xml_str
         else:
             return signed_root

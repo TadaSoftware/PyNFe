@@ -1,8 +1,8 @@
 # Dependencias basicas
-requests
-lxml
-signxml
-cryptography
+requests>=2.32.4
+lxml>=5.4.0
+signxml>=4.1.0
+cryptography>=43.0.3
 # Opcional para NFS-e
 #-r requirements-nfse.txt
 # Opcional para Desenvolvimento (Pytest, Ruff, MyPy, etc)
