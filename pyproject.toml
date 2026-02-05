@@ -22,7 +22,7 @@ line-length = 100
 [tool.poetry.dependencies]
 requests = "^2.32.4"
 signxml = ">=4.1.0"
-cryptography = "43.0.3"
+cryptography = ">=43.0.3"
 lxml = ">=5.4.0"
 pyopenssl = "^25.1.0"
 
