@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # *-* encoding: utf8 *-*
 
+import tempfile
 import unittest
 
 from pynfe.entidades.certificado import CertificadoA1
@@ -17,8 +18,9 @@ class CertificadoTestCase(unittest.TestCase):
         self.a1 = CertificadoA1(self.certificado_correto)
         cert = self.a1.separar_arquivo(senha=self.senha_correto, caminho=self.certificado_correto)
 
-        self.assertTrue(cert[0].startswith("/tmp/"))
-        self.assertTrue(cert[1].startswith("/tmp/"))
+        temp_dir = tempfile.gettempdir()
+        self.assertTrue(cert[0].startswith(temp_dir))
+        self.assertTrue(cert[1].startswith(temp_dir))
 
         self.a1.excluir()
 
