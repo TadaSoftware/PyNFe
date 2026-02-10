@@ -484,6 +484,83 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(antigo_codigo, self.notafiscal.codigo_numerico_aleatorio)
         self.assertEqual(chave_nfce, self.xml[0].attrib["Id"])
 
+    
+        # Preenche as classes do pynfe
+        self.emitente = self.preenche_emitente()
+        self.cliente = self.preenche_destinatario()
+        self.preenche_notafiscal_produto()
+
+    def test_notafiscal_formatador_de_quantidade(self):
+        emitente = self.preenche_emitente()
+        cliente = self.preenche_destinatario()
+
+        utc = datetime.timezone.utc
+        data_emissao = datetime.datetime(2021, 1, 14, 12, 0, 0, tzinfo=utc)
+        data_saida_entrada = datetime.datetime(2021, 1, 14, 13, 10, 20, tzinfo=utc)
+
+        notafiscal = NotaFiscal(
+            emitente,
+            cliente,
+            uf="PR",
+            natureza_operacao="VENDA",
+            modelo=55,
+            serie="1",
+            numero_nf="222",
+            data_emissao=data_emissao,
+            data_saida_entrada=data_saida_entrada,
+            tipo_documento=1,
+            municipio="4118402",
+            tipo_impressao_danfe=1,
+            forma_emissao="1",
+            cliente_final=1,
+            indicador_destino=1,
+            indicador_presencial=1,
+            finalidade_emissao="1",
+            processo_emissao="0",
+            transporte_modalidade_frete=1,
+            informacoes_adicionais_interesse_fisco="Teste quantidade decimal",
+            totais_tributos_aproximado=Decimal("1.23"),
+            valor_troco=Decimal("0.00"),
+        )
+
+        notafiscal.adicionar_produto_servico(
+            codigo="001",
+            descricao="Produto Decimal",
+            ncm="12345678",
+            cfop="5102",
+            unidade_comercial="UN",
+            quantidade_comercial=Decimal("1.123456"),
+            valor_unitario_comercial=Decimal("10.00"),
+            valor_total_bruto=Decimal("11.23"),
+            unidade_tributavel="UN",
+            quantidade_tributavel=Decimal("1.123456"),
+            valor_unitario_tributavel=Decimal("10.00"),
+            ean="SEM GTIN",
+            ean_tributavel="SEM GTIN",
+            ind_total=1,
+            icms_modalidade="00",
+            icms_origem=0,
+            pis_modalidade="99",
+            cofins_modalidade="99",
+            pis_valor_base_calculo=Decimal("0.00"),
+            pis_aliquota_percentual=Decimal("0.00"),
+            pis_valor=Decimal("0.00"),
+            cofins_valor_base_calculo=Decimal("0.00"),
+            cofins_aliquota_percentual=Decimal("0.00"),
+            cofins_valor=Decimal("0.00"),
+            valor_tributos_aprox="1.23",
+            informacoes_adicionais="Teste de casas decimais",
+        )
+
+        notafiscal.adicionar_pagamento(t_pag="01", x_pag="Dinheiro", v_pag=11.23, ind_pag=0)
+
+        xml = self.serializa_nfe()
+
+        qCom = xml.xpath("//ns:det/ns:prod/ns:qCom", namespaces=self.ns)[0].text
+        qTrib = xml.xpath("//ns:det/ns:prod/ns:qTrib", namespaces=self.ns)[0].text
+
+        self.assertEqual(qCom, "1.1235")
+        self.assertEqual(qTrib, "1.1235")
 
 if __name__ == "__main__":
     unittest.main()
