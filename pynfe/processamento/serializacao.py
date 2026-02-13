@@ -1335,12 +1335,8 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(cbs, "vBC").text = "{:.2f}".format(
                 produto_servico.cbs_valor_base_calculo or 0
             )
-            etree.SubElement(cbs, "pCBS").text = "{:.4f}".format(
-                produto_servico.cbs_aliquota or 0
-            )
-            etree.SubElement(cbs, "vCBS").text = "{:.2f}".format(
-                produto_servico.cbs_valor or 0
-            )
+            etree.SubElement(cbs, "pCBS").text = "{:.4f}".format(produto_servico.cbs_aliquota or 0)
+            etree.SubElement(cbs, "vCBS").text = "{:.2f}".format(produto_servico.cbs_valor or 0)
 
     def _serializar_ibs(self, produto_servico, tag_raiz):
         """Serializa IBS (Imposto sobre Bens e Servicos)."""
@@ -1351,17 +1347,11 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(ibs, "vBC").text = "{:.2f}".format(
                 produto_servico.ibs_valor_base_calculo or 0
             )
-            etree.SubElement(ibs, "pIBS").text = "{:.4f}".format(
-                produto_servico.ibs_aliquota or 0
-            )
-            etree.SubElement(ibs, "vIBS").text = "{:.2f}".format(
-                produto_servico.ibs_valor or 0
-            )
+            etree.SubElement(ibs, "pIBS").text = "{:.4f}".format(produto_servico.ibs_aliquota or 0)
+            etree.SubElement(ibs, "vIBS").text = "{:.2f}".format(produto_servico.ibs_valor or 0)
 
         if produto_servico.ibs_codigo_municipio_destino:
-            etree.SubElement(ibs, "cMunDest").text = (
-                produto_servico.ibs_codigo_municipio_destino
-            )
+            etree.SubElement(ibs, "cMunDest").text = produto_servico.ibs_codigo_municipio_destino
 
     def _serializar_is(self, produto_servico, tag_raiz):
         """Serializa IS (Imposto Seletivo)."""
@@ -1372,12 +1362,8 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(is_tag, "vBC").text = "{:.2f}".format(
                 produto_servico.is_valor_base_calculo or 0
             )
-            etree.SubElement(is_tag, "pIS").text = "{:.4f}".format(
-                produto_servico.is_aliquota or 0
-            )
-            etree.SubElement(is_tag, "vIS").text = "{:.2f}".format(
-                produto_servico.is_valor or 0
-            )
+            etree.SubElement(is_tag, "pIS").text = "{:.4f}".format(produto_servico.is_aliquota or 0)
+            etree.SubElement(is_tag, "vIS").text = "{:.2f}".format(produto_servico.is_valor or 0)
 
     def _serializar_declaracao_importacao(
         self, produto_servico, tag_raiz="prod", retorna_string=True
@@ -1779,17 +1765,11 @@ class SerializacaoXML(Serializacao):
 
         # Reforma Tributaria - Totais IVA Dual
         if nota_fiscal.totais_cbs:
-            etree.SubElement(icms_total, "vCBS").text = "{:.2f}".format(
-                nota_fiscal.totais_cbs
-            )
+            etree.SubElement(icms_total, "vCBS").text = "{:.2f}".format(nota_fiscal.totais_cbs)
         if nota_fiscal.totais_ibs:
-            etree.SubElement(icms_total, "vIBS").text = "{:.2f}".format(
-                nota_fiscal.totais_ibs
-            )
+            etree.SubElement(icms_total, "vIBS").text = "{:.2f}".format(nota_fiscal.totais_ibs)
         if nota_fiscal.totais_is:
-            etree.SubElement(icms_total, "vIS").text = "{:.2f}".format(
-                nota_fiscal.totais_is
-            )
+            etree.SubElement(icms_total, "vIS").text = "{:.2f}".format(nota_fiscal.totais_is)
 
         # Transporte
         transp = etree.SubElement(raiz, "transp")
