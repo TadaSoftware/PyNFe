@@ -545,6 +545,31 @@ COFINS_TIPOS_TRIBUTACAO = (
 
 COFINS_TIPOS_CALCULO = IPI_TIPOS_CALCULO
 
+# =============================================
+# Reforma Tributaria - IVA Dual (EC 132/2023)
+# =============================================
+
+# CST para IBS (Imposto sobre Bens e Servicos) e CBS (Contribuicao sobre Bens e Servicos)
+# Tabela preliminar - sujeita a ajuste na regulamentacao da LC
+IBS_CBS_TIPOS_TRIBUTACAO = (
+    ("01", "Tributada Integralmente"),
+    ("02", "Tributada com Reducao (Cesta Basica/Saude)"),
+    ("03", "Isencao"),
+    ("04", "Imunidade"),
+    ("05", "Suspensao"),
+    ("51", "Diferimento"),
+    ("70", "Monofasica (Combustiveis)"),
+)
+
+# CST para IS (Imposto Seletivo)
+IS_TIPOS_TRIBUTACAO = (
+    ("01", "Tributada Integralmente"),
+    ("02", "Tributada com Reducao"),
+    ("03", "Isencao"),
+    ("04", "Imunidade"),
+    ("05", "Suspensao"),
+)
+
 MODALIDADES_FRETE = (
     (0, "0 - Contratação por conta do Remetente (CIF)"),
     (1, "1 - Por conta do destinatário"),

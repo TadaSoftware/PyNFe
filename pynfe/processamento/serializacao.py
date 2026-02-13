@@ -438,6 +438,14 @@ class SerializacaoXML(Serializacao):
             retorna_string=False,
         )
 
+        # Reforma Tributaria - IVA Dual
+        self._serializar_imposto_ibscbs(
+            produto_servico=produto_servico,
+            modelo=modelo,
+            tag_raiz=imposto,
+            retorna_string=False,
+        )
+
         # tag impostoDevol
         if produto_servico.ipi_valor_ipi_dev:
             impostodevol = etree.SubElement(raiz, "impostoDevol")
@@ -1292,6 +1300,85 @@ class SerializacaoXML(Serializacao):
                 produto_servico.imposto_importacao_valor_iof
             )
 
+    # =============================================
+    # Reforma Tributaria - IVA Dual (EC 132/2023)
+    # =============================================
+
+    def _serializar_imposto_ibscbs(
+        self, produto_servico, modelo, tag_raiz="imposto", retorna_string=True
+    ):
+        """Serializa grupo impostoMisto contendo CBS, IBS e IS."""
+        has_cbs = produto_servico.cbs_situacao_tributaria
+        has_ibs = produto_servico.ibs_situacao_tributaria
+        has_is = produto_servico.is_situacao_tributaria
+
+        if not has_cbs and not has_ibs and not has_is:
+            return
+
+        imposto_misto = etree.SubElement(tag_raiz, "impostoMisto")
+
+        if has_cbs:
+            self._serializar_cbs(produto_servico, imposto_misto)
+
+        if has_ibs:
+            self._serializar_ibs(produto_servico, imposto_misto)
+
+        if has_is:
+            self._serializar_is(produto_servico, imposto_misto)
+
+    def _serializar_cbs(self, produto_servico, tag_raiz):
+        """Serializa CBS (Contribuicao sobre Bens e Servicos)."""
+        cbs = etree.SubElement(tag_raiz, "CBS")
+        etree.SubElement(cbs, "CST").text = produto_servico.cbs_situacao_tributaria
+
+        if produto_servico.cbs_situacao_tributaria in ("01", "02", "51"):
+            etree.SubElement(cbs, "vBC").text = "{:.2f}".format(
+                produto_servico.cbs_valor_base_calculo or 0
+            )
+            etree.SubElement(cbs, "pCBS").text = "{:.4f}".format(
+                produto_servico.cbs_aliquota or 0
+            )
+            etree.SubElement(cbs, "vCBS").text = "{:.2f}".format(
+                produto_servico.cbs_valor or 0
+            )
+
+    def _serializar_ibs(self, produto_servico, tag_raiz):
+        """Serializa IBS (Imposto sobre Bens e Servicos)."""
+        ibs = etree.SubElement(tag_raiz, "IBS")
+        etree.SubElement(ibs, "CST").text = produto_servico.ibs_situacao_tributaria
+
+        if produto_servico.ibs_situacao_tributaria in ("01", "02", "51"):
+            etree.SubElement(ibs, "vBC").text = "{:.2f}".format(
+                produto_servico.ibs_valor_base_calculo or 0
+            )
+            etree.SubElement(ibs, "pIBS").text = "{:.4f}".format(
+                produto_servico.ibs_aliquota or 0
+            )
+            etree.SubElement(ibs, "vIBS").text = "{:.2f}".format(
+                produto_servico.ibs_valor or 0
+            )
+
+        if produto_servico.ibs_codigo_municipio_destino:
+            etree.SubElement(ibs, "cMunDest").text = (
+                produto_servico.ibs_codigo_municipio_destino
+            )
+
+    def _serializar_is(self, produto_servico, tag_raiz):
+        """Serializa IS (Imposto Seletivo)."""
+        is_tag = etree.SubElement(tag_raiz, "IS")
+        etree.SubElement(is_tag, "CST").text = produto_servico.is_situacao_tributaria
+
+        if produto_servico.is_situacao_tributaria in ("01", "02"):
+            etree.SubElement(is_tag, "vBC").text = "{:.2f}".format(
+                produto_servico.is_valor_base_calculo or 0
+            )
+            etree.SubElement(is_tag, "pIS").text = "{:.4f}".format(
+                produto_servico.is_aliquota or 0
+            )
+            etree.SubElement(is_tag, "vIS").text = "{:.2f}".format(
+                produto_servico.is_valor or 0
+            )
+
     def _serializar_declaracao_importacao(
         self, produto_servico, tag_raiz="prod", retorna_string=True
     ):
@@ -1688,6 +1775,20 @@ class SerializacaoXML(Serializacao):
         if nota_fiscal.totais_tributos_aproximado:
             etree.SubElement(icms_total, "vTotTrib").text = "{:.2f}".format(
                 nota_fiscal.totais_tributos_aproximado
+            )
+
+        # Reforma Tributaria - Totais IVA Dual
+        if nota_fiscal.totais_cbs:
+            etree.SubElement(icms_total, "vCBS").text = "{:.2f}".format(
+                nota_fiscal.totais_cbs
+            )
+        if nota_fiscal.totais_ibs:
+            etree.SubElement(icms_total, "vIBS").text = "{:.2f}".format(
+                nota_fiscal.totais_ibs
+            )
+        if nota_fiscal.totais_is:
+            etree.SubElement(icms_total, "vIS").text = "{:.2f}".format(
+                nota_fiscal.totais_is
             )
 
         # Transporte

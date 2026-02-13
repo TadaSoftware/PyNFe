@@ -302,6 +302,11 @@ class NotaFiscal(Entidade):
     # - Valor total do ICMS monofásico sujeito a retenção
     totais_icms_v_icms_mono_reten = Decimal()
 
+    # Reforma Tributaria - Totais IVA Dual
+    totais_cbs = Decimal()
+    totais_ibs = Decimal()
+    totais_is = Decimal()
+
     # Transporte
     # - Modalidade do Frete (obrigatorio - seleciona de lista) - MODALIDADES_FRETE
     # 0=Contratação do Frete por conta do Remetente (CIF);
@@ -464,6 +469,11 @@ class NotaFiscal(Entidade):
         self.totais_icms_q_bc_mono_ret += obj.icms_q_bc_mono_ret
         self.totais_icms_v_icms_mono_ret += obj.icms_v_icms_mono_ret
 
+        # Reforma Tributaria - IVA Dual
+        self.totais_cbs += obj.cbs_valor
+        self.totais_ibs += obj.ibs_valor
+        self.totais_is += obj.is_valor
+
         # TODO calcular impostos aproximados
         # self.totais_tributos_aproximado += obj.tributos
 
@@ -477,6 +487,9 @@ class NotaFiscal(Entidade):
             + obj.imposto_importacao_valor
             + obj.ipi_valor_ipi
             + obj.ipi_valor_ipi_dev
+            + obj.ibs_valor
+            + obj.cbs_valor
+            + obj.is_valor
             - obj.desconto
             - obj.icms_desonerado
         )
@@ -1001,6 +1014,29 @@ class NotaFiscalProduto(Entidade):
 
     #   - Valor imposto de importacao
     imposto_importacao_valor = Decimal()
+
+    # =============================================
+    # Reforma Tributaria - IVA Dual (EC 132/2023)
+    # =============================================
+
+    # CBS (Contribuicao sobre Bens e Servicos) - Federal
+    cbs_situacao_tributaria = str()
+    cbs_valor_base_calculo = Decimal()
+    cbs_aliquota = Decimal()
+    cbs_valor = Decimal()
+
+    # IBS (Imposto sobre Bens e Servicos) - Estadual/Municipal
+    ibs_situacao_tributaria = str()
+    ibs_valor_base_calculo = Decimal()
+    ibs_aliquota = Decimal()
+    ibs_valor = Decimal()
+    ibs_codigo_municipio_destino = str()  # cMunDest - IBGE code
+
+    # IS (Imposto Seletivo) - Federal
+    is_situacao_tributaria = str()
+    is_valor_base_calculo = Decimal()
+    is_aliquota = Decimal()
+    is_valor = Decimal()
 
     # - Informacoes Adicionais
     #  - Texto livre de informacoes adicionais

@@ -1,4 +1,4 @@
-# Source Map: `serializacao.py` (2630 lines)
+# Source Map: `serializacao.py` (2740 lines)
 
 XML serialization of NF-e, NFC-e, NFS-e and MDF-e documents into SEFAZ-compliant XML format.
 
@@ -8,10 +8,10 @@ XML serialization of NF-e, NFC-e, NFS-e and MDF-e documents into SEFAZ-compliant
 |-------|-------|---------|
 | `Serializacao` | 30-63 | Abstract base class (not instantiable directly) |
 | `SerializacaoXML` | 66-1829 | Main NF-e/NFC-e XML serialization |
-| `SerializacaoQrcode` | 1960-2064 | NFC-e QR Code generation |
-| `SerializacaoNfse` | 2067-2133 | NFS-e serialization (Betha/Ginfes) |
-| `SerializacaoQrcodeMDFe` | 2136-2159 | MDF-e QR Code generation |
-| `SerializacaoMDFe` | 2162-2630 | MDF-e XML serialization |
+| `SerializacaoQrcode` | 2070-2174 | NFC-e QR Code generation |
+| `SerializacaoNfse` | 2177-2243 | NFS-e serialization (Betha/Ginfes) |
+| `SerializacaoQrcodeMDFe` | 2246-2269 | MDF-e QR Code generation |
+| `SerializacaoMDFe` | 2272-2740 | MDF-e XML serialization |
 
 ---
 
@@ -48,7 +48,11 @@ Abstract base for all serializers. Stores `_fonte_dados`, `_ambiente` (1=prod, 2
 | `_serializar_imposto_pis()` | 1120-1192 | PIS tax |
 | `_serializar_imposto_cofins()` | 1194-1269 | COFINS tax |
 | `_serializar_imposto_importacao()` | 1271-1293 | Import tax (II) |
-| `_serializar_declaracao_importacao()` | 1295-1345 | Import declaration (DI) |
+| `_serializar_imposto_ibscbs()` | 1295-1322 | Reforma Tributaria — impostoMisto wrapper (CBS + IBS + IS) |
+| `_serializar_cbs()` | 1324-1339 | CBS (Contribuicao sobre Bens e Servicos) |
+| `_serializar_ibs()` | 1341-1361 | IBS (Imposto sobre Bens e Servicos) |
+| `_serializar_is()` | 1363-1378 | IS (Imposto Seletivo) |
+| `_serializar_declaracao_importacao()` | 1380-1430 | Import declaration (DI) |
 
 ### ICMS Modalities Detail (within `_serializar_imposto_icms`)
 | CST/CSOSN | Lines | Description |
