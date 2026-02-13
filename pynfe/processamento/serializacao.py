@@ -2034,14 +2034,22 @@ class SerializacaoQrcode(object):
             else:
                 qrcode = NFCE[uf]["HOMOLOGACAO"] + NFCE[uf]["QR"] + url
             url_chave = url_chave = NFCE[uf]["URL"]
-        # MG tem comportamento distindos qrcode e url
+        # MG tem comportamento distintos para qrcode e url
         elif uf == "MG":
             qrcode = NFCE[uf]["QR"] + url
             if tpamb == "1":
                 url_chave = NFCE[uf]["HTTPS"] + NFCE[uf]["URL"]
             else:
                 url_chave = NFCE[uf]["HOMOLOGACAO"] + NFCE[uf]["URL"]
-        # AC, AM, RR, PA, SE
+        # AM tem comportamento distintos para qrcode e url
+        elif uf == "AM":
+            if tpamb == "1":
+                qrcode = NFCE[uf]["HTTPS"] + NFCE[uf]["QR"] + url
+                url_chave = NFCE[uf]["HTTPS"] + NFCE[uf]["URL"]
+            else:
+                qrcode = NFCE[uf]["HTTPS"] + NFCE[uf]["QR_HOMOLOGACAO"] + url
+                url_chave = NFCE[uf]["HTTPS"] + NFCE[uf]["URL"]
+        # AC, RR, PA, SE
         else:
             if tpamb == "1":
                 qrcode = NFCE[uf]["HTTPS"] + NFCE[uf]["QR"] + url
