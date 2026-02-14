@@ -1,10 +1,10 @@
-# CLAUDE.md - PyNFe
+# AGENTS.md - PyNFe
 
 Brazilian electronic fiscal document library (NF-e, NFC-e, NFS-e, MDF-e, CT-e) for SEFAZ webservice communication.
 
 ## Source Map Navigation (MANDATORY)
 
-**Before reading any large file (>200 lines), you MUST first read its `{filename}_map.md` file** in the same directory. The source map contains:
+**Before reading any large file (>200 lines), you MUST first read its `{filename}_map.md` file** in the `docs/` directory. The source map contains:
 - Section-by-section breakdown with exact line ranges
 - Class/method index with purpose descriptions
 - Field group documentation
@@ -15,26 +15,27 @@ This allows you to navigate directly to the specific line-window you need instea
 
 | Source Map | File | Lines | Description |
 |------------|------|-------|-------------|
-| `pynfe/processamento/serializacao_map.md` | `serializacao.py` | 2630 | XML serialization (NF-e, MDF-e, QR codes) |
-| `pynfe/processamento/comunicacao_map.md` | `comunicacao.py` | 1348 | SEFAZ webservice communication |
-| `pynfe/processamento/autorizador_nfse_map.md` | `autorizador_nfse.py` | 538 | NFS-e authorization (Betha/Ginfes) |
-| `pynfe/entidades/notafiscal_map.md` | `notafiscal.py` | 1253 | Invoice entities and tax fields |
-| `pynfe/entidades/manifesto_map.md` | `manifesto.py` | 447 | MDF-e manifest entities |
-| `pynfe/entidades/evento_map.md` | `evento.py` | 237 | Event entities (cancel, correction, etc.) |
-| `pynfe/utils/flags_map.md` | `flags.py` | 645 | Constants, namespaces, tax codes |
-| `pynfe/utils/webservices_map.md` | `webservices.py` | 572 | SEFAZ endpoint URLs by state |
-| `pynfe/utils/utils_map.md` | `__init__.py` | 253 | Utility functions (municipality lookup, signing) |
+| `docs/serializacao_map.md` | `pynfe/processamento/serializacao.py` | 2630 | XML serialization (NF-e, MDF-e, QR codes) |
+| `docs/comunicacao_map.md` | `pynfe/processamento/comunicacao.py` | 1348 | SEFAZ webservice communication |
+| `docs/autorizador_nfse_map.md` | `pynfe/processamento/autorizador_nfse.py` | 538 | NFS-e authorization (Betha/Ginfes) |
+| `docs/notafiscal_map.md` | `pynfe/entidades/notafiscal.py` | 1253 | Invoice entities and tax fields |
+| `docs/manifesto_map.md` | `pynfe/entidades/manifesto.py` | 447 | MDF-e manifest entities |
+| `docs/evento_map.md` | `pynfe/entidades/evento.py` | 237 | Event entities (cancel, correction, etc.) |
+| `docs/flags_map.md` | `pynfe/utils/flags.py` | 645 | Constants, namespaces, tax codes |
+| `docs/webservices_map.md` | `pynfe/utils/webservices.py` | 572 | SEFAZ endpoint URLs by state |
+| `docs/utils_map.md` | `pynfe/utils/__init__.py` | 253 | Utility functions (municipality lookup, signing) |
 
 ### How to Use Source Maps
 
 1. **Read the `_map.md` file first** to understand the file structure
 2. **Identify the line range** you need from the map tables
 3. **Read only that section** using `offset` and `limit` parameters
-4. Example: To understand ICMS CST 60 serialization, read `serializacao_map.md`, find it's at lines 747-770, then read `serializacao.py` with `offset=747, limit=25`
+4. Example: To understand ICMS CST 60 serialization, read `docs/serializacao_map.md`, find it's at lines 747-770, then read `pynfe/processamento/serializacao.py` with `offset=747, limit=25`
 
 ## Project Structure
 
 ```
+docs/                   # Documentation and source maps (*_map.md, reforma_tributaria.md)
 pynfe/
 ├── entidades/          # Domain entities (data models)
 │   ├── base.py         # Base entity class with kwargs init
