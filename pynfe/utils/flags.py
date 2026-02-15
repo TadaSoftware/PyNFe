@@ -223,6 +223,8 @@ NF_FINALIDADES_EMISSAO = (
     (2, "NF-e complementar"),
     (3, "NF-e de ajuste"),
     (4, "NF-e de Devolução"),
+    (5, "NF-e de Débito"),
+    (6, "NF-e de Crédito"),
 )
 
 NF_REFERENCIADA_TIPOS = (
@@ -549,25 +551,34 @@ COFINS_TIPOS_CALCULO = IPI_TIPOS_CALCULO
 # Reforma Tributaria - IVA Dual (EC 132/2023)
 # =============================================
 
-# CST para IBS (Imposto sobre Bens e Servicos) e CBS (Contribuicao sobre Bens e Servicos)
-# Tabela preliminar - sujeita a ajuste na regulamentacao da LC
+# CST para IBSCBS (IBS + CBS) — NT 2025.002-RTC (3-digit codes)
 IBS_CBS_TIPOS_TRIBUTACAO = (
-    ("01", "Tributada Integralmente"),
-    ("02", "Tributada com Reducao (Cesta Basica/Saude)"),
-    ("03", "Isencao"),
-    ("04", "Imunidade"),
-    ("05", "Suspensao"),
-    ("51", "Diferimento"),
-    ("70", "Monofasica (Combustiveis)"),
+    ("000", "Tributação integral"),
+    ("010", "Tributação com alíquota reduzida"),
+    ("100", "Tributação com suspensão"),
+    ("110", "Imunidade — exportação"),
+    ("200", "Tributação com diferimento"),
+    ("222", "Isenção"),
+    ("300", "Não incidência"),
+    ("400", "Tributação por substituição"),
+    ("410", "Tributação com alíquota zero"),
+    ("510", "Tributação integral — regime específico"),
+    ("600", "Tributação monofásica — incidência padrão"),
+    ("620", "Tributação monofásica — demais operações"),
+    ("800", "Crédito presumido"),
+    ("810", "Crédito presumido — ZFM"),
+    ("900", "Outros"),
 )
 
-# CST para IS (Imposto Seletivo)
+# CST para IS (Imposto Seletivo) — CSTSelec (NT 2025.002-RTC)
 IS_TIPOS_TRIBUTACAO = (
-    ("01", "Tributada Integralmente"),
-    ("02", "Tributada com Reducao"),
-    ("03", "Isencao"),
+    ("01", "Tributada integralmente"),
+    ("02", "Tributada com redução"),
+    ("03", "Isenção"),
     ("04", "Imunidade"),
-    ("05", "Suspensao"),
+    ("05", "Suspensão"),
+    ("06", "Diferimento"),
+    ("90", "Outros"),
 )
 
 MODALIDADES_FRETE = (

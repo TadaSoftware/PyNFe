@@ -302,10 +302,16 @@ class NotaFiscal(Entidade):
     # - Valor total do ICMS monofásico sujeito a retenção
     totais_icms_v_icms_mono_reten = Decimal()
 
-    # Reforma Tributaria - Totais IVA Dual
-    totais_cbs = Decimal()
+    # Reforma Tributaria - Totais IVA Dual (Group W03 - IBSCBSTot)
+    totais_vbc_ibscbs = Decimal()  # vBCIBSCBS - Total Base de Calculo
+    totais_ibs_uf = Decimal()
+    totais_ibs_mun = Decimal()
     totais_ibs = Decimal()
+    totais_cbs = Decimal()
     totais_is = Decimal()
+
+    # Reforma Tributaria - cMunFGIBS (Group B)
+    municipio_fato_gerador_ibs = str()
 
     # Transporte
     # - Modalidade do Frete (obrigatorio - seleciona de lista) - MODALIDADES_FRETE
@@ -469,14 +475,18 @@ class NotaFiscal(Entidade):
         self.totais_icms_q_bc_mono_ret += obj.icms_q_bc_mono_ret
         self.totais_icms_v_icms_mono_ret += obj.icms_v_icms_mono_ret
 
-        # Reforma Tributaria - IVA Dual
-        self.totais_cbs += obj.cbs_valor
-        self.totais_ibs += obj.ibs_valor
+        # Reforma Tributaria - IVA Dual (NT 2025.002-RTC)
+        self.totais_vbc_ibscbs += obj.ibscbs_vbc
+        self.totais_ibs_uf += obj.ibscbs_v_ibs_uf
+        self.totais_ibs_mun += obj.ibscbs_v_ibs_mun
+        self.totais_ibs += obj.ibscbs_v_ibs
+        self.totais_cbs += obj.ibscbs_v_cbs
         self.totais_is += obj.is_valor
 
         # TODO calcular impostos aproximados
         # self.totais_tributos_aproximado += obj.tributos
 
+        # vNF does NOT include IBS/CBS/IS (prohibited in 2025-2026 per NT 2025.002-RTC)
         self.totais_icms_total_nota += (
             obj.valor_total_bruto
             + obj.icms_st_valor
@@ -487,9 +497,6 @@ class NotaFiscal(Entidade):
             + obj.imposto_importacao_valor
             + obj.ipi_valor_ipi
             + obj.ipi_valor_ipi_dev
-            + obj.ibs_valor
-            + obj.cbs_valor
-            + obj.is_valor
             - obj.desconto
             - obj.icms_desonerado
         )
@@ -1016,27 +1023,35 @@ class NotaFiscalProduto(Entidade):
     imposto_importacao_valor = Decimal()
 
     # =============================================
-    # Reforma Tributaria - IVA Dual (EC 132/2023)
+    # Reforma Tributaria - IVA Dual (NT 2025.002-RTC)
     # =============================================
 
-    # CBS (Contribuicao sobre Bens e Servicos) - Federal
-    cbs_situacao_tributaria = str()
-    cbs_valor_base_calculo = Decimal()
-    cbs_aliquota = Decimal()
-    cbs_valor = Decimal()
+    # IBSCBS group (Group UB)
+    ibscbs_cst = str()  # CST 3-digit (e.g. "000", "222")
+    ibscbs_c_class_trib = str()  # cClassTrib 6-digit classification code
+    ibscbs_vbc = Decimal()  # vBC - shared base de calculo for IBS + CBS
 
-    # IBS (Imposto sobre Bens e Servicos) - Estadual/Municipal
-    ibs_situacao_tributaria = str()
-    ibs_valor_base_calculo = Decimal()
-    ibs_aliquota = Decimal()
-    ibs_valor = Decimal()
-    ibs_codigo_municipio_destino = str()  # cMunDest - IBGE code
+    # gIBSUF - IBS estadual (UF)
+    ibscbs_p_ibs_uf = Decimal()  # pIBSUF
+    ibscbs_v_ibs_uf = Decimal()  # vIBSUF
 
-    # IS (Imposto Seletivo) - Federal
-    is_situacao_tributaria = str()
-    is_valor_base_calculo = Decimal()
-    is_aliquota = Decimal()
-    is_valor = Decimal()
+    # gIBSMun - IBS municipal
+    ibscbs_p_ibs_mun = Decimal()  # pIBSMun
+    ibscbs_v_ibs_mun = Decimal()  # vIBSMun
+
+    # vIBS total (UF + Mun)
+    ibscbs_v_ibs = Decimal()
+
+    # gCBS - CBS federal
+    ibscbs_p_cbs = Decimal()  # pCBS
+    ibscbs_v_cbs = Decimal()  # vCBS
+
+    # IS (Imposto Seletivo) - Group UB-IS
+    is_cst_selec = str()  # CSTSelec (2-digit)
+    is_c_class_trib = str()  # cClassTribIS 6-digit
+    is_vbc = Decimal()  # vBC
+    is_aliquota = Decimal()  # pIS
+    is_valor = Decimal()  # vIS
 
     # - Informacoes Adicionais
     #  - Texto livre de informacoes adicionais
