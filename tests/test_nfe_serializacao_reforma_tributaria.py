@@ -629,5 +629,64 @@ class ReformaTributariaSerializacaoTestCase(unittest.TestCase):
         self.assertEqual(len(is_tot), 0)
 
 
+    # ------------------------------------------------------------------
+    # Test 9: cMunFGIBS emitted in <ide> header
+    # ------------------------------------------------------------------
+    def test_cmunfgibs_emitido_no_ide(self):
+        emitente = self._emitente()
+        cliente = self._cliente()
+        nf = self._nota_fiscal(emitente, cliente)
+        nf.municipio_fato_gerador_ibs = "4118402"
+
+        kwargs = self._base_product_kwargs()
+        kwargs.update(
+            ibscbs_cst="000",
+            ibscbs_c_class_trib="000001",
+            ibscbs_vbc=Decimal("1000.00"),
+            ibscbs_p_ibs_uf=Decimal("0.1000"),
+            ibscbs_v_ibs_uf=Decimal("1.00"),
+            ibscbs_p_ibs_mun=Decimal("0.0000"),
+            ibscbs_v_ibs_mun=Decimal("0.00"),
+            ibscbs_v_ibs=Decimal("1.00"),
+            ibscbs_p_cbs=Decimal("0.9000"),
+            ibscbs_v_cbs=Decimal("9.00"),
+        )
+        nf.adicionar_produto_servico(**kwargs)
+        nf.adicionar_pagamento(t_pag="01", x_pag="Dinheiro", v_pag=1000.00, ind_pag=0)
+
+        xml = self._serializar_e_assinar()
+
+        # cMunFGIBS should be present in <ide>
+        cmunfgibs = xml.xpath("//ns:ide/ns:cMunFGIBS", namespaces=self.ns)
+        self.assertEqual(len(cmunfgibs), 1)
+        self.assertEqual(cmunfgibs[0].text, "4118402")
+
+        # cMunFGIBS should come after cMunFG
+        ide = xml.xpath("//ns:ide", namespaces=self.ns)[0]
+        tags = [child.tag.split("}")[-1] for child in ide]
+        cmunfg_idx = tags.index("cMunFG")
+        cmunfgibs_idx = tags.index("cMunFGIBS")
+        self.assertGreater(cmunfgibs_idx, cmunfg_idx)
+
+    # ------------------------------------------------------------------
+    # Test 10: cMunFGIBS NOT emitted when not set
+    # ------------------------------------------------------------------
+    def test_cmunfgibs_nao_emitido_quando_vazio(self):
+        emitente = self._emitente()
+        cliente = self._cliente()
+        nf = self._nota_fiscal(emitente, cliente)
+        # municipio_fato_gerador_ibs not set (empty string default)
+
+        kwargs = self._base_product_kwargs()
+        nf.adicionar_produto_servico(**kwargs)
+        nf.adicionar_pagamento(t_pag="01", x_pag="Dinheiro", v_pag=1000.00, ind_pag=0)
+
+        xml = self._serializar_e_assinar()
+
+        # cMunFGIBS should NOT be present
+        cmunfgibs = xml.xpath("//ns:ide/ns:cMunFGIBS", namespaces=self.ns)
+        self.assertEqual(len(cmunfgibs), 0)
+
+
 if __name__ == "__main__":
     unittest.main()
