@@ -1788,9 +1788,7 @@ class SerializacaoXML(Serializacao):
         # Reforma Tributaria - Totais IVA Dual (Group W03 - IBSCBSTot)
         # Type: TIBSCBSMonoTot (PL 010b DFeTiposBasicos_v1.00.xsd)
         has_reforma = (
-            nota_fiscal.totais_vbc_ibscbs
-            or nota_fiscal.totais_ibs
-            or nota_fiscal.totais_cbs
+            nota_fiscal.totais_vbc_ibscbs or nota_fiscal.totais_ibs or nota_fiscal.totais_cbs
         )
         if has_reforma:
             ibscbs_tot = etree.SubElement(total, "IBSCBSTot")

@@ -175,23 +175,23 @@ class ReformaTributariaSerializacaoTestCase(unittest.TestCase):
         self.assertEqual(vbc, "1000.00")
 
         # gIBSUF
-        p_ibs_uf = xml.xpath(
-            "//ns:IBSCBS/ns:gIBSCBS/ns:gIBSUF/ns:pIBSUF", namespaces=self.ns
-        )[0].text
+        p_ibs_uf = xml.xpath("//ns:IBSCBS/ns:gIBSCBS/ns:gIBSUF/ns:pIBSUF", namespaces=self.ns)[
+            0
+        ].text
         self.assertEqual(p_ibs_uf, "0.1000")
-        v_ibs_uf = xml.xpath(
-            "//ns:IBSCBS/ns:gIBSCBS/ns:gIBSUF/ns:vIBSUF", namespaces=self.ns
-        )[0].text
+        v_ibs_uf = xml.xpath("//ns:IBSCBS/ns:gIBSCBS/ns:gIBSUF/ns:vIBSUF", namespaces=self.ns)[
+            0
+        ].text
         self.assertEqual(v_ibs_uf, "1.00")
 
         # gIBSMun
-        p_ibs_mun = xml.xpath(
-            "//ns:IBSCBS/ns:gIBSCBS/ns:gIBSMun/ns:pIBSMun", namespaces=self.ns
-        )[0].text
+        p_ibs_mun = xml.xpath("//ns:IBSCBS/ns:gIBSCBS/ns:gIBSMun/ns:pIBSMun", namespaces=self.ns)[
+            0
+        ].text
         self.assertEqual(p_ibs_mun, "0.0000")
-        v_ibs_mun = xml.xpath(
-            "//ns:IBSCBS/ns:gIBSCBS/ns:gIBSMun/ns:vIBSMun", namespaces=self.ns
-        )[0].text
+        v_ibs_mun = xml.xpath("//ns:IBSCBS/ns:gIBSCBS/ns:gIBSMun/ns:vIBSMun", namespaces=self.ns)[
+            0
+        ].text
         self.assertEqual(v_ibs_mun, "0.00")
 
         # vIBS total
@@ -370,14 +370,14 @@ class ReformaTributariaSerializacaoTestCase(unittest.TestCase):
         self.assertEqual(v_bc, "1500.00")
 
         # Accumulated: IBS UF=1.50, IBS Mun=0.75, IBS=2.25, CBS=13.50
-        v_ibs_uf = xml.xpath(
-            "//ns:IBSCBSTot/ns:gIBS/ns:gIBSUF/ns:vIBSUF", namespaces=self.ns
-        )[0].text
+        v_ibs_uf = xml.xpath("//ns:IBSCBSTot/ns:gIBS/ns:gIBSUF/ns:vIBSUF", namespaces=self.ns)[
+            0
+        ].text
         self.assertEqual(v_ibs_uf, "1.50")
 
-        v_ibs_mun = xml.xpath(
-            "//ns:IBSCBSTot/ns:gIBS/ns:gIBSMun/ns:vIBSMun", namespaces=self.ns
-        )[0].text
+        v_ibs_mun = xml.xpath("//ns:IBSCBSTot/ns:gIBS/ns:gIBSMun/ns:vIBSMun", namespaces=self.ns)[
+            0
+        ].text
         self.assertEqual(v_ibs_mun, "0.75")
 
         v_ibs = xml.xpath("//ns:IBSCBSTot/ns:gIBS/ns:vIBS", namespaces=self.ns)[0].text
@@ -445,15 +445,15 @@ class ReformaTributariaSerializacaoTestCase(unittest.TestCase):
         xml = self._serializar_e_assinar()
 
         # Legacy ICMS still present
-        icms_cst = xml.xpath(
-            "//ns:det/ns:imposto/ns:ICMS/ns:ICMS00/ns:CST", namespaces=self.ns
-        )[0].text
+        icms_cst = xml.xpath("//ns:det/ns:imposto/ns:ICMS/ns:ICMS00/ns:CST", namespaces=self.ns)[
+            0
+        ].text
         self.assertEqual(icms_cst, "00")
 
         # Legacy PIS still present
-        pis_cst = xml.xpath(
-            "//ns:det/ns:imposto/ns:PIS/ns:PISAliq/ns:CST", namespaces=self.ns
-        )[0].text
+        pis_cst = xml.xpath("//ns:det/ns:imposto/ns:PIS/ns:PISAliq/ns:CST", namespaces=self.ns)[
+            0
+        ].text
         self.assertEqual(pis_cst, "01")
 
         # Legacy COFINS still present
@@ -627,7 +627,6 @@ class ReformaTributariaSerializacaoTestCase(unittest.TestCase):
         # ISTot not emitted (IS not in schema yet)
         is_tot = xml.xpath("//ns:total/ns:ISTot", namespaces=self.ns)
         self.assertEqual(len(is_tot), 0)
-
 
     # ------------------------------------------------------------------
     # Test 9: cMunFGIBS emitted in <ide> header
