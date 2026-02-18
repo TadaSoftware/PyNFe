@@ -484,7 +484,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(antigo_codigo, self.notafiscal.codigo_numerico_aleatorio)
         self.assertEqual(chave_nfce, self.xml[0].attrib["Id"])
 
-    
         # Preenche as classes do pynfe
         self.emitente = self.preenche_emitente()
         self.cliente = self.preenche_destinatario()
@@ -561,6 +560,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
 
         self.assertEqual(qCom, "1.1235")
         self.assertEqual(qTrib, "1.1235")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -269,7 +269,7 @@ class SerializacaoXML(Serializacao):
             return etree.tostring(raiz, encoding="unicode", pretty_print=True)
         else:
             return raiz
-        
+
     def _formatarQuantidade(self, quantidade: Decimal) -> str:
         return (
             str(quantidade.quantize(Decimal("1.0000")).normalize())
