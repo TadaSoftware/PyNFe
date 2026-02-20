@@ -25,16 +25,17 @@ NFCE = {
     "AM": {
         # csc_homologacao = '0123456789'
         # token_homologacao = '000001'
-        "STATUS": "nfe.sefaz.am.gov.br/services2/services/NfeStatusServico4",
-        "AUTORIZACAO": "nfe.sefaz.am.gov.br/services2/services/NfeAutorizacao4",
-        "RECIBO": "nfe.sefaz.am.gov.br/services2/services/NfeRetAutorizacao4",
-        "CHAVE": "nfe.sefaz.am.gov.br/services2/services/NfeConsulta4",
-        "INUTILIZACAO": "nfe.sefaz.am.gov.br/services2/services/NfeInutilizacao4",
-        "EVENTOS": "nfe.sefaz.am.gov.br/services2/services/RecepcaoEvento4",
+        "STATUS": "nfce.sefaz.am.gov.br/nfce-services/services/NfeStatusServico4",
+        "AUTORIZACAO": "nfce.sefaz.am.gov.br/nfce-services/services/NfeAutorizacao4",
+        "RECIBO": "nfce.sefaz.am.gov.br/nfce-services/services/NfeRetAutorizacao4",
+        "CHAVE": "nfce.sefaz.am.gov.br/nfce-services/services/NfeConsulta4",
+        "INUTILIZACAO": "nfce.sefaz.am.gov.br/nfce-services/services/NfeInutilizacao4",
+        "EVENTOS": "nfce.sefaz.am.gov.br/nfce-services/services/RecepcaoEvento4",
         "QR": "sefaz.am.gov.br/nfceweb/consultarNFCe.jsp?",
+        "QR_HOMOLOGACAO": "sefaz.am.gov.br/nfceweb-hom/consultarNFCe.jsp?",
         "URL": "sefaz.am.gov.br/nfceweb/formConsulta.do",
-        "HTTPS": "http://sistemas.",
-        "HOMOLOGACAO": "http://homnfce.",
+        "HTTPS": "https://sistemas.",
+        "HOMOLOGACAO": "https://hom",
     },
     "RR": {
         "STATUS": "",
