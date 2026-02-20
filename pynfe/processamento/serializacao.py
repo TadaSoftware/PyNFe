@@ -5,6 +5,7 @@ import re
 import warnings
 
 from datetime import datetime
+from decimal import Decimal
 
 import pynfe.utils.xml_writer as xmlw
 from pynfe.entidades import Manifesto, NotaFiscal
@@ -269,6 +270,13 @@ class SerializacaoXML(Serializacao):
         else:
             return raiz
 
+    def _formatarQuantidade(self, quantidade: Decimal) -> str:
+        return (
+            str(quantidade.quantize(Decimal("1.0000")).normalize())
+            if quantidade % 1 != 0
+            else str(int(quantidade))
+        )
+
     def _serializar_produto_servico(
         self, produto_servico, modelo, tag_raiz="det", retorna_string=True
     ):
@@ -290,7 +298,9 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(prod, "cBenef").text = produto_servico.cbenef
         etree.SubElement(prod, "CFOP").text = produto_servico.cfop
         etree.SubElement(prod, "uCom").text = produto_servico.unidade_comercial
-        etree.SubElement(prod, "qCom").text = str(produto_servico.quantidade_comercial or 0)
+        etree.SubElement(prod, "qCom").text = self._formatarQuantidade(
+            produto_servico.quantidade_comercial or 0
+        )
         etree.SubElement(prod, "vUnCom").text = str("{:.10f}").format(
             produto_servico.valor_unitario_comercial or 0
         )
@@ -308,7 +318,9 @@ class SerializacaoXML(Serializacao):
         )
         etree.SubElement(prod, "cEANTrib").text = produto_servico.ean_tributavel
         etree.SubElement(prod, "uTrib").text = produto_servico.unidade_tributavel
-        etree.SubElement(prod, "qTrib").text = str(produto_servico.quantidade_tributavel)
+        etree.SubElement(prod, "qTrib").text = self._formatarQuantidade(
+            produto_servico.quantidade_tributavel
+        )
         etree.SubElement(prod, "vUnTrib").text = "{:.10f}".format(
             produto_servico.valor_unitario_tributavel or 0
         )
