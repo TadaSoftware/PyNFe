@@ -438,6 +438,14 @@ class SerializacaoXML(Serializacao):
             retorna_string=False,
         )
 
+        # Reforma Tributaria - IVA Dual
+        self._serializar_imposto_ibscbs(
+            produto_servico=produto_servico,
+            modelo=modelo,
+            tag_raiz=imposto,
+            retorna_string=False,
+        )
+
         # tag impostoDevol
         if produto_servico.ipi_valor_ipi_dev:
             impostodevol = etree.SubElement(raiz, "impostoDevol")
@@ -1292,6 +1300,91 @@ class SerializacaoXML(Serializacao):
                 produto_servico.imposto_importacao_valor_iof
             )
 
+    # =============================================
+    # Reforma Tributaria - IVA Dual (NT 2025.002-RTC)
+    # =============================================
+
+    # CSTs that have taxable values (vBC, rates, amounts)
+    _IBSCBS_CST_TRIBUTADOS = ("000", "010", "200", "400", "510", "600", "620", "800", "810", "900")
+
+    def _serializar_imposto_ibscbs(
+        self, produto_servico, modelo, tag_raiz="imposto", retorna_string=True
+    ):
+        """Serializa grupo IBSCBS (Group UB) como filho direto de <imposto>.
+
+        Nota: <IS> (Imposto Seletivo) so entra no schema a partir de 2027.
+        O metodo _serializar_is() esta pronto mas nao e chamado ate que o
+        schema PL 010b inclua o elemento IS dentro de <imposto>.
+        """
+        has_ibscbs = produto_servico.ibscbs_cst
+
+        if not has_ibscbs:
+            return
+
+        self._serializar_ibscbs(produto_servico, tag_raiz)
+
+        # IS: descomentar quando schema suportar (previsto para 2027)
+        # if produto_servico.is_cst_selec:
+        #     self._serializar_is(produto_servico, tag_raiz)
+
+    def _serializar_ibscbs(self, produto_servico, tag_raiz):
+        """Serializa <IBSCBS> com gIBSCBS contendo gIBSUF, gIBSMun e gCBS."""
+        ibscbs = etree.SubElement(tag_raiz, "IBSCBS")
+        etree.SubElement(ibscbs, "CST").text = produto_servico.ibscbs_cst
+
+        if produto_servico.ibscbs_c_class_trib:
+            etree.SubElement(ibscbs, "cClassTrib").text = produto_servico.ibscbs_c_class_trib
+
+        if produto_servico.ibscbs_cst in self._IBSCBS_CST_TRIBUTADOS:
+            gibscbs = etree.SubElement(ibscbs, "gIBSCBS")
+
+            etree.SubElement(gibscbs, "vBC").text = "{:.2f}".format(produto_servico.ibscbs_vbc or 0)
+
+            # gIBSUF
+            gibsuf = etree.SubElement(gibscbs, "gIBSUF")
+            etree.SubElement(gibsuf, "pIBSUF").text = "{:.4f}".format(
+                produto_servico.ibscbs_p_ibs_uf or 0
+            )
+            etree.SubElement(gibsuf, "vIBSUF").text = "{:.2f}".format(
+                produto_servico.ibscbs_v_ibs_uf or 0
+            )
+
+            # gIBSMun
+            gibsmun = etree.SubElement(gibscbs, "gIBSMun")
+            etree.SubElement(gibsmun, "pIBSMun").text = "{:.4f}".format(
+                produto_servico.ibscbs_p_ibs_mun or 0
+            )
+            etree.SubElement(gibsmun, "vIBSMun").text = "{:.2f}".format(
+                produto_servico.ibscbs_v_ibs_mun or 0
+            )
+
+            # vIBS total
+            etree.SubElement(gibscbs, "vIBS").text = "{:.2f}".format(
+                produto_servico.ibscbs_v_ibs or 0
+            )
+
+            # gCBS
+            gcbs = etree.SubElement(gibscbs, "gCBS")
+            etree.SubElement(gcbs, "pCBS").text = "{:.4f}".format(produto_servico.ibscbs_p_cbs or 0)
+            etree.SubElement(gcbs, "vCBS").text = "{:.2f}".format(produto_servico.ibscbs_v_cbs or 0)
+
+    def _serializar_is(self, produto_servico, tag_raiz):
+        """Serializa <IS> (Imposto Seletivo) como filho direto de <imposto>.
+
+        Type: TIS (PL 010b DFeTiposBasicos_v1.00.xsd)
+        Schema field names: CSTIS, cClassTribIS, vBCIS, pIS, vIS
+        """
+        is_tag = etree.SubElement(tag_raiz, "IS")
+        etree.SubElement(is_tag, "CSTIS").text = produto_servico.is_cst_selec
+
+        if produto_servico.is_c_class_trib:
+            etree.SubElement(is_tag, "cClassTribIS").text = produto_servico.is_c_class_trib
+
+        if produto_servico.is_cst_selec in ("01", "02"):
+            etree.SubElement(is_tag, "vBCIS").text = "{:.2f}".format(produto_servico.is_vbc or 0)
+            etree.SubElement(is_tag, "pIS").text = "{:.4f}".format(produto_servico.is_aliquota or 0)
+            etree.SubElement(is_tag, "vIS").text = "{:.2f}".format(produto_servico.is_valor or 0)
+
     def _serializar_declaracao_importacao(
         self, produto_servico, tag_raiz="prod", retorna_string=True
     ):
@@ -1462,6 +1555,8 @@ class SerializacaoXML(Serializacao):
         else:
             etree.SubElement(ide, "idDest").text = str(nota_fiscal.indicador_destino)
         etree.SubElement(ide, "cMunFG").text = nota_fiscal.municipio
+        if nota_fiscal.municipio_fato_gerador_ibs:
+            etree.SubElement(ide, "cMunFGIBS").text = nota_fiscal.municipio_fato_gerador_ibs
         etree.SubElement(ide, "tpImp").text = str(nota_fiscal.tipo_impressao_danfe)
         """ # CONTINGENCIA #
             1=Emissão normal (não em contingência);
@@ -1689,6 +1784,51 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(icms_total, "vTotTrib").text = "{:.2f}".format(
                 nota_fiscal.totais_tributos_aproximado
             )
+
+        # Reforma Tributaria - Totais IVA Dual (Group W03 - IBSCBSTot)
+        # Type: TIBSCBSMonoTot (PL 010b DFeTiposBasicos_v1.00.xsd)
+        has_reforma = (
+            nota_fiscal.totais_vbc_ibscbs or nota_fiscal.totais_ibs or nota_fiscal.totais_cbs
+        )
+        if has_reforma:
+            ibscbs_tot = etree.SubElement(total, "IBSCBSTot")
+            etree.SubElement(ibscbs_tot, "vBCIBSCBS").text = "{:.2f}".format(
+                nota_fiscal.totais_vbc_ibscbs
+            )
+
+            # gIBS (optional — emit if any IBS value exists)
+            if nota_fiscal.totais_ibs_uf or nota_fiscal.totais_ibs_mun or nota_fiscal.totais_ibs:
+                g_ibs = etree.SubElement(ibscbs_tot, "gIBS")
+
+                g_ibs_uf = etree.SubElement(g_ibs, "gIBSUF")
+                etree.SubElement(g_ibs_uf, "vDif").text = "0.00"
+                etree.SubElement(g_ibs_uf, "vDevTrib").text = "0.00"
+                etree.SubElement(g_ibs_uf, "vIBSUF").text = "{:.2f}".format(
+                    nota_fiscal.totais_ibs_uf
+                )
+
+                g_ibs_mun = etree.SubElement(g_ibs, "gIBSMun")
+                etree.SubElement(g_ibs_mun, "vDif").text = "0.00"
+                etree.SubElement(g_ibs_mun, "vDevTrib").text = "0.00"
+                etree.SubElement(g_ibs_mun, "vIBSMun").text = "{:.2f}".format(
+                    nota_fiscal.totais_ibs_mun
+                )
+
+                etree.SubElement(g_ibs, "vIBS").text = "{:.2f}".format(nota_fiscal.totais_ibs)
+                etree.SubElement(g_ibs, "vCredPres").text = "0.00"
+                etree.SubElement(g_ibs, "vCredPresCondSus").text = "0.00"
+
+            # gCBS (optional — emit if any CBS value exists)
+            if nota_fiscal.totais_cbs:
+                g_cbs = etree.SubElement(ibscbs_tot, "gCBS")
+                etree.SubElement(g_cbs, "vDif").text = "0.00"
+                etree.SubElement(g_cbs, "vDevTrib").text = "0.00"
+                etree.SubElement(g_cbs, "vCBS").text = "{:.2f}".format(nota_fiscal.totais_cbs)
+                etree.SubElement(g_cbs, "vCredPres").text = "0.00"
+                etree.SubElement(g_cbs, "vCredPresCondSus").text = "0.00"
+
+            # gMono: not implemented yet (monofasia totals)
+            # gEstornoCred: not implemented yet (estorno de credito totals)
 
         # Transporte
         transp = etree.SubElement(raiz, "transp")
