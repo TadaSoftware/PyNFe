@@ -7,7 +7,7 @@
 3200409	Anchieta
 3200508	Apiacá
 3200607	Aracruz
-3200706	Atilio Vivacqua
+3200706	Atílio Vivácqua
 3200805	Baixo Guandu
 3200904	Barra de São Francisco
 3201001	Boa Esperança

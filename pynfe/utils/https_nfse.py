@@ -1,7 +1,7 @@
 """
-    @author: Junior Tada, Leonardo Tada
+@author: Junior Tada, Leonardo Tada
 
-    Classe que sobrescreve metodos da lib suds para comunicação via https com certificado digital
+Classe que sobrescreve metodos da lib suds para comunicação via https com certificado digital
 
 """
 

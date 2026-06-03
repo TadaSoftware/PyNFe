@@ -357,7 +357,7 @@
 		<xs:restriction base="xs:string">
 			<xs:whiteSpace value="preserve"/>
 			<xs:maxLength value="14"/>
-			<xs:pattern value="[0-9]{0,14}|ISENTO"/>
+			<xs:pattern value="ISENTO|[0-9]{0,14}"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="TJust">
@@ -518,7 +518,7 @@
 		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:whiteSpace value="preserve"/>
-			<xs:pattern value="[!-ÿ]{1}[ -ÿ]{0,}[!-ÿ]{1}|[!-ÿ]{1}"/>
+			<xs:pattern value="[!-ÿ]{1}[ -ÿ]*[!-ÿ]{1}|[!-ÿ]{1}"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="TUf">

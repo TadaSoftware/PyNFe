@@ -31,8 +31,8 @@ def so_numeros(texto) -> str:
 
 # @memoize
 def obter_pais_por_codigo(codigo):
-    if codigo == '1058' or codigo == '' or codigo is None:
-        return 'Brasil'
+    if codigo == "1058" or codigo == "" or codigo is None:
+        return "Brasil"
 
     pais = carregar_arquivo_pais(codigo=codigo)
     pais = pais.get(codigo)
@@ -165,13 +165,15 @@ def remover_acentos(txt):
 
 
 def carregar_arquivo_pais(codigo):
-    caminho_arquivo = os.path.join(CAMINHO_MUNICIPIOS, 'PaisIBGE.txt')
+    caminho_arquivo = os.path.join(CAMINHO_MUNICIPIOS, "PaisIBGE.txt")
 
     with open(caminho_arquivo, "r", encoding="utf-8-sig") as arquivo:
         linhas = arquivo.readlines()
 
-    return {linha.split('\t', maxsplit=1)[0].strip(): linha.split('\t', maxsplit=1)[1].strip()
-            for linha in linhas}
+    return {
+        linha.split("\t", maxsplit=1)[0].strip(): linha.split("\t", maxsplit=1)[1].strip()
+        for linha in linhas
+    }
 
 
 class CustomXMLSigner(XMLSigner):
@@ -181,13 +183,14 @@ class CustomXMLSigner(XMLSigner):
     def check_deprecated_methods(self):
         pass
 
+
 def is_empty(value):
     """
     Verifica se um valor está vazio.
-    
+
     Parameters:
     - value: O valor a ser verificado.
-    
+
     Returns:
     - True se o valor estiver vazio, False caso contrário.
     """
@@ -223,7 +226,11 @@ def arredondar_valor(value: float, decimal_places: int, suprimir_zeros: bool = F
 
 
 def ajustar_valor(
-    value: float, decimal_places: int = 2, min_decimal_places: int = 2, tipo: Literal["ROUND", "TRUNC"] = "ROUND", decimal_separator: str = "."
+    value: float,
+    decimal_places: int = 2,
+    min_decimal_places: int = 2,
+    tipo: Literal["ROUND", "TRUNC"] = "ROUND",
+    decimal_separator: str = ".",
 ):
     value = 0 if value is None else value
 

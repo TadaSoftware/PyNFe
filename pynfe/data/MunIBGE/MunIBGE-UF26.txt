@@ -15,7 +15,7 @@
 2601300	Barra de Guabiraba
 2601409	Barreiros
 2601508	Belém de Maria
-2601607	Belém de São Francisco
+2601607	Belém do São Francisco
 2601706	Belo Jardim
 2601805	Betânia
 2601904	Bezerros
@@ -73,7 +73,7 @@
 2606606	Ibimirim
 2606705	Ibirajuba
 2606804	Igarassu
-2606903	Iguaraci
+2606903	Iguaracy
 2607000	Inajá
 2607109	Ingazeira
 2607208	Ipojuca
@@ -95,7 +95,7 @@
 2608305	Jupi
 2608404	Jurema
 2608453	Lagoa do Carro
-2608503	Lagoa do Itaenga
+2608503	Lagoa de Itaenga
 2608602	Lagoa do Ouro
 2608701	Lagoa dos Gatos
 2608750	Lagoa Grande
@@ -154,7 +154,7 @@
 2613503	São José do Belmonte
 2613602	São José do Egito
 2613701	São Lourenço da Mata
-2613800	São Vicente Ferrer
+2613800	São Vicente Férrer
 2613909	Serra Talhada
 2614006	Serrita
 2614105	Sertânia

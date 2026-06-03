@@ -43,9 +43,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.xsd_procNFe = self.validacao.get_xsd(
             xsd_file=XSD_NFE_PROCESSADA, xsd_folder=XSD_FOLDER_NFE
         )
-        self.xsd_nfe = self.validacao.get_xsd(
-            xsd_file=XSD_NFE, xsd_folder=XSD_FOLDER_NFE
-        )
+        self.xsd_nfe = self.validacao.get_xsd(xsd_file=XSD_NFE, xsd_folder=XSD_FOLDER_NFE)
 
     def preenche_emitente(self):
         self.emitente = Emitente(
@@ -96,7 +94,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             uf="PR",
             natureza_operacao="VENDA",  # venda, compra, transferência, devolução, etc
             forma_pagamento=0,  # 0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros.
-            tipo_pagamento=1,
             modelo=55,  # 55=NF-e; 65=NFC-e
             serie="1",
             numero_nf="111",  # Número do Documento Fiscal.
@@ -170,19 +167,19 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         )
 
         self.notafiscal.adicionar_duplicata(
-            numero='1',
+            numero="1",
             data_vencimento=datetime.datetime(2025, 1, 27, 12, 0, 0, tzinfo=utc),
             valor=Decimal("39.00"),
         )
 
         self.notafiscal.adicionar_duplicata(
-            numero='1',
+            numero="1",
             data_vencimento=datetime.datetime(2025, 1, 28, 12, 0, 0, tzinfo=utc),
             valor=Decimal("39.00"),
         )
 
         self.notafiscal.adicionar_duplicata(
-            numero='1',
+            numero="1",
             data_vencimento=datetime.datetime(2025, 1, 29, 12, 0, 0, tzinfo=utc),
             valor=Decimal("39.00"),
         )
@@ -195,7 +192,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             tp_integra="2",
             t_band="99",
         )
-        
+
         self.notafiscal.adicionar_pagamento(
             t_pag="03",
             x_pag="Cartao Credito",
@@ -220,50 +217,34 @@ class SerializacaoNFeTestCase(unittest.TestCase):
 
     def grupo_ide_test(self):
         uf = self.xml_assinado.xpath("//ns:ide/ns:cUF", namespaces=self.ns)[0].text
-        natureza_operacao = self.xml_assinado.xpath(
-            "//ns:ide/ns:natOp", namespaces=self.ns
-        )[0].text
+        natureza_operacao = self.xml_assinado.xpath("//ns:ide/ns:natOp", namespaces=self.ns)[0].text
         modelo = self.xml_assinado.xpath("//ns:ide/ns:mod", namespaces=self.ns)[0].text
         serie = self.xml_assinado.xpath("//ns:ide/ns:serie", namespaces=self.ns)[0].text
-        numero_nf = self.xml_assinado.xpath("//ns:ide/ns:nNF", namespaces=self.ns)[
+        numero_nf = self.xml_assinado.xpath("//ns:ide/ns:nNF", namespaces=self.ns)[0].text
+        data_emissao = self.xml_assinado.xpath("//ns:ide/ns:dhEmi", namespaces=self.ns)[0].text
+        data_saida_entrada = self.xml_assinado.xpath("//ns:ide/ns:dhSaiEnt", namespaces=self.ns)[
             0
         ].text
-        data_emissao = self.xml_assinado.xpath("//ns:ide/ns:dhEmi", namespaces=self.ns)[
+        tipo_documento = self.xml_assinado.xpath("//ns:ide/ns:tpNF", namespaces=self.ns)[0].text
+        indicador_destino = self.xml_assinado.xpath("//ns:ide/ns:idDest", namespaces=self.ns)[
             0
         ].text
-        data_saida_entrada = self.xml_assinado.xpath(
-            "//ns:ide/ns:dhSaiEnt", namespaces=self.ns
-        )[0].text
-        tipo_documento = self.xml_assinado.xpath(
-            "//ns:ide/ns:tpNF", namespaces=self.ns
-        )[0].text
-        indicador_destino = self.xml_assinado.xpath(
-            "//ns:ide/ns:idDest", namespaces=self.ns
-        )[0].text
-        municipio = self.xml_assinado.xpath("//ns:ide/ns:cMunFG", namespaces=self.ns)[
+        municipio = self.xml_assinado.xpath("//ns:ide/ns:cMunFG", namespaces=self.ns)[0].text
+        tipo_impressao_danfe = self.xml_assinado.xpath("//ns:ide/ns:tpImp", namespaces=self.ns)[
             0
         ].text
-        tipo_impressao_danfe = self.xml_assinado.xpath(
-            "//ns:ide/ns:tpImp", namespaces=self.ns
-        )[0].text
-        forma_emissao = self.xml_assinado.xpath(
-            "//ns:ide/ns:tpEmis", namespaces=self.ns
-        )[0].text
-        tipo_ambiente = self.xml_assinado.xpath(
-            "//ns:ide/ns:tpAmb", namespaces=self.ns
-        )[0].text
-        finalidade_emissao = self.xml_assinado.xpath(
-            "//ns:ide/ns:finNFe", namespaces=self.ns
-        )[0].text
-        cliente_final = self.xml_assinado.xpath(
-            "//ns:ide/ns:indFinal", namespaces=self.ns
-        )[0].text
-        indicador_presencial = self.xml_assinado.xpath(
-            "//ns:ide/ns:indPres", namespaces=self.ns
-        )[0].text
-        processo_emissao = self.xml_assinado.xpath(
-            "//ns:ide/ns:procEmi", namespaces=self.ns
-        )[0].text
+        forma_emissao = self.xml_assinado.xpath("//ns:ide/ns:tpEmis", namespaces=self.ns)[0].text
+        tipo_ambiente = self.xml_assinado.xpath("//ns:ide/ns:tpAmb", namespaces=self.ns)[0].text
+        finalidade_emissao = self.xml_assinado.xpath("//ns:ide/ns:finNFe", namespaces=self.ns)[
+            0
+        ].text
+        cliente_final = self.xml_assinado.xpath("//ns:ide/ns:indFinal", namespaces=self.ns)[0].text
+        indicador_presencial = self.xml_assinado.xpath("//ns:ide/ns:indPres", namespaces=self.ns)[
+            0
+        ].text
+        processo_emissao = self.xml_assinado.xpath("//ns:ide/ns:procEmi", namespaces=self.ns)[
+            0
+        ].text
         versao_processo_emissao = self.xml_assinado.xpath(
             "//ns:ide/ns:verProc", namespaces=self.ns
         )[0].text
@@ -285,28 +266,18 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(cliente_final, "1")
         self.assertEqual(indicador_presencial, "1")
         self.assertEqual(processo_emissao, "0")
-        self.assertEqual(versao_processo_emissao, f'PyNFe {get_version()}')
+        self.assertEqual(versao_processo_emissao, f"PyNFe {get_version()}")
 
     def dados_emitente_test(self):
-        razao_social = self.xml_assinado.xpath(
-            "//ns:emit/ns:xNome", namespaces=self.ns
-        )[0].text
-        nome_fantasia = self.xml_assinado.xpath(
-            "//ns:emit/ns:xFant", namespaces=self.ns
-        )[0].text
+        razao_social = self.xml_assinado.xpath("//ns:emit/ns:xNome", namespaces=self.ns)[0].text
+        nome_fantasia = self.xml_assinado.xpath("//ns:emit/ns:xFant", namespaces=self.ns)[0].text
         cnpj = self.xml_assinado.xpath("//ns:emit/ns:CNPJ", namespaces=self.ns)[0].text
         codigo_de_regime_tributario = self.xml_assinado.xpath(
             "//ns:emit/ns:CRT", namespaces=self.ns
         )[0].text
-        inscricao_estadual = self.xml_assinado.xpath(
-            "//ns:emit/ns:IE", namespaces=self.ns
-        )[0].text
-        inscricao_municipal = self.xml_assinado.xpath(
-            "//ns:emit/ns:IM", namespaces=self.ns
-        )[0].text
-        cnae_fiscal = self.xml_assinado.xpath("//ns:emit/ns:CNAE", namespaces=self.ns)[
-            0
-        ].text
+        inscricao_estadual = self.xml_assinado.xpath("//ns:emit/ns:IE", namespaces=self.ns)[0].text
+        inscricao_municipal = self.xml_assinado.xpath("//ns:emit/ns:IM", namespaces=self.ns)[0].text
+        cnae_fiscal = self.xml_assinado.xpath("//ns:emit/ns:CNAE", namespaces=self.ns)[0].text
         endereco_logradouro = self.xml_assinado.xpath(
             "//ns:emit/ns:enderEmit/ns:xLgr", namespaces=self.ns
         )[0].text
@@ -319,19 +290,17 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         endereco_municipio = self.xml_assinado.xpath(
             "//ns:emit/ns:enderEmit/ns:xMun", namespaces=self.ns
         )[0].text
-        endereco_uf = self.xml_assinado.xpath(
-            "//ns:emit/ns:enderEmit/ns:UF", namespaces=self.ns
-        )[0].text
-        endereco_cep = self.xml_assinado.xpath(
-            "//ns:emit/ns:enderEmit/ns:CEP", namespaces=self.ns
-        )[0].text
+        endereco_uf = self.xml_assinado.xpath("//ns:emit/ns:enderEmit/ns:UF", namespaces=self.ns)[
+            0
+        ].text
+        endereco_cep = self.xml_assinado.xpath("//ns:emit/ns:enderEmit/ns:CEP", namespaces=self.ns)[
+            0
+        ].text
         endereco_pais = self.xml_assinado.xpath(
             "//ns:emit/ns:enderEmit/ns:xPais", namespaces=self.ns
         )[0].text
 
-        self.assertEqual(
-            razao_social, "NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL"
-        )
+        self.assertEqual(razao_social, "NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL")
         self.assertEqual(nome_fantasia, "Nome Fantasia da Empresa")
         self.assertEqual(cnpj, "99999999000199")
         self.assertEqual(codigo_de_regime_tributario, "3")
@@ -347,18 +316,10 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(endereco_pais, "Brasil")
 
     def dados_destinatario_test(self):
-        razao_social = self.xml_assinado.xpath(
-            "//ns:dest/ns:xNome", namespaces=self.ns
-        )[0].text
-        email = self.xml_assinado.xpath("//ns:dest/ns:email", namespaces=self.ns)[
-            0
-        ].text
-        numero_documento = self.xml_assinado.xpath(
-            "//ns:dest/ns:CPF", namespaces=self.ns
-        )[0].text
-        indicador_ie = self.xml_assinado.xpath(
-            "//ns:dest/ns:indIEDest", namespaces=self.ns
-        )[0].text
+        razao_social = self.xml_assinado.xpath("//ns:dest/ns:xNome", namespaces=self.ns)[0].text
+        email = self.xml_assinado.xpath("//ns:dest/ns:email", namespaces=self.ns)[0].text
+        numero_documento = self.xml_assinado.xpath("//ns:dest/ns:CPF", namespaces=self.ns)[0].text
+        indicador_ie = self.xml_assinado.xpath("//ns:dest/ns:indIEDest", namespaces=self.ns)[0].text
         endereco_logradouro = self.xml_assinado.xpath(
             "//ns:dest/ns:enderDest/ns:xLgr", namespaces=self.ns
         )[0].text
@@ -374,12 +335,12 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         endereco_municipio = self.xml_assinado.xpath(
             "//ns:dest/ns:enderDest/ns:xMun", namespaces=self.ns
         )[0].text
-        endereco_uf = self.xml_assinado.xpath(
-            "//ns:dest/ns:enderDest/ns:UF", namespaces=self.ns
-        )[0].text
-        endereco_cep = self.xml_assinado.xpath(
-            "//ns:dest/ns:enderDest/ns:CEP", namespaces=self.ns
-        )[0].text
+        endereco_uf = self.xml_assinado.xpath("//ns:dest/ns:enderDest/ns:UF", namespaces=self.ns)[
+            0
+        ].text
+        endereco_cep = self.xml_assinado.xpath("//ns:dest/ns:enderDest/ns:CEP", namespaces=self.ns)[
+            0
+        ].text
         endereco_pais = self.xml_assinado.xpath(
             "//ns:dest/ns:enderDest/ns:xPais", namespaces=self.ns
         )[0].text
@@ -402,23 +363,19 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(endereco_telefone, "11912341234")
 
     def notas_produtor_referenciadas_test(self):
-        ref_1 = self.xml_assinado.xpath(
-            "//ns:ide/ns:NFref/ns:refNFP/ns:nNF", namespaces=self.ns
-        )[0].text
-        ref_2 = self.xml_assinado.xpath(
-            "//ns:ide/ns:NFref/ns:refNFP/ns:nNF", namespaces=self.ns
-        )[1].text
+        ref_1 = self.xml_assinado.xpath("//ns:ide/ns:NFref/ns:refNFP/ns:nNF", namespaces=self.ns)[
+            0
+        ].text
+        ref_2 = self.xml_assinado.xpath("//ns:ide/ns:NFref/ns:refNFP/ns:nNF", namespaces=self.ns)[
+            1
+        ].text
 
         self.assertEqual(ref_1, "999999998")
         self.assertEqual(ref_2, "999999999")
 
     def notas_referenciadas_test(self):
-        chave_1 = self.xml_assinado.xpath(
-            "//ns:ide/ns:NFref/ns:refNFe", namespaces=self.ns
-        )[0].text
-        chave_2 = self.xml_assinado.xpath(
-            "//ns:ide/ns:NFref/ns:refNFe", namespaces=self.ns
-        )[1].text
+        chave_1 = self.xml_assinado.xpath("//ns:ide/ns:NFref/ns:refNFe", namespaces=self.ns)[0].text
+        chave_2 = self.xml_assinado.xpath("//ns:ide/ns:NFref/ns:refNFe", namespaces=self.ns)[1].text
 
         self.assertEqual(chave_1, "12345678901234567890123456789012345678900001")
         self.assertEqual(chave_2, "12345678901234567890123456789012345678900002")
@@ -449,9 +406,9 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         data_vencimento_1 = self.xml_assinado.xpath(
             "//ns:cobr/ns:dup/ns:dVenc", namespaces=self.ns
         )[0].text
-        valor_duplicata_1 = self.xml_assinado.xpath(
-            "//ns:cobr/ns:dup/ns:vDup", namespaces=self.ns
-        )[0].text
+        valor_duplicata_1 = self.xml_assinado.xpath("//ns:cobr/ns:dup/ns:vDup", namespaces=self.ns)[
+            0
+        ].text
 
         numero_duplicata_2 = self.xml_assinado.xpath(
             "//ns:cobr/ns:dup/ns:nDup", namespaces=self.ns
@@ -459,9 +416,9 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         data_vencimento_2 = self.xml_assinado.xpath(
             "//ns:cobr/ns:dup/ns:dVenc", namespaces=self.ns
         )[1].text
-        valor_duplicata_2 = self.xml_assinado.xpath(
-            "//ns:cobr/ns:dup/ns:vDup", namespaces=self.ns
-        )[1].text
+        valor_duplicata_2 = self.xml_assinado.xpath("//ns:cobr/ns:dup/ns:vDup", namespaces=self.ns)[
+            1
+        ].text
 
         numero_duplicata_3 = self.xml_assinado.xpath(
             "//ns:cobr/ns:dup/ns:nDup", namespaces=self.ns
@@ -469,9 +426,9 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         data_vencimento_3 = self.xml_assinado.xpath(
             "//ns:cobr/ns:dup/ns:dVenc", namespaces=self.ns
         )[2].text
-        valor_duplicata_3 = self.xml_assinado.xpath(
-            "//ns:cobr/ns:dup/ns:vDup", namespaces=self.ns
-        )[2].text
+        valor_duplicata_3 = self.xml_assinado.xpath("//ns:cobr/ns:dup/ns:vDup", namespaces=self.ns)[
+            2
+        ].text
 
         self.assertEqual(numero_duplicata_1, "1")
         self.assertEqual(data_vencimento_1, "2025-01-27")
@@ -486,18 +443,10 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(valor_duplicata_3, "39.00")
 
     def responsavel_tecnico_test(self):
-        cnpj = self.xml_assinado.xpath("//ns:infRespTec/ns:CNPJ", namespaces=self.ns)[
-            0
-        ].text
-        contato = self.xml_assinado.xpath(
-            "//ns:infRespTec/ns:xContato", namespaces=self.ns
-        )[0].text
-        email = self.xml_assinado.xpath("//ns:infRespTec/ns:email", namespaces=self.ns)[
-            0
-        ].text
-        fone = self.xml_assinado.xpath("//ns:infRespTec/ns:fone", namespaces=self.ns)[
-            0
-        ].text
+        cnpj = self.xml_assinado.xpath("//ns:infRespTec/ns:CNPJ", namespaces=self.ns)[0].text
+        contato = self.xml_assinado.xpath("//ns:infRespTec/ns:xContato", namespaces=self.ns)[0].text
+        email = self.xml_assinado.xpath("//ns:infRespTec/ns:email", namespaces=self.ns)[0].text
+        fone = self.xml_assinado.xpath("//ns:infRespTec/ns:fone", namespaces=self.ns)[0].text
 
         self.assertEqual(cnpj, "99999999000199")
         self.assertEqual(contato, "Teste PyNFe")

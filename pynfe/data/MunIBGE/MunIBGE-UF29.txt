@@ -22,7 +22,7 @@
 2901908	Aporá
 2901957	Apuarema
 2902005	Aracatu
-2902054	Araças
+2902054	Araçás
 2902104	Araci
 2902203	Aramari
 2902252	Arataca
@@ -202,7 +202,7 @@
 2917102	Itororó
 2917201	Ituaçu
 2917300	Ituberá
-2917334	Iuiú
+2917334	Iuiu
 2917359	Jaborandi
 2917409	Jacaraci
 2917508	Jacobina
@@ -266,7 +266,7 @@
 2922052	Mulungu do Morro
 2922102	Mundo Novo
 2922201	Muniz Ferreira
-2922250	Muquém de São Francisco
+2922250	Muquém do São Francisco
 2922300	Muritiba
 2922409	Mutuípe
 2922508	Nazaré
@@ -345,7 +345,7 @@
 2928208	Santana
 2928307	Santanópolis
 2928406	Santa Rita de Cássia
-2928505	Santa Teresinha
+2928505	Santa Terezinha
 2928604	Santo Amaro
 2928703	Santo Antônio de Jesus
 2928802	Santo Estêvão

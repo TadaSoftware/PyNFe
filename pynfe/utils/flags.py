@@ -21,6 +21,9 @@ NAMESPACE_CTE = "http://www.portalfiscal.inf.br/cte"
 NAMESPACE_CTE_METODO = "http://www.portalfiscal.inf.br/cte/wsdl/"
 VERSAO_CTE = "3.00"
 
+NAMESPACE_NFCOM = "http://www.portalfiscal.inf.br/nfcom"
+NAMESPACE_NFCOM_METODO = "http://www.portalfiscal.inf.br/nfcom/wsdl/"
+VERSAO_NFCOM = "1.00"
 VERSAO_QRCODE = "2"
 
 TIPOS_DOCUMENTO = (
@@ -34,6 +37,12 @@ XSD_NFE_PROCESSADA = "procNFe_v4.00.xsd"
 XSD_PD_CANCELAR_NFE = "procCancNFe_v1.07.xsd"
 XSD_PD_INUTILIZAR_NFE = "procInutNFe_v1.07.xsd"
 
+XSD_NFE_LEIAUTE = "leiauteNFe_v4.00.xsd"
+XSD_NFE_TIPOS = "DFeTiposBasicos_v1.00.xsd"
+
+SCHEMA_FOLDER_NFE = "pynfe/data/SCHEMAs/NF-e"
+SCHEMA_NFE = "schemaNFe_v1.00.json"
+
 XSD_FOLDER_MDFE = "pynfe/data/XSDs/MDF-e"
 XSD_MDFE = "mdfe_v3.00.xsd"
 XSD_MDFE_PROCESSADA = "procMDFe_v3.00.xsd"
@@ -43,14 +52,14 @@ ICMS_TIPOS_TRIBUTACAO = (
     ("00", "ICMS 00 - Tributada integralmente"),
     ("02", "ICMS 02 - Tributação monofásica própria sobre combustíveis"),
     ("10", "ICMS 10 - Tributada com cobranca do ICMS por substituicao tributaria"),
-    ("15", "ICMS 15 - Tributação monofásica própria e com responsabilidade pela retenção sobre combustíveis"),
+    (
+        "15",
+        "ICMS 15 - Tributação monofásica própria e com responsabilidade pela retenção sobre combustíveis",
+    ),
     ("20", "ICMS 20 - Com reducao da base de calculo"),
     (
         "30",
-        (
-            "ICMS 30 - Isenta ou nao tributada e com cobranca do ICMS por substituicao"
-            " tributaria"
-        ),
+        ("ICMS 30 - Isenta ou nao tributada e com cobranca do ICMS por substituicao tributaria"),
     ),
     ("40", "ICMS 40 - Isenta"),
     ("41", "ICMS 41 - Nao tributada"),
@@ -61,10 +70,7 @@ ICMS_TIPOS_TRIBUTACAO = (
     ("61", "ICMS 61 - Tributação monofásica sobre combustíveis cobrada anteriormente"),
     (
         "70",
-        (
-            "ICMS 70 - Com reducao da base de calculo e cobranca do ICMS por"
-            " substituicao tributaria"
-        ),
+        ("ICMS 70 - Com reducao da base de calculo e cobranca do ICMS por substituicao tributaria"),
     ),
     ("90", "ICMS 90 - Outras"),
     ("101", "ICMS 101 - Tributação ICMS pelo Simples Nacional, CSOSN=101"),
@@ -106,10 +112,7 @@ ICMS_ORIGENS = (
     ),
     (
         5,
-        (
-            "Nacional, mercadoria ou bem com Conteúdo de Importação inferior ou igual a"
-            " 40%. "
-        ),
+        ("Nacional, mercadoria ou bem com Conteúdo de Importação inferior ou igual a 40%. "),
     ),
     (
         6,

@@ -1,8 +1,46 @@
+[project]
+name = "PyNFe"
+version = "0.4.4"
+description = "Interface library with the Brazilian Electronic Invoice web services"
+authors = [
+    {name = "TadaSoftware",email = " tadasoftware@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.9, <4"
+
+
 [build-system]
 requires = ["setuptools>=42"]
 build-backend = "setuptools.build_meta"
+
 [tool.ruff]
 exclude = [
     'pynfe/entidades/__init__.py'
 ]
 line-length = 100
+
+[tool.poetry.dependencies]
+requests = "^2.32.4"
+signxml = "^4.1.0"
+cryptography = "43.0.3"
+lxml = "5.4.0"
+pyopenssl = "^25.1.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.12.5"
+pytest = "^8.4.1"
+taskipy = "^1.14.1"
+pytest-cov = "^6.2.1"
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+
+[tool.taskipy.tasks]
+lint = 'ruff check'
+pre_format = 'ruff check --fix'
+format = 'ruff format'
+pre_lint = 'task format'
+pre_test = 'task lint'
+test = 'pytest -s -x --cov=app -vv'
+post_test = 'coverage html'

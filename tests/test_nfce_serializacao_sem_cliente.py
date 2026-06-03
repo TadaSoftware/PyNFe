@@ -41,9 +41,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.xsd_procNFe = self.validacao.get_xsd(
             xsd_file=XSD_NFE_PROCESSADA, xsd_folder=XSD_FOLDER_NFE
         )
-        self.xsd_nfe = self.validacao.get_xsd(
-            xsd_file=XSD_NFE, xsd_folder=XSD_FOLDER_NFE
-        )
+        self.xsd_nfe = self.validacao.get_xsd(xsd_file=XSD_NFE, xsd_folder=XSD_FOLDER_NFE)
 
     def preenche_emitente(self):
         self.emitente = Emitente(
@@ -75,7 +73,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             uf="PR",
             natureza_operacao="VENDA",  # venda, compra, transferência, devolução, etc
             forma_pagamento=0,  # 0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros.
-            tipo_pagamento=1,
             modelo=65,  # 55=NF-e; 65=NFC-e
             serie="1",
             numero_nf="111",  # Número do Documento Fiscal.
@@ -93,7 +90,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             transporte_modalidade_frete=1,
             informacoes_adicionais_interesse_fisco="Mensagem complementar",
             totais_tributos_aproximado=Decimal("1.01"),
-            valor_troco=Decimal('3.00'),
+            valor_troco=Decimal("3.00"),
         )
 
         self.notafiscal.adicionar_produto_servico(
@@ -153,47 +150,31 @@ class SerializacaoNFeTestCase(unittest.TestCase):
 
     def grupo_ide_test(self):
         uf = self.xml_assinado.xpath("//ns:ide/ns:cUF", namespaces=self.ns)[0].text
-        natureza_operacao = self.xml_assinado.xpath(
-            "//ns:ide/ns:natOp", namespaces=self.ns
-        )[0].text
+        natureza_operacao = self.xml_assinado.xpath("//ns:ide/ns:natOp", namespaces=self.ns)[0].text
         modelo = self.xml_assinado.xpath("//ns:ide/ns:mod", namespaces=self.ns)[0].text
         serie = self.xml_assinado.xpath("//ns:ide/ns:serie", namespaces=self.ns)[0].text
-        numero_nf = self.xml_assinado.xpath("//ns:ide/ns:nNF", namespaces=self.ns)[
+        numero_nf = self.xml_assinado.xpath("//ns:ide/ns:nNF", namespaces=self.ns)[0].text
+        data_emissao = self.xml_assinado.xpath("//ns:ide/ns:dhEmi", namespaces=self.ns)[0].text
+        tipo_documento = self.xml_assinado.xpath("//ns:ide/ns:tpNF", namespaces=self.ns)[0].text
+        indicador_destino = self.xml_assinado.xpath("//ns:ide/ns:idDest", namespaces=self.ns)[
             0
         ].text
-        data_emissao = self.xml_assinado.xpath("//ns:ide/ns:dhEmi", namespaces=self.ns)[
+        municipio = self.xml_assinado.xpath("//ns:ide/ns:cMunFG", namespaces=self.ns)[0].text
+        tipo_impressao_danfe = self.xml_assinado.xpath("//ns:ide/ns:tpImp", namespaces=self.ns)[
             0
         ].text
-        tipo_documento = self.xml_assinado.xpath(
-            "//ns:ide/ns:tpNF", namespaces=self.ns
-        )[0].text
-        indicador_destino = self.xml_assinado.xpath(
-            "//ns:ide/ns:idDest", namespaces=self.ns
-        )[0].text
-        municipio = self.xml_assinado.xpath("//ns:ide/ns:cMunFG", namespaces=self.ns)[
+        forma_emissao = self.xml_assinado.xpath("//ns:ide/ns:tpEmis", namespaces=self.ns)[0].text
+        tipo_ambiente = self.xml_assinado.xpath("//ns:ide/ns:tpAmb", namespaces=self.ns)[0].text
+        finalidade_emissao = self.xml_assinado.xpath("//ns:ide/ns:finNFe", namespaces=self.ns)[
             0
         ].text
-        tipo_impressao_danfe = self.xml_assinado.xpath(
-            "//ns:ide/ns:tpImp", namespaces=self.ns
-        )[0].text
-        forma_emissao = self.xml_assinado.xpath(
-            "//ns:ide/ns:tpEmis", namespaces=self.ns
-        )[0].text
-        tipo_ambiente = self.xml_assinado.xpath(
-            "//ns:ide/ns:tpAmb", namespaces=self.ns
-        )[0].text
-        finalidade_emissao = self.xml_assinado.xpath(
-            "//ns:ide/ns:finNFe", namespaces=self.ns
-        )[0].text
-        cliente_final = self.xml_assinado.xpath(
-            "//ns:ide/ns:indFinal", namespaces=self.ns
-        )[0].text
-        indicador_presencial = self.xml_assinado.xpath(
-            "//ns:ide/ns:indPres", namespaces=self.ns
-        )[0].text
-        processo_emissao = self.xml_assinado.xpath(
-            "//ns:ide/ns:procEmi", namespaces=self.ns
-        )[0].text
+        cliente_final = self.xml_assinado.xpath("//ns:ide/ns:indFinal", namespaces=self.ns)[0].text
+        indicador_presencial = self.xml_assinado.xpath("//ns:ide/ns:indPres", namespaces=self.ns)[
+            0
+        ].text
+        processo_emissao = self.xml_assinado.xpath("//ns:ide/ns:procEmi", namespaces=self.ns)[
+            0
+        ].text
 
         self.assertEqual(uf, "41")
         self.assertEqual(natureza_operacao, "VENDA")
@@ -213,25 +194,15 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(processo_emissao, "0")
 
     def dados_emitente_test(self):
-        razao_social = self.xml_assinado.xpath(
-            "//ns:emit/ns:xNome", namespaces=self.ns
-        )[0].text
-        nome_fantasia = self.xml_assinado.xpath(
-            "//ns:emit/ns:xFant", namespaces=self.ns
-        )[0].text
+        razao_social = self.xml_assinado.xpath("//ns:emit/ns:xNome", namespaces=self.ns)[0].text
+        nome_fantasia = self.xml_assinado.xpath("//ns:emit/ns:xFant", namespaces=self.ns)[0].text
         cnpj = self.xml_assinado.xpath("//ns:emit/ns:CNPJ", namespaces=self.ns)[0].text
         codigo_de_regime_tributario = self.xml_assinado.xpath(
             "//ns:emit/ns:CRT", namespaces=self.ns
         )[0].text
-        inscricao_estadual = self.xml_assinado.xpath(
-            "//ns:emit/ns:IE", namespaces=self.ns
-        )[0].text
-        inscricao_municipal = self.xml_assinado.xpath(
-            "//ns:emit/ns:IM", namespaces=self.ns
-        )[0].text
-        cnae_fiscal = self.xml_assinado.xpath("//ns:emit/ns:CNAE", namespaces=self.ns)[
-            0
-        ].text
+        inscricao_estadual = self.xml_assinado.xpath("//ns:emit/ns:IE", namespaces=self.ns)[0].text
+        inscricao_municipal = self.xml_assinado.xpath("//ns:emit/ns:IM", namespaces=self.ns)[0].text
+        cnae_fiscal = self.xml_assinado.xpath("//ns:emit/ns:CNAE", namespaces=self.ns)[0].text
         endereco_logradouro = self.xml_assinado.xpath(
             "//ns:emit/ns:enderEmit/ns:xLgr", namespaces=self.ns
         )[0].text
@@ -244,19 +215,17 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         endereco_municipio = self.xml_assinado.xpath(
             "//ns:emit/ns:enderEmit/ns:xMun", namespaces=self.ns
         )[0].text
-        endereco_uf = self.xml_assinado.xpath(
-            "//ns:emit/ns:enderEmit/ns:UF", namespaces=self.ns
-        )[0].text
-        endereco_cep = self.xml_assinado.xpath(
-            "//ns:emit/ns:enderEmit/ns:CEP", namespaces=self.ns
-        )[0].text
+        endereco_uf = self.xml_assinado.xpath("//ns:emit/ns:enderEmit/ns:UF", namespaces=self.ns)[
+            0
+        ].text
+        endereco_cep = self.xml_assinado.xpath("//ns:emit/ns:enderEmit/ns:CEP", namespaces=self.ns)[
+            0
+        ].text
         endereco_pais = self.xml_assinado.xpath(
             "//ns:emit/ns:enderEmit/ns:xPais", namespaces=self.ns
         )[0].text
 
-        self.assertEqual(
-            razao_social, "NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL"
-        )
+        self.assertEqual(razao_social, "NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL")
         self.assertEqual(nome_fantasia, "Nome Fantasia da Empresa")
         self.assertEqual(cnpj, "99999999000199")
         self.assertEqual(codigo_de_regime_tributario, "3")
@@ -278,51 +247,25 @@ class SerializacaoNFeTestCase(unittest.TestCase):
 
     def total_e_produto_test(self):
         # Produto
-        cProd = self.xml_assinado.xpath(
-            "//ns:det/ns:prod/ns:cProd", namespaces=self.ns
-        )[0].text
-        cEAN = self.xml_assinado.xpath("//ns:det/ns:prod/ns:cEAN", namespaces=self.ns)[
-            0
-        ].text
-        xProd = self.xml_assinado.xpath(
-            "//ns:det/ns:prod/ns:xProd", namespaces=self.ns
-        )[0].text
-        NCM = self.xml_assinado.xpath("//ns:det/ns:prod/ns:NCM", namespaces=self.ns)[
-            0
-        ].text
+        cProd = self.xml_assinado.xpath("//ns:det/ns:prod/ns:cProd", namespaces=self.ns)[0].text
+        cEAN = self.xml_assinado.xpath("//ns:det/ns:prod/ns:cEAN", namespaces=self.ns)[0].text
+        xProd = self.xml_assinado.xpath("//ns:det/ns:prod/ns:xProd", namespaces=self.ns)[0].text
+        NCM = self.xml_assinado.xpath("//ns:det/ns:prod/ns:NCM", namespaces=self.ns)[0].text
 
         CEST = None
         indEscala = None
-        CFOP = self.xml_assinado.xpath("//ns:det/ns:prod/ns:CFOP", namespaces=self.ns)[
+        CFOP = self.xml_assinado.xpath("//ns:det/ns:prod/ns:CFOP", namespaces=self.ns)[0].text
+        uCom = self.xml_assinado.xpath("//ns:det/ns:prod/ns:uCom", namespaces=self.ns)[0].text
+        qCom = self.xml_assinado.xpath("//ns:det/ns:prod/ns:qCom", namespaces=self.ns)[0].text
+        vUnCom = self.xml_assinado.xpath("//ns:det/ns:prod/ns:vUnCom", namespaces=self.ns)[0].text
+        vProd = self.xml_assinado.xpath("//ns:det/ns:prod/ns:vProd", namespaces=self.ns)[0].text
+        cEANTrib = self.xml_assinado.xpath("//ns:det/ns:prod/ns:cEANTrib", namespaces=self.ns)[
             0
         ].text
-        uCom = self.xml_assinado.xpath("//ns:det/ns:prod/ns:uCom", namespaces=self.ns)[
-            0
-        ].text
-        qCom = self.xml_assinado.xpath("//ns:det/ns:prod/ns:qCom", namespaces=self.ns)[
-            0
-        ].text
-        vUnCom = self.xml_assinado.xpath(
-            "//ns:det/ns:prod/ns:vUnCom", namespaces=self.ns
-        )[0].text
-        vProd = self.xml_assinado.xpath(
-            "//ns:det/ns:prod/ns:vProd", namespaces=self.ns
-        )[0].text
-        cEANTrib = self.xml_assinado.xpath(
-            "//ns:det/ns:prod/ns:cEANTrib", namespaces=self.ns
-        )[0].text
-        uTrib = self.xml_assinado.xpath(
-            "//ns:det/ns:prod/ns:uTrib", namespaces=self.ns
-        )[0].text
-        qTrib = self.xml_assinado.xpath(
-            "//ns:det/ns:prod/ns:qTrib", namespaces=self.ns
-        )[0].text
-        vUnTrib = self.xml_assinado.xpath(
-            "//ns:det/ns:prod/ns:vUnTrib", namespaces=self.ns
-        )[0].text
-        indTot = self.xml_assinado.xpath(
-            "//ns:det/ns:prod/ns:indTot", namespaces=self.ns
-        )[0].text
+        uTrib = self.xml_assinado.xpath("//ns:det/ns:prod/ns:uTrib", namespaces=self.ns)[0].text
+        qTrib = self.xml_assinado.xpath("//ns:det/ns:prod/ns:qTrib", namespaces=self.ns)[0].text
+        vUnTrib = self.xml_assinado.xpath("//ns:det/ns:prod/ns:vUnTrib", namespaces=self.ns)[0].text
+        indTot = self.xml_assinado.xpath("//ns:det/ns:prod/ns:indTot", namespaces=self.ns)[0].text
 
         self.assertEqual(cProd, "000328")
         self.assertEqual(cEAN, "1234567890121")
@@ -374,72 +317,54 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.assertEqual(vFCP, None)
 
         # Informações Adicionais do produto
-        infAdProd = self.xml_assinado.xpath(
-            "//ns:det/ns:infAdProd", namespaces=self.ns
-        )[0].text
+        infAdProd = self.xml_assinado.xpath("//ns:det/ns:infAdProd", namespaces=self.ns)[0].text
         self.assertEqual(infAdProd, "Informacoes adicionais")
 
         # Totalizadores
-        vBC = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vBC", namespaces=self.ns
-        )[0].text
-        vICMS = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vICMS", namespaces=self.ns
-        )[0].text
+        vBC = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vBC", namespaces=self.ns)[0].text
+        vICMS = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vICMS", namespaces=self.ns)[
+            0
+        ].text
         vICMSDeson = self.xml_assinado.xpath(
             "//ns:total/ns:ICMSTot/ns:vICMSDeson", namespaces=self.ns
         )[0].text
-        vFCP = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vFCP", namespaces=self.ns
-        )[0].text
-        vBCST = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vBCST", namespaces=self.ns
-        )[0].text
-        vST = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vST", namespaces=self.ns
-        )[0].text
-        vFCPST = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vFCPST", namespaces=self.ns
-        )[0].text
+        vFCP = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vFCP", namespaces=self.ns)[0].text
+        vBCST = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vBCST", namespaces=self.ns)[
+            0
+        ].text
+        vST = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vST", namespaces=self.ns)[0].text
+        vFCPST = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vFCPST", namespaces=self.ns)[
+            0
+        ].text
         vFCPSTRet = self.xml_assinado.xpath(
             "//ns:total/ns:ICMSTot/ns:vFCPSTRet", namespaces=self.ns
         )[0].text
-        vProd = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vProd", namespaces=self.ns
-        )[0].text
-        vFrete = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vFrete", namespaces=self.ns
-        )[0].text
-        vSeg = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vSeg", namespaces=self.ns
-        )[0].text
-        vDesc = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vDesc", namespaces=self.ns
-        )[0].text
-        vII = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vII", namespaces=self.ns
-        )[0].text
-        vIPI = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vIPI", namespaces=self.ns
-        )[0].text
+        vProd = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vProd", namespaces=self.ns)[
+            0
+        ].text
+        vFrete = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vFrete", namespaces=self.ns)[
+            0
+        ].text
+        vSeg = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vSeg", namespaces=self.ns)[0].text
+        vDesc = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vDesc", namespaces=self.ns)[
+            0
+        ].text
+        vII = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vII", namespaces=self.ns)[0].text
+        vIPI = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vIPI", namespaces=self.ns)[0].text
         vIPIDevol = self.xml_assinado.xpath(
             "//ns:total/ns:ICMSTot/ns:vIPIDevol", namespaces=self.ns
         )[0].text
-        vPIS = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vPIS", namespaces=self.ns
-        )[0].text
-        vCOFINS = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vCOFINS", namespaces=self.ns
-        )[0].text
-        vOutro = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vOutro", namespaces=self.ns
-        )[0].text
-        vNF = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vNF", namespaces=self.ns
-        )[0].text
-        vTotTrib = self.xml_assinado.xpath(
-            "//ns:total/ns:ICMSTot/ns:vTotTrib", namespaces=self.ns
-        )[0].text
+        vPIS = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vPIS", namespaces=self.ns)[0].text
+        vCOFINS = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vCOFINS", namespaces=self.ns)[
+            0
+        ].text
+        vOutro = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vOutro", namespaces=self.ns)[
+            0
+        ].text
+        vNF = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vNF", namespaces=self.ns)[0].text
+        vTotTrib = self.xml_assinado.xpath("//ns:total/ns:ICMSTot/ns:vTotTrib", namespaces=self.ns)[
+            0
+        ].text
 
         self.assertEqual(vBC, "0.00")
         self.assertEqual(vICMS, "0.00")

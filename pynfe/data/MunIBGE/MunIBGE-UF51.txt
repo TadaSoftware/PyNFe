@@ -15,6 +15,7 @@
 5101605	Barão de Melgaço
 5101704	Barra do Bugres
 5101803	Barra do Garças
+5101837	Boa Esperança do Norte
 5101852	Bom Jesus do Araguaia
 5101902	Brasnorte
 5102504	Cáceres
@@ -61,7 +62,7 @@
 5105200	Juscimeira
 5105234	Lambari D'Oeste
 5105259	Lucas do Rio Verde
-5105309	Luciára
+5105309	Luciara
 5105507	Vila Bela da Santíssima Trindade
 5105580	Marcelândia
 5105606	Matupá
@@ -96,7 +97,7 @@
 5106802	Porto dos Gaúchos
 5106828	Porto Esperidião
 5106851	Porto Estrela
-5107008	Poxoréo
+5107008	Poxoréu
 5107040	Primavera do Leste
 5107065	Querência
 5107107	São José dos Quatro Marcos
@@ -118,7 +119,7 @@
 5107768	Santa Rita do Trivelato
 5107776	Santa Terezinha
 5107792	Santo Antônio do Leste
-5107800	Santo Antônio do Leverger
+5107800	Santo Antônio de Leverger
 5107859	São Félix do Araguaia
 5107875	Sapezal
 5107883	Serra Nova Dourada

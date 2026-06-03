@@ -1,5 +1,8 @@
-from pyxb import BIND
+import uuid
 from importlib import import_module
+
+from lxml import etree
+from pyxb import BIND
 
 
 class InterfaceAutorizador:
@@ -9,6 +12,238 @@ class InterfaceAutorizador:
 
     def cancelar(self):
         pass
+
+
+class SerializacaoOsasco:
+    def __init__(self, chave_autenticacao):
+        self.chave_autenticacao = chave_autenticacao
+
+    def consultar(
+        self,
+        cnpj_tomador=None,
+        cpf_tomador=None,
+        data_inicial=None,
+        data_final=None,
+        numero_nota_inicial=None,
+        numero_nota_final=None,
+        numero_rps_inicial=None,
+        numero_rps_final=None,
+        numero_rps_unico=None,
+    ):
+        return {
+            "ChaveAutenticacao": self.chave_autenticacao,
+            "CNPJTomador": cnpj_tomador,
+            "CPFTomador": cpf_tomador,
+            "DataInicial": data_inicial,
+            "DataFinal": data_final,
+            "NumeroNotaInicial": numero_nota_inicial,
+            "NumeroNotaFinal": numero_nota_final,
+            "NumeroReciboInicial": numero_rps_inicial,
+            "NumeroReciboFinal": numero_rps_final,
+            "NumeroReciboUnico": numero_rps_unico,
+        }
+
+
+class SerializacaoCampinas(InterfaceAutorizador):
+    """
+    Serialização ABRASF v2.03 – Campinas
+    Retorna SOAP XML (SEM assinatura).
+    Assinatura e envio ficam fora.
+    """
+
+    def _gerar_id(self, prefixo):
+        return f"{prefixo}{uuid.uuid4().hex.upper()}"
+
+    def soap_envelope(
+        self,
+        metodo,
+        xml_assinado,
+    ):
+        NAMESPACE_SOAP = "http://schemas.xmlsoap.org/soap/envelope/"
+        NAMESPACE_XSI = "http://www.w3.org/2001/XMLSchema-instance"
+        NAMESPACE_XSD = "http://www.w3.org/2001/XMLSchema"
+        NAMESPACE_ABRASF = "http://nfse.abrasf.org.br"
+
+        xml_metodo = etree.Element("{%s}" % NAMESPACE_ABRASF + metodo)
+        xml_metodo.append(xml_assinado)
+        raiz = etree.Element(
+            "{%s}Envelope" % NAMESPACE_SOAP,
+            nsmap={
+                "xsi": NAMESPACE_XSI,
+                "xsd": NAMESPACE_XSD,
+                "soap": NAMESPACE_SOAP,
+                "nfse": NAMESPACE_ABRASF,
+            },
+        )
+        body = etree.SubElement(raiz, "{%s}Body" % NAMESPACE_SOAP)
+        body.append(xml_metodo)
+
+        return etree.tostring(raiz, pretty_print=True).decode()
+
+    def consultar_periodo(self, emitente, data_inicio, data_fim, pagina=1):
+        raiz = etree.Element("ConsultarNfseServicoPrestadoEnvio")
+
+        prestador = etree.SubElement(raiz, "Prestador")
+        cpf_cnpj = etree.SubElement(prestador, "CpfCnpj")
+        etree.SubElement(cpf_cnpj, "Cnpj").text = emitente.cnpj
+        etree.SubElement(prestador, "InscricaoMunicipal").text = emitente.inscricao_municipal
+
+        periodo = etree.SubElement(raiz, "PeriodoEmissao")
+        etree.SubElement(periodo, "DataInicial").text = data_inicio
+        etree.SubElement(periodo, "DataFinal").text = data_fim
+
+        etree.SubElement(raiz, "Pagina").text = str(pagina)
+
+        return etree.tostring(raiz, pretty_print=True).decode()
+
+    def consultar_faixa(self, emitente, numero_inicial, numero_final, pagina=1):
+        raiz = etree.Element("ConsultarNfseFaixaEnvio")
+
+        prestador = etree.SubElement(raiz, "Prestador")
+        cpf_cnpj = etree.SubElement(prestador, "CpfCnpj")
+        etree.SubElement(cpf_cnpj, "Cnpj").text = emitente.cnpj
+        etree.SubElement(prestador, "InscricaoMunicipal").text = emitente.inscricao_municipal
+
+        faixa = etree.SubElement(raiz, "Faixa")
+        etree.SubElement(faixa, "NumeroNfseInicial").text = str(numero_inicial)
+        etree.SubElement(faixa, "NumeroNfseFinal").text = str(numero_final)
+
+        etree.SubElement(raiz, "Pagina").text = str(pagina)
+
+        return etree.tostring(raiz, pretty_print=True).decode()
+
+
+class SerializacaoSpeedgov(InterfaceAutorizador):
+    """
+    Serialização ABRASF v1.00 – Speedgov
+    """
+
+    def _cabecalho(self):
+        cabecalho_xml = """<cabecalho xmlns="http://ws.speedgov.com.br/cabecalho_v1.xsd" versao="1"><versaoDados xmlns="">1</versaoDados></cabecalho>""".strip()
+        return cabecalho_xml
+
+    def soap_envelope(
+        self,
+        metodo,
+        xml_envio,
+    ):
+        NAMESPACE_SOAP = "http://schemas.xmlsoap.org/soap/envelope/"
+        NAMESPACE_ABRASF = "http://www.abrasf.org.br/ABRASF/arquivos/nfse.xsd"
+
+        ns_metodo = {
+            "ConsultarNfse": "http://ws.speedgov.com.br/consultar_nfse_envio_v1.xsd",
+        }
+
+        envelope = etree.Element(
+            "{http://schemas.xmlsoap.org/soap/envelope/}Envelope",
+            nsmap={
+                "soapenv": NAMESPACE_SOAP,
+                "nfse": NAMESPACE_ABRASF,
+                "consult": ns_metodo[metodo],
+            },
+        )
+        etree.SubElement(envelope, "{http://schemas.xmlsoap.org/soap/envelope/}Header")
+        body = etree.SubElement(envelope, "{http://schemas.xmlsoap.org/soap/envelope/}Body")
+
+        consultar_nfse = etree.SubElement(body, "{%s}" % NAMESPACE_ABRASF + metodo)
+
+        header = etree.SubElement(consultar_nfse, "header")
+        header.text = etree.CDATA(self._cabecalho())
+
+        parameters = etree.SubElement(consultar_nfse, "parameters")
+        parameters.text = etree.CDATA(xml_envio)
+
+        return etree.tostring(envelope, pretty_print=True).decode()
+
+    def consultar_periodo(self, emitente, data_inicio, data_fim):
+        NAMESPACE_SPEEDGOV_CONSULTAR_NFSE_ENVIO = (
+            "http://ws.speedgov.com.br/consultar_nfse_envio_v1.xsd"
+        )
+        raiz = etree.Element(
+            "{%s}ConsultarNfseEnvio" % NAMESPACE_SPEEDGOV_CONSULTAR_NFSE_ENVIO,
+        )
+
+        prestador = etree.SubElement(raiz, "Prestador")
+        etree.SubElement(prestador, "Cnpj").text = emitente.cnpj
+        etree.SubElement(prestador, "InscricaoMunicipal").text = emitente.inscricao_municipal
+
+        periodo = etree.SubElement(raiz, "PeriodoEmissao")
+        etree.SubElement(periodo, "DataInicial").text = data_inicio
+        etree.SubElement(periodo, "DataFinal").text = data_fim
+
+        return etree.tostring(raiz, pretty_print=True).decode()
+
+
+class SerializacaoGiss(InterfaceAutorizador):
+    """
+    Serialização ABRASF v2.04 – GISS
+    """
+
+    NAMESPACE_SOAP = "http://schemas.xmlsoap.org/soap/envelope/"
+    NAMESPACE_XSI = "http://www.w3.org/2001/XMLSchema-instance"
+    NAMESPACE_XSD = "http://www.w3.org/2001/XMLSchema"
+    NAMESPACE_ABRASF = "http://nfse.abrasf.org.br"
+    NAMESPACE_METODO = "http://www.giss.com.br/consultar-nfse-servico-prestado-envio-v2_04.xsd"
+    NAMESPACE_TIPOS = "http://www.giss.com.br/tipos-v2_04.xsd"
+    NAMESPACE_CABECALHO = "http://www.giss.com.br/cabecalho-v2_04.xsd"
+
+    def _cabecalho(self):
+        cabecalho_xml = f"""<cabecalho xmlns="{self.NAMESPACE_CABECALHO}" versao="2.04"><versaoDados>2.04</versaoDados></cabecalho>""".strip()
+        return cabecalho_xml
+
+    def soap_envelope(
+        self,
+        metodo,
+        xml_assinado,
+    ):
+        NAMESPACE_SOAP = "http://schemas.xmlsoap.org/soap/envelope/"
+        NAMESPACE_XSI = "http://www.w3.org/2001/XMLSchema-instance"
+        NAMESPACE_XSD = "http://www.w3.org/2001/XMLSchema"
+        NAMESPACE_ABRASF = "http://nfse.abrasf.org.br"
+
+        envelope = etree.Element(
+            f"{{{self.NAMESPACE_SOAP}}}Envelope",
+            nsmap={
+                "xsi": NAMESPACE_XSI,
+                "xsd": NAMESPACE_XSD,
+                "soap": NAMESPACE_SOAP,
+                "nfse": NAMESPACE_ABRASF,
+            },
+        )
+        body = etree.SubElement(envelope, f"{{{self.NAMESPACE_SOAP}}}Body")
+
+        consultar_nfse = etree.SubElement(
+            body, f"{{{self.NAMESPACE_ABRASF}}}{metodo}Request"
+        )
+
+        header = etree.SubElement(consultar_nfse, "nfseCabecMsg")
+        header.text = etree.CDATA(self._cabecalho())
+
+        parameters = etree.SubElement(consultar_nfse, "nfseDadosMsg")
+        parameters.text = etree.CDATA(xml_assinado)
+
+        return (
+            '<?xml version="1.0" encoding="utf-8"?>'
+            + etree.tostring(envelope, pretty_print=True).decode()
+        )
+
+    def consultar_periodo(self, emitente, data_inicio, data_fim, pagina=1):
+        return f"""<ConsultarNfseServicoPrestadoEnvio
+            xmlns="{self.NAMESPACE_METODO}"
+            xmlns:tipos="{self.NAMESPACE_TIPOS}">
+
+            <Prestador>
+                <tipos:CpfCnpj>
+                <tipos:Cnpj>{emitente.cnpj}</tipos:Cnpj>
+                </tipos:CpfCnpj>
+                <tipos:InscricaoMunicipal>{emitente.inscricao_municipal}</tipos:InscricaoMunicipal>
+            </Prestador>
+            <PeriodoCompetencia>
+                <DataInicial>{data_inicio}</DataInicial>
+                <DataFinal>{data_fim}</DataFinal>
+            </PeriodoCompetencia>
+            <Pagina>{pagina}</Pagina>
+        </ConsultarNfseServicoPrestadoEnvio>""".strip()
 
 
 class SerializacaoBetha(InterfaceAutorizador):
@@ -84,7 +319,14 @@ class SerializacaoBetha(InterfaceAutorizador):
         gnfse = nfse_schema.GerarNfseEnvio()
         gnfse.Rps = declaracao_servico
 
-        return gnfse.toxml(element_name="GerarNfseEnvio")
+        gnfse = (
+            gnfse.toxml(encoding="utf-8", element_name="GerarNfseEnvio")
+            .replace("ns1:", "")
+            .replace(":ns1", "")
+            .replace('<?xml version="1.0" ?>', "")
+        )
+
+        return gnfse
 
     def consultar_rps(self, nfse):
         """Retorna string de um XML gerado a partir do
@@ -106,7 +348,7 @@ class SerializacaoBetha(InterfaceAutorizador):
         consulta.Prestador = id_prestador
 
         consulta = (
-            consulta.toxml(element_name="ConsultarNfseRpsEnvio")
+            consulta.toxml(encoding="utf-8", element_name="ConsultarNfseRpsEnvio")
             .replace("ns1:", "")
             .replace(":ns1", "")
             .replace('<?xml version="1.0" ?>', "")
@@ -132,7 +374,7 @@ class SerializacaoBetha(InterfaceAutorizador):
         consulta.Faixa.NumeroNfseFinal = fim
 
         consulta = (
-            consulta.toxml(element_name="ConsultarNfseFaixaEnvio")
+            consulta.toxml(encoding="utf-8", element_name="ConsultarNfseFaixaEnvio")
             .replace("ns1:", "")
             .replace(":ns1", "")
             .replace('<?xml version="1.0" ?>', "")
@@ -165,7 +407,7 @@ class SerializacaoBetha(InterfaceAutorizador):
         cancelar = nfse_schema.CancelarNfseEnvio()
         cancelar.Pedido = pedido
 
-        return cancelar.toxml(element_name="CancelarNfseEnvio")
+        return cancelar.toxml(encoding="utf-8", element_name="CancelarNfseEnvio")
 
     def serializar_lote_sincrono(self, nfse):
         """Retorna string de um XML gerado a partir do
@@ -244,294 +486,80 @@ class SerializacaoBetha(InterfaceAutorizador):
         gnfse = nfse_schema.EnviarLoteRpsSincronoEnvio()
         gnfse.LoteRps = lote
 
-        return gnfse.toxml(element_name="EnviarLoteRpsSincronoEnvio")
+        return gnfse.toxml(encoding="utf-8", element_name="EnviarLoteRpsSincronoEnvio")
 
 
 class SerializacaoGinfes(InterfaceAutorizador):
     def __init__(self):
-        # importa
-        global _tipos, servico_consultar_nfse_envio_v03
-        global servico_enviar_lote_rps_envio_v03, cabecalho_v03
-        global servico_cancelar_nfse_envio_v03
-        global servico_consultar_lote_rps_envio_v03
-        global servico_consultar_situacao_lote_rps_envio_v03
-        global servico_consultar_nfse_rps_envio_v03
-        _tipos = import_module("pynfe.utils.nfse.ginfes._tipos")
-        servico_consultar_nfse_envio_v03 = import_module(
-            "pynfe.utils.nfse.ginfes.servico_consultar_nfse_envio_v03"
-        )
-        servico_cancelar_nfse_envio_v03 = import_module(
-            "pynfe.utils.nfse.ginfes.servico_cancelar_nfse_envio_v03"
-        )
-        servico_enviar_lote_rps_envio_v03 = import_module(
-            "pynfe.utils.nfse.ginfes.servico_enviar_lote_rps_envio_v03"
-        )
-        cabecalho_v03 = import_module("pynfe.utils.nfse.ginfes.cabecalho_v03")
-        servico_consultar_lote_rps_envio_v03 = import_module(
-            "pynfe.utils.nfse.ginfes.servico_consultar_lote_rps_envio_v03"
-        )
-        servico_consultar_situacao_lote_rps_envio_v03 = import_module(
-            "pynfe.utils.nfse.ginfes.servico_consultar_situacao_lote_rps_envio_v03"
-        )
-        servico_consultar_nfse_rps_envio_v03 = import_module(
-            "pynfe.utils.nfse.ginfes.servico_consultar_nfse_rps_envio_v03"
-        )
+        pass
+    
 
-    def consultar_rps(self, emitente, numero, serie, tipo):
-        """Retorna string de um XML de consulta por Rps gerado a partir do
-        XML Schema (XSD). Binding gerado pelo modulo PyXB.
-        servico_consultar_nfse_rps_envio_v03.xsd
-        """
-        # Rps
-        id_rps = _tipos.tcIdentificacaoRps()
-        id_rps.Numero = numero
-        id_rps.Serie = serie
-        id_rps.Tipo = tipo
+    def consultar_periodo(self, emitente, data_inicio, data_fim, pagina=1):
+        NS = "http://www.ginfes.com.br/servico_consultar_nfse_servico_prestado_envio_v03.xsd"
+        DS = "http://www.w3.org/2000/09/xmldsig#"
+
+        nsmap = {None: NS, "ds": DS}
+
+        root = etree.Element(f"{{{NS}}}ConsultarNfseServicoPrestadoEnvio", nsmap=nsmap)
+
+        # ID obrigatório (antes da assinatura)
+        root.attrib["Id"] = f"CNFSESP{uuid.uuid4().hex.upper()}"
 
         # Prestador
-        id_prestador = _tipos.tcIdentificacaoPrestador()
-        id_prestador.Cnpj = emitente.cnpj
-        id_prestador.InscricaoMunicipal = emitente.inscricao_municipal
-
-        consulta = servico_consultar_nfse_rps_envio_v03.ConsultarNfseRpsEnvio()
-        consulta.IdentificacaoRps = id_rps
-        consulta.Prestador = id_prestador
-
-        return consulta.toxml(element_name="ns1:ConsultarNfseRpsEnvio")
-
-    def consultar_nfse(self, emitente, numero=None, inicio=None, fim=None):
-        # Prestador
-        id_prestador = _tipos.tcIdentificacaoPrestador()
-        id_prestador.Cnpj = emitente.cnpj
-        id_prestador.InscricaoMunicipal = emitente.inscricao_municipal
-
-        consulta = servico_consultar_nfse_envio_v03.ConsultarNfseEnvio()
-        consulta.Prestador = id_prestador
-        # Consulta por Numero
-        if numero is not None:
-            consulta.NumeroNfse = numero
-        else:
-            # consulta por Data
-            consulta.PeriodoEmissao = BIND()
-            consulta.PeriodoEmissao.DataInicial = inicio
-            consulta.PeriodoEmissao.DataFinal = fim
-
-        return consulta.toxml(element_name="ns1:ConsultarNfseEnvio")
-
-    def consultar_lote(self, emitente, numero):
-        # Prestador
-        id_prestador = _tipos.tcIdentificacaoPrestador()
-        id_prestador.Cnpj = emitente.cnpj
-        id_prestador.InscricaoMunicipal = emitente.inscricao_municipal
-
-        consulta = servico_consultar_lote_rps_envio_v03.ConsultarLoteRpsEnvio()
-        consulta.Prestador = id_prestador
-        consulta.Protocolo = str(numero)
-
-        return consulta.toxml(element_name="ns1:ConsultarLoteRpsEnvio")
-
-    def consultar_situacao_lote(self, emitente, numero):
-        "Serializa lote de envio, baseado no servico_consultar_situacao_lote_rps_envio_v03.xsd"
-        # Prestador
-        id_prestador = _tipos.tcIdentificacaoPrestador()
-        id_prestador.Cnpj = emitente.cnpj
-        id_prestador.InscricaoMunicipal = emitente.inscricao_municipal
-
-        consulta = (
-            servico_consultar_situacao_lote_rps_envio_v03.ConsultarSituacaoLoteRpsEnvio()
+        prestador = etree.SubElement(root, f"{{{NS}}}Prestador")
+        cpf_cnpj = etree.SubElement(prestador, f"{{{NS}}}CpfCnpj")
+        etree.SubElement(cpf_cnpj, f"{{{NS}}}Cnpj").text = emitente.cnpj
+        etree.SubElement(prestador, f"{{{NS}}}InscricaoMunicipal").text = (
+            emitente.inscricao_municipal
         )
-        consulta.Prestador = id_prestador
-        consulta.Protocolo = str(numero)
 
-        return consulta.toxml(element_name="ns1:ConsultarSituacaoLoteRpsEnvio")
+        # Período
+        periodo = etree.SubElement(root, f"{{{NS}}}PeriodoEmissao")
+        etree.SubElement(periodo, f"{{{NS}}}DataInicial").text = data_inicio
+        etree.SubElement(periodo, f"{{{NS}}}DataFinal").text = data_fim
 
-    def serializar_lote_assincrono(self, nfse):
-        "Serializa lote de envio, baseado no servico_enviar_lote_rps_envio_v03.xsd"
+        # Página
+        etree.SubElement(root, f"{{{NS}}}Pagina").text = str(pagina)
 
-        servico = _tipos.tcDadosServico()
-        valores_servico = _tipos.tcValores()
-        valores_servico.ValorServicos = nfse.servico.valor_servico
-        # valores_servico.ValorServicos = str(Decimal(
-        # nfse.servico.valor_servico.quantize(Decimal('.01'), rounding=ROUND_HALF_UP)))
-        valores_servico.IssRetido = nfse.servico.iss_retido
-        # Dados opcionais
-        if nfse.servico.valor_deducoes:
-            valores_servico.ValorDeducoes = nfse.servico.valor_deducoes
-        if nfse.servico.valor_pis:
-            valores_servico.ValorPis = nfse.servico.valor_pis
-        if nfse.servico.valor_confins:
-            valores_servico.ValorCofins = nfse.servico.valor_confins
-        if nfse.servico.valor_inss:
-            valores_servico.ValorInss = nfse.servico.valor_inss
-        if nfse.servico.valor_ir:
-            valores_servico.ValorIr = nfse.servico.valor_ir
-        if nfse.servico.valor_csll:
-            valores_servico.ValorCsll = nfse.servico.valor_csll
-        if nfse.servico.valor_iss:
-            valores_servico.ValorIss = nfse.servico.valor_iss
-        if nfse.servico.valor_iss_retido:
-            valores_servico.ValorIssRetido = nfse.servico.valor_iss_retido
-        if nfse.servico.valor_liquido:
-            valores_servico.ValorLiquidoNfse = nfse.servico.valor_liquido
-        if nfse.servico.outras_retencoes:
-            valores_servico.OutrasRetencoes = nfse.servico.outras_retencoes
-        if nfse.servico.base_calculo:
-            valores_servico.BaseCalculo = nfse.servico.base_calculo
-        if nfse.servico.aliquota:
-            valores_servico.Aliquota = nfse.servico.aliquota
-        if nfse.servico.desconto_incondicionado:
-            valores_servico.DescontoIncondicionado = (
-                nfse.servico.desconto_incondicionado
-            )
-        if nfse.servico.desconto_condicionado:
-            valores_servico.DescontoCondicionado = nfse.servico.desconto_condicionado
+        return etree.tostring(root, encoding="utf-8", xml_declaration=True)
 
-        servico.Valores = valores_servico
-        servico.ItemListaServico = nfse.servico.item_lista
-        # opcionais
-        if nfse.servico.codigo_cnae:
-            servico.CodigoCnae = nfse.servico.codigo_cnae
-        if nfse.servico.codigo_tributacao_municipio:
-            servico.CodigoTributacaoMunicipio = nfse.servico.codigo_tributacao_municipio
-        # obrigatórios
-        servico.Discriminacao = nfse.servico.discriminacao
-        servico.CodigoMunicipio = nfse.servico.codigo_municipio
+    def consultar_faixa(self, emitente, numero_inicial, numero_final, pagina=1):
+        NS = "http://www.ginfes.com.br/servico_consultar_nfse_faixa_envio_v03.xsd"
+        DS = "http://www.w3.org/2000/09/xmldsig#"
 
-        # endereco tomador
-        endereco_tomador = _tipos.tcEndereco()
-        endereco_tomador.Endereco = nfse.cliente.endereco_logradouro
-        if nfse.cliente.endereco_complemento:
-            endereco_tomador.Complemento = nfse.cliente.endereco_complemento
-        endereco_tomador.Numero = nfse.cliente.endereco_numero
-        endereco_tomador.Bairro = nfse.cliente.endereco_bairro
-        if nfse.cliente.endereco_cod_municipio:
-            endereco_tomador.CodigoMunicipio = nfse.cliente.endereco_cod_municipio
-        endereco_tomador.Uf = nfse.cliente.endereco_uf
-        endereco_tomador.Cep = nfse.cliente.endereco_cep
-        # identificacao Tomador
-        id_tomador = _tipos.tcIdentificacaoTomador()
-        id_tomador.CpfCnpj = nfse.cliente.numero_documento
-        if nfse.cliente.inscricao_municipal:
-            id_tomador.InscricaoMunicipal = nfse.cliente.inscricao_municipal
-        # Tomador
-        tomador = _tipos.tcDadosTomador()
-        tomador.IdentificacaoTomador = id_tomador
-        tomador.RazaoSocial = nfse.cliente.razao_social
-        tomador.Endereco = endereco_tomador
-        # opcional
-        if nfse.cliente.endereco_telefone or nfse.cliente.email:
-            tomador.Contato = _tipos.tcContato()
-            if nfse.cliente.endereco_telefone:
-                tomador.Contato.Telefone = nfse.cliente.endereco_telefone
-            if nfse.cliente.email:
-                tomador.Contato.Email = nfse.cliente.email
+        nsmap = {None: NS, "ds": DS}
+
+        root = etree.Element(f"{{{NS}}}ConsultarNfseFaixaEnvio", nsmap=nsmap)
+
+        # Id obrigatório (ANTES da assinatura)
+        root.attrib["Id"] = f"CNFSEFAIXA{uuid.uuid4().hex.upper()}"
 
         # Prestador
-        id_prestador = _tipos.tcIdentificacaoPrestador()
-        id_prestador.Cnpj = nfse.emitente.cnpj
-        id_prestador.InscricaoMunicipal = nfse.emitente.inscricao_municipal
-
-        # identificacao rps
-        id_rps = _tipos.tcIdentificacaoRps()
-        id_rps.Numero = nfse.identificador
-        id_rps.Serie = nfse.serie
-        id_rps.Tipo = nfse.tipo
-        # inf rps
-        inf_rps = _tipos.tcInfRps()
-        inf_rps.IdentificacaoRps = id_rps
-        inf_rps.DataEmissao = nfse.data_emissao.strftime("%Y-%m-%dT%H:%M:%S")
-        # Natureza da Operação
-        # 1 – Tributação no município
-        # 2 - Tributação fora do município
-        # 3 - Isenção
-        # 4 - Imune
-        # 5 –Exigibilidade suspensa por decisão judicial
-        # 6 – Exigibilidade suspensa por procedimento administrativo
-        inf_rps.NaturezaOperacao = nfse.natureza_operacao
-        # Regime Especial de Tributação
-        # 1 – Microempresa municipal
-        # 2 - Estimativa
-        # 3 – Sociedade de profissionais
-        # 4 – Cooperativa
-        # 5 - Microempresário Individual (MEI)
-        # 6 - Microempresário e Empresa de Pequeno Porte (ME EPP)
-        if nfse.regime_especial:
-            inf_rps.RegimeEspecialTributacao = nfse.regime_especial
-        inf_rps.OptanteSimplesNacional = nfse.simples  # 1-sim 2-nao
-        inf_rps.IncentivadorCultural = nfse.incentivo  # 1-sim 2-nao
-        # Código de status da NFS-e
-        # 1-Normal 2-Cancelado (sempre 1, nota não pode ser enviada como cancelada)
-        inf_rps.Status = 1
-        inf_rps.RpsSubstituido = None  # opcional
-        inf_rps.Servico = servico
-        inf_rps.Prestador = id_prestador
-        inf_rps.Tomador = tomador
-        inf_rps.IntermediarioServico = None  # opcional
-        inf_rps.ConstrucaoCivil = None  # opcional
-        inf_rps.Id = nfse.identificador
-
-        rps = _tipos.tcRps()
-        rps.InfRps = inf_rps
-
-        lote = _tipos.tcLoteRps()
-        lote.NumeroLote = 1
-        lote.Id = 1
-        lote.Cnpj = nfse.emitente.cnpj
-        lote.InscricaoMunicipal = nfse.emitente.inscricao_municipal
-        lote.QuantidadeRps = 1
-        lote.ListaRps = BIND()
-        lote.ListaRps.append(rps)
-
-        enviarLote = servico_enviar_lote_rps_envio_v03.EnviarLoteRpsEnvio()
-        enviarLote.LoteRps = lote
-        return enviarLote.toxml(element_name="ns1:EnviarLoteRpsEnvio")
-
-    def cancelar(self, nfse, codigo):
-        """Retorna string de um XML gerado a partir do
-        XML Schema (XSD). Binding gerado pelo modulo PyXB."""
-        # id nfse
-        id_nfse = _tipos.tcIdentificacaoNfse()
-        id_nfse.Numero = nfse.identificador
-        id_nfse.Cnpj = nfse.emitente.cnpj
-        id_nfse.InscricaoMunicipal = nfse.emitente.inscricao_municipal
-        id_nfse.CodigoMunicipio = nfse.emitente.endereco_cod_municipio
-
-        # Info Pedido de cancelamento
-        info_pedido = _tipos.tcInfPedidoCancelamento()
-        info_pedido.Id = "1"
-        info_pedido.IdentificacaoNfse = id_nfse
-        info_pedido.CodigoCancelamento = codigo
-
-        # Pedido
-        pedido = _tipos.tcPedidoCancelamento()
-        pedido.InfPedidoCancelamento = info_pedido
-
-        # Cancelamento
-        cancelar = servico_cancelar_nfse_envio_v03.CancelarNfseEnvio()
-        cancelar.Pedido = pedido
-
-        return cancelar.toxml(element_name="ns1:CancelarNfseEnvio")
-
-    def cancelar_v2(self, nfse):
-        # serialização utilizando lxml
-        from lxml import etree
-
-        ns1 = "http://www.ginfes.com.br/servico_cancelar_nfse_envio"
-        ns2 = "http://www.ginfes.com.br/tipos"
-        raiz = etree.Element(
-            "{%s}CancelarNfseEnvio" % ns1, nsmap={"ns1": ns1, "ns2": ns2}
+        prestador = etree.SubElement(root, f"{{{NS}}}Prestador")
+        cpf_cnpj = etree.SubElement(prestador, f"{{{NS}}}CpfCnpj")
+        etree.SubElement(cpf_cnpj, f"{{{NS}}}Cnpj").text = emitente.cnpj
+        etree.SubElement(prestador, f"{{{NS}}}InscricaoMunicipal").text = (
+            emitente.inscricao_municipal
         )
-        prestador = etree.SubElement(raiz, "{%s}Prestador" % ns1)
-        etree.SubElement(prestador, "{%s}Cnpj" % ns2).text = nfse.emitente.cnpj
-        etree.SubElement(
-            prestador, "{%s}InscricaoMunicipal" % ns2
-        ).text = nfse.emitente.inscricao_municipal
-        etree.SubElement(raiz, "{%s}NumeroNfse" % ns1).text = nfse.identificador
-        return etree.tostring(raiz, encoding="unicode")
+
+        # Faixa
+        faixa = etree.SubElement(root, f"{{{NS}}}Faixa")
+        etree.SubElement(faixa, f"{{{NS}}}NumeroNfseInicial").text = str(numero_inicial)
+        etree.SubElement(faixa, f"{{{NS}}}NumeroNfseFinal").text = str(numero_final)
+
+        # Página
+        etree.SubElement(root, f"{{{NS}}}Pagina").text = str(pagina)
+
+        return etree.tostring(root, encoding="utf-8", xml_declaration=True)
 
     def cabecalho(self):
-        # info
-        cabecalho = cabecalho_v03.cabecalho()
-        cabecalho.versao = "3"
-        cabecalho.versaoDados = "3"
-        return cabecalho.toxml(element_name="ns2:cabecalho")
+        NS = "http://www.ginfes.com.br/cabecalho_v03.xsd"
+
+        nsmap = {None: NS}
+
+        cabecalho = etree.Element(f"{{{NS}}}cabecalho", nsmap=nsmap)
+        cabecalho.attrib["versao"] = "3"
+        versao_dados = etree.SubElement(cabecalho, f"{{{NS}}}versaoDados")
+        versao_dados.text = "3"
+
+        return etree.tostring(cabecalho, encoding="utf-8", xml_declaration=True)

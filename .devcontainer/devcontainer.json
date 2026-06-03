@@ -1,0 +1,37 @@
+{
+    "name": "PyNFe",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/python:1": {
+            "version": "3.12",
+            "installTools": true
+        }
+    },
+    "workspaceFolder": "/workspaces/PyNFe/",
+    "mounts": [
+        "source=${env:HOME}/.ssh,target=/root/.ssh,type=bind"
+    ],
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.languageServer": "Pylance",
+                "editor.formatOnSave": true,
+                "python.linting.enabled": true,
+                "python.linting.linter": "ruff",
+                "editor.codeActionsOnSave": {
+                    "source.fixAll": "explicit"
+                }
+            },
+            "extensions": [
+                "eamodio.gitlens",
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "charliermarsh.ruff"
+            ]
+        }
+    },
+    "postCreateCommand": "pip install --user -r /workspaces/PyNFe/requirements.txt -r /workspaces/PyNFe/requirements-nfse.txt || true"
+}

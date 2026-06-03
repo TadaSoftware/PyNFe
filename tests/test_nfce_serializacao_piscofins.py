@@ -42,9 +42,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.xsd_procNFe = self.validacao.get_xsd(
             xsd_file=XSD_NFE_PROCESSADA, xsd_folder=XSD_FOLDER_NFE
         )
-        self.xsd_nfe = self.validacao.get_xsd(
-            xsd_file=XSD_NFE, xsd_folder=XSD_FOLDER_NFE
-        )
+        self.xsd_nfe = self.validacao.get_xsd(xsd_file=XSD_NFE, xsd_folder=XSD_FOLDER_NFE)
 
     def preenche_emitente(self):
         self.emitente = Emitente(
@@ -76,7 +74,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             uf="PR",
             natureza_operacao="VENDA",  # venda, compra, transferência, devolução, etc
             forma_pagamento=0,  # 0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros.
-            tipo_pagamento=1,
             modelo=65,  # 55=NF-e; 65=NFC-e
             serie="1",
             numero_nf="111",  # Número do Documento Fiscal.
@@ -94,7 +91,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             transporte_modalidade_frete=1,
             informacoes_adicionais_interesse_fisco="Mensagem complementar",
             totais_tributos_aproximado=Decimal("1.01"),
-            valor_troco=Decimal('3.00'),
+            valor_troco=Decimal("3.00"),
         )
 
         self.notafiscal.adicionar_produto_servico(
@@ -138,7 +135,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             uf="PR",
             natureza_operacao="VENDA",  # venda, compra, transferência, devolução, etc
             forma_pagamento=0,  # 0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros.
-            tipo_pagamento=1,
             modelo=65,  # 55=NF-e; 65=NFC-e
             serie="1",
             numero_nf="111",  # Número do Documento Fiscal.
@@ -156,7 +152,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
             transporte_modalidade_frete=1,
             informacoes_adicionais_interesse_fisco="Mensagem complementar",
             totais_tributos_aproximado=Decimal("1.01"),
-            valor_troco=Decimal('3.00'),
+            valor_troco=Decimal("3.00"),
         )
 
         self.notafiscal.adicionar_produto_servico(
@@ -201,8 +197,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
     def validacao_pis_cofins_nao_informado(self):
         try:
             CST_PIS = self.xml_assinado.xpath(
-                "//ns:det/ns:imposto/ns:PIS/ns:PISOutr/ns:CST",
-                namespaces=self.ns
+                "//ns:det/ns:imposto/ns:PIS/ns:PISOutr/ns:CST", namespaces=self.ns
             )[0].text
         except BaseException:
             CST_PIS = None
@@ -210,8 +205,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
 
         try:
             vPIS = self.xml_assinado.xpath(
-                "//ns:det/ns:imposto/ns:PIS/ns:PISOutr/ns:vPIS",
-                namespaces=self.ns
+                "//ns:det/ns:imposto/ns:PIS/ns:PISOutr/ns:vPIS", namespaces=self.ns
             )[0].text
         except BaseException:
             vPIS = None
@@ -220,8 +214,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         # COFINS
         try:
             CST_COFINS = self.xml_assinado.xpath(
-                "//ns:det/ns:imposto/ns:COFINS/ns:COFINSOutr/ns:CST",
-                namespaces=self.ns
+                "//ns:det/ns:imposto/ns:COFINS/ns:COFINSOutr/ns:CST", namespaces=self.ns
             )[0].text
         except BaseException:
             CST_COFINS = None
@@ -229,8 +222,7 @@ class SerializacaoNFeTestCase(unittest.TestCase):
 
         try:
             vCOFINS = self.xml_assinado.xpath(
-                "//ns:det/ns:imposto/ns:COFINS/ns:COFINSOutr/ns:vCOFINS",
-                namespaces=self.ns
+                "//ns:det/ns:imposto/ns:COFINS/ns:COFINSOutr/ns:vCOFINS", namespaces=self.ns
             )[0].text
         except BaseException:
             vCOFINS = None
@@ -238,32 +230,27 @@ class SerializacaoNFeTestCase(unittest.TestCase):
 
     def validacao_pis_cofins_informado(self):
         CST_PIS = self.xml_assinado.xpath(
-            "//ns:det/ns:imposto/ns:PIS/ns:PISOutr/ns:CST",
-            namespaces=self.ns
+            "//ns:det/ns:imposto/ns:PIS/ns:PISOutr/ns:CST", namespaces=self.ns
         )[0].text
         self.assertEqual(CST_PIS, "51")
 
         vPIS = self.xml_assinado.xpath(
-            "//ns:det/ns:imposto/ns:PIS/ns:PISOutr/ns:vPIS",
-            namespaces=self.ns
+            "//ns:det/ns:imposto/ns:PIS/ns:PISOutr/ns:vPIS", namespaces=self.ns
         )[0].text
         self.assertEqual(vPIS, "0.79")
 
         # COFINS
         CST_COFINS = self.xml_assinado.xpath(
-            "//ns:det/ns:imposto/ns:COFINS/ns:COFINSOutr/ns:CST",
-            namespaces=self.ns
+            "//ns:det/ns:imposto/ns:COFINS/ns:COFINSOutr/ns:CST", namespaces=self.ns
         )[0].text
         self.assertEqual(CST_COFINS, "51")
 
         vCOFINS = self.xml_assinado.xpath(
-            "//ns:det/ns:imposto/ns:COFINS/ns:COFINSOutr/ns:vCOFINS",
-            namespaces=self.ns
+            "//ns:det/ns:imposto/ns:COFINS/ns:COFINSOutr/ns:vCOFINS", namespaces=self.ns
         )[0].text
         self.assertEqual(vCOFINS, "3.48")
 
     def test_notafiscal_com_pis_cofins_opcional_sem_informar(self):
-
         # Preenche as classes do pynfe
         self.emitente = self.preenche_emitente()
         self.notafiscal = self.preenche_notafiscal_produto_sem_piscofins()
@@ -277,7 +264,6 @@ class SerializacaoNFeTestCase(unittest.TestCase):
         self.validacao_pis_cofins_nao_informado()
 
     def test_notafiscal_com_pis_cofins_informado(self):
-
         # Preenche as classes do pynfe
         self.emitente = self.preenche_emitente()
         self.notafiscal = self.preenche_notafiscal_produto_com_piscofins()

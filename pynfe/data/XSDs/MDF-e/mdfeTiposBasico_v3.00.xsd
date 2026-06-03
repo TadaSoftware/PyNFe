@@ -355,7 +355,7 @@ Por exemplo, o arquivo para o schema do modal Rodoviário na versão 1.00 será 
 														</xs:restriction>
 													</xs:simpleType>
 												</xs:element>
-												<xs:element name="infCTe" minOccurs="0" maxOccurs="10000">
+												<xs:element name="infCTe" minOccurs="0" maxOccurs="20000">
 													<xs:annotation>
 														<xs:documentation>Conhecimentos de Tranporte - usar este grupo quando for prestador de serviço de transporte</xs:documentation>
 													</xs:annotation>
@@ -489,10 +489,37 @@ Por exemplo, o arquivo para o schema do modal Rodoviário na versão 1.00 será 
 																	</xs:sequence>
 																</xs:complexType>
 															</xs:element>
+															<xs:sequence minOccurs="0">
+																<xs:element name="indPrestacaoParcial">
+																	<xs:annotation>
+																		<xs:documentation>Indicador de Prestação parcial</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:whiteSpace value="preserve"/>
+																			<xs:enumeration value="1"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="infNFePrestParcial" maxOccurs="unbounded">
+																	<xs:annotation>
+																		<xs:documentation>Grupo de informações das NFe que foram entregues do CTe relacionado</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="chNFe" type="TChCTe">
+																				<xs:annotation>
+																					<xs:documentation>Nota Fiscal Eletrônica</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
 														</xs:sequence>
 													</xs:complexType>
 												</xs:element>
-												<xs:element name="infNFe" minOccurs="0" maxOccurs="10000">
+												<xs:element name="infNFe" minOccurs="0" maxOccurs="20000">
 													<xs:annotation>
 														<xs:documentation>Nota Fiscal Eletronica</xs:documentation>
 													</xs:annotation>
@@ -610,7 +637,7 @@ Por exemplo, o arquivo para o schema do modal Rodoviário na versão 1.00 será 
 														</xs:sequence>
 													</xs:complexType>
 												</xs:element>
-												<xs:element name="infMDFeTransp" minOccurs="0" maxOccurs="10000">
+												<xs:element name="infMDFeTransp" minOccurs="0" maxOccurs="20000">
 													<xs:annotation>
 														<xs:documentation>Manifesto Eletrônico de Documentos Fiscais. Somente para modal Aquaviário (vide regras MOC)</xs:documentation>
 													</xs:annotation>
@@ -1142,9 +1169,43 @@ Dados obrigatórios apenas no modal Rodoviário, depois da lei 11.442/07. Para o
 										<xs:simpleType>
 											<xs:restriction base="TString">
 												<xs:minLength value="2"/>
-												<xs:maxLength value="2000"/>
+												<xs:maxLength value="8000"/>
 											</xs:restriction>
 										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="infPAA" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Grupo de Informação do Provedor de Assinatura e Autorização</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="CNPJPAA" type="TCnpj">
+										<xs:annotation>
+											<xs:documentation>CNPJ do Provedor de Assinatura e Autorização</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="PAASignature">
+										<xs:annotation>
+											<xs:documentation>Assinatura RSA do Emitente para DFe gerados por PAA</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="SignatureValue" type="xs:base64Binary">
+													<xs:annotation>
+														<xs:documentation>Assinatura digital padrão RSA</xs:documentation>
+														<xs:documentation>Converter o atributo Id do DFe para array de bytes e assinar com a chave privada do RSA com algoritmo SHA1 gerando um valor no formato base64.</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:element name="RSAKeyValue" type="TRSAKeyValueType">
+													<xs:annotation>
+														<xs:documentation>Chave Publica no padrão XML RSA Key</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
 									</xs:element>
 								</xs:sequence>
 							</xs:complexType>

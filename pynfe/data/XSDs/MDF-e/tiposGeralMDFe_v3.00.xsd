@@ -644,4 +644,13 @@
 			<xs:pattern value="[A-Z]{2,3}[0-9]{4}|[A-Z]{3,4}[0-9]{3}|[A-Z0-9]{7}"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:complexType name="TRSAKeyValueType">
+		<xs:annotation>
+			<xs:documentation>Tipo que representa uma chave publica padrão RSA</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Modulus" type="xs:base64Binary"/>
+			<xs:element name="Exponent" type="xs:base64Binary"/>
+		</xs:sequence>
+	</xs:complexType>
 </xs:schema>

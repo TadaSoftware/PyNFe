@@ -46,10 +46,13 @@ class CertificadoA1(Certificado):
         try:
             with open(self.caminho_arquivo, "rb") as cert_arquivo:
                 cert_conteudo = cert_arquivo.read()
-        except (PermissionError, FileNotFoundError) as exc:
-            raise Exception(
-                """Falha ao abrir arquivo do certificado digital A1.
-                Verifique local e permissoes do arquivo."""
+        except FileNotFoundError as exc:
+            raise FileNotFoundError(
+                "Falha ao abrir arquivo do certificado digital A1. Verifique o local do arquivo."
+            ) from exc
+        except PermissionError as exc:
+            raise PermissionError(
+                "Falha ao abrir arquivo do certificado digital A1. Verifique as permissoes do arquivo."
             ) from exc
         except Exception as exc:
             raise Exception(
@@ -68,7 +71,7 @@ class CertificadoA1(Certificado):
         except Exception as e:
             if "invalid password" in str(e).lower():
                 raise Exception(
-                    "Falha ao carregar certificado digital A1. Verifique a senha do" " certificado."
+                    "Falha ao carregar certificado digital A1. Verifique a senha do certificado."
                 ) from e
             else:
                 raise Exception(

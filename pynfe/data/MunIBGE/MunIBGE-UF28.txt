@@ -1,4 +1,4 @@
-﻿2800100	Amparo de São Francisco
+﻿2800100	Amparo do São Francisco
 2800209	Aquidabã
 2800308	Aracaju
 2800407	Arauá
@@ -21,7 +21,7 @@
 2802304	Frei Paulo
 2802403	Gararu
 2802502	General Maynard
-2802601	Gracho Cardoso
+2802601	Graccho Cardoso
 2802700	Ilha das Flores
 2802809	Indiaroba
 2802908	Itabaiana
