@@ -21,6 +21,9 @@ NAMESPACE_CTE = "http://www.portalfiscal.inf.br/cte"
 NAMESPACE_CTE_METODO = "http://www.portalfiscal.inf.br/cte/wsdl/"
 VERSAO_CTE = "3.00"
 
+NAMESPACE_NFCOM = "http://www.portalfiscal.inf.br/nfcom"
+NAMESPACE_NFCOM_METODO = "http://www.portalfiscal.inf.br/nfcom/wsdl/"
+VERSAO_NFCOM = "1.00"
 VERSAO_QRCODE = "2"
 
 TIPOS_DOCUMENTO = (
@@ -33,6 +36,12 @@ XSD_NFE = "nfe_v4.00.xsd"
 XSD_NFE_PROCESSADA = "procNFe_v4.00.xsd"
 XSD_PD_CANCELAR_NFE = "procCancNFe_v1.07.xsd"
 XSD_PD_INUTILIZAR_NFE = "procInutNFe_v1.07.xsd"
+
+XSD_NFE_LEIAUTE = "leiauteNFe_v4.00.xsd"
+XSD_NFE_TIPOS = "DFeTiposBasicos_v1.00.xsd"
+
+SCHEMA_FOLDER_NFE = "pynfe/data/SCHEMAs/NF-e"
+SCHEMA_NFE = "schemaNFe_v1.00.json"
 
 XSD_FOLDER_MDFE = "pynfe/data/XSDs/MDF-e"
 XSD_MDFE = "mdfe_v3.00.xsd"

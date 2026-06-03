@@ -28,8 +28,11 @@ class AssinaturaA1(Assinatura):
         self.key, self.cert = CertificadoA1(certificado).separar_arquivo(senha)
 
     def assinar(self, xml: etree._Element, retorna_string=False) -> Union[str, etree._Element]:
+        if isinstance(xml, str):
+            xml = etree.fromstring(xml.encode('utf-8'))
+
         # busca tag que tem id(reference_uri), logo nao importa se tem namespace
-        reference = xml.find(".//*[@Id]").attrib["Id"]
+        reference = xml.xpath('//*[@Id]')[0].attrib['Id'] if xml.xpath('//*[@Id]') else None
 
         # retira acentos
         xml_str = remover_acentos(etree.tostring(xml, encoding="unicode", pretty_print=False))

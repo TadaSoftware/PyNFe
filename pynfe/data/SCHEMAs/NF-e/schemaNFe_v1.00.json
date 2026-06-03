@@ -1,0 +1,1113 @@
+{
+    "versaoManual": "NFe/infNFe/@versao",
+    "idIntegracao": "NFe/infNFe/@Id",
+    "estado": "NFe/infNFe/ide/cUF",
+    "codigo": "NFe/infNFe/ide/cNF",
+    "natureza": "NFe/infNFe/ide/natOp",
+    "modelo": "NFe/infNFe/ide/mod",
+    "serie": "NFe/infNFe/ide/serie",
+    "numero": "NFe/infNFe/ide/nNF",
+    "dataEmissao": "NFe/infNFe/ide/dhEmi",
+    "dataSaidaEntradaTz": "NFe/infNFe/ide/dhSaiEnt",
+    "saida": "NFe/infNFe/ide/tpNF",
+    "dataPrevistaEntrega": "NFe/infNFe/ide/dhPrevEntrega",
+    "codigoIdentificacaoDestino": "NFe/infNFe/ide/idDest",
+    "codigoMunicipioFatoGerador": "NFe/infNFe/ide/cMunFG",
+    "codigoMunicipioFatoGeradorIBS": "NFe/infNFe/ide/cMunFGIBS",
+    "tipoImpressao": "NFe/infNFe/ide/tpImp",
+    "tipoEmissao": "NFe/infNFe/ide/tpEmis",
+    "digitoVerificador": "NFe/infNFe/ide/cDV",
+    "ambiente": "NFe/infNFe/ide/tpAmb",
+    "finalidade": "NFe/infNFe/ide/finNFe",
+    "tipoNotaDebito": "NFe/infNFe/ide/tpNFDebito",
+    "tipoNotaCredito": "NFe/infNFe/ide/tpNFCredito",
+    "consumidorFinal": "NFe/infNFe/ide/indFinal",
+    "presencial": "NFe/infNFe/ide/indPres",
+    "intermediador": "NFe/infNFe/ide/indIntermed",
+    "processoEmissao": "NFe/infNFe/ide/procEmi",
+    "versaoProcessoEmissao": "NFe/infNFe/ide/verProc",
+    "dataContingencia": "NFe/infNFe/ide/dhCont",
+    "justificativaContingencia": "NFe/infNFe/ide/xJust",
+    "compraGovernamental": {
+        "tipoEnte": "NFe/infNFe/ide/gCompraGov/tpEnteGov",
+        "percentual": "NFe/infNFe/ide/gCompraGov/pRedutor",
+        "tipoOperacao": "NFe/infNFe/ide/gCompraGov/tpOperGov"
+    },
+    "pagAntecipado": [{
+        "chave": "NFe/infNFe/ide/gPagAntecipado/refNFe[]"
+    }],
+    "emitente": {
+        "cpfCnpj": "NFe/infNFe/emit/CNPJ",
+        "razaoSocial": "NFe/infNFe/emit/xNome",
+        "nomeFantasia": "NFe/infNFe/emit/xFant",
+        "endereco": {
+            "logradouro": "NFe/infNFe/emit/enderEmit/xLgr",
+            "numero": "NFe/infNFe/emit/enderEmit/nro",
+            "complemento": "NFe/infNFe/emit/enderEmit/xCpl",
+            "bairro": "NFe/infNFe/emit/enderEmit/xBairro",
+            "codigoCidade": "NFe/infNFe/emit/enderEmit/cMun",
+            "descricaoCidade": "NFe/infNFe/emit/enderEmit/xMun",
+            "estado": "NFe/infNFe/emit/enderEmit/UF",
+            "cep": "NFe/infNFe/emit/enderEmit/CEP",
+            "codigoPais": "NFe/infNFe/emit/enderEmit/cPais",
+            "descricaoPais": "NFe/infNFe/emit/enderEmit/xPais"
+        },
+        "telefone": "NFe/infNFe/emit/enderEmit/fone",
+        "inscricaoEstadual": "NFe/infNFe/emit/IE",
+        "inscricaoEstadualSubstituto": "NFe/infNFe/emit/IEST",
+        "inscricaoMunicipal": "NFe/infNFe/emit/IM",
+        "cnae": "NFe/infNFe/emit/CNAE", 
+        "regimeTributario": "NFe/infNFe/emit/CRT"
+    },
+    "avulsa": {
+        "cnpj": "NFe/infNFe/avulsa/CNPJ",
+        "orgao": "NFe/infNFe/avulsa/xOrgao",
+        "matricula": "NFe/infNFe/avulsa/matr",
+        "nomdeAgente": "NFe/infNFe/avulsa/xAgente",
+        "telefone": "NFe/infNFe/avulsa/fone",
+        "estado": "NFe/infNFe/avulsa/UF",
+        "numeroDocumentoArrecadacao": "NFe/infNFe/avulsa/nDAR",
+        "dataEmissao": "NFe/infNFe/avulsa/dEmi",
+        "valorTotal": "NFe/infNFe/avulsa/vDAR",
+        "reparticaoFiscal": "NFe/infNFe/avulsa/repEmi",
+        "dataPagamento": "NFe/infNFe/avulsa/dPag"
+    },
+    "destinatario": {
+        "cpfCnpj": "NFe/infNFe/dest/CNPJ",
+        "codigoEstrangeiro": "NFe/infNFe/dest/idEstrangeiro",
+        "razaoSocial": "NFe/infNFe/dest/xNome",
+        "endereco": {
+            "logradouro": "NFe/infNFe/dest/enderDest/xLgr",
+            "numero": "NFe/infNFe/dest/enderDest/nro",
+            "complemento": "NFe/infNFe/dest/enderDest/xCpl",
+            "bairro": "NFe/infNFe/dest/enderDest/xBairro",
+            "codigoCidade": "NFe/infNFe/dest/enderDest/cMun",
+            "descricaoCidade": "NFe/infNFe/dest/enderDest/xMun",
+            "estado": "NFe/infNFe/dest/enderDest/UF",
+            "cep": "NFe/infNFe/dest/enderDest/CEP",
+            "codigoPais": "NFe/infNFe/dest/enderDest/cPais",
+            "descricaoPais": "NFe/infNFe/dest/enderDest/xPais",
+            "telefone": "NFe/infNFe/dest/enderDest/fone"
+        },
+        "indicadorInscricaoEstadual": "NFe/infNFe/dest/indIEDest",
+        "inscricaoEstadual": "NFe/infNFe/dest/IE",
+        "inscricaoSuframa": "NFe/infNFe/dest/ISUF",
+        "inscricaoMunicipal": "NFe/infNFe/dest/IM",
+        "email": "NFe/infNFe/dest/email"
+    },
+    "localRetirada": {
+        "cpfCnpj": "NFe/infNFe/retirada/CNPJ",
+        "nome": "NFe/infNFe/retirada/xNome",
+        "lougradouro": "NFe/infNFe/retirada/xLgr",
+        "numero": "NFe/infNFe/retirada/nro",
+        "complemento": "NFe/infNFe/retirada/xCpl",
+        "bairro": "NFe/infNFe/retirada/xBairro",
+        "codigoCidade": "NFe/infNFe/retirada/cMun",
+        "descricaoCidade": "NFe/infNFe/retirada/xMun",
+        "estado": "NFe/infNFe/retirada/UF",
+        "cep": "NFe/infNFe/retirada/CEP",
+        "codigoPais": "NFe/infNFe/retirada/cPais",
+        "descricaoPais": "NFe/infNFe/retirada/xPais",
+        "telefone": "NFe/infNFe/retirada/fone",
+        "email": "NFe/infNFe/retirada/email",
+        "inscricaoEstadual": "NFe/infNFe/retirada/IE"
+    },
+    "localEntrega": {
+        "cpfCnpj": "NFe/infNFe/entrega/CNPJ",
+        "razaoSocial": "NFe/infNFe/entrega/xNome",
+        "endereco": {
+            "logradouro": "NFe/infNFe/entrega/xLgr",
+            "numero": "NFe/infNFe/entrega/nro",
+            "complemento": "NFe/infNFe/entrega/xCpl",
+            "bairro": "NFe/infNFe/entrega/xBairro",
+            "codigoCidade": "NFe/infNFe/entrega/cMun",
+            "descricaoCidade": "NFe/infNFe/entrega/xMun",
+            "estado": "NFe/infNFe/entrega/UF",
+            "cep": "NFe/infNFe/entrega/CEP",
+            "codigoPais": "NFe/infNFe/entrega/cPais",
+            "descricaoPais": "NFe/infNFe/entrega/xPais"
+        },
+        "telefone": "NFe/infNFe/entrega/fone",
+        "email": "NFe/infNFe/entrega/email",
+        "inscricaoEstadual": "NFe/infNFe/entrega/IE"
+    },
+    "total": {
+        "baseCalculoIcms": "NFe/infNFe/total/ICMSTot/vBC",
+        "valorIcms": "NFe/infNFe/total/ICMSTot/vICMS",
+        "valorIcmsDesonerado": "NFe/infNFe/total/ICMSTot/vICMSDeson",
+        "valorIcmsFcp": "NFe/infNFe/total/ICMSTot/vFCPUFDest",
+        "valorIcmsEstadoDestino": "NFe/infNFe/total/ICMSTot/vICMSUFDest",
+        "valorIcmsEstadoRemetente": "NFe/infNFe/total/ICMSTot/vICMSUFRemet",
+        "valorFcp": "NFe/infNFe/total/ICMSTot/vFCP",
+        "baseCalculoIcmsSt": "NFe/infNFe/total/ICMSTot/vBCST",
+        "valorIcmsSt": "NFe/infNFe/total/ICMSTot/vST",
+        "valorFcpSt": "NFe/infNFe/total/ICMSTot/vFCPST",
+        "valorFcpStRetido": "NFe/infNFe/total/ICMSTot/vFCPSTRet",
+        "baseCalculoMono": "NFe/infNFe/total/ICMSTot/qBCMono",
+        "valorIcmsMono": "NFe/infNFe/total/ICMSTot/vICMSMono",
+        "baseCalculoMonoRetencao": "NFe/infNFe/total/ICMSTot/qBCMonoReten",
+        "valorIcmsMonoRetencao": "NFe/infNFe/total/ICMSTot/vICMSMonoReten",
+        "baseCalculoMonoRetido": "NFe/infNFe/total/ICMSTot/qBCMonoRet",
+        "valorIcmsMonoRetido": "NFe/infNFe/total/ICMSTot/vICMSMonoRet",
+        "valorProdutosServicos": "NFe/infNFe/total/ICMSTot/vProd",
+        "valorFrete": "NFe/infNFe/total/ICMSTot/vFrete",
+        "valorSeguro": "NFe/infNFe/total/ICMSTot/vSeg",
+        "valorDesconto": "NFe/infNFe/total/ICMSTot/vDesc",
+        "valorIi": "NFe/infNFe/total/ICMSTot/vII",
+        "valorIpi": "NFe/infNFe/total/ICMSTot/vIPI",
+        "valorIpiDevolvido": "NFe/infNFe/total/ICMSTot/vIPIDevol",
+        "valorPis": "NFe/infNFe/total/ICMSTot/vPIS",
+        "valorCofins": "NFe/infNFe/total/ICMSTot/vCOFINS",
+        "valorOutros": "NFe/infNFe/total/ICMSTot/vOutro",
+        "valorNfe": "NFe/infNFe/total/ICMSTot/vNF",
+        "valorAproximadoTributos": "NFe/infNFe/total/ICMSTot/vTotTrib",
+        "servico": {
+            "valor": "NFe/infNFe/total/ISSQNtot/vServ",
+            "baseCalculo": "NFe/infNFe/total/ISSQNtot/vBC",
+            "valorIss": "NFe/infNFe/total/ISSQNtot/vISS",
+            "valorPis": "NFe/infNFe/total/ISSQNtot/vPIS",
+            "valorCofins": "NFe/infNFe/total/ISSQNtot/vCOFINS",
+            "dataPrestacao": "NFe/infNFe/total/ISSQNtot/dCompet",
+            "valorDeducao": "NFe/infNFe/total/ISSQNtot/vDeducao",
+            "valorOutros": "NFe/infNFe/total/ISSQNtot/vOutro",
+            "descontoIncondicionado": "NFe/infNFe/total/ISSQNtot/vDescIncond",
+            "descontoCondicionado": "NFe/infNFe/total/ISSQNtot/vDescCond",
+            "valorRetencaoIss": "NFe/infNFe/total/ISSQNtot/vISSRet",
+            "codigoRegimeEspecial": "NFe/infNFe/total/ISSQNtot/cRegTrib"
+        },
+        "valorPisRetido": "NFe/infNFe/total/retTrib/vRetPIS",
+        "valorCofinsRetido": "NFe/infNFe/total/retTrib/vRetCOFINS",
+        "valorCsllRetido": "NFe/infNFe/total/retTrib/vRetCSLL",
+        "baseCalculoIrrf": "NFe/infNFe/total/retTrib/vBCIRRF",
+        "valorIrrfRetido": "NFe/infNFe/total/retTrib/vIRRF",
+        "baseCalculoRetencao": "NFe/infNFe/total/retTrib/vBCRetPrev",
+        "valorPrevidenciaRetido": "NFe/infNFe/total/retTrib/vRetPrev",
+        "baseCalculoIs": "NFe/infNFe/total/ISTot/vIS",
+        "baseCalculoIbsCbs": "NFe/infNFe/total/IBSCBSTot/vBCIBSCBS",
+        "valorDiferimentoIbsUF": "NFe/infNFe/total/IBSCBSTot/gIBS/gIBSUF/vDif",
+        "valorDevolucaoIbsUF": "NFe/infNFe/total/IBSCBSTot/gIBS/gIBSUF/vDevTrib",
+        "valorIbsUF": "NFe/infNFe/total/IBSCBSTot/gIBS/gIBSUF/vIBSUF",
+        "valorDiferimentoIbsMunicipio": "NFe/infNFe/total/IBSCBSTot/gIBS/gIBSMun/vDif",
+        "valorDevolucaoIbsMunicipio": "NFe/infNFe/total/IBSCBSTot/gIBS/gIBSMun/vDevTrib",
+        "valorIbsMunicipio": "NFe/infNFe/total/IBSCBSTot/gIBS/gIBSMun/vIBSMun",
+        "valorIbs": "NFe/infNFe/total/IBSCBSTot/gIBS/vIBS",
+        "valorIbsCreditoPresumido": "NFe/infNFe/total/IBSCBSTot/gIBS/vCredPres",
+        "valorIbsCreditoPresumidoSupensao": "NFe/infNFe/total/IBSCBSTot/gIBS/vCredPresCondSus",
+        "valorCbsDiferimento": "NFe/infNFe/total/IBSCBSTot/gCBS/vDif",
+        "valorCbsDevolucao": "NFe/infNFe/total/IBSCBSTot/gCBS/vDevTrib",
+        "valorCbs": "NFe/infNFe/total/IBSCBSTot/gCBS/vCBS",
+        "valorCbsCreditoPresumido": "NFe/infNFe/total/IBSCBSTot/gCBS/vCredPres",
+        "valorCbsCreditoPresumidoSupensao": "NFe/infNFe/total/IBSCBSTot/gCBS/vCredPresCondSus",
+        "valorIbsMono": "NFe/infNFe/total/IBSCBSTot/gMono/vIBSMono",
+        "valorCbsMono": "NFe/infNFe/total/IBSCBSTot/gMono/vCBSMono",
+        "valorIbsMonoRetencao": "NFe/infNFe/total/IBSCBSTot/gMono/vIBSMonoReten",
+        "valorCbsMonoRetenencao": "NFe/infNFe/total/IBSCBSTot/gMono/vCBSMonoReten",
+        "valorIbsMonoRetido": "NFe/infNFe/total/IBSCBSTot/gMono/vIBSMonoRet",
+        "valorCbsMonoRetido": "NFe/infNFe/total/IBSCBSTot/gMono/vCBSMonoRet",
+        "valorIbsEstornado": "NFe/infNFe/total/IBSCBSTot/gEstornoCred/vIBSEstCred",
+        "valorCbsEstornado": "NFe/infNFe/total/IBSCBSTot/gEstornoCred/vCBSEstCred",
+        "valorIbsCbsIs": "NFe/infNFe/total/vNFTot"
+    },
+    "transporte": {
+        "modalidadeFrete": "NFe/infNFe/transp/modFrete",
+        "transportador": {
+            "cpfCnpj": "NFe/infNFe/transp/transporta/CNPJ",
+            "nome": "NFe/infNFe/transp/transporta/xNome",
+            "inscricaoEstadual": "NFe/infNFe/transp/transporta/IE",
+            "endereco": {
+                "logradouro": "NFe/infNFe/transp/transporta/xEnder",
+                "descricaoCidade": "NFe/infNFe/transp/transporta/xMun",
+                "uf": "NFe/infNFe/transp/transporta/UF"
+            }
+        },
+        "retencaoICMS": {
+            "valorServico": "NFe/infNFe/transp/retTransp/vServ",
+            "baseICMS": "NFe/infNFe/transp/retTransp/vBCRet",
+            "aliquota": "NFe/infNFe/transp/retTransp/pICMSRet",
+            "valorICMSRet": "NFe/infNFe/transp/retTransp/vICMSRet",
+            "cfop": "NFe/infNFe/transp/retTransp/CFOP",
+            "codigoMunicipioOcorrencia": "NFe/infNFe/transp/retTransp/cMunFG"
+        },
+        "veiculo": {
+            "placa": "NFe/infNFe/transp/veicTransp/placa",
+            "uf": "NFe/infNFe/transp/veicTransp/UF",
+            "rntc": "NFe/infNFe/transp/veicTransp/RNTC"
+        },
+        "reboque": [{
+            "vagao": "NFe/infNFe/transp/vagao",
+            "balsa": "NFe/infNFe/transp/balsa",
+            "placa": "NFe/infNFe/transp/reboque[]/placa",
+            "uf": "NFe/infNFe/transp/reboque[]/UF",
+            "rntc": "NFe/infNFe/transp/reboque[]/RNTC"
+        }],
+        "volumes": [{
+            "quantidade": "NFe/infNFe/transp/vol[]/qVol",
+            "especie": "NFe/infNFe/transp/vol[]/esp",
+            "marca": "NFe/infNFe/transp/vol[]/marca",
+            "numeracao": "NFe/infNFe/transp/vol[]/nVol",
+            "pesoLiquido": "NFe/infNFe/transp/vol[]/pesoL",
+            "pesoBruto": "NFe/infNFe/transp/vol[]/pesoB",
+            "lacres": [{
+                "numero": "NFe/infNFe/transp/vol[]/lacres[]/nLacre"
+            }]
+        }]
+    },
+    "cobranca": {
+        "numero": "NFe/infNFe/cobr/fat/nFat",
+        "valorTotal": "NFe/infNFe/cobr/fat/vOrig",
+        "valorDesconto": "NFe/infNFe/cobr/fat/vDesc",
+        "valorLiquido": "NFe/infNFe/cobr/fat/vLiq",
+        "parcelas": [{
+            "numero": "NFe/infNFe/cobr/dup[]/nDup",
+            "dataVencimento": "NFe/infNFe/cobr/dup[]/dVenc",
+            "valor": "NFe/infNFe/cobr/dup[]/vDup"
+        }]
+    },
+    "valorTroco": "NFe/infNFe/pag/vTroco",
+    "informacoesComplementaresContribuinte": "NFe/infNFe/infAdic/infAdFisco",
+    "informacoesComplementares": "NFe/infNFe/infAdic/infCpl",
+    "exportacao": {
+        "estadoEmbarque": "NFe/infNFe/exporta/UFSaidaPais",
+        "descricaoLocalEmbarque": "NFe/infNFe/exporta/xLocExporta",
+        "descricaoLocalDespacho": "NFe/infNFe/exporta/xLocDespacho"
+    },
+    "compra": {
+        "notaEmpenho": "NFe/infNFe/compra/xNEmp",
+        "pedido": "NFe/infNFe/compra/xPed",
+        "contrato": "NFe/infNFe/compra/xCont"
+    },
+    "cana": {
+        "safra": "NFe/infNFe/cana/safra",
+        "dataReferencia": "NFe/infNFe/cana/ref",
+        "quantidadeMes": "NFe/infNFe/cana/qTotMes",
+        "quantidadeAnterior": "NFe/infNFe/cana/qTotAnt",
+        "quantidadeGeral": "NFe/infNFe/cana/qTotGer",
+        "valorFornecimentos": "NFe/infNFe/cana/vFor",
+        "valorTotal": "NFe/infNFe/cana/vTotDed",
+        "valorLiquidoFornecimento": "NFe/infNFe/cana/vLiqFor",
+        "fornecimentoDiario": [{
+            "dia": "NFe/infNFe/cana/forDia[]/@dia",
+            "quantidadeKg": "NFe/infNFe/cana/forDia[]/qtde"
+        }]
+    },
+    "canaDeducoes": [{
+        "descricao": "NFe/infNFe/cana/deduc[]/xDed",
+        "valor": "NFe/infNFe/cana/deduc[]/vDed"
+    }],
+    "nfeReferenciada": [{
+        "chave": "NFe/infNFe/ide/NFref[]/refNFe",
+        "chaveSigilo": "NFe/infNFe/ide/NFref[]/refNFeSig",
+        "nfePapel": {
+            "estado": "NFe/infNFe/ide/NFref[]/refNF/cUF",
+            "dataEmissao": "NFe/infNFe/ide/NFref[]/refNF/AAMM",
+            "cpfCnpj": "NFe/infNFe/ide/NFref[]/refNF/CNPJ",
+            "modelo": "NFe/infNFe/ide/NFref[]/refNF/mod",
+            "serie": "NFe/infNFe/ide/NFref[]/refNF/serie",
+            "numero": "NFe/infNFe/ide/NFref[]/refNF/nNF"
+        },
+        "produtorRural": {
+            "estado": "NFe/infNFe/ide/NFref[]/refNFP/cUF",
+            "dataEmissao": "NFe/infNFe/ide/NFref[]/refNFP/AAMM",
+            "cnpj": "NFe/infNFe/ide/NFref[]/refNFP/CNPJ",
+            "cpf": "NFe/infNFe/ide/NFref[]/refNFP/CPF",
+            "inscricaoEstadual": "NFe/infNFe/ide/NFref[]/refNFP/IE",
+            "modelo": "NFe/infNFe/ide/NFref[]/refNFP/mod",
+            "serie": "NFe/infNFe/ide/NFref[]/refNFP/serie",
+            "numero": "NFe/infNFe/ide/NFref[]/refNFP/nNF"
+        },
+        "chaveCte": "NFe/infNFe/ide/NFref[]/refCTe",
+        "cupomFiscal": {
+            "modelo": "NFe/infNFe/ide/NFref[]/refECF/mod",
+            "numeroOrdemSequencia": "NFe/infNFe/ide/NFref[]/refECF/nECF",
+            "numeroContador": "NFe/infNFe/ide/NFref[]/refECF/nCOO"
+        }
+    }],
+    "responsavelAutorizado": [{
+        "cpfCnpj": "NFe/infNFe/autXML[]/CNPJ"
+    }],
+    "itens": [{
+        "codigo": "NFe/infNFe/det/prod/cProd",
+        "codigoEAN": "NFe/infNFe/det/prod/cEAN",
+        "codigoBarras": "NFe/infNFe/det/prod/cBarra",
+        "descricao": "NFe/infNFe/det/prod/xProd",
+        "ncm": "NFe/infNFe/det/prod/NCM",
+        "cest": "NFe/infNFe/det/prod/CEST",
+        "indicadorEscalaRelevante": "NFe/infNFe/det/prod/indEscala",
+        "cnpjFabricante": "NFe/infNFe/det/prod/CNPJFab",
+        "codigoBeneficioFiscal": "NFe/infNFe/det/prod/cBenef",
+        "creditoPresumido": [{
+            "codigo": "NFe/infNFe/det/prod/gCred[]/cCredPresumido",
+            "percentual": "NFe/infNFe/det/prod/gCred[]/pCredPresumido",
+            "valor": "NFe/infNFe/det/prod/gCred[]/vCredPresumido"
+        }],
+        "exTipi": "NFe/infNFe/det/prod/EXTIPI",
+        "cfop": "NFe/infNFe/det/prod/CFOP",
+        "unidade": {
+            "comercial": "NFe/infNFe/det/prod/uCom",
+            "tributavel": "NFe/infNFe/det/prod/uTrib"
+        },
+        "quantidade": {
+            "comercial": "NFe/infNFe/det/prod/qCom",
+            "tributavel": "NFe/infNFe/det/prod/qTrib"
+        },
+        "valorUnitario": {
+            "comercial": "NFe/infNFe/det/prod/vUnCom",
+            "tributavel": "NFe/infNFe/det/prod/vUnTrib"
+        },
+        "valor": "NFe/infNFe/det/prod/vProd",
+        "codigoEANTributavel": "NFe/infNFe/det/prod/cEANTrib",
+        "codigoBarrasTributavel": "NFe/infNFe/det/prod/cBarraTrib",
+        "valorFrete": "NFe/infNFe/det/prod/vFrete",
+        "valorSeguro": "NFe/infNFe/det/prod/vSeg",
+        "valorDesconto": "NFe/infNFe/det/prod/vDesc",
+        "valorOutros": "NFe/infNFe/det/prod/vOutro",
+        "compoeTotal": "NFe/infNFe/det/prod/indTot",
+        "tipoCreditoPresumidoIbsZFM": "NFe/infNFe/det/prod/tpCredPresIBSZFM",
+        "indicadorBemMovelUsado": "NFe/infNFe/det/prod/indBemMovelUsado",
+        "numeroCompra": "NFe/infNFe/det/prod/xPed",
+        "pedidoCompra": "NFe/infNFe/det/prod/nItemPed",
+        "numeroFci": "NFe/infNFe/det/prod/nFCI",
+        "veiculo": {
+            "tipoOperacao": "NFe/infNFe/det/prod/veicProd/tpOp",
+            "chassi": "NFe/infNFe/det/prod/veicProd/chassi",
+            "codigoCor": "NFe/infNFe/det/prod/veicProd/cCor",
+            "descricaoCor": "NFe/infNFe/det/prod/veicProd/xCor",
+            "potenciaMotor": "NFe/infNFe/det/prod/veicProd/pot",
+            "cilindradas": "NFe/infNFe/det/prod/veicProd/cilin",
+            "pesoLiquido": "NFe/infNFe/det/prod/veicProd/pesoL",
+            "pesoBruto": "NFe/infNFe/det/prod/veicProd/pesoB",
+            "numeroSerie": "NFe/infNFe/det/prod/veicProd/nSerie",
+            "tipoCombustivel": "NFe/infNFe/det/prod/veicProd/tpComb",
+            "numeroMotor": "NFe/infNFe/det/prod/veicProd/nMotor",
+            "capacidadeTracao": "NFe/infNFe/det/prod/veicProd/CMT",
+            "distanciaEixos": "NFe/infNFe/det/prod/veicProd/dist",
+            "anoModelo": "NFe/infNFe/det/prod/veicProd/anoMod",
+            "anoFabricacao": "NFe/infNFe/det/prod/veicProd/anoFab",
+            "tipoPintura": "NFe/infNFe/det/prod/veicProd/tpPint",
+            "tipo": "NFe/infNFe/det/prod/veicProd/tpVeic",
+            "especie": "NFe/infNFe/det/prod/veicProd/espVeic",
+            "condicaoVin": "NFe/infNFe/det/prod/veicProd/VIN",
+            "condicao": "NFe/infNFe/det/prod/veicProd/condVeic",
+            "codigoModelo": "NFe/infNFe/det/prod/veicProd/cMod",
+            "codigoCorDenatran": "NFe/infNFe/det/prod/veicProd/cCorDENATRAN",
+            "lotacaoMaxima": "NFe/infNFe/det/prod/veicProd/lota",
+            "restricao": "NFe/infNFe/det/prod/veicProd/tpRest"
+        },
+        "medicamentos": [{
+            "codigoAnvisa": "NFe/infNFe/det/prod/med[]/cProdANVISA",
+            "motivoInsencaoAnvisa": "NFe/infNFe/det/prod/med[]/xMotivoIsencao",
+            "valorMaximo": "NFe/infNFe/det/prod/med[]/vPMC"
+        }],
+        "combustivel": {
+            "codigoAnp": "NFe/infNFe/det/prod/comb/cProdANP",
+            "descricaoAnp": "NFe/infNFe/det/prod/comb/descANP",
+            "percentualGlp": "NFe/infNFe/det/prod/comb/pGLP",
+            "percentualGnn": "NFe/infNFe/det/prod/comb/pGNn",
+            "percentualGni": "NFe/infNFe/det/prod/comb/pGNi",
+            "valorPartida": "NFe/infNFe/det/prod/comb/vPart",
+            "codigoAutorizacao": "NFe/infNFe/det/prod/comb/CODIF",
+            "faturamentoTemperaturaAmbiente": "NFe/infNFe/det/prod/comb/qTemp",
+            "estadoConsumo": "NFe/infNFe/det/prod/comb/UFCons",
+            "percentualMistura": "NFe/infNFe/det/prod/comb/pBio",
+            "cide": {
+                "baseCalculo": "NFe/infNFe/det/prod/comb/CIDE/qBCProd",
+                "aliquota": "NFe/infNFe/det/prod/comb/CIDE/vAliqProd",
+                "valor": "NFe/infNFe/det/prod/comb/CIDE/vCIDE"
+            },
+            "encerrante": {
+                "numeroBico": "NFe/infNFe/det/prod/comb/encerrante/nBico",
+                "numeroBomba": "NFe/infNFe/det/prod/comb/encerrante/nBomba",
+                "numeroTanque": "NFe/infNFe/det/prod/comb/encerrante/nTanque",
+                "valorInicio": "NFe/infNFe/det/prod/comb/encerrante/vEncIni",
+                "valorFinal": "NFe/infNFe/det/prod/comb/encerrante/vEncFin"
+            },
+            "origemCombustivel": [{
+                "indicadorImportacao": "NFe/infNFe/det/prod/comb/origComb[]/indImport",
+                "codigoUf": "NFe/infNFe/det/prod/comb/origComb[]/cUFOrig",
+                "percentualOrigUf": "NFe/infNFe/det/prod/comb/origComb[]/pOrig"
+            }]
+        },
+        "papelImune": {
+            "numero": "NFe/infNFe/det/prod/nRECOPI"
+        },
+        "tributos": {
+            "valorAproximadoTributos": "NFe/infNFe/det/imposto/vTotTrib",
+            "icms": {
+                "origem_ICMS00": "NFe/infNFe/det/imposto/ICMS/ICMS00/orig",
+                "cst_ICMS00": "NFe/infNFe/det/imposto/ICMS/ICMS00/CST",
+                "baseCalculo": {
+                    "modalidadeDeterminacao_ICMS00": "NFe/infNFe/det/imposto/ICMS/ICMS00/modBC",
+                    "valor_ICMS00": "NFe/infNFe/det/imposto/ICMS/ICMS00/vBC",
+                    "modalidadeDeterminacao_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/modBC",
+                    "valor_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/vBC",
+                    "modalidadeDeterminacao_ICMS20": "NFe/infNFe/det/imposto/ICMS/ICMS20/modBC",
+                    "percentualReducao_ICMS20": "NFe/infNFe/det/imposto/ICMS/ICMS20/pRedBC",
+                    "valor_ICMS20": "NFe/infNFe/det/imposto/ICMS/ICMS20/vBC",
+                    "modalidadeDeterminacao_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/modBC",
+                    "percentualReducao_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/pRedBC",
+                    "valor_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/vBC",
+                    "modalidadeDeterminacao_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/modBC",
+                    "percentualReducao_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/pRedBC",
+                    "valor_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/vBC",
+                    "modalidadeDeterminacao_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/modBC",
+                    "valor_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/vBC",
+                    "percentualReducao_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/pRedBC",
+                    "modalidadeDeterminacao_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/modBC",
+                    "valor_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/vBC",
+                    "percentualReducao_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/pRedBC",
+                    "modalidadeDeterminacao_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/modBC",
+                    "valor_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/vBC",
+                    "percentualReducao_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/pRedBC"
+                },
+                "aliquota_ICMS00": "NFe/infNFe/det/imposto/ICMS/ICMS00/pICMS",
+                "valor_ICMS00": "NFe/infNFe/det/imposto/ICMS/ICMS00/vICMS",
+                "fundoCombatePobreza": {
+                    "baseCalculo": {
+                        "aliquota_ICMS00": "NFe/infNFe/det/imposto/ICMS/ICMS00/pFCP",
+                        "valor_ICMS00": "NFe/infNFe/det/imposto/ICMS/ICMS00/vFCP",
+                        "valor_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/vBCFCP",
+                        "valor_ICMS20": "NFe/infNFe/det/imposto/ICMS/ICMS20/vBCFCP",
+                        "valor_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/vBCFCP",
+                        "valor_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/vBCFCP",
+                        "valor_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/vBCFCP"
+                    },
+                    "aliquota_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/pFCP",
+                    "valor_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/vFCP",
+                    "aliquota_ICMS20": "NFe/infNFe/det/imposto/ICMS/ICMS20/pFCP",
+                    "valor_ICMS20": "NFe/infNFe/det/imposto/ICMS/ICMS20/vFCP",
+                    "aliquota_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/pFCP",
+                    "valor_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/vFCP",
+                    "diferimento": {
+                        "percentual_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/pFCPDif",
+                        "valor_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/vFCPDif",
+                        "valorEfetivo_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/vFCPEfet"
+                    },
+                    "aliquota_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/pFCP",
+                    "valor_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/vFCP",
+                    "aliquota_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/pFCP",
+                    "valor_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/vFCP"
+                },
+                "origem_ICMS02": "NFe/infNFe/det/imposto/ICMS/ICMS02/orig",
+                "cst_ICMS02": "NFe/infNFe/det/imposto/ICMS/ICMS02/CST",
+                "baseCalculoMono_ICMS02": "NFe/infNFe/det/imposto/ICMS/ICMS02/qBCMono",
+                "valorIcmsMono_ICMS02": "NFe/infNFe/det/imposto/ICMS/ICMS02/vICMSMono",
+                "aliquotaAdRem_ICMS02": "NFe/infNFe/det/imposto/ICMS/ICMS02/adRemICMS",
+                "origem_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/orig",
+                "cst_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/CST",
+                "aliquota_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/pICMS",
+                "valor_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/vICMS",
+                "substituicaoTributaria": {
+                    "baseCalculo": {
+                        "modalidadeDeterminacao_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/modBCST",
+                        "percentualReducao_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/pRedBCST",
+                        "valor_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/vBCST",
+                        "modalidadeDeterminacao_ICMS30": "NFe/infNFe/det/imposto/ICMS/ICMS30/modBCST",
+                        "percentualReducao_ICMS30": "NFe/infNFe/det/imposto/ICMS/ICMS30/pRedBCST",
+                        "valor_ICMS30": "NFe/infNFe/det/imposto/ICMS/ICMS30/vBCST",
+                        "valor_ICMS60": "NFe/infNFe/det/imposto/ICMS/ICMS60/vBCSTRet",
+                        "modalidadeDeterminacao_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/modBCST",
+                        "percentualReducao_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/pRedBCST",
+                        "valor_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/vBCST",
+                        "modalidadeDeterminacao_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/modBCST",
+                        "percentualReducao_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/pRedBCST",
+                        "valor_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/vBCST",
+                        "modalidadeDeterminacao_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/modBCST",
+                        "percentualReducao_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/pRedBCST",
+                        "valor_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/vBCST",
+                        "valor_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/vBCSTRet",
+                        "modalidadeDeterminacao_ICMSSN201": "NFe/infNFe/det/imposto/ICMS/ICMSSN201/modBCST",
+                        "percentualReducao_ICMSSN201": "NFe/infNFe/det/imposto/ICMS/ICMSSN201/pRedBCST",
+                        "valor_ICMSSN201": "NFe/infNFe/det/imposto/ICMS/ICMSSN201/vBCST",
+                        "modalidadeDeterminacao_ICMSSN202": "NFe/infNFe/det/imposto/ICMS/ICMSSN202/modBCST",
+                        "percentualReducao_ICMSSN202": "NFe/infNFe/det/imposto/ICMS/ICMSSN202/pRedBCST",
+                        "valor_ICMSSN202": "NFe/infNFe/det/imposto/ICMS/ICMSSN202/vBCST",
+                        "valor_ICMSSN500": "NFe/infNFe/det/imposto/ICMS/ICMSSN500/vBCSTRet",
+                        "modalidadeDeterminacao_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/modBCST",
+                        "percentualReducao_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/pRedBCST",
+                        "valor_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/vBCST"
+                    },
+                    "margemValorAdicionado": {
+                        "percentual_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/pMVAST",
+                        "percentual_ICMS30": "NFe/infNFe/det/imposto/ICMS/ICMS30/pMVAST",
+                        "percentual_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/pMVAST",
+                        "percentual_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/pMVAST",
+                        "percentual_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/pMVAST",
+                        "percentual_ICMSSN201": "NFe/infNFe/det/imposto/ICMS/ICMSSN201/pMVAST",
+                        "percentual_ICMSSN202": "NFe/infNFe/det/imposto/ICMS/ICMSSN202/pMVAST",
+                        "percentual_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/pMVAST"
+                    },
+                    "aliquota_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/pICMSST",
+                    "valor_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/vICMSST",
+                    "fundoCombatePobreza": {
+                        "baseCalculo": {
+                            "valor_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/vBCFCPST",
+                            "valor_ICMS30": "NFe/infNFe/det/imposto/ICMS/ICMS30/vBCFCPST",
+                            "valor_ICMS60": "NFe/infNFe/det/imposto/ICMS/ICMS60/vBCFCPSTRet",
+                            "valor_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/vBCFCPST",
+                            "valor_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/vBCFCPST",
+                            "valor_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/vBCFCPST",
+                            "valor_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/vBCFCPSTRet",
+                            "valor_ICMSSN201": "NFe/infNFe/det/imposto/ICMS/ICMSSN201/vBCFCPST",
+                            "valor_ICMSSN202": "NFe/infNFe/det/imposto/ICMS/ICMSSN202/vBCFCPST",
+                            "valor_ICMSSN500": "NFe/infNFe/det/imposto/ICMS/ICMSSN500/vBCFCPSTRet",
+                            "valor_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/vBCFCPST"
+                        },
+                        "aliquota_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/pFCPST",
+                        "valor_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/vFCPST",
+                        "aliquota_ICMS30": "NFe/infNFe/det/imposto/ICMS/ICMS30/pFCPST",
+                        "valor_ICMS30": "NFe/infNFe/det/imposto/ICMS/ICMS30/vFCPST",
+                        "aliquota_ICMS60": "NFe/infNFe/det/imposto/ICMS/ICMS60/pFCPSTRet",
+                        "valor_ICMS60": "NFe/infNFe/det/imposto/ICMS/ICMS60/vFCPSTRet",
+                        "aliquota_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/pFCPST",
+                        "valor_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/vFCPST",
+                        "aliquota_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/pFCPST",
+                        "valor_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/vFCPST",
+                        "aliquota_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/pFCPST",
+                        "valor_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/vFCPST",
+                        "aliquota_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/pFCPSTRet",
+                        "valor_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/vFCPSTRet",
+                        "aliquota_ICMSSN201": "NFe/infNFe/det/imposto/ICMS/ICMSSN201/pFCPST",
+                        "valor_ICMSSN201": "NFe/infNFe/det/imposto/ICMS/ICMSSN201/vFCPST",
+                        "aliquota_ICMSSN202": "NFe/infNFe/det/imposto/ICMS/ICMSSN202/pFCPST",
+                        "valor_ICMSSN202": "NFe/infNFe/det/imposto/ICMS/ICMSSN202/vFCPST",
+                        "aliquota_ICMSSN500": "NFe/infNFe/det/imposto/ICMS/ICMSSN500/pFCPSTRet",
+                        "valor_ICMSSN500": "NFe/infNFe/det/imposto/ICMS/ICMSSN500/vFCPSTRet",
+                        "aliquota_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/pFCPST",
+                        "valor_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/vFCPST"
+                    },
+                    "desoneracao": {
+                        "valor_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/vICMSSTDeson",
+                        "motivo_ICMS10": "NFe/infNFe/det/imposto/ICMS/ICMS10/motDesICMSST",
+                        "valor_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/vICMSSTDeson",
+                        "motivo_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/motDesICMSST",
+                        "valor_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/vICMSSTDeson",
+                        "motivo_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/motDesICMSST"
+                    },
+                    "aliquota_ICMS30": "NFe/infNFe/det/imposto/ICMS/ICMS30/pICMSST",
+                    "valor_ICMS30": "NFe/infNFe/det/imposto/ICMS/ICMS30/vICMSST",
+                    "aliquota_ICMS60": "NFe/infNFe/det/imposto/ICMS/ICMS60/pST",
+                    "valor_ICMS60": "NFe/infNFe/det/imposto/ICMS/ICMS60/vICMSSTRet",
+                    "aliquota_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/pICMSST",
+                    "valor_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/vICMSST",
+                    "aliquota_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/pICMSST",
+                    "valor_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/vICMSST",
+                    "aliquota_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/pICMSST",
+                    "valor_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/vICMSST",
+                    "ufDevido_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/UFST",
+                    "aliquota_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/pST",
+                    "valor_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/vICMSSTRet",
+                    "ufDestino": {
+                        "baseCalculo": {
+                            "valor_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/vBCSTDest"
+                        },
+                        "valor_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/vICMSSTDest"
+                    },
+                    "aliquota_ICMSSN201": "NFe/infNFe/det/imposto/ICMS/ICMSSN201/pICMSST",
+                    "valor_ICMSSN201": "NFe/infNFe/det/imposto/ICMS/ICMSSN201/vICMSST",
+                    "aliquota_ICMSSN202": "NFe/infNFe/det/imposto/ICMS/ICMSSN202/pICMSST",
+                    "valor_ICMSSN202": "NFe/infNFe/det/imposto/ICMS/ICMSSN202/vICMSST",
+                    "aliquota_ICMSSN500": "NFe/infNFe/det/imposto/ICMS/ICMSSN500/pST",
+                    "valor_ICMSSN500": "NFe/infNFe/det/imposto/ICMS/ICMSSN500/vICMSSTRet",
+                    "aliquota_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/pICMSST",
+                    "valor_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/vICMSST"
+                },
+                "origem_ICMS15": "NFe/infNFe/det/imposto/ICMS/ICMS15/orig",
+                "cst_ICMS15": "NFe/infNFe/det/imposto/ICMS/ICMS15/CST",
+                "baseCalculoMono_ICMS15": "NFe/infNFe/det/imposto/ICMS/ICMS15/qBCMono",
+                "valorIcmsMono_ICMS15": "NFe/infNFe/det/imposto/ICMS/ICMS15/vICMSMono",
+                "aliquotaAdRem_ICMS15": "NFe/infNFe/det/imposto/ICMS/ICMS15/adRemICMS",
+                "baseCalculoMonoRetencao_ICMS15": "NFe/infNFe/det/imposto/ICMS/ICMS15/qBCMonoReten",
+                "aliquotaAdRemRetencao_ICMS15": "NFe/infNFe/det/imposto/ICMS/ICMS15/adRemICMSReten",
+                "valorIcmsMonoRetencao_ICMS15": "NFe/infNFe/det/imposto/ICMS/ICMS15/vICMSMonoReten",
+                "percentualReducaoAdRem_ICMS15": "NFe/infNFe/det/imposto/ICMS/ICMS15/pRedAdRem",
+                "motivoReducaoAdRem_ICMS15": "NFe/infNFe/det/imposto/ICMS/ICMS15/motRedAdRem",
+                "origem_ICMS20": "NFe/infNFe/det/imposto/ICMS/ICMS20/orig",
+                "cst_ICMS20": "NFe/infNFe/det/imposto/ICMS/ICMS20/CST",
+                "aliquota_ICMS20": "NFe/infNFe/det/imposto/ICMS/ICMS20/pICMS",
+                "valor_ICMS20": "NFe/infNFe/det/imposto/ICMS/ICMS20/vICMS",
+                "desoneracao": {
+                    "valor_ICMS20": "NFe/infNFe/det/imposto/ICMS/ICMS20/vICMSDeson",
+                    "deduzItem_ICMS20": "NFe/infNFe/det/imposto/ICMS/ICMS20/indDeduzDeson",
+                    "motivo_ICMS20": "NFe/infNFe/det/imposto/ICMS/ICMS20/motDesICMS",
+                    "valor_ICMS30": "NFe/infNFe/det/imposto/ICMS/ICMS30/vICMSDeson",
+                    "deduzItem_ICMS30": "NFe/infNFe/det/imposto/ICMS/ICMS30/indDeduzDeson",
+                    "motivo_ICMS30": "NFe/infNFe/det/imposto/ICMS/ICMS30/motDesICMS",
+                    "valor_ICMS40": "NFe/infNFe/det/imposto/ICMS/ICMS40/vICMSDeson",
+                    "deduzItem_ICMS40": "NFe/infNFe/det/imposto/ICMS/ICMS40/indDeduzDeson",
+                    "motivo_ICMS40": "NFe/infNFe/det/imposto/ICMS/ICMS40/motDesICMS",
+                    "valor_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/vICMSDeson",
+                    "deduzItem_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/indDeduzDeson",
+                    "motivo_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/motDesICMS",
+                    "valor_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/vICMSDeson",
+                    "deduzItem_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/indDeduzDeson",
+                    "motivo_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/motDesICMS"
+                },
+                "origem_ICMS30": "NFe/infNFe/det/imposto/ICMS/ICMS30/orig",
+                "cst_ICMS30": "NFe/infNFe/det/imposto/ICMS/ICMS30/CST",
+                "origem_ICMS40": "NFe/infNFe/det/imposto/ICMS/ICMS40/orig",
+                "cst_ICMS40": "NFe/infNFe/det/imposto/ICMS/ICMS40/CST",
+                "origem_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/orig",
+                "cst_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/CST",
+                "codigoBeneficioFiscalRBC_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/cBenefRBC",
+                "aliquota_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/pICMS",
+                "valor_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/vICMSOp",
+                "diferimento": {
+                    "percentual_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/pDif",
+                    "valor_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/vICMSDif",
+                    "valorIcmsDevido_ICMS51": "NFe/infNFe/det/imposto/ICMS/ICMS51/vICMS"
+                },
+                "origem_ICMS53": "NFe/infNFe/det/imposto/ICMS/ICMS53/orig",
+                "cst_ICMS53": "NFe/infNFe/det/imposto/ICMS/ICMS53/CST",
+                "baseCalculoMonoDiferido_ICMS53": "NFe/infNFe/det/imposto/ICMS/ICMS53/qBCMonoDif",
+                "aliquotaAdRemDiferido_ICMS53": "NFe/infNFe/det/imposto/ICMS/ICMS53/adRemICMSDif",
+                "valorIcmsDiferido_ICMS53": "NFe/infNFe/det/imposto/ICMS/ICMS53/vICMSMonoDif",
+                "baseCalculoMono_ICMS53": "NFe/infNFe/det/imposto/ICMS/ICMS53/qBCMono",
+                "aliquotaAdRem_ICMS53": "NFe/infNFe/det/imposto/ICMS/ICMS53/adRemICMS",
+                "valorIcmsMonoOperacao_ICMS53": "NFe/infNFe/det/imposto/ICMS/ICMS53/vICMSMonoOp",
+                "percentualDiferimento_ICMS53": "NFe/infNFe/det/imposto/ICMS/ICMS53/pDif",
+                "valorIcmsMono_ICMS53": "NFe/infNFe/det/imposto/ICMS/ICMS53/vICMSMono",
+                "origem_ICMS60": "NFe/infNFe/det/imposto/ICMS/ICMS60/orig",
+                "cst_ICMS60": "NFe/infNFe/det/imposto/ICMS/ICMS60/CST",
+                "valor_ICMS60": "NFe/infNFe/det/imposto/ICMS/ICMS60/vICMSSubstituto",
+                "efetivo": {
+                    "baseCalculo": {
+                        "percentualReducao_ICMS60": "NFe/infNFe/det/imposto/ICMS/ICMS60/pRedBCEfet",
+                        "valor_ICMS60": "NFe/infNFe/det/imposto/ICMS/ICMS60/vBCEfet",
+                        "percentualReducao_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/pRedBCEfet",
+                        "valor_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/vBCEfet",
+                        "percentualReducao_ICMSSN500": "NFe/infNFe/det/imposto/ICMS/ICMSSN500/pRedBCEfet",
+                        "valor_ICMSSN500": "NFe/infNFe/det/imposto/ICMS/ICMSSN500/vBCEfet"
+                    },
+                    "aliquota_ICMS60": "NFe/infNFe/det/imposto/ICMS/ICMS60/pICMSEfet",
+                    "valor_ICMS60": "NFe/infNFe/det/imposto/ICMS/ICMS60/vICMSEfet",
+                    "aliquota_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/pICMSEfet",
+                    "valor_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/vICMSEfet",
+                    "aliquota_ICMSSN500": "NFe/infNFe/det/imposto/ICMS/ICMSSN500/pICMSEfet",
+                    "valor_ICMSSN500": "NFe/infNFe/det/imposto/ICMS/ICMSSN500/vICMSEfet"
+                },
+                "origem_ICMS61": "NFe/infNFe/det/imposto/ICMS/ICMS61/orig",
+                "cst_ICMS61": "NFe/infNFe/det/imposto/ICMS/ICMS61/CST",
+                "baseCalculoMonoRetido_ICMS61": "NFe/infNFe/det/imposto/ICMS/ICMS61/qBCMonoRet",
+                "aliquotaAdRemRetido_ICMS61": "NFe/infNFe/det/imposto/ICMS/ICMS61/adRemICMSRet",
+                "valorIcmsMonoRetido_ICMS61": "NFe/infNFe/det/imposto/ICMS/ICMS61/vICMSMonoRet",
+                "origem_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/orig",
+                "cst_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/CST",
+                "aliquota_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/pICMS",
+                "valor_ICMS70": "NFe/infNFe/det/imposto/ICMS/ICMS70/vICMS",
+                "origem_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/orig",
+                "cst_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/CST",
+                "aliquota_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/pICMS",
+                "valor_ICMS90": "NFe/infNFe/det/imposto/ICMS/ICMS90/vICMS",
+                "origem_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/orig",
+                "cst_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/CST",
+                "aliquota_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/pICMS",
+                "valor_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/vICMS",
+                "operacaoPropria": {
+                    "baseCalculo": {
+                        "percentual_ICMSPart": "NFe/infNFe/det/imposto/ICMS/ICMSPart/pBCOp"
+                    }
+                },
+                "origem_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/orig",
+                "cst_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/CST",
+                "valor_ICMSST": "NFe/infNFe/det/imposto/ICMS/ICMSST/vICMSSubstituto",
+                "origem_ICMSSN101": "NFe/infNFe/det/imposto/ICMS/ICMSSN101/orig",
+                "csosn_ICMSSN101": "NFe/infNFe/det/imposto/ICMS/ICMSSN101/CSOSN",
+                "creditoSimplesNacional": {
+                    "percentual_ICMSSN101": "NFe/infNFe/det/imposto/ICMS/ICMSSN101/pCredSN",
+                    "valor_ICMSSN101": "NFe/infNFe/det/imposto/ICMS/ICMSSN101/vCredICMSSN",
+                    "percentual_ICMSSN201": "NFe/infNFe/det/imposto/ICMS/ICMSSN201/pCredSN",
+                    "valor_ICMSSN201": "NFe/infNFe/det/imposto/ICMS/ICMSSN201/vCredICMSSN",
+                    "percentual_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/pCredSN",
+                    "valor_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/vCredICMSSN"
+                },
+                "origem_ICMSSN102": "NFe/infNFe/det/imposto/ICMS/ICMSSN102/orig",
+                "csosn_ICMSSN102": "NFe/infNFe/det/imposto/ICMS/ICMSSN102/CSOSN",
+                "origem_ICMSSN201": "NFe/infNFe/det/imposto/ICMS/ICMSSN201/orig",
+                "csosn_ICMSSN201": "NFe/infNFe/det/imposto/ICMS/ICMSSN201/CSOSN",
+                "origem_ICMSSN202": "NFe/infNFe/det/imposto/ICMS/ICMSSN202/orig",
+                "csosn_ICMSSN202": "NFe/infNFe/det/imposto/ICMS/ICMSSN202/CSOSN",
+                "origem_ICMSSN500": "NFe/infNFe/det/imposto/ICMS/ICMSSN500/orig",
+                "csosn_ICMSSN500": "NFe/infNFe/det/imposto/ICMS/ICMSSN500/CSOSN",
+                "valor_ICMSSN500": "NFe/infNFe/det/imposto/ICMS/ICMSSN500/vICMSSubstituto",
+                "origem_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/orig",
+                "csosn_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/CSOSN",
+                "aliquota_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/pICMS",
+                "valor_ICMSSN900": "NFe/infNFe/det/imposto/ICMS/ICMSSN900/vICMS"
+            },
+            "is": {
+                "cst": "NFe/infNFe/det/imposto/IS/CSTIS",
+                "classificao": "NFe/infNFe/det/imposto/IS/cClassTribIS",
+                "baseCalculo": "NFe/infNFe/det/imposto/IS/vBCIS",
+                "aliquota": "NFe/infNFe/det/imposto/IS/pIS",
+                "aliquotaEspecifica": "NFe/infNFe/det/imposto/IS/pISEspec",
+                "unidade": "NFe/infNFe/det/imposto/IS/uTrib",
+                "quantidade": "NFe/infNFe/det/imposto/IS/qTrib",
+                "valor": "NFe/infNFe/det/imposto/IS/vIS"
+            },
+            "ibscbs": {
+                "cst": "NFe/infNFe/det/imposto/IBSCBS/CST",
+                "classificacao": "NFe/infNFe/det/imposto/IBSCBS/cClassTrib",
+                "indicadorDoacao": "NFe/infNFe/det/imposto/IBSCBS/indDoacao",
+                "baseCalculo": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/vBC",
+                "uf": {
+                    "aliquota": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSUF/pIBSUF",
+                    "diferimento": {
+                        "aliquota": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSUF/gDif/pDif",
+                        "valor": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSUF/gDif/vDif"
+                    },
+                    "devolucao": {
+                        "valor": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSUF/gDevTrib/vDevTrib"
+                    },
+                    "reducao": {
+                        "aliquota": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSUF/gRed/pRedAliq",
+                        "aliquotaEfetiva": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSUF/gRed/pAliqEfet"
+                    },
+                    "valor": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSUF/vIBSUF"
+                },
+                "municipio": {
+                    "aliquota": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSMun/pIBSMun",
+                    "diferimento": {
+                        "aliquota": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSMun/gDif/pDif",
+                        "valor": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSMun/gDif/vDif"
+                    },
+                    "devolucao": {
+                        "valor": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSMun/gDevTrib/vDevTrib"
+                    },
+                    "reducao": {
+                        "aliquota": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSMun/gRed/pRedAliq",
+                        "aliquotaEfetiva": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSMun/gRed/pAliqEfet"
+                    },
+                    "valor": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSMun/vIBSMun"
+                },
+                "valorIbs": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/vIBS",
+                "cbs": {
+                    "aliquota": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCBS/pCBS",
+                    "diferimento": {
+                        "aliquota": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCBS/gDif/pDif",
+                        "valor": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCBS/gDif/vDif"
+                    },
+                    "devolucao": {
+                        "valor": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCBS/gDevTrib/vDevTrib"
+                    },
+                    "reducao": {
+                        "aliquota": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCBS/gRed/pRedAliq",
+                        "aliquotaEfetiva": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCBS/gRed/pAliqEfet"
+                    },
+                    "valor": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCBS/vCBS"
+                },
+                "tributacaoRegular": {
+                    "cts": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTribRegular/CSTReg",
+                    "classificacao": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTribRegular/cClassTribReg",
+                    "aliquotaUF": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTribRegular/pAliqEfetRegIBSUF",
+                    "valorUF": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTribRegular/vTribRegIBSUF",
+                    "aliquotaMunicipio": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTribRegular/pAliqEfetRegIBSMun",
+                    "valorMunicipio": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTribRegular/vTribRegIBSMun",
+                    "aliquota": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTribRegular/pAliqEfetRegCBS",
+                    "valor": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTribRegular/vTribRegCBS"
+                },
+                "compraGovernamental": {
+                    "aliquotaUF": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTribCompraGov/pAliqIBSUF",
+                    "valorUF": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTribCompraGov/vTribIBSUF",
+                    "aliquotaMunicipio": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTribCompraGov/pAliqIBSMun",
+                    "valorMunicipio": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTribCompraGov/vTribIBSMun",
+                    "aliquotaCbs": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTribCompraGov/pAliqCBS",
+                    "valorCbs": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTribCompraGov/vTribCBS"
+                },
+                "monofasico": {
+                    "quantidade": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoPadrao/qBCMono",
+                    "aliquotaAdRemIbs": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoPadrao/adRemIBS",
+                    "aliquotaAdRemCbs": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoPadrao/adRemCBS",
+                    "valorIbs": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoPadrao/vIBSMono",
+                    "valorCbs": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoPadrao/vCBSMono",
+                    
+                    "quantidadeRetencao": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoReten/qBCMonoReten",
+                    "aliquotaAdRemIbsRetencao": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoReten/adRemIBSReten",
+                    "valorIbsRetencao": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoReten/vIBSMonoReten",
+                    "aliquotaAdRemCbsRetencao": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoReten/adRemCBSReten",
+                    "valorCbsRetencao": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoReten/vCBSMonoReten",
+                    
+                    "quantidadeRetida": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoRet/qBCMonoRet",
+                    "aliquotaAdRemIbsRetida": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoRet/adRemIBSRet",
+                    "valorIbsRetido": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoRet/vIBSMonoRet",
+                    "aliquotaAdRemCbsRetida": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoRet/adRemCBSRet",
+                    "valorCbsRetida": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoRet/vCBSMonoRet",
+
+                    "aliquotaIbsDiferimento": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoDif/pDifIBS",
+                    "valorIbsDiferimento": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoDif/vIBSMonoDif",
+                    "aliquotaCbsDiferimento": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoDif/pDifCBS",
+                    "valorCbsDiferimento": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoDif/vCBSMonoDif",
+                    "valorTotalIbs": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoDif/vTotIBSMonoItem",
+                    "valorTotalCbs": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBSMono/gMonoDif/vTotCBSMonoItem"
+                },
+                "transferenciaCredito": {
+                    "valorIbs": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTransfCred/vIBS",
+                    "valorCbs": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gTransfCred/vCBS"
+                },
+                "ajusteCompetencia": {
+                    "competencia": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gAjusteCompet/competApur",
+                    "valorIbs": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gAjusteCompet/vIBS",
+                    "valorCbs": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gAjusteCompet/vCBS"
+                },
+                "estornoCredito": {
+                    "valorIbsEstornado": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gEstornoCred/vIBSEstCred",
+                    "valorCbsEstornado": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gEstornoCred/vCBSEstCred"
+                },
+                "creditoPresumidoOperacao": {
+                    "codigo": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCredPresOper/cCredPres",
+                    "baseCalculo": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCredPresOper/vBCCredPres"
+                },
+                "ibsCreditoPresumido": {
+                    "percentual": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSCredPres/pCredPres",
+                    "valor": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSCredPres/vCredPres",
+                    "valorSuspensivo": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gIBSCredPres/vCredPresCondSus"
+                },
+                "cbsCreditoPresumido": {
+                    "percentual": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCBSCredPres/pCredPres",
+                    "valor": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCBSCredPres/vCredPres",
+                    "valorSuspensivo": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCBSCredPres/vCredPresCondSus"
+                },
+                 "creditoPresumidoZfm": {
+                    "competencia": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCredPresIBSZFM/competApur",
+                    "tipo": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCredPresIBSZFM/tpCredPresIBSZFM",
+                    "valor": "NFe/infNFe/det/imposto/IBSCBS/gIBSCBS/gCredPresIBSZFM/vCredPresIBSZFM"
+                }
+            },
+            "ipi": {
+                "cnpjProdutor": "NFe/infNFe/det/imposto/IPI/CNPJProd",
+                "seloControle": {
+                    "codigo": "NFe/infNFe/det/imposto/IPI/cSelo",
+                    "quantidade": "NFe/infNFe/det/imposto/IPI/qSelo"
+                },
+                "codigoEnquadramentoLegal": "NFe/infNFe/det/imposto/IPI/cEnq",
+                "cst_IPITrib": "NFe/infNFe/det/imposto/IPI/IPITrib/CST",
+                "baseCalculo_IPITrib": "NFe/infNFe/det/imposto/IPI/IPITrib/vBC",
+                "unidade": {
+                    "quantidade_IPITrib": "NFe/infNFe/det/imposto/IPI/IPITrib/qUnid",
+                    "valor_IPITrib": "NFe/infNFe/det/imposto/IPI/IPITrib/vUnid"
+                },
+                "aliquota_IPITrib": "NFe/infNFe/det/imposto/IPI/IPITrib/pIPI",
+                "valor_IPITrib": "NFe/infNFe/det/imposto/IPI/IPITrib/vIPI",
+                "cst_IPINT": "NFe/infNFe/det/imposto/IPI/IPINT/CST"
+            },
+            "importacao": {
+                "baseCalculo": "NFe/infNFe/det/imposto/II/vBC",
+                "valorDespesasAduaneiras": "NFe/infNFe/det/imposto/II/vDespAdu",
+                "valor": "NFe/infNFe/det/imposto/II/vII",
+                "valorOperacoesFinanceiras": "NFe/infNFe/det/imposto/II/vIOF"
+            },
+            "issqn": {
+                "baseCalculo": "NFe/infNFe/det/imposto/ISSQN/vBC",
+                "aliquota": "NFe/infNFe/det/imposto/ISSQN/vAliq",
+                "valor": "NFe/infNFe/det/imposto/ISSQN/vISSQN",
+                "codigoMunicipioFatoGerador": "NFe/infNFe/det/imposto/ISSQN/cMunFG",
+                "codigoServico": "NFe/infNFe/det/imposto/ISSQN/cListServ",
+                "valorDeducao": "NFe/infNFe/det/imposto/ISSQN/vDeducao",
+                "valorOutros": "NFe/infNFe/det/imposto/ISSQN/vOutro",
+                "descontoIncondicionado": "NFe/infNFe/det/imposto/ISSQN/vDescIncond",
+                "descontoCondicionado": "NFe/infNFe/det/imposto/ISSQN/vDescCond",
+                "valorRetencaoIss": "NFe/infNFe/det/imposto/ISSQN/vISSRet",
+                "codigoExigibilidade": "NFe/infNFe/det/imposto/ISSQN/indISS",
+                "codigoMunicipalServico": "NFe/infNFe/det/imposto/ISSQN/cServico",
+                "codigoMunicipioIncidencia": "NFe/infNFe/det/imposto/ISSQN/cMun",
+                "codigoPais": "NFe/infNFe/det/imposto/ISSQN/cPais",
+                "numeroProcessoSuspensao": "NFe/infNFe/det/imposto/ISSQN/nProcesso",
+                "incentivoFiscal": "NFe/infNFe/det/imposto/ISSQN/indIncentivo"
+            },
+            "pis": {
+                "cst_PISAliq": "NFe/infNFe/det/imposto/PIS/PISAliq/CST",
+                "baseCalculo": {
+                    "valor_PISAliq": "NFe/infNFe/det/imposto/PIS/PISAliq/vBC",
+                    "valor_PISOutr": "NFe/infNFe/det/imposto/PIS/PISOutr/vBC"
+                },
+                "aliquota_PISAliq": "NFe/infNFe/det/imposto/PIS/PISAliq/pPIS",
+                "valor_PISAliq": "NFe/infNFe/det/imposto/PIS/PISAliq/vPIS",
+                "cst_PISQtde": "NFe/infNFe/det/imposto/PIS/PISQtde/CST",
+                "quantidadeVendida_PISQtde": "NFe/infNFe/det/imposto/PIS/PISQtde/qBCProd",
+                "aliquotaReais_PISQtde": "NFe/infNFe/det/imposto/PIS/PISQtde/vAliqProd",
+                "valor_PISQtde": "NFe/infNFe/det/imposto/PIS/PISQtde/vPIS",
+                "cst_PISNT": "NFe/infNFe/det/imposto/PIS/PISNT/CST",
+                "cst_PISOutr": "NFe/infNFe/det/imposto/PIS/PISOutr/CST",
+                "aliquota_PISOutr": "NFe/infNFe/det/imposto/PIS/PISOutr/pPIS",
+                "quantidadeVendida_PISOutr": "NFe/infNFe/det/imposto/PIS/PISOutr/qBCProd",
+                "aliquotaReais_PISOutr": "NFe/infNFe/det/imposto/PIS/PISOutr/vAliqProd",
+                "valor_PISOutr": "NFe/infNFe/det/imposto/PIS/PISOutr/vPIS",
+                "substituicaoTributaria": {
+                    "baseCalculo": "NFe/infNFe/det/imposto/PISST/vBC",
+                    "aliquota": "NFe/infNFe/det/imposto/PISST/pPIS",
+                    "quantidadeVendida": "NFe/infNFe/det/imposto/PISST/qBCProd",
+                    "aliquotaReais": "NFe/infNFe/det/imposto/PISST/vAliqProd",
+                    "valor": "NFe/infNFe/det/imposto/PISST/vPIS",
+                    "compoeTotal": "NFe/infNFe/det/imposto/PISST/indSomaPISST"
+                }
+            },
+            "cofins": {
+                "cst_COFINSAliq": "NFe/infNFe/det/imposto/COFINS/COFINSAliq/CST",
+                "baseCalculo": {
+                    "valor_COFINSAliq": "NFe/infNFe/det/imposto/COFINS/COFINSAliq/vBC",
+                    "valor_COFINSOutr": "NFe/infNFe/det/imposto/COFINS/COFINSOutr/vBC"
+                },
+                "aliquota_COFINSAliq": "NFe/infNFe/det/imposto/COFINS/COFINSAliq/pCOFINS",
+                "valor_COFINSAliq": "NFe/infNFe/det/imposto/COFINS/COFINSAliq/vCOFINS",
+                "cst_COFINSQtde": "NFe/infNFe/det/imposto/COFINS/COFINSQtde/CST",
+                "quantidadeVendida_COFINSQtde": "NFe/infNFe/det/imposto/COFINS/COFINSQtde/qBCProd",
+                "aliquotaReais_COFINSQtde": "NFe/infNFe/det/imposto/COFINS/COFINSQtde/vAliqProd",
+                "valor_COFINSQtde": "NFe/infNFe/det/imposto/COFINS/COFINSQtde/vCOFINS",
+                "cst_COFINSNT": "NFe/infNFe/det/imposto/COFINS/COFINSNT/CST",
+                "cst_COFINSOutr": "NFe/infNFe/det/imposto/COFINS/COFINSOutr/CST",
+                "aliquota_COFINSOutr": "NFe/infNFe/det/imposto/COFINS/COFINSOutr/pCOFINS",
+                "quantidadeVendida_COFINSOutr": "NFe/infNFe/det/imposto/COFINS/COFINSOutr/qBCProd",
+                "aliquotaReais_COFINSOutr": "NFe/infNFe/det/imposto/COFINS/COFINSOutr/vAliqProd",
+                "valor_COFINSOutr": "NFe/infNFe/det/imposto/COFINS/COFINSOutr/vCOFINS",
+                "substituicaoTributaria": {
+                    "baseCalculo": "NFe/infNFe/det/imposto/COFINSST/vBC",
+                    "aliquota": "NFe/infNFe/det/imposto/COFINSST/pCOFINS",
+                    "quantidadeVendida": "NFe/infNFe/det/imposto/COFINSST/qBCProd",
+                    "aliquotaReais": "NFe/infNFe/det/imposto/COFINSST/vAliqProd",
+                    "valor": "NFe/infNFe/det/imposto/COFINSST/vCOFINS",
+                    "compoeTotal": "NFe/infNFe/det/imposto/COFINSST/indSomaCOFINSST"
+                }
+            },
+            "partilha": {
+                "ufDestino": {
+                    "baseCalculoIcms": "NFe/infNFe/det/imposto/ICMSUFDest/vBCUFDest",
+                    "baseCalculoFcp": "NFe/infNFe/det/imposto/ICMSUFDest/vBCFCPUFDest",
+                    "percentualIcmsFcp": "NFe/infNFe/det/imposto/ICMSUFDest/pFCPUFDest",
+                    "aliquotaInterna": "NFe/infNFe/det/imposto/ICMSUFDest/pICMSUFDest",
+                    "aliquotaInterestadual": "NFe/infNFe/det/imposto/ICMSUFDest/pICMSInter",
+                    "percentualProvisorioIcmsInterestadual": "NFe/infNFe/det/imposto/ICMSUFDest/pICMSInterPart",
+                    "icmsRelativoFcp": "NFe/infNFe/det/imposto/ICMSUFDest/vFCPUFDest",
+                    "icmsInterestadual": "NFe/infNFe/det/imposto/ICMSUFDest/vICMSUFDest"
+                },
+                "ufRemetente": {
+                    "icmsInterestadual": "NFe/infNFe/det/imposto/ICMSUFDest/vICMSUFRemet"
+                }
+            },
+            "percentualMercadoriaDevolvida": "NFe/infNFe/det/impostoDevol/pDevol",
+            "valorIpiDevolvido": "NFe/infNFe/det/impostoDevol/IPI/vIPIDevol"
+        },
+        "informacoesComplementares": "NFe/infNFe/det/infAdProd",
+        "numero": "NFe/infNFe/det/@nItem",
+        "nve": [{"numero": "NFe/infNFe/det/prod/NVE[]"}],
+        "importacao": [{
+            "numero": "NFe/infNFe/det/prod/DI[]/nDI",
+            "dataEmissao": "NFe/infNFe/det/prod/DI[]/dDI",
+            "desembaraco": {
+                "local": "NFe/infNFe/det/prod/DI[]/xLocDesemb",
+                "estado": "NFe/infNFe/det/prod/DI[]/UFDesemb",
+                "data": "NFe/infNFe/det/prod/DI[]/dDesemb"
+            },
+            "viaTransporte": "NFe/infNFe/det/prod/DI[]/tpViaTransp",
+            "valorAfrmm": "NFe/infNFe/det/prod/DI[]/vAFRMM",
+            "formaImportacao": "NFe/infNFe/det/prod/DI[]/tpIntermedio",
+            "adquirente": {
+                "cnpj": "NFe/infNFe/det/prod/DI[]/CNPJ",
+                "cpf": "NFe/infNFe/det/prod/DI[]/CPF",
+                "estado": "NFe/infNFe/det/prod/DI[]/UFTerceiro"
+            },
+            "codigoExportador": "NFe/infNFe/det/prod/DI[]/cExportador",
+            "adicoes": [{
+                "numero": "NFe/infNFe/det/prod/DI[]/adi[]/nAdicao",
+                "numeroSequencia": "NFe/infNFe/det/prod/DI[]/adi[]/nSeqAdic",
+                "codigoFabricante": "NFe/infNFe/det/prod/DI[]/adi[]/cFabricante",
+                "valorDesconto": "NFe/infNFe/det/prod/DI[]/adi[]/vDescDI",
+                "numeroDrawback": "NFe/infNFe/det/prod/DI[]/adi[]/nDraw"
+            }]
+        }],
+        "exportacao": [{
+            "numeroDrawback": "NFe/infNFe/det/prod/detExport[]/nDraw",
+            "exportacaoIndireta": {
+                "numero": "NFe/infNFe/det/prod/detExport[]/exportInd/nRE",
+                "chave": "NFe/infNFe/det/prod/detExport[]/exportInd/chNFe",
+                "quantidade": "NFe/infNFe/det/prod/detExport[]/exportInd/qExport"
+            }
+        }],
+        "rastreavel": [{
+            "lote": "NFe/infNFe/det/prod/rastro[]/nLote",
+            "quantidade": "NFe/infNFe/det/prod/rastro[]/qLote",
+            "dataFabricacao": "NFe/infNFe/det/prod/rastro[]/dFab",
+            "dataValidade": "NFe/infNFe/det/prod/rastro[]/dVal",
+            "codigoAgregacao": "NFe/infNFe/det/prod/rastro[]/cAgreg"
+        }],
+        "armamentos": [{
+            "tipo": "NFe/infNFe/det/prod/arma[]/tpArma",
+            "numeroSerie": "NFe/infNFe/det/prod/arma[]/nSerie",
+            "numeroSerieCano": "NFe/infNFe/det/prod/arma[]/nCano",
+            "descricao": "NFe/infNFe/det/prod/arma[]/descr"
+        }],
+        "observacoes": {
+            "contribuinte": [{
+                "campo": "NFe/infNFe/det/obsItem/obsCont[]/@xCampo",
+                "texto": "NFe/infNFe/det/obsItem/obsCont[]/xTexto"
+            }],
+            "fisco": [{
+                "texto": "NFe/infNFe/det/obsItem/obsFisco[]/@xCampo",
+                "campo": "NFe/infNFe/det/obsItem/obsFisco[]/xTexto"
+            }]
+        },
+        "valorTotal": "NFe/infNFe/det/vItem",
+        "dfeReferenciado": {
+            "chaveAcesso": "NFe/infNFe/det/DFeReferenciado/chaveAcesso",
+            "numero": "NFe/infNFe/det/DFeReferenciado/nItem"
+        }
+    }],
+    "pagamentos": [{
+        "aVista": "NFe/infNFe/pag/detPag[]/indPag",
+        "meio": "NFe/infNFe/pag/detPag[]/tPag",
+        "descricaoMeio": "NFe/infNFe/pag/detPag[]/xPag",
+        "valor": "NFe/infNFe/pag/detPag[]/vPag",
+        "cartao": {
+            "tipoIntegracao": "NFe/infNFe/pag/detPag[]/card/tpIntegra",
+            "cnpjCredenciadora": "NFe/infNFe/pag/detPag[]/card/CNPJ",
+            "bandeiraOperadora": "NFe/infNFe/pag/detPag[]/card/tBand",
+            "numeroAutorizacao": "NFe/infNFe/pag/detPag[]/card/cAut"
+        }
+    }],
+    "pagamento": {
+        "data": "NFe/infNFe/pag/detPag[]/dPag",
+        "cnpjTransacional": "NFe/infNFe/pag/detPag[]/CNPJPag",
+        "ufTransacional": "NFe/infNFe/pag/detPag[]/UFPag",
+        "cartao": {
+            "cnpjBeneficiario": "NFe/infNFe/pag/detPag[]/card/CNPJReceb",
+            "idTerminal": "NFe/infNFe/pag/detPag[]/card/idTermPag"
+        }
+    },
+    "intermediadorTransacao": {
+        "cpfCnpj": "NFe/infNFe/infIntermed/CNPJ",
+        "identificadorCadastro": "NFe/infNFe/infIntermed/idCadIntTran"
+    },
+    "observacoes": {
+        "contribuinte": [{
+            "campo": "NFe/infNFe/infAdic/obsCont[]/@xCampo",
+            "texto": "NFe/infNFe/infAdic/obsCont[]/xTexto"
+        }],
+        "fisco": [{
+            "texto": "NFe/infNFe/infAdic/obsFisco[]/xTexto",
+            "campo": "NFe/infNFe/infAdic/obsFisco[]/@xCampo"
+        }]
+    },
+    "processoReferenciado": [{
+        "identificador": "NFe/infNFe/infAdic/procRef[]/nProc",
+        "origem": "NFe/infNFe/infAdic/procRef[]/indProc",
+        "tipo": "NFe/infNFe/infAdic/procRef[]/tpAto"
+    }],
+    "responsavelTecnico": {
+        "cpfCnpj": "NFe/infNFe/infRespTec/CNPJ",
+        "nome": "NFe/infNFe/infRespTec/xContato",
+        "email": "NFe/infNFe/infRespTec/email",
+        "telefone": "NFe/infNFe/infRespTec/fone",
+        "idCSRT": "NFe/infNFe/infRespTec/idCSRT",
+        "hashCSRT": "NFe/infNFe/infRespTec/hashCSRT"
+    },
+    "agropecuario": {
+        "defensivo": [{
+            "numeroReceituario": "NFe/infNFe/agropecuario/defensivo[]/nReceituario",
+            "cpfResponsavelTecnico": "NFe/infNFe/agropecuario/defensivo[]/CPFRespTec"
+        }],
+        "guiaTransito": {
+            "tipoGuia": "NFe/infNFe/agropecuario/guiaTransito/tpGuia",
+            "ufGuia": "NFe/infNFe/agropecuario/guiaTransito/UFGuia",
+            "serieGuia": "NFe/infNFe/agropecuario/guiaTransito/serieGuia",
+            "numeroGuia": "NFe/infNFe/agropecuario/guiaTransito/nGuia"
+        }
+    }
+}

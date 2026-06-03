@@ -3,28 +3,16 @@ import base64
 import hashlib
 import re
 import warnings
-
 from datetime import datetime
 from decimal import Decimal
 
 import pynfe.utils.xml_writer as xmlw
 from pynfe.entidades import Manifesto, NotaFiscal
-from pynfe.utils import (
-    etree,
-    obter_codigo_por_municipio,
-    obter_municipio_por_codigo,
-    obter_pais_por_codigo,
-    so_numeros,
-)
-from pynfe.utils.flags import (
-    CODIGOS_ESTADOS,
-    NAMESPACE_MDFE,
-    NAMESPACE_NFE,
-    NAMESPACE_SIG,
-    VERSAO_MDFE,
-    VERSAO_PADRAO,
-    VERSAO_QRCODE,
-)
+from pynfe.utils import (etree, obter_codigo_por_municipio,
+                         obter_municipio_por_codigo, obter_pais_por_codigo,
+                         so_numeros)
+from pynfe.utils.flags import (CODIGOS_ESTADOS, NAMESPACE_CTE, NAMESPACE_MDFE,
+                               NAMESPACE_NFE, NAMESPACE_SIG, VERSAO_MDFE, VERSAO_PADRAO, VERSAO_QRCODE)
 from pynfe.utils.webservices import MDFE, NFCE
 
 
@@ -2109,6 +2097,86 @@ class SerializacaoXML(Serializacao):
             return raiz
 
 
+    def serializar_evento_cte(self, evento, tag_raiz="eventoCTe", retorna_string=False):
+        tz = datetime.now().astimezone().strftime("%z")
+        tz = "{}:{}".format(tz[:-2], tz[-2:])
+        raiz = etree.Element(tag_raiz, versao="4.00", nsmap={None: NAMESPACE_CTE})
+        e = etree.SubElement(raiz, "infEvento", Id=evento.identificador_cte)
+        etree.SubElement(e, "cOrgao").text = CODIGOS_ESTADOS[evento.uf.upper()]
+        etree.SubElement(e, "tpAmb").text = str(self._ambiente)
+        if len(so_numeros(evento.cnpj)) == 11:
+            etree.SubElement(e, "CPF").text = evento.cnpj
+        else:
+            etree.SubElement(e, "CNPJ").text = evento.cnpj
+        etree.SubElement(e, "chCTe").text = evento.chave  
+        etree.SubElement(e, "dhEvento").text = (
+            evento.data_emissao.strftime("%Y-%m-%dT%H:%M:%S") + tz
+        )
+        etree.SubElement(e, "tpEvento").text = evento.tp_evento
+        etree.SubElement(e, "nSeqEvento").text = str(evento.n_seq_evento)
+        det = etree.SubElement(e, "detEvento", versaoEvento="4.00")
+        # EVENTOS COMENTADOS NÂO TESTADOS
+        # if evento.descricao == "Comprovante de Entrega do CT-e":
+        #     etree.Subelement(det, "nProt").text = evento.protocolo
+        #     # Data e hora de conclusão da entrega da NF-e, Formato AAAA-MM-DDTHH:MM:DD TZD, <xs:restriction base="TDateTimeUTC"/>
+        #     etree.SubElement(det, "dhEntrega").text = evento.data_hora.strftime("%Y-%m-%dT%H:%M:%S") + tz
+        #     etree.SubElement(det, "nDoc").text = evento.documento_recebedor
+        #     etree.SubElement(det, "xNome").text = evento.nome_recebedor
+        #     etree.SubElement(det, "latitude").text = evento.latitude
+        #     etree.SubElement(det, "longitude").text = evento.longitude
+        #     etree.SubElement(det, "hashEntrega").text = evento.hash_entrega # concatenação: Chave de acesso do CT-e + Base64 da imagem capturada da entrega (Exemplo: imagem capturada da assinatura eletrônica, digital do recebedor, foto, etc), resultado das funções SHA-1 e base64 do token CSRT fornecido pelo fisco + chave de acesso do DF-e. (Implementação em futura NT)
+        #     etree.SubElement(det, "dhHashEntrega").text = evento.datahora_hash.strftime("%Y-%m-%dT%H:%M:%S") + tz #Formato AAAA-MM-DDTHH:MM:DD TZD
+        #     if evento.informacao_entrega:
+        #         inf_entrega = etree.SubElement(det, "infEntrega") #apenas para CT-e com tipo de serviço Normal
+        #         etree.SubElement(inf_entrega, "chNFe").text = evento.chave_acesso #chave de acesso da NF-e entregue
+        if evento.descricao == "Cancelamento do Comprovante de Entrega do CT-e":
+            cancelamento = etree.SubElement(det, "evCancCECTe")
+            etree.SubElement(cancelamento, "descEvento").text = evento.descricao
+            etree.SubElement(cancelamento, "nProt").text = evento.protocolo #Número do Protocolo de autorização do CT-e
+            etree.SubElement(cancelamento, "nProtCE").text = evento.protocolo_evento #Número do Protocolo de autorização do evento a ser cancelado
+        # elif evento.descricao == "Insucesso na Entrega do CT-e":
+        #     etree.SubElement(det, "nProt").text = evento.protocolo
+        #     etree.SubElement(det, "dhTentativaEntrega").text = evento.data_hora_tentativa.strftime("%Y-%m-%dT%H:%M:%S") + tz #Formato AAAA-MM-DDTHH:MM:DD TZD
+        #     etree.SubElement(det, "nTentativa").text = evento.numero_tentativa
+        #     etree.SubElement(det, "tpMotivo").text = evento.tipo_motivo 
+            # #Motivo do insucesso: 
+            # # 1- Recebedor não encontrado; 
+            # # 2- Recusa do recebedor; 
+            # # 3- Endereço inexistente; 
+            # # 4- Outros (exige informar justificativa)
+            # if evento.tipo_motivo == 4:
+            #     etree.SubElement(det, "xJustMotivo").text = evento.justificativa #apenas para tpMotivo = 4, 15-256 caracteres
+            # etree.SubElement(det, "latitude").text = evento.latitude
+            # etree.SubElement(det, "longitude").text = evento.longitude
+            # etree.SubElement(det, "hashTentativaEntrega").text = evento.hash_entrega
+            # # Hash (SHA1) no formato Base64 resultante da concatenação: Chave de acesso do CT-e + Base64 da imagem capturada da tentativa com insucesso da entrega (Exemplo: foto do local que não recebeu a entrega ou do local sem recebedor)</xs:documentation>
+			# # <xs:documentation>O hashCSRT é o resultado das funções SHA-1 e base64 do token CSRT fornecido pelo fisco + chave de acesso do DF-e. (Implementação em futura NT)
+            # # Observação: 28 caracteres são representados no schema como 20 bytes do tipo base64Binary
+            # etree.SubElement(det, "dhHashTentativaEntrega").text = evento.datahora_hash.strftime("%Y-%m-%dT%H:%M:%S") + tz #Formato AAAA-MM-DDTHH:MM:DD TZD
+            # if evento.informacao_entrega:
+            #     inf_entrega = etree.SubElement(det, "infEntrega") #apenas para CT-e com tipo de serviço Normal
+            #     etree.SubElement(inf_entrega, "chNFe").text = evento.chave_acesso #chave de acesso da NF-e com insucesso na entrega
+        elif evento.descricao == "Cancelamento do Insucesso de Entrega do CT-e":
+            cancelamento = etree.SubElement(det, "evCancIECTe")
+            etree.SubElement(cancelamento, "descEvento").text = evento.descricao
+            etree.SubElement(cancelamento, "nProt").text = evento.protocolo
+            etree.SubElement(cancelamento, "nProtIE").text = evento.protocolo_evento
+        elif evento.descricao == "Prestação do Serviço em Desacordo":
+            desacordo = etree.SubElement(det, "evPrestDesacordo")
+            etree.SubElement(desacordo, "descEvento").text = evento.descricao
+            etree.SubElement(desacordo, "indDesacordoOper").text = "1" #Indicador de operação em desacordo
+            etree.SubElement(desacordo, "xObs").text = evento.observacao
+        elif evento.descricao == "Cancelamento Prestação do Serviço em Desacordo":
+            cancelamento = etree.SubElement(det, "evCancPrestDesacordo")
+            etree.SubElement(cancelamento, "descEvento").text = evento.descricao
+            etree.SubElement(cancelamento, "nProtEvPrestDes").text = evento.protocolo_evento
+
+        if retorna_string:
+            return etree.tostring(raiz, encoding="unicode", pretty_print=True)
+        else:
+            return raiz
+
+
 class SerializacaoQrcode(object):
     """Classe que gera e serializa o qrcode de NFC-e no xml"""
 
@@ -2225,72 +2293,55 @@ class SerializacaoQrcode(object):
 
 
 class SerializacaoNfse(object):
-    def __init__(self, autorizador):
+    def __init__(self, autorizador, chave_autenticacao=None):
         "Recebe uma string com o nome do autorizador."
         self.autorizador = autorizador
+        self.chave_autenticacao = chave_autenticacao
 
-    def gerar(self, nfse):
-        if self.autorizador.lower() == "betha":
-            from pynfe.processamento.autorizador_nfse import SerializacaoBetha
-
-            return SerializacaoBetha().gerar(nfse)
+    def consultar_faixa(self, emitente, numero_inicial, numero_final, pagina=1):
+        if self.autorizador.lower() == "campinas":
+            from pynfe.processamento.autorizador_nfse import SerializacaoCampinas
+        
+            return SerializacaoCampinas().consultar_faixa(emitente, numero_inicial, numero_final, pagina=pagina)
+        elif self.autorizador.lower() == "osasco":
+            from pynfe.processamento.autorizador_nfse import SerializacaoOsasco
+            return SerializacaoOsasco(self.chave_autenticacao).consultar(numero_nota_inicial=numero_inicial, numero_nota_final=numero_final)
         else:
-            raise Exception("Este método só esta implementado no autorizador Betha.")
-
-    def gerar_lote(self, nfse):
-        if self.autorizador.lower() == "ginfes":
+            raise Exception(f"Este método não esta implementado para o autorizador {self.autorizador.upper()}")
+    
+    def consultar_periodo(self, emitente, data_inicio, data_fim, pagina=1):
+        if self.autorizador.lower() == "campinas":
+            from pynfe.processamento.autorizador_nfse import SerializacaoCampinas
+        
+            return SerializacaoCampinas().consultar_periodo(emitente, data_inicio, data_fim, pagina=pagina)
+        elif self.autorizador.lower() == "osasco":
+            from pynfe.processamento.autorizador_nfse import SerializacaoOsasco
+        
+            return SerializacaoOsasco(self.chave_autenticacao).consultar(data_inicial=data_inicio, data_final=data_fim)
+        elif self.autorizador.lower() == "giss":
+            from pynfe.processamento.autorizador_nfse import SerializacaoGiss
+        
+            return SerializacaoGiss().consultar_periodo(emitente, data_inicio, data_fim, pagina=pagina)
+        elif self.autorizador.lower() == "speedgov":
+            from pynfe.processamento.autorizador_nfse import SerializacaoSpeedgov
+        
+            return SerializacaoSpeedgov().consultar_periodo(emitente, data_inicio, data_fim)
+        elif self.autorizador.lower() == "ginfes":
             from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
-
-            return SerializacaoGinfes().serializar_lote_assincrono(nfse)
+        
+            return SerializacaoGinfes().consultar_periodo(emitente, data_inicio, data_fim, pagina=pagina)
         else:
-            raise Exception("Este método só esta implementado no autorizador ginfes.")
+            raise Exception(f"Este método não esta implementado para o autorizador {self.autorizador.upper()}")
 
-    def consultar_nfse(self, emitente, numero=None, inicio=None, fim=None):
-        if self.autorizador.lower() == "ginfes":
-            from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
 
-            return SerializacaoGinfes().consultar_nfse(emitente, numero, inicio, fim)
+    def consultar_nfse(self, emitente, numero_nfse):
+        if self.autorizador.lower() == "osasco":
+            from pynfe.processamento.autorizador_nfse import SerializacaoOsasco
+            return SerializacaoOsasco(self.chave_autenticacao).consultar(numero_nota_inicial=numero_nfse, numero_nota_final=numero_nfse)
         else:
-            raise Exception("Este método só esta implementado no autorizador ginfes.")
+            raise Exception(f"Este método não esta implementado para o autorizador {self.autorizador.upper()}")
 
-    def consultar_lote(self, emitente, numero):
-        if self.autorizador.lower() == "ginfes":
-            from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
 
-            return SerializacaoGinfes().consultar_lote(emitente, numero)
-        else:
-            raise Exception("Este método só esta implementado no autorizador ginfes.")
-
-    def consultar_rps(self, emitente, numero, serie, tipo):
-        if self.autorizador.lower() == "ginfes":
-            from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
-
-            return SerializacaoGinfes().consultar_rps(emitente, numero, serie, tipo)
-        else:
-            raise Exception("Este método só esta implementado no autorizador ginfes.")
-
-    def consultar_situacao_lote(self, emitente, numero):
-        if self.autorizador.lower() == "ginfes":
-            from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
-
-            return SerializacaoGinfes().consultar_situacao_lote(emitente, numero)
-        else:
-            raise Exception("Este método só esta implementado no autorizador ginfes.")
-
-    def cancelar(self, nfse):
-        if self.autorizador.lower() == "ginfes":
-            from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
-
-            # versao 3
-            # return SerializacaoGinfes().cancelar(nfse)
-            # versao 2
-            return SerializacaoGinfes().cancelar_v2(nfse)
-        elif self.autorizador.lower() == "betha":
-            from pynfe.processamento.autorizador_nfse import SerializacaoBetha
-
-            return SerializacaoBetha().cancelar(nfse)
-        else:
-            raise Exception("Autorizador não suportado para cancelamento!")
 
 
 class SerializacaoQrcodeMDFe(object):

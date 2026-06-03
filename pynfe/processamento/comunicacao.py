@@ -1,29 +1,31 @@
 # -*- coding: utf-8 -*-
 import datetime
+import html
 import re
 
 import requests
-
 from pynfe.entidades.certificado import CertificadoA1
-from pynfe.utils import etree, so_numeros
+from pynfe.utils import etree, obter_municipio_por_codigo, so_numeros
 from pynfe.utils.flags import (
     CODIGOS_ESTADOS,
     MODELO_MDFE,
-    NAMESPACE_BETHA,
     NAMESPACE_CTE,
     NAMESPACE_CTE_METODO,
     NAMESPACE_MDFE,
     NAMESPACE_MDFE_METODO,
     NAMESPACE_METODO,
+    NAMESPACE_NFCOM,
+    NAMESPACE_NFCOM_METODO,
     NAMESPACE_NFE,
     NAMESPACE_SOAP,
     NAMESPACE_XSD,
     NAMESPACE_XSI,
     VERSAO_CTE,
     VERSAO_MDFE,
+    VERSAO_NFCOM,
     VERSAO_PADRAO,
 )
-from pynfe.utils.webservices import CTE, MDFE, NFCE, NFE, NFSE
+from pynfe.utils.webservices import CTE, MDFE, NFCE, NFCOM, NFE, NFSE
 
 from .assinatura import AssinaturaA1
 
@@ -165,14 +167,94 @@ class ComunicacaoSefaz(Comunicacao):
         """
         # url do serviço
         url = self._get_url(modelo=modelo, consulta="CHAVE", contingencia=contingencia)
-        # Monta XML do corpo da requisição
-        raiz = etree.Element("consSitNFe", versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
-        etree.SubElement(raiz, "tpAmb").text = str(self._ambiente)
-        etree.SubElement(raiz, "xServ").text = "CONSULTAR"
-        etree.SubElement(raiz, "chNFe").text = chave
-        # Monta XML para envio da requisição
-        xml = self._construir_xml_soap("NFeConsultaProtocolo4", raiz)
+        if modelo == "nfcom":
+            raiz = etree.Element("consSitNFCom", versao=VERSAO_NFCOM, xmlns=NAMESPACE_NFCOM)
+            etree.SubElement(raiz, "tpAmb").text = str(self._ambiente)
+            etree.SubElement(raiz, "xServ").text = "CONSULTAR"
+            etree.SubElement(raiz, "chNFCom").text = chave
+            xml = self._construir_xml_soap("NFComConsulta", raiz)
+        else:
+            # Monta XML do corpo da requisição
+            raiz = etree.Element("consSitNFe", versao=VERSAO_PADRAO, xmlns=NAMESPACE_NFE)
+            etree.SubElement(raiz, "tpAmb").text = str(self._ambiente)
+            etree.SubElement(raiz, "xServ").text = "CONSULTAR"
+            etree.SubElement(raiz, "chNFe").text = chave
+            # Monta XML para envio da requisição
+            xml = self._construir_xml_soap("NFeConsultaProtocolo4", raiz)
         return self._post(url, xml)
+
+    def download_nota(self, modelo, chave, contingencia=False):
+        """
+        Download da NFCom via Portal SVRS (HTML + extração do XML via JS).
+        """
+
+        url = self._get_url(modelo=modelo, consulta="DOWNLOAD", contingencia=contingencia)
+
+        if modelo != "nfcom":
+            raise NotImplementedError("Download not implemented for this model yet.")
+
+        # validação da chave
+        if not chave or not chave.isdigit() or len(chave) != 44:
+            raise ValueError("Chave NFCom inválida (esperado 44 dígitos numéricos)")
+
+        certificado_a1 = CertificadoA1(self.certificado)
+
+        try:
+            key_path, cert_path = certificado_a1.separar_arquivo(
+                self.certificado_senha, caminho=True
+            )
+            cert = (cert_path, key_path)
+
+            session = requests.Session()
+
+            response = session.post(
+                url,
+                files={
+                    "sistema": (None, "Nfcom"),
+                    "OrigemSite": (None, "0"),
+                    "Ambiente": (None, str(self._ambiente)),
+                    "ChaveAcessoDfe": (None, chave),
+                },
+                headers={
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                    "Referer": "https://dfe-portal.svrs.rs.gov.br/Nfcom",
+                },
+                cert=cert,
+                verify=False,
+                timeout=30,
+            )
+
+            html_body = response.text
+
+            # 🚫 BLOQUEIO POR IP (rate limit)
+            if "textoErro" in html_body and "IP não autorizado" in html_body:
+                raise PermissionError(
+                    "SVRS bloqueou o IP por múltiplas consultas simultâneas. "
+                    "Aguarde liberação ou utilize outro IP."
+                )
+
+            # 🔍 extrai o XML do JS
+            pattern = r'var\s+stringJson\s*=\s*\{\s*"xml"\s*:\s*"(.+?)"\s*\};'
+            match = re.search(pattern, html_body, re.DOTALL)
+
+            if not match:
+                raise ValueError(
+                    "XML não encontrado no HTML retornado pelo portal SVRS. "
+                    "Pode ser chave inexistente, ambiente incorreto ou NFCom sem permissão."
+                )
+
+            xml_js = match.group(1)
+
+            # remove escapes JavaScript
+            xml = bytes(xml_js, "utf-8").decode("unicode_escape")
+
+            # converte entidades HTML (&amp; etc)
+            xml = html.unescape(xml)
+
+            return xml.strip()
+
+        finally:
+            certificado_a1.excluir()
 
     def consulta_distribuicao(
         self, cnpj=None, cpf=None, chave=None, nsu=0, consulta_nsu_especifico=False
@@ -497,8 +579,19 @@ class ComunicacaoSefaz(Comunicacao):
                 else:
                     # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
                     self.url = NFCE[self.uf.upper()][ambiente] + NFCE[self.uf.upper()][consulta]
+            elif modelo == "nfcom":
+                if consulta == "DOWNLOAD":
+                    self.url = NFCOM["SVRS"][consulta]
+                else:
+                    if self.uf.upper() in ["MG", "MT", "MS"]:
+                        self.url = (
+                            NFCOM[self.uf.upper()][ambiente] + NFCOM[self.uf.upper()][consulta]
+                        )
+                    else:
+                        self.url = NFCOM["SVRS"][ambiente] + NFCOM["SVRS"][consulta]
+
             else:
-                raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
+                raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce" ou "nfcom"')
         # Estados que utilizam outros ambientes
         else:
             lista_svrs = [
@@ -529,8 +622,12 @@ class ComunicacaoSefaz(Comunicacao):
                 elif modelo == "nfce":
                     # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
                     self.url = NFCE["SVRS"][ambiente] + NFCE["SVRS"][consulta]
+                elif modelo == "nfcom":
+                    self.url = NFCOM["SVRS"][ambiente] + NFCOM["SVRS"][consulta]
                 else:
-                    raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
+                    raise Exception(
+                        'Modelo não encontrado! Defina modelo="nfe" ou "nfce" ou "nfcom"'
+                    )
             # unico UF que utiliza SVAN ainda para NF-e
             # SVRS para NFC-e
             elif self.uf.upper() == "MA":
@@ -544,28 +641,47 @@ class ComunicacaoSefaz(Comunicacao):
                 elif modelo == "nfce":
                     # nfce Ex: https://homologacao.nfce.fazenda.pr.gov.br/nfce/NFeStatusServico3
                     self.url = NFCE["SVRS"][ambiente] + NFCE["SVRS"][consulta]
+                elif modelo == "nfcom":
+                    self.url = NFCOM["SVRS"][ambiente] + NFCOM["SVRS"][consulta]
                 else:
-                    raise Exception('Modelo não encontrado! Defina modelo="nfe" ou "nfce"')
+                    raise Exception(
+                        'Modelo não encontrado! Defina modelo="nfe" ou "nfce" ou "nfcom"'
+                    )
             else:
                 raise Exception(f"Url não encontrada para {modelo} e {consulta} {self.uf.upper()}")
         return self.url
 
     def _construir_xml_soap(self, metodo, dados, cabecalho=False):
-        """Mota o XML para o envio via SOAP"""
+        """Monta o XML para o envio via SOAP"""
         raiz = etree.Element(
             "{%s}Envelope" % NAMESPACE_SOAP,
-            nsmap={"xsi": NAMESPACE_XSI, "xsd": NAMESPACE_XSD, "soap": NAMESPACE_SOAP},
+            nsmap={
+                "xsi": NAMESPACE_XSI,
+                "xsd": NAMESPACE_XSD,
+                "soap": NAMESPACE_SOAP,
+            },
         )
+
         body = etree.SubElement(raiz, "{%s}Body" % NAMESPACE_SOAP)
-        # distribuição tem um corpo de xml diferente
+
+        # === NFe Distribuição ===
         if metodo == "NFeDistribuicaoDFe":
             x = etree.SubElement(body, "nfeDistDFeInteresse", xmlns=NAMESPACE_METODO + metodo)
             a = etree.SubElement(x, "nfeDadosMsg")
+
+        # === Cadastro MT ===
         elif metodo == "CadConsultaCadastro4" and self.uf.upper() == "MT":
             x = etree.SubElement(body, "consultaCadastro", xmlns=NAMESPACE_METODO + metodo)
             a = etree.SubElement(x, "nfeDadosMsg")
+
+        # === NFCOM Consulta ===
+        elif metodo == "NFComConsulta":
+            a = etree.SubElement(body, "nfcomDadosMsg", xmlns=NAMESPACE_NFCOM_METODO + metodo)
+
+        # === Default (NFe / NFCe / CTe etc) ===
         else:
             a = etree.SubElement(body, "nfeDadosMsg", xmlns=NAMESPACE_METODO + metodo)
+
         a.append(dados)
         return raiz
 
@@ -578,6 +694,7 @@ class ComunicacaoSefaz(Comunicacao):
         }
         if self.uf.upper() == "PE":
             response["SOAPAction"] = ""
+
         return response
 
     def _post(self, url, xml, timeout=None):
@@ -595,6 +712,8 @@ class ComunicacaoSefaz(Comunicacao):
                 etree.tostring(xml, encoding="unicode").replace("\n", ""),
             )
             xml = xml_declaration + xml
+            print(xml)
+            print("URL:", url)
             # Faz o request com o servidor
             result = requests.post(
                 url,
@@ -618,7 +737,9 @@ class ComunicacaoNfse(Comunicacao):
     _versao = ""
     _namespace = ""
 
-    def __init__(self, certificado, certificado_senha, autorizador, homologacao=False):
+    def __init__(
+        self, autorizador, certificado=None, certificado_senha=None, homologacao=False, **kwargs
+    ):
         self.certificado = certificado
         self.certificado_senha = certificado_senha
         self._ambiente = 2 if homologacao else 1
@@ -626,100 +747,121 @@ class ComunicacaoNfse(Comunicacao):
         if self.autorizador == "GINFES":
             self._namespace = "http://www.ginfes.com.br/cabecalho_v03.xsd"
             self._versao = "3"
-        elif self.autorizador == "BETHA":
-            self._namespace = NAMESPACE_BETHA
-            self._versao = "2.02"
+        elif self.autorizador == "SAO_PAULO":
+            self._namespace = "http://www.prefeitura.sp.gov.br/nfe"
+            self._versao = "2"
+        elif self.autorizador == "BARUERI":
+            self._namespace = "http://www.barueri.sp.gov.br/nfeservice"
+        elif self.autorizador == "OSASCO":
+            pass
+        elif self.autorizador == "CAMPINAS":
+            pass
+        elif self.autorizador == "SPEEDGOV":
+            if not kwargs.get("codigo_municipio"):
+                raise Exception(
+                    "Para o autorizador SPEEDGOV é necessário informar o código do município."
+                )
+            self.codigo_municipio = kwargs.get("codigo_municipio")
+        elif self.autorizador == "GISS":
+            if not kwargs.get("codigo_municipio"):
+                raise Exception(
+                    "Para o autorizador GISS é necessário informar o código do município."
+                )
+            self.codigo_municipio = kwargs.get("codigo_municipio")
         else:
             raise Exception("Autorizador não encontrado!")
 
-    def autorizacao(self, nota):
+    def consultar_nfse(self, payload):
         # url do serviço
         url = self._get_url()
-        if self.autorizador == "BETHA":
-            # xml
-            xml = etree.tostring(nota, encoding="unicode", pretty_print=False)
-            # comunica via wsdl
-            return self._post(url, xml, "gerar")
-        else:
-            raise Exception("Este método só esta implementado no autorizador betha.")
 
-    def enviar_lote(self, xml):
-        # url do serviço
-        url = self._get_url()
-        if self.autorizador == "GINFES":
-            # xml
-            xml = '<?xml version="1.0" encoding="UTF-8"?>' + xml
+        if self.autorizador == "OSASCO":
             # comunica via wsdl
-            return self._post_https(url, xml, "enviar_lote")
+            return self._post_zeep(url, NFSE[self.autorizador]["CONSULTA_COMPLETA"], payload)
         else:
-            raise Exception("Este método só esta implementado no autorizador ginfes.")
+            raise Exception("Este método não esta implementado para o autorizador.")
 
-    def consultar(self, xml):
+    def consultar_rps(self, payload):
         # url do serviço
         url = self._get_url()
-        if self.autorizador == "GINFES":
+        if self.autorizador == "CAMPINAS":
+            from pynfe.processamento.autorizador_nfse import SerializacaoCampinas
+
+            xml_assinado = AssinaturaA1(self.certificado, self.certificado_senha).assinar(payload)
+            envelope_xml = SerializacaoCampinas().soap_envelope(
+                NFSE[self.autorizador]["CONSULTA_RPS"], xml_assinado
+            )
+            return self._post_soap_raw(url, envelope_xml)
+        elif self.autorizador == "OSASCO":
+            # comunica via wsdl
+            return self._post_zeep(url, NFSE[self.autorizador]["CONSULTA"], payload)
+        else:
+            raise Exception("Este método não esta implementado para o autorizador.")
+
+    def consultar_faixa(self, payload):
+        # url do serviço
+        url = self._get_url()
+        if self.autorizador == "CAMPINAS":
+            from pynfe.processamento.autorizador_nfse import SerializacaoCampinas
+
+            xml_assinado = AssinaturaA1(self.certificado, self.certificado_senha).assinar(payload)
+            envelope_xml = SerializacaoCampinas().soap_envelope(
+                NFSE[self.autorizador]["CONSULTA_FAIXA"], xml_assinado
+            )
+            return self._post_soap_raw(url, envelope_xml)
+        elif self.autorizador == "OSASCO":
+            # comunica via wsdl
+            return self._post_zeep(url, NFSE[self.autorizador]["CONSULTA"], payload)
+        else:
+            raise Exception("Este método não esta implementado para o autorizador.")
+
+    def consultar_periodo(self, payload):
+        # url do serviço
+        url = self._get_url()
+        if self.autorizador == "CAMPINAS":
+            from pynfe.processamento.autorizador_nfse import SerializacaoCampinas
+
+            xml_assinado = AssinaturaA1(self.certificado, self.certificado_senha).assinar(payload)
+            envelope_xml = SerializacaoCampinas().soap_envelope(
+                NFSE[self.autorizador]["CONSULTA_SERVICO"], xml_assinado
+            )
+            return self._post_soap_raw(url, envelope_xml)
+        elif self.autorizador == "SPEEDGOV":
+            from pynfe.processamento.autorizador_nfse import SerializacaoSpeedgov
+
+            envelope_xml = SerializacaoSpeedgov().soap_envelope(
+                NFSE[self.autorizador]["CONSULTA_SERVICO"], payload
+            )
+            return self._post_soap_raw(url, envelope_xml)
+        elif self.autorizador == "GISS":
+            from pynfe.processamento.autorizador_nfse import SerializacaoGiss
+
+            xml_assinado = AssinaturaA1(self.certificado, self.certificado_senha).assinar(
+                payload, retorna_string=True
+            )
+            envelope_xml = SerializacaoGiss().soap_envelope(
+                NFSE[self.autorizador]["CONSULTA_SERVICO"], xml_assinado
+            )
+            return self._post_soap_raw(url, envelope_xml)
+        elif self.autorizador == "OSASCO":
+            # comunica via wsdl
+            return self._post_zeep(url, NFSE[self.autorizador]["CONSULTA"], payload)
+        elif self.autorizador == "GINFES":
             # xml
-            xml = '<?xml version="1.0" encoding="UTF-8"?>' + xml
+            xml = '<?xml version="1.0" encoding="UTF-8"?>' +  payload.decode("utf-8")
             # comunica via wsdl
             return self._post_https(url, xml, "consulta")
         else:
-            raise Exception("Este método só esta implementado no autorizador ginfes.")
+            raise Exception("Este método não esta implementado para o autorizador.")
 
-    def consultar_rps(self, xml):
-        # url do serviço
-        url = self._get_url()
-        if self.autorizador == "BETHA":
-            # comunica via wsdl
-            return self._post(url, xml, "consultaRps")
-        elif self.autorizador == "GINFES":
-            return self._post_https(url, xml, "consultaRps")
-        # TODO outros autorizadres
-        else:
-            raise Exception("Autorizador não encontrado!")
+    def consultar_lote(self, payload):
+        raise Exception("Este método não esta implementado para o autorizador.")
 
-    def consultar_faixa(self, xml):
-        # url do serviço
-        url = self._get_url()
-        if self.autorizador == "BETHA":
-            # comunica via wsdl
-            return self._post(url, xml, "consultaFaixa")
-        else:
-            raise Exception("Este método só esta implementado no autorizador betha.")
+    def consultar_situacao_lote(self, payload):
+        raise Exception("Este método não esta implementado para o autorizador.")
 
-    def consultar_lote(self, xml):
-        # url do serviço
-        url = self._get_url()
-        if self.autorizador == "GINFES":
-            # xml
-            xml = '<?xml version="1.0" encoding="UTF-8"?>' + xml
-            # comunica via wsdl
-            return self._post_https(url, xml, "consulta_lote")
-        else:
-            raise Exception("Este método só esta implementado no autorizador ginfes.")
-
-    def consultar_situacao_lote(self, xml):
-        # url do serviço
-        url = self._get_url()
-        if self.autorizador == "GINFES":
-            # comunica via wsdl
-            return self._post_https(url, xml, "consulta_situacao_lote")
-        else:
-            raise Exception("Este método só esta implementado no autorizador ginfes.")
-
-    def cancelar(self, xml):
-        # url do serviço
-        url = self._get_url()
-        # Betha
-        if self.autorizador == "BETHA":
-            # comunica via wsdl
-            return self._post(url, xml, "cancelar")
-        # Ginfes
-        elif self.autorizador == "GINFES":
-            # comunica via wsdl com certificado
-            return self._post_https(url, xml, "cancelar")
-        # TODO outros autorizadres
-        else:
-            raise Exception("Autorizador não encontrado!")
+    def cancelar(self, payload):
+        raise Exception("Este método não esta implementado para o autorizador.")
 
     def _cabecalho(self, retorna_string=True):
         """Monta o XML do cabeçalho da requisição wsdl
@@ -761,20 +903,26 @@ class ComunicacaoNfse(Comunicacao):
         else:
             return raiz
 
-    def _cabecalho_ginfes(self):
-        """Retorna o XML do cabeçalho gerado pelo xsd"""
-        from pynfe.processamento.autorizador_nfse import SerializacaoGinfes
-
-        return SerializacaoGinfes().cabecalho()
-
     def _get_url(self):
         """Retorna a url para comunicação com o webservice"""
         if self._ambiente == 1:
             ambiente = "HTTPS"
+        elif self._ambiente != 1 and self.autorizador == "SAO_PAULO":
+            raise Exception("São Paulo só opera em produção.")
         else:
             ambiente = "HOMOLOGACAO"
         if self.autorizador in NFSE:
             self.url = NFSE[self.autorizador][ambiente]
+            if self.autorizador == "GISS":
+                municipio = obter_municipio_por_codigo(
+                    str(self.codigo_municipio), uf=str(self.codigo_municipio)[:2], normalizado=True
+                )
+                self.url = self.url.replace("{municipio}", str(municipio.lower()))
+            if self.autorizador == "SPEEDGOV":
+                self.url = self.url.replace(
+                    "{suffix_municipio}",
+                    NFSE[self.autorizador]["SUFFIX_MUNICIPIO"][str(self.codigo_municipio)],
+                )
         else:
             raise Exception("Autorizador nao encontrado!")
         return self.url
@@ -803,15 +951,25 @@ class ComunicacaoNfse(Comunicacao):
         except Exception as e:
             raise e
 
+    def _post_soap_raw(self, url, soap_xml):
+        certificado_a1 = CertificadoA1(self.certificado)
+        key, cert = certificado_a1.separar_arquivo(self.certificado_senha, caminho=True)
+        return requests.post(
+            url,
+            data=soap_xml.encode("utf-8"),
+            cert=(cert, key),
+            verify=False,
+            headers={"Content-Type": "text/xml; charset=utf-8"},
+        )
+
     def _post_https(self, url, xml, metodo):
         """Comunicação wsdl (https) utilizando certificado do usuário"""
         # cabecalho
         cabecalho = self._cabecalho()
         # comunicacao wsdl
         try:
-            from suds.client import Client
-
             from pynfe.utils.https_nfse import HttpAuthenticated
+            from suds.client import Client
 
             certificadoA1 = CertificadoA1(self.certificado)
             chave, cert = certificadoA1.separar_arquivo(self.certificado_senha, caminho=True)
@@ -843,6 +1001,213 @@ class ComunicacaoNfse(Comunicacao):
                 raise Exception("Método não implementado no autorizador.")
         except Exception as e:
             raise e
+
+
+    def enviar_barueri(self, xml, operation):
+        url = self._get_url()
+
+        if not self.autorizador == "BARUERI":
+            raise Exception(f"Enviar RPS não implementado para {self.autorizador}")
+
+        return self._post_barueri_requests(url, xml, operation)
+
+    def consultar_rps_barueri(self, xml, operation):
+        url = self._get_url()
+
+        if not self.autorizador == "BARUERI":
+            raise Exception(f"Consultar RPS não implementado para {self.autorizador}")
+
+        return self._post_barueri_requests(url, xml, operation)
+
+    def baixar_rps_barueri(self, xml, operation):
+        url = self._get_url()
+
+        if not self.autorizador == "BARUERI":
+            raise Exception(f"Baixar RPS não implementado para {self.autorizador}")
+
+        return self._post_barueri_requests(url, xml, operation)
+
+    def _post_barueri_requests(self, url, xml, operation):
+        """
+        Comunicação SOAP usando requests diretamente (como NFe)
+        Recebe o envelope SOAP completo já montado
+        """
+        import requests
+
+        certificado_a1 = CertificadoA1(self.certificado)
+        try:
+            chave, cert = certificado_a1.separar_arquivo(self.certificado_senha, caminho=True)
+            chave_cert = (cert, chave)
+
+            if operation == "enviar_rps":
+                soap_action = "http://www.barueri.sp.gov.br/nfe/NFeLoteEnviarArquivo"
+            elif operation == "consultar_rps":
+                soap_action = "http://www.barueri.sp.gov.br/nfe/NFeLoteStatusArquivo"
+            elif operation == "listar_rps":
+                soap_action = "http://www.barueri.sp.gov.br/nfe/NFeLoteListarArquivos"
+            elif operation == "baixar_nfse":
+                soap_action = "http://www.barueri.sp.gov.br/nfe/NFeLoteBaixarArquivo"
+            else:
+                raise Exception(f"Operação {operation} não implementada para Barueri.")
+
+            headers = {"Content-Type": "text/xml; charset=utf-8", "SOAPAction": f'"{soap_action}"'}
+
+            return requests.post(
+                url,
+                data=xml.encode("utf-8"),
+                headers=headers,
+                cert=chave_cert,
+                verify=False,
+                timeout=30,
+            )
+
+        except requests.exceptions.RequestException as e:
+            raise e
+        finally:
+            certificado_a1.excluir()
+
+    def _post_barueri_https(self, url, xml, metodo):
+        """
+        LEGACY: Comunicação wsdl (https) utilizando certificado do usuário
+        Este método usa SUDS e não é mais usado pelo Barueri.
+        Usar _post_barueri_requests() para Barueri.
+        """
+        # comunicacao wsdl
+
+        certificadoA1 = CertificadoA1(self.certificado)
+        try:
+            from pynfe.utils.https_nfse import HttpAuthenticated
+            from suds.client import Client
+
+            chave, cert = certificadoA1.separar_arquivo(self.certificado_senha, caminho=True)
+
+            cliente = Client(url, transport=HttpAuthenticated(key=chave, cert=cert, endereco=url))
+
+            # gerar nfse
+
+            if metodo == "enviar_rps":
+                return cliente.service.NFeLoteEnviarArquivo(VersaoSchema=1, MensagemXML=xml)
+            elif metodo == "consultar_rps":
+                return cliente.service.NFeLoteStatusArquivo(VersaoSchema=1, MensagemXML=xml)
+            elif metodo == "listar_rps":
+                return cliente.service.NFeLoteListarArquivos(VersaoSchema=1, MensagemXML=xml)
+            elif metodo == "baixar_nfse":
+                return cliente.service.NFeLoteBaixarArquivo(VersaoSchema=1, MensagemXML=xml)
+            elif metodo == "cancelar":
+                return cliente.service.CancelamentoNFe(VersaoSchema=1, MensagemXML=xml)
+            # TODO outros metodos
+            else:
+                raise Exception(f"Método {metodo} não implementado no autorizador Barueri.")
+        except Exception as e:
+            raise e
+        finally:
+            certificadoA1.excluir()
+
+    def enviar_sp(self, xml, operation, versao_schema=2):
+        """
+        Send XML to São Paulo NFS-e webservice.
+
+        Args:
+            xml: XML string to send
+            operation: Operation name (enviar_rps, teste_envio_lote_rps, envio_lote_rps, consultar_rps, cancelar)
+            versao_schema: Schema version (1 for v1, 2 for v2 - Reforma Tributária 2026)
+
+        Returns:
+            WebService response
+        """
+        url = self._get_url()
+        if self.autorizador == "SAO_PAULO":
+            return self._post_sp_https(url, xml, operation, versao_schema)
+        else:
+            raise Exception(f"Enviar RPS não implementado para {self.autorizador}")
+
+    def _post_sp_https(self, url, xml, metodo, versao_schema=2):
+        """
+        Comunicação wsdl (https) utilizando certificado do usuário.
+
+        According to São Paulo NFS-e manual v3.3.4:
+        - VersaoSchema=2: Schema version 2 (Reforma Tributária 2026)
+
+        Args:
+            url: WebService URL
+            xml: XML message string
+            metodo: Method name
+            versao_schema: Schema version (1 or 2)
+        """
+        certificadoA1 = CertificadoA1(self.certificado)
+        try:
+            from pynfe.utils.https_nfse import HttpAuthenticated
+            from suds.client import Client
+
+            chave, cert = certificadoA1.separar_arquivo(self.certificado_senha, caminho=True)
+
+            cliente = Client(url, transport=HttpAuthenticated(key=chave, cert=cert, endereco=url))
+
+            # São Paulo NFS-e WebService methods
+            # Manual v3.3.4 section 4.3.1: All methods receive VersaoSchema and MensagemXML
+            if metodo == "enviar_rps":
+                return cliente.service.EnvioRPS(VersaoSchema=versao_schema, MensagemXML=xml)
+            elif metodo == "teste_envio_lote_rps":
+                return cliente.service.TesteEnvioLoteRPS(
+                    VersaoSchema=versao_schema, MensagemXML=xml
+                )
+            elif metodo == "envio_lote_rps":
+                return cliente.service.EnvioLoteRPS(VersaoSchema=versao_schema, MensagemXML=xml)
+            elif metodo == "consultar_rps":
+                return cliente.service.ConsultaNFe(VersaoSchema=versao_schema, MensagemXML=xml)
+            elif metodo == "cancelar":
+                return cliente.service.CancelamentoNFe(VersaoSchema=versao_schema, MensagemXML=xml)
+            else:
+                raise Exception(f"Método {metodo} não implementado no autorizador São Paulo.")
+        except Exception as e:
+            raise e
+        finally:
+            certificadoA1.excluir()
+
+    def _post_zeep(self, wsdl, metodo, payload, wcf_compatibility=True):
+        """
+        Comunicação wsdl utilizando a biblioteca zeep )
+        Recebe o wsdl, o método a ser chamado e o payload (XML ou objeto)
+        """
+        try:
+            import requests
+            from zeep import Client
+            from zeep.helpers import serialize_object
+            from zeep.settings import Settings
+            from zeep.transports import Transport
+
+            session = requests.Session()
+            session.verify = False
+
+            # certificado A1
+            if self.certificado:
+                certificadoA1 = CertificadoA1(self.certificado)
+                chave, cert = certificadoA1.separar_arquivo(self.certificado_senha, caminho=True)
+                session.cert = (cert, chave)
+
+            transport = Transport(session=session, timeout=60)
+
+            settings = Settings(strict=not wcf_compatibility, xml_huge_tree=True)
+
+            client = Client(wsdl=wsdl, transport=transport, settings=settings)
+
+            # DEBUG ÚTIL
+            print("SOAP endpoint:", client.service._binding_options["address"])
+
+            if not hasattr(client.service, metodo):
+                raise Exception(f"Método {metodo} não existe no WSDL")
+
+            print("Chamando método:", metodo)
+            print("payload:", payload)
+
+            service = getattr(client.service, metodo)
+
+            response = service(payload)
+            return serialize_object(response)
+
+        finally:
+            if self.certificado:
+                certificadoA1.excluir()
 
 
 class ComunicacaoMDFe(Comunicacao):
@@ -1199,17 +1564,6 @@ class ComunicacaoCTe(Comunicacao):
         xml = self._construir_xml_soap("CTeDistribuicaoDFe", raiz)
         return self._post(url, xml)
 
-    def consulta(self, chave):
-        url = self._get_url("CONSULTA")
-        # Monta XML do corpo da requisição
-        raiz = etree.Element("consSitCTe", versao=self._versao, xmlns=NAMESPACE_CTE)
-        etree.SubElement(raiz, "tpAmb").text = str(self._ambiente)
-        etree.SubElement(raiz, "xServ").text = "CONSULTAR"
-        etree.SubElement(raiz, "chCTe").text = chave
-        # Monta XML para envio da requisição
-        xml = self._construir_xml_soap("cteConsultaCT", raiz)
-        return self._post(url, xml)
-
     def _get_url_an(self, consulta):
         ambiente = "https://www1."  # produção
         if self._ambiente == 2:  # homologacao
@@ -1280,20 +1634,40 @@ class ComunicacaoCTe(Comunicacao):
                 raise Exception(f"Url não encontrada para {consulta} {self.uf.upper()}")
         return self.url
 
+    def evento(self, evento):
+        """
+        Envia eventos do CTe como:
+            Comprovante de Entrega do CT-e
+            Cancelamento do Comprovante de Entrega do CT-e
+            Insucesso na Entrega do CT-e
+            Cancelamento do Insucesso de Entrega do CT-e
+            Prestação do Serviço em Desacordo
+            Cancelamento Prestação do Serviço em Desacordo
+        :param evento: Nome do Evento
+        :return:
+        """
+
+        # url do serviço
+        url = self._get_url("EVENTOS")
+
+        # Monta XML do corpo da requisição
+        xml = self._construir_xml_soap("CTeRecepcaoEventoV4", evento)
+        return self._post(url, xml)
+
     def _construir_xml_soap(self, metodo, dados, cabecalho=False):
         """Monta o XML para o envio via SOAP"""
 
         raiz = etree.Element(
             "{%s}Envelope" % NAMESPACE_SOAP,
-            nsmap={"xsi": NAMESPACE_XSI, "xsd": NAMESPACE_XSD, "soap": NAMESPACE_SOAP},
+            nsmap={"soap": NAMESPACE_SOAP, "xsi": NAMESPACE_XSI, "xsd": NAMESPACE_XSD},
         )
-
-        if self._header:
+        if self._header and metodo != "CTeRecepcaoEventoV4":
             cabecalho = self._cabecalho_soap(metodo)
             c = etree.SubElement(raiz, "{%s}Header" % self._namespace_soap)
             c.append(cabecalho)
 
         body = etree.SubElement(raiz, "{%s}Body" % NAMESPACE_SOAP)
+
         # distribuição tem um corpo de xml diferente
         if metodo == "CTeDistribuicaoDFe":
             x = etree.SubElement(body, "cteDistDFeInteresse", xmlns=NAMESPACE_CTE_METODO + metodo)
