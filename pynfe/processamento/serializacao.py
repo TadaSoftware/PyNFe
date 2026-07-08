@@ -18,6 +18,8 @@ from pynfe.utils import (
 )
 from pynfe.utils.flags import (
     CODIGOS_ESTADOS,
+    IBSCBS_CST_TRIBUTADOS,
+    IBSCBS_CST_GRUPO_REDUCAO,
     NAMESPACE_MDFE,
     NAMESPACE_NFE,
     NAMESPACE_SIG,
@@ -1316,9 +1318,6 @@ class SerializacaoXML(Serializacao):
     # Reforma Tributaria - IVA Dual (NT 2025.002-RTC)
     # =============================================
 
-    # CSTs that have taxable values (vBC, rates, amounts)
-    _IBSCBS_CST_TRIBUTADOS = ("000", "010", "200", "400", "510", "600", "620", "800", "810", "900")
-
     def _serializar_imposto_ibscbs(
         self, produto_servico, modelo, tag_raiz="imposto", retorna_string=True
     ):
@@ -1347,7 +1346,7 @@ class SerializacaoXML(Serializacao):
         if produto_servico.ibscbs_c_class_trib:
             etree.SubElement(ibscbs, "cClassTrib").text = produto_servico.ibscbs_c_class_trib
 
-        if produto_servico.ibscbs_cst in self._IBSCBS_CST_TRIBUTADOS:
+        if produto_servico.ibscbs_cst in IBSCBS_CST_TRIBUTADOS:
             gibscbs = etree.SubElement(ibscbs, "gIBSCBS")
 
             etree.SubElement(gibscbs, "vBC").text = "{:.2f}".format(produto_servico.ibscbs_vbc or 0)
@@ -1357,6 +1356,14 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(gibsuf, "pIBSUF").text = "{:.4f}".format(
                 produto_servico.ibscbs_p_ibs_uf or 0
             )
+
+            if produto_servico.ibscbs_cst in IBSCBS_CST_GRUPO_REDUCAO:
+                self._serializar_ibscbs_reducao_aliquota(
+                    produto_servico.ibscbs_ibs_uf_p_red_aliq,
+                    produto_servico.ibscbs_ibs_uf_p_aliq_efet,
+                    gibsuf,
+                )
+
             etree.SubElement(gibsuf, "vIBSUF").text = "{:.2f}".format(
                 produto_servico.ibscbs_v_ibs_uf or 0
             )
@@ -1366,6 +1373,14 @@ class SerializacaoXML(Serializacao):
             etree.SubElement(gibsmun, "pIBSMun").text = "{:.4f}".format(
                 produto_servico.ibscbs_p_ibs_mun or 0
             )
+
+            if produto_servico.ibscbs_cst in IBSCBS_CST_GRUPO_REDUCAO:
+                self._serializar_ibscbs_reducao_aliquota(
+                    produto_servico.ibscbs_ibs_mun_p_red_aliq,
+                    produto_servico.ibscbs_ibs_mun_p_aliq_efet,
+                    gibsmun,
+                )
+
             etree.SubElement(gibsmun, "vIBSMun").text = "{:.2f}".format(
                 produto_servico.ibscbs_v_ibs_mun or 0
             )
@@ -1378,7 +1393,20 @@ class SerializacaoXML(Serializacao):
             # gCBS
             gcbs = etree.SubElement(gibscbs, "gCBS")
             etree.SubElement(gcbs, "pCBS").text = "{:.4f}".format(produto_servico.ibscbs_p_cbs or 0)
+
+            if produto_servico.ibscbs_cst in IBSCBS_CST_GRUPO_REDUCAO:
+                self._serializar_ibscbs_reducao_aliquota(
+                    produto_servico.ibscbs_cbs_p_red_aliq,
+                    produto_servico.ibscbs_cbs_p_aliq_efet,
+                    gcbs,
+                )
+
             etree.SubElement(gcbs, "vCBS").text = "{:.2f}".format(produto_servico.ibscbs_v_cbs or 0)
+
+    def _serializar_ibscbs_reducao_aliquota(self, p_red_aliq, p_aliq_efet, tag_raiz):
+        gred = etree.SubElement(tag_raiz, "gRed")
+        etree.SubElement(gred, "pRedAliq").text = "{:.4f}".format(p_red_aliq or 0)
+        etree.SubElement(gred, "pAliqEfet").text = "{:.4f}".format(p_aliq_efet or 0)
 
     def _serializar_is(self, produto_servico, tag_raiz):
         """Serializa <IS> (Imposto Seletivo) como filho direto de <imposto>.

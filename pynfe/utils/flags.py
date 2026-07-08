@@ -552,23 +552,42 @@ COFINS_TIPOS_CALCULO = IPI_TIPOS_CALCULO
 # =============================================
 
 # CST para IBSCBS (IBS + CBS) — NT 2025.002-RTC (3-digit codes)
+# Atualizado de acordo com Informe Técnico 2025.002 v.1.60 - Publicado em 23/06/2026
 IBS_CBS_TIPOS_TRIBUTACAO = (
     ("000", "Tributação integral"),
-    ("010", "Tributação com alíquota reduzida"),
-    ("100", "Tributação com suspensão"),
-    ("110", "Imunidade — exportação"),
-    ("200", "Tributação com diferimento"),
-    ("222", "Isenção"),
-    ("300", "Não incidência"),
-    ("400", "Tributação por substituição"),
-    ("410", "Tributação com alíquota zero"),
-    ("510", "Tributação integral — regime específico"),
-    ("600", "Tributação monofásica — incidência padrão"),
-    ("620", "Tributação monofásica — demais operações"),
-    ("800", "Crédito presumido"),
-    ("810", "Crédito presumido — ZFM"),
-    ("900", "Outros"),
+    ("010", "Tributação com alíquotas uniformes"),
+    ("011", "Tributação com alíquotas uniformes reduzidas"),
+    ("200", "Alíquota reduzida"),
+    ("220", "Alíquota fixa"),
+    ("221", "Alíquota fixa proporcional"),
+    ("222", "Redução de base de cálculo"),
+    ("400", "Isenção"),
+    ("410", "Imunidade e não incidência"),
+    ("510", "Diferimento"),
+    ("515", "Diferimento com redução de alíquota"),
+    ("550", "Suspensão"),
+    ("620", "Tributação monofásica"),
+    ("800", "Transferência de crédito"),
+    ("810", "Ajuste de IBS na ZFM"),
+    ("811", "Ajustes"),
+    ("820", "Tributação em documento específico"),
+    ("830", "Exclusão de base de cálculo"),
 )
+
+IBSCBS_CST_TRIBUTADOS = (
+    "000",
+    "010",
+    "011",
+    "200",
+    "220",
+    "221",
+    "222",
+    "510",
+    "515",
+    "550",
+    "830",
+)
+IBSCBS_CST_GRUPO_REDUCAO = ("011", "200", "515")
 
 # CST para IS (Imposto Seletivo) — CSTSelec (NT 2025.002-RTC)
 IS_TIPOS_TRIBUTACAO = (

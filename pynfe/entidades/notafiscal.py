@@ -1035,9 +1035,17 @@ class NotaFiscalProduto(Entidade):
     ibscbs_p_ibs_uf = Decimal()  # pIBSUF
     ibscbs_v_ibs_uf = Decimal()  # vIBSUF
 
+    # IBS estadual - gRed
+    ibscbs_ibs_uf_p_red_aliq = Decimal()  # gRed - pRedAliq
+    ibscbs_ibs_uf_p_aliq_efet = Decimal()  # gRed - pAliqEfet
+
     # gIBSMun - IBS municipal
     ibscbs_p_ibs_mun = Decimal()  # pIBSMun
     ibscbs_v_ibs_mun = Decimal()  # vIBSMun
+
+    # IBS municipal - gRed
+    ibscbs_ibs_mun_p_red_aliq = Decimal()  # gRed - pRedAliq
+    ibscbs_ibs_mun_p_aliq_efet = Decimal()  # gRed - pAliqEfet
 
     # vIBS total (UF + Mun)
     ibscbs_v_ibs = Decimal()
@@ -1045,6 +1053,10 @@ class NotaFiscalProduto(Entidade):
     # gCBS - CBS federal
     ibscbs_p_cbs = Decimal()  # pCBS
     ibscbs_v_cbs = Decimal()  # vCBS
+
+    # gCBS - gRed
+    ibscbs_cbs_p_red_aliq = Decimal()  # gRed - pRedAliq
+    ibscbs_cbs_p_aliq_efet = Decimal()  # gRed - pAliqEfet
 
     # IS (Imposto Seletivo) - Group UB-IS
     is_cst_selec = str()  # CSTSelec (2-digit)
