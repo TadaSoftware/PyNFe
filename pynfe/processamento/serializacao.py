@@ -2144,8 +2144,9 @@ class SerializacaoQrcode(object):
         lista_dia = re.findall(r"-\d{2}", str(data))
         dia = str(lista_dia[1])
         dia = dia[1:]
-        replacements = {"0": ""}
-        token = re.sub("([0])", lambda m: replacements[m.group()], token)
+        # Id do CSC sem zeros nao significativos (a esquerda). Um zero que
+        # faz parte do identificador, como em 000100, permanece.
+        token = token.lstrip("0")
 
         # VERSAO_QRCODE =2
         if online:
