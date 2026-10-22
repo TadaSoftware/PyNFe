@@ -25,7 +25,7 @@ from pynfe.utils.flags import (
     VERSAO_PADRAO,
     VERSAO_QRCODE,
 )
-from pynfe.utils.webservices import MDFE, NFCE
+from pynfe.utils.webservices import MDFE, NFCE, qrcode_host, url_consulta_chave
 
 
 class Serializacao(object):
@@ -1316,8 +1316,13 @@ class SerializacaoXML(Serializacao):
     # Reforma Tributaria - IVA Dual (NT 2025.002-RTC)
     # =============================================
 
-    # CSTs that have taxable values (vBC, rates, amounts)
-    _IBSCBS_CST_TRIBUTADOS = ("000", "010", "200", "400", "510", "600", "620", "800", "810", "900")
+    # CSTs that have taxable values (vBC, rates, amounts) and use <gIBSCBS>
+    _IBSCBS_CST_TRIBUTADOS = ("000", "010", "200", "400", "510", "600", "800", "810", "900")
+
+    # CSTs that use the monophasic tax regime and emit <gIBSCBSMono> instead of <gIBSCBS>
+    # (qBCMono, adRemIBS/adRemCBS, vIBSMono/vCBSMono). Start with 620 (combustiveis);
+    # 630/640 will be added when SEFAZ publishes the corresponding cClassTrib codes.
+    _IBSCBS_CST_MONOFASICO = ("620",)
 
     def _serializar_imposto_ibscbs(
         self, produto_servico, modelo, tag_raiz="imposto", retorna_string=True
@@ -1340,45 +1345,116 @@ class SerializacaoXML(Serializacao):
         #     self._serializar_is(produto_servico, tag_raiz)
 
     def _serializar_ibscbs(self, produto_servico, tag_raiz):
-        """Serializa <IBSCBS> com gIBSCBS contendo gIBSUF, gIBSMun e gCBS."""
+        """Serializa <IBSCBS>.
+
+        Para CSTs monofasicas (ex: 620) emite <gIBSCBSMono> com qBCMono, adRemIBS,
+        vIBSMono, adRemCBS, vCBSMono. Para demais CSTs tributados emite <gIBSCBS>
+        com vBC + gIBSUF + gIBSMun + gCBS.
+        """
         ibscbs = etree.SubElement(tag_raiz, "IBSCBS")
         etree.SubElement(ibscbs, "CST").text = produto_servico.ibscbs_cst
 
         if produto_servico.ibscbs_c_class_trib:
             etree.SubElement(ibscbs, "cClassTrib").text = produto_servico.ibscbs_c_class_trib
 
-        if produto_servico.ibscbs_cst in self._IBSCBS_CST_TRIBUTADOS:
-            gibscbs = etree.SubElement(ibscbs, "gIBSCBS")
+        if produto_servico.ibscbs_cst in self._IBSCBS_CST_MONOFASICO:
+            self._serializar_gibscbs_mono(produto_servico, ibscbs)
+        elif produto_servico.ibscbs_cst in self._IBSCBS_CST_TRIBUTADOS:
+            self._serializar_gibscbs(produto_servico, ibscbs)
 
-            etree.SubElement(gibscbs, "vBC").text = "{:.2f}".format(produto_servico.ibscbs_vbc or 0)
+    def _serializar_gibscbs(self, produto_servico, ibscbs):
+        """Serializa <gIBSCBS> padrao com vBC, gIBSUF, gIBSMun, vIBS e gCBS."""
+        gibscbs = etree.SubElement(ibscbs, "gIBSCBS")
 
-            # gIBSUF
-            gibsuf = etree.SubElement(gibscbs, "gIBSUF")
-            etree.SubElement(gibsuf, "pIBSUF").text = "{:.4f}".format(
-                produto_servico.ibscbs_p_ibs_uf or 0
-            )
-            etree.SubElement(gibsuf, "vIBSUF").text = "{:.2f}".format(
-                produto_servico.ibscbs_v_ibs_uf or 0
-            )
+        etree.SubElement(gibscbs, "vBC").text = "{:.2f}".format(produto_servico.ibscbs_vbc or 0)
 
-            # gIBSMun
-            gibsmun = etree.SubElement(gibscbs, "gIBSMun")
-            etree.SubElement(gibsmun, "pIBSMun").text = "{:.4f}".format(
-                produto_servico.ibscbs_p_ibs_mun or 0
-            )
-            etree.SubElement(gibsmun, "vIBSMun").text = "{:.2f}".format(
-                produto_servico.ibscbs_v_ibs_mun or 0
-            )
+        # gIBSUF
+        gibsuf = etree.SubElement(gibscbs, "gIBSUF")
+        etree.SubElement(gibsuf, "pIBSUF").text = "{:.4f}".format(
+            produto_servico.ibscbs_p_ibs_uf or 0
+        )
+        etree.SubElement(gibsuf, "vIBSUF").text = "{:.2f}".format(
+            produto_servico.ibscbs_v_ibs_uf or 0
+        )
 
-            # vIBS total
-            etree.SubElement(gibscbs, "vIBS").text = "{:.2f}".format(
-                produto_servico.ibscbs_v_ibs or 0
-            )
+        # gIBSMun
+        gibsmun = etree.SubElement(gibscbs, "gIBSMun")
+        etree.SubElement(gibsmun, "pIBSMun").text = "{:.4f}".format(
+            produto_servico.ibscbs_p_ibs_mun or 0
+        )
+        etree.SubElement(gibsmun, "vIBSMun").text = "{:.2f}".format(
+            produto_servico.ibscbs_v_ibs_mun or 0
+        )
 
-            # gCBS
-            gcbs = etree.SubElement(gibscbs, "gCBS")
-            etree.SubElement(gcbs, "pCBS").text = "{:.4f}".format(produto_servico.ibscbs_p_cbs or 0)
-            etree.SubElement(gcbs, "vCBS").text = "{:.2f}".format(produto_servico.ibscbs_v_cbs or 0)
+        # vIBS total
+        etree.SubElement(gibscbs, "vIBS").text = "{:.2f}".format(produto_servico.ibscbs_v_ibs or 0)
+
+        # gCBS
+        gcbs = etree.SubElement(gibscbs, "gCBS")
+        etree.SubElement(gcbs, "pCBS").text = "{:.4f}".format(produto_servico.ibscbs_p_cbs or 0)
+        etree.SubElement(gcbs, "vCBS").text = "{:.2f}".format(produto_servico.ibscbs_v_cbs or 0)
+
+    def _serializar_gibscbs_mono(self, produto_servico, ibscbs):
+        """Serializa <gIBSCBSMono> para CSTs monofasicas (620).
+
+        Estrutura obrigatoria por NT 2025.002-RTC (type TMonofasia do
+        DFeTiposBasicos_v1.00.xsd, sequencia gMonoPadrao -> gMonoReten ->
+        gMonoRet -> gMonoDif -> vTotIBSMonoItem -> vTotCBSMonoItem). Para
+        CST 620 "Tributacao monofasica padrao" emitimos apenas <gMonoPadrao>
+        com os cinco campos na ordem do schema, seguido pelos dois totais
+        item-level que sao REQUERIDOS pelo schema (sem minOccurs=0):
+
+            <gIBSCBSMono>
+                <gMonoPadrao>
+                    <qBCMono>TDec1104RTC (4 casas)</qBCMono>
+                    <adRemIBS>TDec_0302_04RTC (4 casas)</adRemIBS>
+                    <adRemCBS>TDec_0302_04RTC (4 casas)</adRemCBS>
+                    <vIBSMono>TDec1302RTC (2 casas)</vIBSMono>
+                    <vCBSMono>TDec1302RTC (2 casas)</vCBSMono>
+                </gMonoPadrao>
+                <vTotIBSMonoItem>TDec1302RTC (2 casas)</vTotIBSMonoItem>
+                <vTotCBSMonoItem>TDec1302RTC (2 casas)</vTotCBSMonoItem>
+            </gIBSCBSMono>
+
+        IMPORTANT:
+        - O wrapper <gMonoPadrao> e obrigatorio. Antes da correcao da
+          DEV-1953 o grupo era emitido flat (sem o wrapper) e SEFAZ
+          rejeitava com cStat 225 "Falha no Schema XML da NFe (Elemento:
+          enviNFe/NFe[1]/infNFe/det[1]/imposto/IBSCBS/gIBSCBSMono/qBCMono)".
+        - A ordem <adRemCBS> antes de <vIBSMono> segue o schema oficial
+          (linhas 701-725 de DFeTiposBasicos_v1.00.xsd). A ordem anterior
+          (<vIBSMono> antes de <adRemCBS>) tambem violava o schema.
+        - <vTotIBSMonoItem> e <vTotCBSMonoItem> sao SIBLINGS de
+          <gMonoPadrao> (NAO filhos), ambos OBRIGATORIOS por schema (DEV-1954).
+          Sem eles SEFAZ rejeita com cStat 225 "Falha no Schema XML da NFe
+          (Elemento: ... gIBSCBSMono/)" (barra final indica fechamento).
+        """
+        gibscbs_mono = etree.SubElement(ibscbs, "gIBSCBSMono")
+        gmono_padrao = etree.SubElement(gibscbs_mono, "gMonoPadrao")
+        etree.SubElement(gmono_padrao, "qBCMono").text = "{:.4f}".format(
+            produto_servico.ibscbs_q_bc_mono or 0
+        )
+        etree.SubElement(gmono_padrao, "adRemIBS").text = "{:.4f}".format(
+            produto_servico.ibscbs_ad_rem_ibs or 0
+        )
+        etree.SubElement(gmono_padrao, "adRemCBS").text = "{:.4f}".format(
+            produto_servico.ibscbs_ad_rem_cbs or 0
+        )
+        etree.SubElement(gmono_padrao, "vIBSMono").text = "{:.2f}".format(
+            produto_servico.ibscbs_v_ibs_mono or 0
+        )
+        etree.SubElement(gmono_padrao, "vCBSMono").text = "{:.2f}".format(
+            produto_servico.ibscbs_v_cbs_mono or 0
+        )
+        # vTotIBSMonoItem / vTotCBSMonoItem: required siblings of <gMonoPadrao>
+        # per schema TMonofasia (DEV-1954). For a single-line mono item without
+        # retencao/diferimento, these equal vIBSMono/vCBSMono.
+        etree.SubElement(gibscbs_mono, "vTotIBSMonoItem").text = "{:.2f}".format(
+            produto_servico.ibscbs_v_tot_ibs_mono_item or 0
+        )
+        etree.SubElement(gibscbs_mono, "vTotCBSMonoItem").text = "{:.2f}".format(
+            produto_servico.ibscbs_v_tot_cbs_mono_item or 0
+        )
 
     def _serializar_is(self, produto_servico, tag_raiz):
         """Serializa <IS> (Imposto Seletivo) como filho direto de <imposto>.
@@ -1799,8 +1875,17 @@ class SerializacaoXML(Serializacao):
 
         # Reforma Tributaria - Totais IVA Dual (Group W03 - IBSCBSTot)
         # Type: TIBSCBSMonoTot (PL 010b DFeTiposBasicos_v1.00.xsd)
+        # ``has_mono`` is true when at least one item routed to <gIBSCBSMono>:
+        # SEFAZ rejects with cStat 1119 ("Total de IBS e CBS nao informado")
+        # when items emit monofasia but the IBSCBSTot/gMono total is missing.
+        # During Teste de Carga 2026, every ad rem is zero so the regular
+        # accumulators stay at 0; the count flag forces emission anyway.
+        has_mono = nota_fiscal.totais_mono_item_count > 0
         has_reforma = (
-            nota_fiscal.totais_vbc_ibscbs or nota_fiscal.totais_ibs or nota_fiscal.totais_cbs
+            nota_fiscal.totais_vbc_ibscbs
+            or nota_fiscal.totais_ibs
+            or nota_fiscal.totais_cbs
+            or has_mono
         )
         if has_reforma:
             ibscbs_tot = etree.SubElement(total, "IBSCBSTot")
@@ -1839,7 +1924,35 @@ class SerializacaoXML(Serializacao):
                 etree.SubElement(g_cbs, "vCredPres").text = "0.00"
                 etree.SubElement(g_cbs, "vCredPresCondSus").text = "0.00"
 
-            # gMono: not implemented yet (monofasia totals)
+            # gMono - totals da monofasia (DEV-1955)
+            # Per NT 2025.002-RTC schema TIBSCBSMonoTot, the <gMono> wrapper is
+            # itself optional (minOccurs=0) but, when present, ALL six children
+            # are REQUIRED (no minOccurs=0 inside). SEFAZ requires <gMono>
+            # whenever the NF-e contains items with <gIBSCBSMono>; omitting it
+            # raises cStat 1119 ("Total de IBS e CBS nao informado"). For the
+            # Teste de Carga 2026 scenario every value is "0.00", but the
+            # block itself must still be emitted.
+            if has_mono:
+                g_mono = etree.SubElement(ibscbs_tot, "gMono")
+                etree.SubElement(g_mono, "vIBSMono").text = "{:.2f}".format(
+                    nota_fiscal.totais_v_ibs_mono
+                )
+                etree.SubElement(g_mono, "vCBSMono").text = "{:.2f}".format(
+                    nota_fiscal.totais_v_cbs_mono
+                )
+                etree.SubElement(g_mono, "vIBSMonoReten").text = "{:.2f}".format(
+                    nota_fiscal.totais_v_ibs_mono_reten
+                )
+                etree.SubElement(g_mono, "vCBSMonoReten").text = "{:.2f}".format(
+                    nota_fiscal.totais_v_cbs_mono_reten
+                )
+                etree.SubElement(g_mono, "vIBSMonoRet").text = "{:.2f}".format(
+                    nota_fiscal.totais_v_ibs_mono_ret
+                )
+                etree.SubElement(g_mono, "vCBSMonoRet").text = "{:.2f}".format(
+                    nota_fiscal.totais_v_cbs_mono_ret
+                )
+
             # gEstornoCred: not implemented yet (estorno de credito totals)
 
         # Transporte
@@ -2165,50 +2278,22 @@ class SerializacaoQrcode(object):
 
         url = "p={}|{}".format(url, url_hash)
 
-        # url_chave -Texto com a URL de consulta por chave de acesso a ser impressa no DANFE NFC-e.
-        # Informar a URL da “Consulta por chave de acesso da NFC-e”.
-        # A mesma URL que deve estar informada no DANFE NFC-e para consulta por chave de acesso
-        lista_uf_padrao = ["PR", "CE", "RS", "RJ", "RO", "DF"]
-        if uf in lista_uf_padrao:
+        # As UFs abaixo divergem apenas em COMO montar o <qrCode>: para quais delas o caminho
+        # "QR" ja embute o host, e qual caminho vale por ambiente.
+        lista_uf_qr_sem_host = ["PR", "CE", "RS", "RJ", "RO", "DF", "MG"]
+        if uf in lista_uf_qr_sem_host:
             qrcode = NFCE[uf]["QR"] + url
-            url_chave = NFCE[uf]["URL"]
-        elif uf == "SP":
-            if tpamb == "1":
-                qrcode = NFCE[uf]["HTTPS"] + "www." + NFCE[uf]["QR"] + url
-                url_chave = NFCE[uf]["HTTPS"] + "www." + NFCE[uf]["URL"]
-            else:
-                qrcode = NFCE[uf]["HTTPS"] + "www.homologacao." + NFCE[uf]["QR"] + url
-                url_chave = NFCE[uf]["HTTPS"] + "www.homologacao." + NFCE[uf]["URL"]
-        # BA tem comportamento distindo para qrcode e url
-        elif uf == "BA":
-            if tpamb == "1":
-                qrcode = NFCE[uf]["HTTPS"] + NFCE[uf]["QR"] + url
-            else:
-                qrcode = NFCE[uf]["HOMOLOGACAO"] + NFCE[uf]["QR"] + url
-            url_chave = url_chave = NFCE[uf]["URL"]
-        # MG tem comportamento distintos para qrcode e url
-        elif uf == "MG":
-            qrcode = NFCE[uf]["QR"] + url
-            if tpamb == "1":
-                url_chave = NFCE[uf]["HTTPS"] + NFCE[uf]["URL"]
-            else:
-                url_chave = NFCE[uf]["HOMOLOGACAO"] + NFCE[uf]["URL"]
-        # AM tem comportamento distintos para qrcode e url
         elif uf == "AM":
-            if tpamb == "1":
-                qrcode = NFCE[uf]["HTTPS"] + NFCE[uf]["QR"] + url
-                url_chave = NFCE[uf]["HTTPS"] + NFCE[uf]["URL"]
-            else:
-                qrcode = NFCE[uf]["HTTPS"] + NFCE[uf]["QR_HOMOLOGACAO"] + url
-                url_chave = NFCE[uf]["HTTPS"] + NFCE[uf]["URL"]
-        # AC, RR, PA, SE
+            caminho_qr = NFCE[uf]["QR"] if tpamb == "1" else NFCE[uf]["QR_HOMOLOGACAO"]
+            qrcode = qrcode_host(uf, producao=tpamb == "1") + caminho_qr + url
+        # AC, AP, BA, ES, GO, MS, PA, PE, RR, SC, SE, SP
         else:
-            if tpamb == "1":
-                qrcode = NFCE[uf]["HTTPS"] + NFCE[uf]["QR"] + url
-                url_chave = NFCE[uf]["HTTPS"] + NFCE[uf]["URL"]
-            else:
-                qrcode = NFCE[uf]["HOMOLOGACAO"] + NFCE[uf]["QR"] + url
-                url_chave = NFCE[uf]["HOMOLOGACAO"] + NFCE[uf]["URL"]
+            qrcode = qrcode_host(uf, producao=tpamb == "1") + NFCE[uf]["QR"] + url
+
+        # <urlChave> e a URL da "Consulta por chave de acesso da NFC-e" impressa no DANFE
+        # NFC-e - registro oficial DIFERENTE do endereco do QR Code. url_consulta_chave
+        # devolve o valor completo; nunca concatene host aqui (DEV-2468).
+        url_chave = url_consulta_chave(uf, producao=tpamb == "1")
         # adicionta tag infNFeSupl com qrcode
         info = etree.Element("infNFeSupl")
         etree.SubElement(info, "qrCode").text = etree.CDATA(qrcode.strip())
@@ -2448,7 +2533,9 @@ class SerializacaoMDFe(Serializacao):
                     etree.SubElement(infCIOT, "CNPJ").text = item.cpfcnpj
 
         # Vale Pedágio
-        if modal_rodoviario.pedagio is not None:
+        # valePed must be omitted when there are no disp entries: an empty
+        # <valePed/> is rejected by the MDF-e modal schema (cStat 580).
+        if modal_rodoviario.pedagio:
             valePed = etree.SubElement(infANTT, "valePed")
             for num, item in enumerate(modal_rodoviario.pedagio):
                 disp = etree.SubElement(valePed, "disp")
@@ -2479,6 +2566,11 @@ class SerializacaoMDFe(Serializacao):
                     etree.SubElement(infContrato, "vContratoGlobal").text = "{:.2f}".format(
                         item.vContratoGlobal or 0
                     )
+
+        # infANTT is fully optional: omit it when no child was serialized
+        # (e.g. carga própria without RNTRC/CIOT/vale-pedágio/contratantes).
+        if len(infANTT) == 0:
+            rodo.remove(infANTT)
 
         # Veículo Tração
         if len(modal_rodoviario.veiculo_tracao) != 1:

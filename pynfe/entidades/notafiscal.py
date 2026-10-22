@@ -10,6 +10,12 @@ from pynfe.utils.flags import CODIGOS_ESTADOS, NF_STATUS
 
 from .base import CampoDeprecated, Entidade
 
+# CSTs IBS/CBS that route to <gIBSCBSMono> instead of <gIBSCBS>. Mirrors
+# the constant in pynfe.processamento.serializacao but defined here so the
+# NotaFiscal accumulator can detect monofasic items without importing the
+# serializer. Keep in sync with SerializacaoXML._IBSCBS_CST_MONOFASICO.
+_IBSCBS_CST_MONOFASICO = ("620",)
+
 
 class NotaFiscal(Entidade):
     # campos deprecados
@@ -310,6 +316,24 @@ class NotaFiscal(Entidade):
     totais_cbs = Decimal()
     totais_is = Decimal()
 
+    # Reforma Tributaria - Totais Monofasia (Group W03 - IBSCBSTot/gMono)
+    # Per NT 2025.002-RTC schema TIBSCBSMonoTot, when ANY item carries
+    # <gIBSCBSMono>, the IBSCBSTot wrapper MUST emit a <gMono> sibling with
+    # six TDec1302RTC values (all REQUIRED inside <gMono>): vIBSMono,
+    # vCBSMono, vIBSMonoReten, vCBSMonoReten, vIBSMonoRet, vCBSMonoRet.
+    # SEFAZ rejects with cStat 1119 ("Total de IBS e CBS nao informado")
+    # when items emit <gIBSCBSMono> but the totalizer omits <gMono>.
+    # ``totais_mono_item_count`` tracks the number of monofasic items so
+    # the serializer can decide to emit <gMono> even when all six values
+    # are zero (Teste de Carga 2026 scenario, where every ad rem is 0).
+    totais_v_ibs_mono = Decimal()  # sum of vTotIBSMonoItem (gMonoPadrao)
+    totais_v_cbs_mono = Decimal()  # sum of vTotCBSMonoItem (gMonoPadrao)
+    totais_v_ibs_mono_reten = Decimal()  # sum of vTotIBSMonoItem (gMonoReten)
+    totais_v_cbs_mono_reten = Decimal()  # sum of vTotCBSMonoItem (gMonoReten)
+    totais_v_ibs_mono_ret = Decimal()  # sum of vTotIBSMonoItem (gMonoRet)
+    totais_v_cbs_mono_ret = Decimal()  # sum of vTotCBSMonoItem (gMonoRet)
+    totais_mono_item_count = int()
+
     # Reforma Tributaria - cMunFGIBS (Group B)
     municipio_fato_gerador_ibs = str()
 
@@ -482,6 +506,21 @@ class NotaFiscal(Entidade):
         self.totais_ibs += obj.ibscbs_v_ibs
         self.totais_cbs += obj.ibscbs_v_cbs
         self.totais_is += obj.is_valor
+
+        # Reforma Tributaria - Totais Monofasia (IBSCBSTot/gMono per NT 2025.002-RTC)
+        # Aggregate item-level vTotIBSMonoItem / vTotCBSMonoItem so the
+        # serializer can emit <gMono> with the required totals. PyNFe today
+        # only supports <gMonoPadrao> at item level (see _serializar_gibscbs_mono),
+        # so the Reten/Ret accumulators stay at zero, but the schema requires
+        # all six fields to be emitted whenever <gMono> is present, so they
+        # are kept here to align with TIBSCBSMonoTot/gMono.
+        # ``totais_mono_item_count`` is incremented when CST routes to mono,
+        # giving the serializer a stable signal to emit <gMono> even if every
+        # value is zero (Teste de Carga 2026 scenario).
+        self.totais_v_ibs_mono += obj.ibscbs_v_tot_ibs_mono_item
+        self.totais_v_cbs_mono += obj.ibscbs_v_tot_cbs_mono_item
+        if obj.ibscbs_cst in _IBSCBS_CST_MONOFASICO:
+            self.totais_mono_item_count += 1
 
         # TODO calcular impostos aproximados
         # self.totais_tributos_aproximado += obj.tributos
@@ -1045,6 +1084,23 @@ class NotaFiscalProduto(Entidade):
     # gCBS - CBS federal
     ibscbs_p_cbs = Decimal()  # pCBS
     ibscbs_v_cbs = Decimal()  # vCBS
+
+    # gIBSCBSMono - Tributacao monofasica (CST 620)
+    # Emitted as <gIBSCBSMono> instead of <gIBSCBS> for CST 620 items.
+    # qBCMono = quantity in monophasic base unit (TDec_1104v)
+    # adRemIBS / adRemCBS = ad rem rate in BRL per unit (TDec_0302a10)
+    # vIBSMono / vCBSMono = final value in BRL
+    # vTotIBSMonoItem / vTotCBSMonoItem = item-level mono totals (TDec1302RTC). Per
+    # NT 2025.002-RTC schema TMonofasia, these are REQUIRED siblings of
+    # <gMonoPadrao> inside <gIBSCBSMono> (NOT children of <gMonoPadrao>). For a
+    # single-line item without retencao/diferimento, they equal vIBSMono/vCBSMono.
+    ibscbs_q_bc_mono = Decimal()  # qBCMono
+    ibscbs_ad_rem_ibs = Decimal()  # adRemIBS
+    ibscbs_v_ibs_mono = Decimal()  # vIBSMono
+    ibscbs_ad_rem_cbs = Decimal()  # adRemCBS
+    ibscbs_v_cbs_mono = Decimal()  # vCBSMono
+    ibscbs_v_tot_ibs_mono_item = Decimal()  # vTotIBSMonoItem
+    ibscbs_v_tot_cbs_mono_item = Decimal()  # vTotCBSMonoItem
 
     # IS (Imposto Seletivo) - Group UB-IS
     is_cst_selec = str()  # CSTSelec (2-digit)

@@ -31,7 +31,8 @@ setuptools.setup(
     },
     install_requires=[
         "pyopenssl>=23.0.0",
-        "requests",
+        "requests>=2.32.4",
+        "certifi>=2026.10.19",
         "lxml",
         "signxml",
     ],

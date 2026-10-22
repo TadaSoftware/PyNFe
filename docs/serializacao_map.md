@@ -1,4 +1,4 @@
-# Source Map: `serializacao.py` (2771 lines)
+# Source Map: `serializacao.py` (2881 lines)
 
 XML serialization of NF-e, NFC-e, NFS-e and MDF-e documents into SEFAZ-compliant XML format.
 
@@ -6,20 +6,20 @@ XML serialization of NF-e, NFC-e, NFS-e and MDF-e documents into SEFAZ-compliant
 
 | Class | Lines | Purpose |
 |-------|-------|---------|
-| `Serializacao` | 30-63 | Abstract base class (not instantiable directly) |
-| `SerializacaoXML` | 66-1860 | Main NF-e/NFC-e XML serialization |
-| `SerializacaoQrcode` | 2102-2206 | NFC-e QR Code generation |
-| `SerializacaoNfse` | 2209-2275 | NFS-e serialization (Betha/Ginfes) |
-| `SerializacaoQrcodeMDFe` | 2278-2301 | MDF-e QR Code generation |
-| `SerializacaoMDFe` | 2304-2771 | MDF-e XML serialization |
+| `Serializacao` | 31-65 | Abstract base class (not instantiable directly) |
+| `SerializacaoXML` | 67-2222 | Main NF-e/NFC-e XML serialization |
+| `SerializacaoQrcode` | 2225-2309 | NFC-e QR Code generation |
+| `SerializacaoNfse` | 2312-2378 | NFS-e serialization (Betha/Ginfes) |
+| `SerializacaoQrcodeMDFe` | 2381-2404 | MDF-e QR Code generation |
+| `SerializacaoMDFe` | 2407-2881 | MDF-e XML serialization |
 
 ---
 
-## `Serializacao` (base class) — Lines 30-63
+## `Serializacao` (base class) — Lines 31-65
 
 Abstract base for all serializers. Stores `_fonte_dados`, `_ambiente` (1=prod, 2=homolog), `_contingencia`, `_so_cpf`.
 
-## `SerializacaoXML` — Lines 66-1860
+## `SerializacaoXML` — Lines 67-2222
 
 ### Exported Methods
 | Method | Lines | Purpose |
@@ -102,19 +102,21 @@ Abstract base for all serializers. Stores `_fonte_dados`, `_ambiente` (1=prod, 2
 
 ---
 
-## `SerializacaoQrcode` — Lines 2102-2206
+## `SerializacaoQrcode` — Lines 2225-2309
 
-Generates NFC-e QR Code URL. Handles online/offline modes and state-specific URL patterns (SP, BA, MG, etc.).
+Generates the `<infNFeSupl>` block. `<qrCode>` handles online/offline modes and the
+state-specific host/path patterns; `<urlChave>` is a separate registry and comes straight from
+`webservices.url_consulta_chave` — never concatenate a host onto it (DEV-2468, rejeicao 878).
 
-## `SerializacaoNfse` — Lines 2209-2275
+## `SerializacaoNfse` — Lines 2312-2378
 
 Delegates to Betha or Ginfes serializers. Methods: `gerar`, `gerar_lote`, `consultar_nfse`, `consultar_lote`, `consultar_rps`, `consultar_situacao_lote`, `cancelar`.
 
-## `SerializacaoQrcodeMDFe` — Lines 2278-2301
+## `SerializacaoQrcodeMDFe` — Lines 2381-2404
 
 Generates MDF-e QR Code URL using SVRS endpoint.
 
-## `SerializacaoMDFe` — Lines 2304-2771
+## `SerializacaoMDFe` — Lines 2407-2881
 
 ### Methods
 | Method | Lines | Purpose |

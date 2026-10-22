@@ -1,2 +1,2 @@
 pytest
-ruff
+ruff==0.12.5

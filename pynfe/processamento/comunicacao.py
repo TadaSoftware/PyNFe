@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+import base64
 import datetime
+import gzip
 import re
 
 import requests
@@ -39,8 +41,12 @@ class Comunicacao(object):
     certificado = None
     certificado_senha = None
     url = None
+    # Passed to requests as `verify`: True, False or a CA bundle path.
+    # False keeps the historical behavior (no SEFAZ server certificate validation).
+    verify = False
 
-    def __init__(self, uf, certificado, certificado_senha, homologacao=False):
+    def __init__(self, uf, certificado, certificado_senha, homologacao=False, verify=False):
+        self.verify = verify
         self.uf = uf
         self.certificado = certificado
         self.certificado_senha = certificado_senha
@@ -601,7 +607,7 @@ class ComunicacaoSefaz(Comunicacao):
                 xml,
                 headers=self._post_header(),
                 cert=chave_cert,
-                verify=False,
+                verify=self.verify,
                 timeout=timeout,
             )
             result.encoding = "utf-8"
@@ -876,39 +882,34 @@ class ComunicacaoMDFe(Comunicacao):
         Método para realizar autorização do manifesto
         :param manifesto: XML assinado
         :param id_lote: Id do lote - numero autoincremental gerado pelo sistema
+            (usado apenas no envio assincrono)
         :param ind_sinc: Indicador de sincrono e assincrono, 0 para assincrono, 1 para sincrono
         :return:  Uma tupla que em caso de sucesso,
             retorna xml com manifesto e protocolo de autorização.
-        Caso contrário, envia todo o soap de resposta da Sefaz para decisão do usuário.
+        Caso contrário, retorna o retMDFe parseado (quando a SEFAZ respondeu) ou a
+        resposta HTTP crua para decisão do usuário.
         """
-        # url do serviço
-        if ind_sinc == 0:
-            url = self._get_url(consulta="RECEPCAO")
-        elif ind_sinc == 1:
-            url = self._get_url(consulta="RECEPCAO_SINC")
-        else:
-            raise "ind_sinc deve ser 0=assincrono ou 1=sincrono"
+        if ind_sinc == 1:
+            return self._autorizacao_sincrona(manifesto)
+        if ind_sinc != 0:
+            raise ValueError("ind_sinc deve ser 0=assincrono ou 1=sincrono")
+
+        # Envio assincrono: lote enviMDFe para o servico MDFeRecepcao
+        url = self._get_url(consulta="RECEPCAO")
 
         # Monta XML do corpo da requisição
         raiz = etree.Element("enviMDFe", xmlns=NAMESPACE_MDFE, versao=VERSAO_MDFE)
         etree.SubElement(raiz, "idLote").text = str(
             id_lote
         )  # numero autoincremental gerado pelo sistema
-        # etree.SubElement(raiz, 'indSinc').text = str(ind_sinc)
-        # # 0 para assincrono, 1 para sincrono
         raiz.append(manifesto)
 
         # Monta XML para envio da requisição
-        if ind_sinc == 0:
-            xml = self._construir_xml_soap("MDFeRecepcao", raiz)
-        elif ind_sinc == 1:
-            xml = self._construir_xml_soap("MDFeRecepcaoSinc", raiz)
+        xml = self._construir_xml_soap("MDFeRecepcao", raiz)
 
         # Faz request no Servidor da Sefaz
         retorno = self._post(url, xml)
 
-        # Em caso de sucesso, retorna xml com o mdfe e protocolo de autorização.
-        # Caso contrário, envia todo o soap de resposta da Sefaz para decisão do usuário.
         if retorno.status_code == 200:
             # namespace
             ns = {"ns": NAMESPACE_MDFE}
@@ -919,41 +920,59 @@ class ComunicacaoMDFe(Comunicacao):
                 # em SP retorno.text apresenta erro
                 prot = etree.fromstring(retorno.content)
 
-            if ind_sinc == 1:
-                try:
-                    # Protocolo com envio OK
-                    inf_prot = prot[1][0]
-                    lote_status = inf_prot.xpath("ns:retEnviMDFe/ns:cStat", namespaces=ns)[0].text
-
-                    # Lote processado
-                    if lote_status == self._edoc_situacao_lote_processado:
-                        prot_mdfe = inf_prot.xpath("ns:retEnviMDFe/ns:protMDFe", namespaces=ns)[0]
-                        status = prot_mdfe.xpath("ns:infProt/ns:cStat", namespaces=ns)[0].text
-
-                        # autorizado uso do MDF-e
-                        # retorna xml final (protMDFe + MDFe)
-                        if status in self._edoc_situacao_ja_enviado:  # if status == '100':
-                            raiz = etree.Element(
-                                "mdfeProc", xmlns=NAMESPACE_MDFE, versao=VERSAO_MDFE
-                            )
-                            raiz.append(manifesto)
-                            raiz.append(prot_mdfe)
-                            return 0, raiz
-                except IndexError:
-                    # Protocolo com algum erro no Envio
-                    return 1, retorno, manifesto
-            else:
-                # Retorna id do protocolo para posterior consulta em caso de sucesso.
-                rec = prot[1][0]
-                status = rec.xpath("ns:retEnviMDFe/ns:cStat", namespaces=ns)[0].text
-                # Lote Recebido com Sucesso!
-                if status in (
-                    self._edoc_situacao_arquivo_recebido_com_sucesso,
-                    self._edoc_situacao_em_processamento,
-                ):
-                    nrec = rec.xpath("ns:retEnviMDFe/ns:infRec/ns:nRec", namespaces=ns)[0].text
-                    return 0, nrec, manifesto
+            # Retorna id do protocolo para posterior consulta em caso de sucesso.
+            rec = prot[1][0]
+            status = rec.xpath("ns:retEnviMDFe/ns:cStat", namespaces=ns)[0].text
+            # Lote Recebido com Sucesso!
+            if status in (
+                self._edoc_situacao_arquivo_recebido_com_sucesso,
+                self._edoc_situacao_em_processamento,
+            ):
+                nrec = rec.xpath("ns:retEnviMDFe/ns:infRec/ns:nRec", namespaces=ns)[0].text
+                return 0, nrec, manifesto
         return 1, retorno, manifesto
+
+    def _autorizacao_sincrona(self, manifesto):
+        """Envia o MDF-e para o servico sincrono MDFeRecepcaoSinc.
+
+        Conforme o MOC do MDF-e, o servico de recepcao sincrona recebe o XML
+        assinado do <MDFe> compactado com gzip e codificado em base64 como
+        conteudo texto de mdfeDadosMsg — sem o envelope <enviMDFe>/<idLote>
+        usado no envio assincrono.
+        """
+        url = self._get_url(consulta="RECEPCAO_SINC")
+
+        mdfe_compactado = base64.b64encode(gzip.compress(etree.tostring(manifesto))).decode("ascii")
+        xml = self._construir_xml_soap("MDFeRecepcaoSinc", mdfe_compactado)
+
+        retorno = self._post(url, xml, content_type=b"application/soap+xml; charset=utf-8;")
+
+        if retorno.status_code != 200:
+            return 1, retorno, manifesto
+
+        ns = {"ns": NAMESPACE_MDFE}
+        try:
+            envelope = etree.fromstring(retorno.content)
+            ret_mdfe = envelope.xpath("//ns:retMDFe", namespaces=ns)[0]
+        except (ValueError, IndexError, etree.XMLSyntaxError):
+            # Resposta nao parseavel: devolve a resposta HTTP crua
+            return 1, retorno, manifesto
+
+        # Rejeicao pode vir no nivel do retMDFe (ex.: 580, sem protMDFe)
+        # ou no nivel do protMDFe/infProt.
+        prot_mdfe_list = ret_mdfe.xpath("ns:protMDFe", namespaces=ns)
+        if prot_mdfe_list:
+            prot_mdfe = prot_mdfe_list[0]
+            status = prot_mdfe.xpath("ns:infProt/ns:cStat", namespaces=ns)
+            # autorizado uso do MDF-e: retorna xml final (MDFe + protMDFe)
+            if status and status[0].text in self._edoc_situacao_ja_enviado:
+                raiz = etree.Element("mdfeProc", xmlns=NAMESPACE_MDFE, versao=VERSAO_MDFE)
+                raiz.append(manifesto)
+                raiz.append(prot_mdfe)
+                return 0, raiz
+
+        # Devolve o retMDFe parseado para o chamador consultar cStat/xMotivo
+        return 1, ret_mdfe, manifesto
 
     def status_servico(self):
         url = self._get_url("STATUS")
@@ -1037,16 +1056,17 @@ class ComunicacaoMDFe(Comunicacao):
 
         a = etree.SubElement(body, self._envio_mensagem, xmlns=self._namespace_metodo + metodo)
 
-        # if metodo == 'MDFeRecepcaoSinc':
-        #     body_base64 = base64.b16encode(a).decode()
-
-        a.append(dados)
+        if isinstance(dados, str):
+            # payload compactado (gzip+base64) vai como texto de mdfeDadosMsg
+            a.text = dados
+        else:
+            a.append(dados)
         return raiz
 
-    def _post_header(self, soap_webservice_method=False):
+    def _post_header(self, soap_webservice_method=False, content_type=None):
         """Retorna um dicionário com os atributos para o cabeçalho da requisição HTTP"""
         header = {
-            b"content-type": b"text/xml; charset=utf-8;",
+            b"content-type": content_type or b"text/xml; charset=utf-8;",
         }
 
         # PE é a únca UF que exige SOAPAction no header
@@ -1060,7 +1080,7 @@ class ComunicacaoMDFe(Comunicacao):
 
         return header
 
-    def _post(self, url, xml):
+    def _post(self, url, xml, content_type=None):
         certificado_a1 = CertificadoA1(self.certificado)
         chave, cert = certificado_a1.separar_arquivo(self.certificado_senha, caminho=True)
         chave_cert = (cert, chave)
@@ -1084,9 +1104,9 @@ class ComunicacaoMDFe(Comunicacao):
             result = requests.post(
                 url,
                 xml,
-                headers=self._post_header(),
+                headers=self._post_header(content_type=content_type),
                 cert=chave_cert,
-                verify=False,
+                verify=self.verify,
                 timeout=50,
             )
             result.encoding = "utf-8"
@@ -1334,7 +1354,7 @@ class ComunicacaoCTe(Comunicacao):
                 xml,
                 headers=self._post_header(),
                 cert=chave_cert,
-                verify=False,
+                verify=self.verify,
                 timeout=300,
             )
             result.encoding = "utf-8"

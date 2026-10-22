@@ -1,98 +1,133 @@
-# Reforma Tributaria - IBS/CBS (NT 2025.002-RTC)
+# Tax Reform (Reforma Tributaria) - IBS/CBS (NT 2025.002-RTC)
 
-Suporte ao IVA Dual brasileiro conforme a Emenda Constitucional 132/2023, Lei Complementar 214/2025 e Nota Tecnica NT 2025.002-RTC.
+Support for the Brazilian Dual VAT (IVA Dual) per Constitutional Amendment 132/2023, Complementary Law 214/2025 and Technical Note NT 2025.002-RTC.
 
-## Contexto
+## Context
 
-A Reforma Tributaria substitui gradualmente cinco tributos por um modelo de IVA Dual:
+The Tax Reform gradually replaces five taxes with a Dual VAT model:
 
-| Imposto | Tipo | Substitui | Competencia | Inicio |
+| Tax | Type | Replaces | Jurisdiction | Start |
 |---------|------|-----------|-------------|--------|
-| **CBS** (Contribuicao sobre Bens e Servicos) | Federal | PIS, COFINS | Uniao | 2026 (teste 0,9%) |
-| **IBS** (Imposto sobre Bens e Servicos) | Subnacional | ICMS, ISS | Estados + Municipios | 2026 (teste 0,1% UF) |
-| **IS** (Imposto Seletivo) | Extrafiscal | IPI (parcial) | Uniao | **2027** |
+| **CBS** (Contribuicao sobre Bens e Servicos) | Federal | PIS, COFINS | Union | 2026 (test 0.9%) |
+| **IBS** (Imposto sobre Bens e Servicos) | Subnational | ICMS, ISS | States + Municipalities | 2026 (test 0.1% UF) |
+| **IS** (Imposto Seletivo) | Extrafiscal | IPI (partial) | Union | **2027** |
 
-> **IBS e dividido em duas parcelas**: IBS-UF (estadual) e IBS-Mun (municipal), informadas separadamente no XML.
+> **IBS is split into two parts**: IBS-UF (state) and IBS-Mun (municipal), reported separately in the XML.
 
-### Cronograma de transicao
+### Transition schedule
 
-- **2026**: Fase de testes — CBS 0,9%, IBS-UF 0,1%, IBS-Mun 0%. Obrigatorio para CRT=3.
-- **2027**: CBS em aliquota plena. IS entra em vigor. Split Payment inicia.
-- **2029-2032**: Reducao gradual de ICMS/ISS, aumento proporcional do IBS.
-- **2033**: Extincao completa de ICMS, ISS, PIS, COFINS e IPI.
+- **2026**: Test phase — CBS 0.9%, IBS-UF 0.1%, IBS-Mun 0%. Mandatory for CRT=3.
+- **2027**: CBS at full rate. IS takes effect. Split Payment starts.
+- **2029-2032**: Gradual reduction of ICMS/ISS, proportional increase of IBS.
+- **2033**: Full extinction of ICMS, ISS, PIS, COFINS and IPI.
 
-Durante a transicao, os impostos legados (ICMS, PIS, COFINS) **coexistem** com os novos (IBS, CBS) na mesma NF-e.
+During the transition, the legacy taxes (ICMS, PIS, COFINS) **coexist** with the new ones (IBS, CBS) in the same NF-e.
 
-## Escopo da implementacao
+## Implementation scope
 
-A implementacao cobre:
+The implementation covers:
 
-- Grupo `<IBSCBS>` como filho direto de `<imposto>` (sem wrapper `<impostoMisto>`)
-- CSTs de 3 digitos conforme NT 2025.002-RTC (ex: "000", "010", "222")
-- `cClassTrib` (codigo de classificacao tributaria de 6 digitos)
-- IBS dividido em `gIBSUF` e `gIBSMun`
-- Base de calculo compartilhada (`vBC`) para IBS e CBS
-- Totais em `<IBSCBSTot>` separado de `<ICMSTot>`
-- `cMunFGIBS` no cabecalho (Group B)
-- `vNF` **NAO inclui** IBS/CBS (proibido em 2025-2026)
-- `finNFe=5` (Nota de Debito) e `finNFe=6` (Nota de Credito)
-- Campos de entidade para IS (Imposto Seletivo) — **armazenados mas nao serializados** ate o schema suportar (2027)
+- Grupo `<IBSCBS>` as a direct child of `<imposto>` (no `<impostoMisto>` wrapper)
+- 3-digit CSTs per NT 2025.002-RTC (e.g. "000", "010", "222")
+- `cClassTrib` (6-digit tax classification code)
+- IBS split into `gIBSUF` and `gIBSMun`
+- Shared tax base (`vBC`) for IBS and CBS
+- Totals in `<IBSCBSTot>`, separate from `<ICMSTot>`
+- `cMunFGIBS` in the header (Group B)
+- `vNF` **does NOT include** IBS/CBS (forbidden in 2025-2026)
+- `finNFe=5` (Debit Note) and `finNFe=6` (Credit Note)
+- Entity fields for IS (Selective Tax) — **stored but not serialized** until the schema supports it (2027)
+- Single-phase taxation (`gIBSCBSMono`) for CST 620 — fuels and other products under the IBS/CBS single-phase regime
 
-**Nao inclui** (ainda): Split Payment, cashback, eventos de apuracao assistida, Grupo VB (total do item), Grupo VC (referenciamento de DF-e), Grupo BB (antecipacao de pagamento), tributacao monofasica (`gIBSCBSMono`), diferimento per-item (`gDif`), devolucao de tributos per-item (`gDevTrib`), reducao de aliquota per-item (`gRed`), estorno de credito (`gEstornoCred`), credito presumido per-item (`gCredPresOper`, `gCredPresIBSZFM`).
+**Does not include** (yet): Split Payment, cashback, assisted assessment events, Group VB (item total), Group VC (DF-e referencing), Group BB (payment anticipation), per-item deferral (`gDif`), per-item tax refund (`gDevTrib`), per-item rate reduction (`gRed`), credit reversal (`gEstornoCred`), per-item presumed credit (`gCredPresOper`, `gCredPresIBSZFM`).
 
-## CSTs disponiveis
+### Single-phase taxation — `gIBSCBSMono`
 
-### IBS e CBS — CST de 3 digitos (compartilham a mesma tabela)
+For products with CST 620 (fuels, etc.) the group emitted inside `<IBSCBS>` is `<gIBSCBSMono>` instead of `<gIBSCBS>`. Per the official schema (`DFeTiposBasicos_v1.00.xsd`, type `TMonofasia`), the five single-phase fields live under the mandatory `<gMonoPadrao>` wrapper, in the order defined by the schema. In addition, `<vTotIBSMonoItem>` and `<vTotCBSMonoItem>` are SIBLINGS of `<gMonoPadrao>` (NOT children) and both are MANDATORY per schema (no `minOccurs=0`):
+
+```xml
+<gIBSCBSMono>
+  <gMonoPadrao>
+    <qBCMono>18.0000</qBCMono>
+    <adRemIBS>0.1000</adRemIBS>
+    <adRemCBS>0.0000</adRemCBS>
+    <vIBSMono>1.80</vIBSMono>
+    <vCBSMono>0.00</vCBSMono>
+  </gMonoPadrao>
+  <vTotIBSMonoItem>1.80</vTotIBSMonoItem>
+  <vTotCBSMonoItem>0.00</vTotCBSMonoItem>
+</gIBSCBSMono>
+```
+
+| Field | Type | Description |
+|-------|------|-----------|
+| `qBCMono` | TDec1104RTC | Quantity taxed on the single-phase base |
+| `adRemIBS` | TDec_0302_04RTC | IBS ad rem rate (BRL amount per unit) |
+| `adRemCBS` | TDec_0302_04RTC | CBS ad rem rate (BRL amount per unit) |
+| `vIBSMono` | TDec1302RTC | Single-phase IBS amount |
+| `vCBSMono` | TDec1302RTC | Single-phase CBS amount |
+| `vTotIBSMonoItem` | TDec1302RTC | Item single-phase IBS total (sibling of `gMonoPadrao`) |
+| `vTotCBSMonoItem` | TDec1302RTC | Item single-phase CBS total (sibling of `gMonoPadrao`) |
+
+Attributes on the `NotaFiscalProduto` entity: `ibscbs_q_bc_mono`, `ibscbs_ad_rem_ibs`, `ibscbs_v_ibs_mono`, `ibscbs_ad_rem_cbs`, `ibscbs_v_cbs_mono`, `ibscbs_v_tot_ibs_mono_item`, `ibscbs_v_tot_cbs_mono_item`.
+
+For single-line items (no withholding / prior withholding / deferral), `vTotIBSMonoItem == vIBSMono` and `vTotCBSMonoItem == vCBSMono`. When the caller does not provide the attributes, the serializer emits `0.00` (safe default during the 2026 Load Test with zeroed ad rem rates).
+
+During the 2026 Load Test SEFAZ has not published the ad rem rates yet, so the values may be zero — the `gIBSCBSMono` group is still emitted correctly.
+
+## Available CSTs
+
+### IBS and CBS — 3-digit CST (they share the same table)
 
 ```python
 from pynfe.utils.flags import IBS_CBS_TIPOS_TRIBUTACAO
 ```
 
-| CST | Descricao |
+| CST | Description |
 |-----|-----------|
-| 000 | Tributacao integral |
-| 010 | Tributacao com aliquota reduzida |
-| 100 | Tributacao com suspensao |
-| 110 | Imunidade — exportacao |
-| 200 | Tributacao com diferimento |
-| 222 | Isencao |
-| 300 | Nao incidencia |
-| 400 | Tributacao por substituicao |
-| 410 | Tributacao com aliquota zero |
-| 510 | Tributacao integral — regime especifico |
-| 600 | Tributacao monofasica — incidencia padrao |
-| 620 | Tributacao monofasica — demais operacoes |
-| 800 | Credito presumido |
-| 810 | Credito presumido — ZFM |
-| 900 | Outros |
+| 000 | Full taxation |
+| 010 | Taxation at a reduced rate |
+| 100 | Taxation with suspension |
+| 110 | Immunity — export |
+| 200 | Taxation with deferral |
+| 222 | Exemption |
+| 300 | Non-incidence |
+| 400 | Taxation by substitution |
+| 410 | Taxation at zero rate |
+| 510 | Full taxation — specific regime |
+| 600 | Single-phase taxation — standard incidence |
+| 620 | Single-phase taxation — other operations |
+| 800 | Presumed credit |
+| 810 | Presumed credit — ZFM |
+| 900 | Other |
 
-### IS (Imposto Seletivo) — CSTIS de 2 digitos
+### IS (Imposto Seletivo, Selective Tax) — 2-digit CSTIS
 
 ```python
 from pynfe.utils.flags import IS_TIPOS_TRIBUTACAO
 ```
 
-| CSTIS | Descricao |
+| CSTIS | Description |
 |-------|-----------|
-| 01 | Tributada integralmente |
-| 02 | Tributada com reducao |
-| 03 | Isencao |
-| 04 | Imunidade |
-| 05 | Suspensao |
-| 06 | Diferimento |
-| 90 | Outros |
+| 01 | Fully taxed |
+| 02 | Taxed with reduction |
+| 03 | Exemption |
+| 04 | Immunity |
+| 05 | Suspension |
+| 06 | Deferral |
+| 90 | Other |
 
-> **IS nao e serializado no XML em 2026.** O schema SEFAZ (PL 010b) inclui o tipo `TIS` com tags `CSTIS`, `cClassTribIS`, `vBCIS`, `pIS`, `vIS`, porem a serializacao esta desabilitada ate 2027. Os campos de entidade estao prontos e serao ativados quando necessario.
+> **IS is not serialized in the XML in 2026.** The SEFAZ schema (PL 010b) includes the `TIS` type with tags `CSTIS`, `cClassTribIS`, `vBCIS`, `pIS`, `vIS`, but serialization is disabled until 2027. The entity fields are ready and will be enabled when needed.
 
-## Como usar
+## How to use
 
-### Exemplo: produto com IBSCBS (tributacao integral CST 000)
+### Example: product with IBSCBS (full taxation, CST 000)
 
 ```python
 from decimal import Decimal
 
 nota_fiscal.adicionar_produto_servico(
-    # ... campos obrigatorios do produto ...
+    # ... mandatory product fields ...
     codigo="001",
     descricao="Produto exemplo",
     ncm="99999999",
@@ -108,7 +143,7 @@ nota_fiscal.adicionar_produto_servico(
     ean_tributavel="SEM GTIN",
     ind_total=1,
 
-    # ... impostos legados (ICMS, PIS, COFINS) continuam obrigatorios ...
+    # ... legacy taxes (ICMS, PIS, COFINS) are still mandatory ...
     icms_modalidade="00",
     icms_origem=0,
     icms_csosn="",
@@ -118,18 +153,18 @@ nota_fiscal.adicionar_produto_servico(
     cofins_valor=Decimal("0.00"),
 
     # IBSCBS — Group UB
-    ibscbs_cst="000",                           # CST 3 digitos
-    ibscbs_c_class_trib="000001",               # cClassTrib 6 digitos
-    ibscbs_vbc=Decimal("1000.00"),              # Base de calculo compartilhada IBS+CBS
-    ibscbs_p_ibs_uf=Decimal("0.1000"),          # Aliquota IBS UF (4 casas)
-    ibscbs_v_ibs_uf=Decimal("1.00"),            # Valor IBS UF
-    ibscbs_p_ibs_mun=Decimal("0.0000"),         # Aliquota IBS Municipal
-    ibscbs_v_ibs_mun=Decimal("0.00"),           # Valor IBS Municipal
-    ibscbs_v_ibs=Decimal("1.00"),               # Valor total IBS (UF + Mun)
-    ibscbs_p_cbs=Decimal("0.9000"),             # Aliquota CBS (4 casas)
-    ibscbs_v_cbs=Decimal("9.00"),               # Valor CBS
+    ibscbs_cst="000",                           # 3-digit CST
+    ibscbs_c_class_trib="000001",               # 6-digit cClassTrib
+    ibscbs_vbc=Decimal("1000.00"),              # Shared IBS+CBS tax base
+    ibscbs_p_ibs_uf=Decimal("0.1000"),          # IBS UF rate (4 decimals)
+    ibscbs_v_ibs_uf=Decimal("1.00"),            # IBS UF amount
+    ibscbs_p_ibs_mun=Decimal("0.0000"),         # Municipal IBS rate
+    ibscbs_v_ibs_mun=Decimal("0.00"),           # Municipal IBS amount
+    ibscbs_v_ibs=Decimal("1.00"),               # Total IBS amount (UF + Mun)
+    ibscbs_p_cbs=Decimal("0.9000"),             # CBS rate (4 decimals)
+    ibscbs_v_cbs=Decimal("9.00"),               # CBS amount
 
-    # IS — armazenado na entidade mas NAO serializado no XML (2026)
+    # IS — stored on the entity but NOT serialized in the XML (2026)
     # is_cst_selec="01",
     # is_c_class_trib="010001",
     # is_vbc=Decimal("1000.00"),
@@ -138,93 +173,93 @@ nota_fiscal.adicionar_produto_servico(
 )
 ```
 
-### Exemplo: produto isento (CST 222)
+### Example: exempt product (CST 222)
 
 ```python
 nota_fiscal.adicionar_produto_servico(
-    # ... campos do produto ...
+    # ... product fields ...
 
-    # IBSCBS isento — apenas CST e cClassTrib, sem valores
+    # Exempt IBSCBS — only CST and cClassTrib, no amounts
     ibscbs_cst="222",
     ibscbs_c_class_trib="000002",
 )
 ```
 
-### Exemplo: sem reforma tributaria (compatibilidade retroativa)
+### Example: without the tax reform (backward compatibility)
 
-Se nenhum campo `ibscbs_*` for informado, o grupo `<IBSCBS>` **nao e emitido** no XML. Isso garante compatibilidade total com NF-e que nao precisam dos novos impostos.
+If no `ibscbs_*` field is provided, the `<IBSCBS>` group **is not emitted** in the XML. This guarantees full compatibility with NF-e that do not need the new taxes.
 
 ```python
-# Produto sem campos de reforma = XML identico ao anterior
+# Product without reform fields = XML identical to before
 nota_fiscal.adicionar_produto_servico(
-    # ... apenas campos legados (ICMS, PIS, COFINS) ...
+    # ... only legacy fields (ICMS, PIS, COFINS) ...
 )
 ```
 
-### cMunFGIBS no cabecalho
+### cMunFGIBS in the header
 
 ```python
 nota_fiscal = NotaFiscal(
-    # ... demais campos ...
-    municipio_fato_gerador_ibs="4118402",  # Codigo IBGE — gera <cMunFGIBS> no <ide>
+    # ... other fields ...
+    municipio_fato_gerador_ibs="4118402",  # IBGE code — generates <cMunFGIBS> in <ide>
 )
 ```
 
-## Campos disponiveis
+## Available fields
 
-### Campos do produto (`adicionar_produto_servico`)
+### Product fields (`adicionar_produto_servico`)
 
 #### IBSCBS (Group UB)
 
-| Campo | Tipo | Descricao |
+| Field | Type | Description |
 |-------|------|-----------|
-| `ibscbs_cst` | `str` | CST 3 digitos (ex: "000", "222") |
-| `ibscbs_c_class_trib` | `str` | cClassTrib 6 digitos (classificacao tributaria) |
-| `ibscbs_vbc` | `Decimal` | Base de calculo compartilhada IBS + CBS |
-| `ibscbs_p_ibs_uf` | `Decimal` | Aliquota IBS estadual (4 casas decimais) |
-| `ibscbs_v_ibs_uf` | `Decimal` | Valor IBS estadual |
-| `ibscbs_p_ibs_mun` | `Decimal` | Aliquota IBS municipal (4 casas decimais) |
-| `ibscbs_v_ibs_mun` | `Decimal` | Valor IBS municipal |
-| `ibscbs_v_ibs` | `Decimal` | Valor total IBS (UF + Mun) |
-| `ibscbs_p_cbs` | `Decimal` | Aliquota CBS (4 casas decimais) |
-| `ibscbs_v_cbs` | `Decimal` | Valor CBS |
+| `ibscbs_cst` | `str` | 3-digit CST (e.g. "000", "222") |
+| `ibscbs_c_class_trib` | `str` | 6-digit cClassTrib (tax classification) |
+| `ibscbs_vbc` | `Decimal` | Shared IBS + CBS tax base |
+| `ibscbs_p_ibs_uf` | `Decimal` | State IBS rate (4 decimal places) |
+| `ibscbs_v_ibs_uf` | `Decimal` | State IBS amount |
+| `ibscbs_p_ibs_mun` | `Decimal` | Municipal IBS rate (4 decimal places) |
+| `ibscbs_v_ibs_mun` | `Decimal` | Municipal IBS amount |
+| `ibscbs_v_ibs` | `Decimal` | Total IBS amount (UF + Mun) |
+| `ibscbs_p_cbs` | `Decimal` | CBS rate (4 decimal places) |
+| `ibscbs_v_cbs` | `Decimal` | CBS amount |
 
-#### IS (Imposto Seletivo) — armazenado, nao serializado em 2026
+#### IS (Selective Tax) — stored, not serialized in 2026
 
-| Campo | XML Tag | Descricao |
+| Field | XML Tag | Description |
 |-------|---------|-----------|
-| `is_cst_selec` | `CSTIS` | CSTIS 2 digitos (ex: "01", "02") |
-| `is_c_class_trib` | `cClassTribIS` | cClassTribIS 6 digitos |
-| `is_vbc` | `vBCIS` | Base de calculo IS |
-| `is_aliquota` | `pIS` | Aliquota IS (4 casas decimais) |
-| `is_valor` | `vIS` | Valor IS |
+| `is_cst_selec` | `CSTIS` | 2-digit CSTIS (e.g. "01", "02") |
+| `is_c_class_trib` | `cClassTribIS` | 6-digit cClassTribIS |
+| `is_vbc` | `vBCIS` | IS tax base |
+| `is_aliquota` | `pIS` | IS rate (4 decimal places) |
+| `is_valor` | `vIS` | IS amount |
 
-### Totais da nota fiscal (acumulados automaticamente)
+### Invoice totals (accumulated automatically)
 
-| Campo | XML Path em `IBSCBSTot` | Descricao |
+| Field | XML path in `IBSCBSTot` | Description |
 |-------|-------------------------|-----------|
-| `totais_vbc_ibscbs` | `vBCIBSCBS` | Soma de `ibscbs_vbc` de todos os produtos |
-| `totais_ibs_uf` | `gIBS/gIBSUF/vIBSUF` | Soma de `ibscbs_v_ibs_uf` de todos os produtos |
-| `totais_ibs_mun` | `gIBS/gIBSMun/vIBSMun` | Soma de `ibscbs_v_ibs_mun` de todos os produtos |
-| `totais_ibs` | `gIBS/vIBS` | Soma de `ibscbs_v_ibs` de todos os produtos |
-| `totais_cbs` | `gCBS/vCBS` | Soma de `ibscbs_v_cbs` de todos os produtos |
-| `totais_is` | *(nao emitido)* | Soma de `is_valor` — acumulado internamente, nao no XML |
+| `totais_vbc_ibscbs` | `vBCIBSCBS` | Sum of `ibscbs_vbc` across all products |
+| `totais_ibs_uf` | `gIBS/gIBSUF/vIBSUF` | Sum of `ibscbs_v_ibs_uf` across all products |
+| `totais_ibs_mun` | `gIBS/gIBSMun/vIBSMun` | Sum of `ibscbs_v_ibs_mun` across all products |
+| `totais_ibs` | `gIBS/vIBS` | Sum of `ibscbs_v_ibs` across all products |
+| `totais_cbs` | `gCBS/vCBS` | Sum of `ibscbs_v_cbs` across all products |
+| `totais_is` | *(not emitted)* | Sum of `is_valor` — accumulated internally, not in the XML |
 
-Os totais sao acumulados automaticamente ao chamar `adicionar_produto_servico()`.
+Totals are accumulated automatically when calling `adicionar_produto_servico()`.
 
-> **IMPORTANTE**: IBS/CBS/IS **NAO sao somados** ao `vNF` (proibido em 2025-2026 conforme NT 2025.002-RTC).
+> **IMPORTANT**: IBS/CBS/IS **are NOT added** to `vNF` (forbidden in 2025-2026 per NT 2025.002-RTC).
 
-### Campo do cabecalho
+### Header field
 
-| Campo | XML Tag | Descricao |
+| Field | XML Tag | Description |
 |-------|---------|-----------|
-| `municipio_fato_gerador_ibs` | `cMunFGIBS` | Codigo IBGE do municipio do fato gerador IBS (7 digitos) |
+| `municipio_fato_gerador_ibs` | `cMunFGIBS` | IBGE code of the municipality of the IBS taxable event (7 digits) |
 
-## Estrutura XML gerada
+## Generated XML structure
 
-### Item — dentro de `<det><imposto>`
+### Item — inside `<det><imposto>`
 
-O grupo `<IBSCBS>` e adicionado como filho direto de `<imposto>`, apos `<COFINS>`:
+The `<IBSCBS>` group is added as a direct child of `<imposto>`, after `<COFINS>`:
 
 ```xml
 <det nItem="1">
@@ -257,7 +292,7 @@ O grupo `<IBSCBS>` e adicionado como filho direto de `<imposto>`, apos `<COFINS>
 </det>
 ```
 
-Para CSTs nao tributados (ex: 222 — isencao):
+For non-taxed CSTs (e.g. 222 — exemption):
 
 ```xml
 <IBSCBS>
@@ -266,53 +301,62 @@ Para CSTs nao tributados (ex: 222 — isencao):
 </IBSCBS>
 ```
 
-### Totais — Group W03 (`<IBSCBSTot>`)
+### Totals — Group W03 (`<IBSCBSTot>`)
 
-Os totais ficam em um grupo **separado** de `<ICMSTot>`, como irmao dentro de `<total>`. O tipo XSD e `TIBSCBSMonoTot` (definido em `DFeTiposBasicos_v1.00.xsd`).
+The totals live in a group **separate** from `<ICMSTot>`, as a sibling inside `<total>`. The XSD type is `TIBSCBSMonoTot` (defined in `DFeTiposBasicos_v1.00.xsd`).
 
 ```xml
 <total>
   <ICMSTot>
-    <!-- totais existentes (ICMS, PIS, COFINS, etc.) -->
-    <vNF>1250.00</vNF>  <!-- NAO inclui IBS/CBS/IS -->
+    <!-- existing totals (ICMS, PIS, COFINS, etc.) -->
+    <vNF>1250.00</vNF>  <!-- does NOT include IBS/CBS/IS -->
   </ICMSTot>
   <IBSCBSTot>
-    <vBCIBSCBS>1000.00</vBCIBSCBS>       <!-- Total BC (obrigatorio, primeiro filho) -->
-    <gIBS>                                 <!-- Totalizacao do IBS (opcional) -->
+    <vBCIBSCBS>1000.00</vBCIBSCBS>       <!-- Total BC (mandatory, first child) -->
+    <gIBS>                                 <!-- IBS totals (optional) -->
       <gIBSUF>
-        <vDif>0.00</vDif>                 <!-- Total diferimento IBS UF -->
-        <vDevTrib>0.00</vDevTrib>          <!-- Total devolucao tributos IBS UF -->
-        <vIBSUF>1.00</vIBSUF>             <!-- Total IBS estadual -->
+        <vDif>0.00</vDif>                 <!-- Total IBS UF deferral -->
+        <vDevTrib>0.00</vDevTrib>          <!-- Total IBS UF tax refund -->
+        <vIBSUF>1.00</vIBSUF>             <!-- Total state IBS -->
       </gIBSUF>
       <gIBSMun>
         <vDif>0.00</vDif>
         <vDevTrib>0.00</vDevTrib>
-        <vIBSMun>0.50</vIBSMun>           <!-- Total IBS municipal -->
+        <vIBSMun>0.50</vIBSMun>           <!-- Total municipal IBS -->
       </gIBSMun>
       <vIBS>1.50</vIBS>                   <!-- Total IBS (UF + Mun) -->
-      <vCredPres>0.00</vCredPres>          <!-- Total credito presumido IBS -->
+      <vCredPres>0.00</vCredPres>          <!-- Total IBS presumed credit -->
       <vCredPresCondSus>0.00</vCredPresCondSus>
     </gIBS>
-    <gCBS>                                 <!-- Totalizacao da CBS (opcional) -->
+    <gCBS>                                 <!-- CBS totals (optional) -->
       <vDif>0.00</vDif>
       <vDevTrib>0.00</vDevTrib>
       <vCBS>9.00</vCBS>                   <!-- Total CBS -->
       <vCredPres>0.00</vCredPres>
       <vCredPresCondSus>0.00</vCredPresCondSus>
     </gCBS>
-    <!-- gMono: totais monofasia (nao implementado) -->
-    <!-- gEstornoCred: totais estorno de credito (nao implementado) -->
+    <gMono>                                <!-- Single-phase totals (DEV-1955) -->
+      <vIBSMono>0.00</vIBSMono>            <!-- Total standard single-phase IBS -->
+      <vCBSMono>0.00</vCBSMono>            <!-- Total standard single-phase CBS -->
+      <vIBSMonoReten>0.00</vIBSMonoReten>  <!-- Total single-phase IBS subject to withholding -->
+      <vCBSMonoReten>0.00</vCBSMonoReten>  <!-- Total single-phase CBS subject to withholding -->
+      <vIBSMonoRet>0.00</vIBSMonoRet>      <!-- Total single-phase IBS previously withheld -->
+      <vCBSMonoRet>0.00</vCBSMonoRet>      <!-- Total single-phase CBS previously withheld -->
+    </gMono>
+    <!-- gEstornoCred: credit reversal totals (not implemented) -->
   </IBSCBSTot>
 </total>
 ```
 
-> Os subgrupos `gIBS` e `gCBS` sao opcionais (`minOccurs="0"`) — emitidos apenas quando ha valores. Os campos `vDif`, `vDevTrib`, `vCredPres` e `vCredPresCondSus` sao obrigatorios dentro de cada subgrupo (emitidos como "0.00" quando nao utilizados).
+> The `gIBS` and `gCBS` subgroups are optional (`minOccurs="0"`) — emitted only when there are amounts. The `vDif`, `vDevTrib`, `vCredPres` and `vCredPresCondSus` fields are mandatory inside each subgroup (emitted as "0.00" when unused).
+>
+> The `gMono` subgroup is optional, but mandatory whenever any NF-e item carries `<gIBSCBSMono>` (CST 620, etc.). When emitted, **all six children** are mandatory (`vIBSMono`, `vCBSMono`, `vIBSMonoReten`, `vCBSMonoReten`, `vIBSMonoRet`, `vCBSMonoRet`). Omitting `<gMono>` in an NF-e with single-phase items makes SEFAZ reject it with `cStat 1119 - "Total de IBS e CBS nao informado"`. The `Reten`/`Ret` totals are not accumulated at item level yet (PyNFe still only emits `<gMonoPadrao>`), so they will be "0.00" until `<gMonoReten>` / `<gMonoRet>` / `<gMonoDif>` are supported at item level.
 
-### Cabecalho — `cMunFGIBS` no `<ide>`
+### Header — `cMunFGIBS` in `<ide>`
 
 ```xml
 <ide>
-  <!-- ... campos existentes ... -->
+  <!-- ... existing fields ... -->
   <cMunFG>4118402</cMunFG>
   <cMunFGIBS>4118402</cMunFGIBS>
   <tpImp>1</tpImp>
@@ -320,74 +364,74 @@ Os totais ficam em um grupo **separado** de `<ICMSTot>`, como irmao dentro de `<
 </ide>
 ```
 
-## Regras de serializacao
+## Serialization rules
 
-### CSTs tributados (emitem `gIBSCBS` com valores)
+### Taxed CSTs (emit `gIBSCBS` with amounts)
 
 CSTs: 000, 010, 200, 400, 510, 600, 620, 800, 810, 900
 
-Esses CSTs geram o subgrupo `<gIBSCBS>` completo com `vBC`, `gIBSUF`, `gIBSMun`, `vIBS` e `gCBS`.
+These CSTs generate the full `<gIBSCBS>` subgroup with `vBC`, `gIBSUF`, `gIBSMun`, `vIBS` and `gCBS`.
 
-### CSTs nao tributados (apenas CST + cClassTrib)
+### Non-taxed CSTs (only CST + cClassTrib)
 
 CSTs: 100, 110, 222, 300, 410
 
-Esses CSTs geram apenas `<CST>` e `<cClassTrib>`, sem `<gIBSCBS>`.
+These CSTs generate only `<CST>` and `<cClassTrib>`, without `<gIBSCBS>`.
 
-### Outras regras
+### Other rules
 
-- **`cClassTrib`**: Emitido quando informado (campo obrigatorio na pratica)
-- **`cMunFGIBS`**: Emitido no `<ide>` apenas quando informado
-- **`<IBSCBSTot>`**: Tipo `TIBSCBSMonoTot`. Omitido se todos os totais forem zero. Quando emitido, `vBCIBSCBS` e obrigatorio como primeiro filho; `gIBS` e `gCBS` sao opcionais
-- **`<IBSCBS>`**: Tipo `TTribNFe`. Omitido completamente se `ibscbs_cst` nao for informado
-- **IS (`<IS>`)**: Tipo `TIS`. **Nao emitido no XML** — serializacao desabilitada ate 2027
-- **`<ISTot>`**: Tipo `TISTot`. **Nao emitido** — sera irmao de `<IBSCBSTot>` (antes dele no schema)
-- **`vNF`**: NAO inclui valores de IBS, CBS ou IS (proibido em 2025-2026)
+- **`cClassTrib`**: Emitted when provided (mandatory field in practice)
+- **`cMunFGIBS`**: Emitted in `<ide>` only when provided
+- **`<IBSCBSTot>`**: Tipo `TIBSCBSMonoTot`. Omitted if all totals are zero AND no item carries `<gIBSCBSMono>`. When emitted, `vBCIBSCBS` is mandatory as the first child; `gIBS`, `gCBS` and `gMono` are optional (but `gMono` is mandatory whenever there are single-phase items)
+- **`<IBSCBS>`**: Tipo `TTribNFe`. Omitted entirely if `ibscbs_cst` is not provided
+- **IS (`<IS>`)**: Tipo `TIS`. **Not emitted in the XML** — serialization disabled until 2027
+- **`<ISTot>`**: Tipo `TISTot`. **Not emitted** — will be a sibling of `<IBSCBSTot>` (before it in the schema)
+- **`vNF`**: does NOT include IBS, CBS or IS amounts (forbidden in 2025-2026)
 
-## IS (Imposto Seletivo) — preparado para 2027
+## IS (Selective Tax) — prepared for 2027
 
-O IS esta implementado nas entidades mas desabilitado na serializacao:
+IS is implemented in the entities but disabled in serialization:
 
-- **Entidade** (`NotaFiscalProduto`): campos `is_cst_selec`, `is_c_class_trib`, `is_vbc`, `is_aliquota`, `is_valor` — podem ser preenchidos normalmente
-- **Totais** (`NotaFiscal`): `totais_is` e acumulado internamente
-- **Serializacao**: `_serializar_is()` existe e usa as tags corretas do schema (`CSTIS`, `cClassTribIS`, `vBCIS`, `pIS`, `vIS`) mas nao e chamado
-- **XML**: nao emite `<IS>` nem `<ISTot>`
+- **Entity** (`NotaFiscalProduto`): fields `is_cst_selec`, `is_c_class_trib`, `is_vbc`, `is_aliquota`, `is_valor` — can be filled in normally
+- **Totals** (`NotaFiscal`): `totais_is` is accumulated internally
+- **Serialization**: `_serializar_is()` exists and uses the correct schema tags (`CSTIS`, `cClassTribIS`, `vBCIS`, `pIS`, `vIS`) but is not called
+- **XML**: emits neither `<IS>` nor `<ISTot>`
 
-Quando a serializacao do IS for ativada (previsto para 2027):
-1. Descomentar a chamada em `_serializar_imposto_ibscbs()`
-2. Adicionar serializacao de `<ISTot>` em `_serializar_nota_fiscal()` (irmao de `<IBSCBSTot>`, antes dele)
-3. Atualizar os testes
+When IS serialization is enabled (planned for 2027):
+1. Uncomment the call in `_serializar_imposto_ibscbs()`
+2. Add `<ISTot>` serialization in `_serializar_nota_fiscal()` (sibling of `<IBSCBSTot>`, before it)
+3. Update the tests
 
-## Referencia tecnica
+## Technical reference
 
-| Recurso | Descricao |
+| Resource | Description |
 |---------|-----------|
-| NT 2025.002-RTC (v1.30+) | Nota Tecnica com alteracoes nos layouts XML |
-| PL 010b | Pacote de schemas XML (`leiauteNFe_v4.00.xsd` + `DFeTiposBasicos_v1.00.xsd`) |
-| LC 214/2025 | Lei Complementar que regulamenta a reforma |
-| [Tabela cClassTrib](https://dfe-portal.svrs.rs.gov.br/DFE/TabelaClassificacaoTributaria) | Tabela oficial de classificacao tributaria (JSON disponivel) |
-| [Tabela cCredPres](https://dfe-portal.svrs.rs.gov.br/DFE/TabelaCreditoPresumido) | Tabela de credito presumido |
+| NT 2025.002-RTC (v1.30+) | Technical Note with changes to the XML layouts |
+| PL 010b | XML schema package (`leiauteNFe_v4.00.xsd` + `DFeTiposBasicos_v1.00.xsd`) |
+| LC 214/2025 | Complementary Law that regulates the reform |
+| [Tabela cClassTrib](https://dfe-portal.svrs.rs.gov.br/DFE/TabelaClassificacaoTributaria) | Official tax classification table (JSON available) |
+| [Tabela cCredPres](https://dfe-portal.svrs.rs.gov.br/DFE/TabelaCreditoPresumido) | Presumed credit table |
 
-### Tipos XSD relevantes (DFeTiposBasicos_v1.00.xsd)
+### Relevant XSD types (DFeTiposBasicos_v1.00.xsd)
 
-| Tipo XSD | Elemento XML | Uso |
+| XSD type | XML element | Use |
 |----------|-------------|-----|
 | `TTribNFe` | `IBSCBS` | Per-item: CST, cClassTrib, choice(gIBSCBS/gIBSCBSMono/...) |
 | `TCIBS` | `gIBSCBS` | Per-item: vBC, gIBSUF, gIBSMun, vIBS, gCBS |
 | `TIS` | `IS` | Per-item: CSTIS, cClassTribIS, vBCIS, pIS, vIS |
-| `TIBSCBSMonoTot` | `IBSCBSTot` | Totais: vBCIBSCBS, gIBS, gCBS, gMono, gEstornoCred |
-| `TISTot` | `ISTot` | Totais: vIS |
-| `TDif` | `gDif` | Diferimento (pDif, vDif) |
-| `TDevTrib` | `gDevTrib` | Devolucao de tributo (vDevTrib) |
-| `TRed` | `gRed` | Reducao de aliquota (pRedAliq, pAliqEfet) |
-| `TCredPres` | `gCredPresOper` | Credito presumido (pCredPres, vCredPres/vCredPresCondSus) |
+| `TIBSCBSMonoTot` | `IBSCBSTot` | Totals: vBCIBSCBS, gIBS, gCBS, gMono, gEstornoCred |
+| `TISTot` | `ISTot` | Totals: vIS |
+| `TDif` | `gDif` | Deferral (pDif, vDif) |
+| `TDevTrib` | `gDevTrib` | Tax refund (vDevTrib) |
+| `TRed` | `gRed` | Rate reduction (pRedAliq, pAliqEfet) |
+| `TCredPres` | `gCredPresOper` | Presumed credit (pCredPres, vCredPres/vCredPresCondSus) |
 
-## Notas importantes
+## Important notes
 
-- Os nomes das tags XML seguem estritamente os tipos XSD do PL 010b (`DFeTiposBasicos_v1.00.xsd`):
+- XML tag names strictly follow the PL 010b XSD types (`DFeTiposBasicos_v1.00.xsd`):
   - Per-item: `TTribNFe` (`IBSCBS`), `TCIBS` (`gIBSCBS`), `TIS` (`IS`)
-  - Totais: `TIBSCBSMonoTot` (`IBSCBSTot`), `TISTot` (`ISTot`)
-- O calculo dos valores (base de calculo, aliquota, valor) deve ser feito pela aplicacao consumidora. PyNFe apenas serializa os valores informados.
-- Durante a fase de transicao (2026-2033), os impostos legados e os novos coexistem no mesmo XML.
-- Aliquotas de teste para 2026: CBS=0,9%, IBS-UF=0,1%, IBS-Mun=0%.
-- Campos de diferimento (`vDif`), devolucao de tributos (`vDevTrib`) e credito presumido (`vCredPres`, `vCredPresCondSus`) sao emitidos como "0.00" nos totais. Suporte completo para esses campos sera adicionado conforme necessidade.
+  - Totals: `TIBSCBSMonoTot` (`IBSCBSTot`), `TISTot` (`ISTot`)
+- Computing the amounts (tax base, rate, amount) is the consuming application's job. PyNFe only serializes the provided values.
+- During the transition phase (2026-2033), legacy and new taxes coexist in the same XML.
+- Test rates for 2026: CBS=0.9%, IBS-UF=0.1%, IBS-Mun=0%.
+- Deferral (`vDif`), tax refund (`vDevTrib`) and presumed credit (`vCredPres`, `vCredPresCondSus`) fields are emitted as "0.00" in the totals. Full support for these fields will be added as needed.
