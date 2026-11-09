@@ -209,9 +209,9 @@ class ReformaTributariaSerializacaoTestCase(unittest.TestCase):
         self.assertEqual(len(is_tag), 0)
 
     # ------------------------------------------------------------------
-    # Test 2: CST 222 — isenção (no vBC, values zero)
+    # Test 2: CST 400 — isenção (no vBC, values zero)
     # ------------------------------------------------------------------
-    def test_cst222_isencao_sem_valores(self):
+    def test_cst400_isencao_sem_valores(self):
         emitente = self._emitente()
         cliente = self._cliente()
         nf = self._nota_fiscal(emitente, cliente)
@@ -225,7 +225,7 @@ class ReformaTributariaSerializacaoTestCase(unittest.TestCase):
             valor_total_bruto=Decimal("50.00"),
             quantidade_tributavel=Decimal("1"),
             valor_unitario_tributavel=Decimal("50.00"),
-            ibscbs_cst="222",
+            ibscbs_cst="400",
             ibscbs_c_class_trib="000002",
         )
         nf.adicionar_produto_servico(**kwargs)
@@ -239,19 +239,60 @@ class ReformaTributariaSerializacaoTestCase(unittest.TestCase):
 
         # CST present
         cst = xml.xpath("//ns:IBSCBS/ns:CST", namespaces=self.ns)[0].text
-        self.assertEqual(cst, "222")
+        self.assertEqual(cst, "400")
 
         # cClassTrib present
         cclass = xml.xpath("//ns:IBSCBS/ns:cClassTrib", namespaces=self.ns)[0].text
         self.assertEqual(cclass, "000002")
 
-        # No gIBSCBS group (CST 222 is not in taxable CSTs)
+        # No gIBSCBS group (CST 400 is not in taxable CSTs)
         gibscbs = xml.xpath("//ns:IBSCBS/ns:gIBSCBS", namespaces=self.ns)
         self.assertEqual(len(gibscbs), 0)
 
         # No IS group
         is_group = xml.xpath("//ns:det/ns:imposto/ns:IS", namespaces=self.ns)
         self.assertEqual(len(is_group), 0)
+
+    # ------------------------------------------------------------------
+    # Test 2b: CST 222 — Redução de Base de Cálculo (IndExigeTrib=True)
+    # ------------------------------------------------------------------
+    def test_cst222_reducao_base_calculo_tributado(self):
+        emitente = self._emitente()
+        cliente = self._cliente()
+        nf = self._nota_fiscal(emitente, cliente)
+
+        kwargs = self._base_product_kwargs()
+        kwargs.update(
+            codigo="002",
+            descricao="Produto reducao bc reforma tributaria",
+            ibscbs_cst="222",
+            ibscbs_c_class_trib="000003",
+            ibscbs_vbc=Decimal("500.00"),
+            ibscbs_p_ibs_uf=Decimal("0.1000"),
+            ibscbs_v_ibs_uf=Decimal("0.50"),
+            ibscbs_p_ibs_mun=Decimal("0.0000"),
+            ibscbs_v_ibs_mun=Decimal("0.00"),
+            ibscbs_v_ibs=Decimal("0.50"),
+            ibscbs_p_cbs=Decimal("0.9000"),
+            ibscbs_v_cbs=Decimal("4.50"),
+        )
+        nf.adicionar_produto_servico(**kwargs)
+        nf.adicionar_pagamento(t_pag="01", x_pag="Dinheiro", v_pag=1000.00, ind_pag=0)
+
+        xml = self._serializar_e_assinar()
+
+        # IBSCBS present
+        ibscbs = xml.xpath("//ns:det/ns:imposto/ns:IBSCBS", namespaces=self.ns)
+        self.assertEqual(len(ibscbs), 1)
+
+        cst = xml.xpath("//ns:IBSCBS/ns:CST", namespaces=self.ns)[0].text
+        self.assertEqual(cst, "222")
+
+        # gIBSCBS group must be present for CST 222
+        gibscbs = xml.xpath("//ns:IBSCBS/ns:gIBSCBS", namespaces=self.ns)
+        self.assertEqual(len(gibscbs), 1)
+        vbc = xml.xpath("//ns:IBSCBS/ns:gIBSCBS/ns:vBC", namespaces=self.ns)[0].text
+        self.assertEqual(vbc, "500.00")
 
     # ------------------------------------------------------------------
     # Test 3: No reforma data — IBSCBS not emitted
@@ -685,6 +726,48 @@ class ReformaTributariaSerializacaoTestCase(unittest.TestCase):
         # cMunFGIBS should NOT be present
         cmunfgibs = xml.xpath("//ns:ide/ns:cMunFGIBS", namespaces=self.ns)
         self.assertEqual(len(cmunfgibs), 0)
+
+    # ------------------------------------------------------------------
+    # Test 11: Validacao da lista _IBSCBS_CST_TRIBUTADOS e flags NT 2025.002-RTC
+    # ------------------------------------------------------------------
+    def test_ibscbs_cst_tributados_e_flags(self):
+        from pynfe.processamento.serializacao import SerializacaoXML
+        from pynfe.utils.flags import IBS_CBS_TIPOS_TRIBUTACAO
+
+        esperados_tributados = (
+            "000",
+            "010",
+            "011",
+            "200",
+            "220",
+            "221",
+            "222",
+            "510",
+            "515",
+            "550",
+            "830",
+        )
+        self.assertEqual(SerializacaoXML._IBSCBS_CST_TRIBUTADOS, esperados_tributados)
+
+        csts_flags = dict(IBS_CBS_TIPOS_TRIBUTACAO)
+        self.assertEqual(csts_flags["000"], "Tributação integral")
+        self.assertEqual(csts_flags["010"], "Tributação com alíquotas uniformes")
+        self.assertEqual(csts_flags["011"], "Tributação com alíquotas uniformes reduzidas")
+        self.assertEqual(csts_flags["200"], "Alíquota reduzida")
+        self.assertEqual(csts_flags["220"], "Alíquota fixa")
+        self.assertEqual(csts_flags["221"], "Alíquota fixa proporcional")
+        self.assertEqual(csts_flags["222"], "Redução de Base de Cálculo")
+        self.assertEqual(csts_flags["400"], "Isenção")
+        self.assertEqual(csts_flags["410"], "Imunidade e não incidência")
+        self.assertEqual(csts_flags["510"], "Diferimento")
+        self.assertEqual(csts_flags["515"], "Diferimento com redução de alíquota")
+        self.assertEqual(csts_flags["550"], "Suspensão")
+        self.assertEqual(csts_flags["620"], "Tributação Monofásica")
+        self.assertEqual(csts_flags["800"], "Transferência de crédito")
+        self.assertEqual(csts_flags["810"], "Ajuste de IBS na ZFM")
+        self.assertEqual(csts_flags["811"], "Ajustes")
+        self.assertEqual(csts_flags["820"], "Tributação em documento específico")
+        self.assertEqual(csts_flags["830"], "Exclusão da Base de Cálculo")
 
 
 if __name__ == "__main__":

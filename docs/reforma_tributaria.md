@@ -51,20 +51,23 @@ from pynfe.utils.flags import IBS_CBS_TIPOS_TRIBUTACAO
 | CST | Descricao |
 |-----|-----------|
 | 000 | Tributacao integral |
-| 010 | Tributacao com aliquota reduzida |
-| 100 | Tributacao com suspensao |
-| 110 | Imunidade — exportacao |
-| 200 | Tributacao com diferimento |
-| 222 | Isencao |
-| 300 | Nao incidencia |
-| 400 | Tributacao por substituicao |
-| 410 | Tributacao com aliquota zero |
-| 510 | Tributacao integral — regime especifico |
-| 600 | Tributacao monofasica — incidencia padrao |
-| 620 | Tributacao monofasica — demais operacoes |
-| 800 | Credito presumido |
-| 810 | Credito presumido — ZFM |
-| 900 | Outros |
+| 010 | Tributacao com aliquotas uniformes |
+| 011 | Tributacao com aliquotas uniformes reduzidas |
+| 200 | Aliquota reduzida |
+| 220 | Aliquota fixa |
+| 221 | Aliquota fixa proporcional |
+| 222 | Reducao de Base de Calculo |
+| 400 | Isencao |
+| 410 | Imunidade e nao incidencia |
+| 510 | Diferimento |
+| 515 | Diferimento com reducao de aliquota |
+| 550 | Suspensao |
+| 620 | Tributacao Monofasica |
+| 800 | Transferencia de credito |
+| 810 | Ajuste de IBS na ZFM |
+| 811 | Ajustes |
+| 820 | Tributacao em documento especifico |
+| 830 | Exclusao da Base de Calculo |
 
 ### IS (Imposto Seletivo) — CSTIS de 2 digitos
 
@@ -107,7 +110,6 @@ nota_fiscal.adicionar_produto_servico(
     valor_unitario_tributavel=Decimal("100.00"),
     ean_tributavel="SEM GTIN",
     ind_total=1,
-
     # ... impostos legados (ICMS, PIS, COFINS) continuam obrigatorios ...
     icms_modalidade="00",
     icms_origem=0,
@@ -116,19 +118,17 @@ nota_fiscal.adicionar_produto_servico(
     cofins_modalidade="99",
     pis_valor=Decimal("0.00"),
     cofins_valor=Decimal("0.00"),
-
     # IBSCBS — Group UB
-    ibscbs_cst="000",                           # CST 3 digitos
-    ibscbs_c_class_trib="000001",               # cClassTrib 6 digitos
-    ibscbs_vbc=Decimal("1000.00"),              # Base de calculo compartilhada IBS+CBS
-    ibscbs_p_ibs_uf=Decimal("0.1000"),          # Aliquota IBS UF (4 casas)
-    ibscbs_v_ibs_uf=Decimal("1.00"),            # Valor IBS UF
-    ibscbs_p_ibs_mun=Decimal("0.0000"),         # Aliquota IBS Municipal
-    ibscbs_v_ibs_mun=Decimal("0.00"),           # Valor IBS Municipal
-    ibscbs_v_ibs=Decimal("1.00"),               # Valor total IBS (UF + Mun)
-    ibscbs_p_cbs=Decimal("0.9000"),             # Aliquota CBS (4 casas)
-    ibscbs_v_cbs=Decimal("9.00"),               # Valor CBS
-
+    ibscbs_cst="000",  # CST 3 digitos
+    ibscbs_c_class_trib="000001",  # cClassTrib 6 digitos
+    ibscbs_vbc=Decimal("1000.00"),  # Base de calculo compartilhada IBS+CBS
+    ibscbs_p_ibs_uf=Decimal("0.1000"),  # Aliquota IBS UF (4 casas)
+    ibscbs_v_ibs_uf=Decimal("1.00"),  # Valor IBS UF
+    ibscbs_p_ibs_mun=Decimal("0.0000"),  # Aliquota IBS Municipal
+    ibscbs_v_ibs_mun=Decimal("0.00"),  # Valor IBS Municipal
+    ibscbs_v_ibs=Decimal("1.00"),  # Valor total IBS (UF + Mun)
+    ibscbs_p_cbs=Decimal("0.9000"),  # Aliquota CBS (4 casas)
+    ibscbs_v_cbs=Decimal("9.00"),  # Valor CBS
     # IS — armazenado na entidade mas NAO serializado no XML (2026)
     # is_cst_selec="01",
     # is_c_class_trib="010001",
@@ -138,14 +138,13 @@ nota_fiscal.adicionar_produto_servico(
 )
 ```
 
-### Exemplo: produto isento (CST 222)
+### Exemplo: produto isento (CST 400)
 
 ```python
 nota_fiscal.adicionar_produto_servico(
     # ... campos do produto ...
-
     # IBSCBS isento — apenas CST e cClassTrib, sem valores
-    ibscbs_cst="222",
+    ibscbs_cst="400",
     ibscbs_c_class_trib="000002",
 )
 ```
@@ -178,7 +177,7 @@ nota_fiscal = NotaFiscal(
 
 | Campo | Tipo | Descricao |
 |-------|------|-----------|
-| `ibscbs_cst` | `str` | CST 3 digitos (ex: "000", "222") |
+| `ibscbs_cst` | `str` | CST 3 digitos (ex: "000", "400") |
 | `ibscbs_c_class_trib` | `str` | cClassTrib 6 digitos (classificacao tributaria) |
 | `ibscbs_vbc` | `Decimal` | Base de calculo compartilhada IBS + CBS |
 | `ibscbs_p_ibs_uf` | `Decimal` | Aliquota IBS estadual (4 casas decimais) |
@@ -257,11 +256,11 @@ O grupo `<IBSCBS>` e adicionado como filho direto de `<imposto>`, apos `<COFINS>
 </det>
 ```
 
-Para CSTs nao tributados (ex: 222 — isencao):
+Para CSTs nao tributados (ex: 400 — isencao):
 
 ```xml
 <IBSCBS>
-  <CST>222</CST>
+  <CST>400</CST>
   <cClassTrib>000002</cClassTrib>
 </IBSCBS>
 ```
@@ -324,13 +323,13 @@ Os totais ficam em um grupo **separado** de `<ICMSTot>`, como irmao dentro de `<
 
 ### CSTs tributados (emitem `gIBSCBS` com valores)
 
-CSTs: 000, 010, 200, 400, 510, 600, 620, 800, 810, 900
+CSTs: 000, 010, 011, 200, 220, 221, 222, 510, 515, 550, 830
 
 Esses CSTs geram o subgrupo `<gIBSCBS>` completo com `vBC`, `gIBSUF`, `gIBSMun`, `vIBS` e `gCBS`.
 
 ### CSTs nao tributados (apenas CST + cClassTrib)
 
-CSTs: 100, 110, 222, 300, 410
+CSTs: 400, 410, 620, 800, 810, 811, 820
 
 Esses CSTs geram apenas `<CST>` e `<cClassTrib>`, sem `<gIBSCBS>`.
 

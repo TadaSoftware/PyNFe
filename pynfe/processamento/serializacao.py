@@ -1316,8 +1316,20 @@ class SerializacaoXML(Serializacao):
     # Reforma Tributaria - IVA Dual (NT 2025.002-RTC)
     # =============================================
 
-    # CSTs that have taxable values (vBC, rates, amounts)
-    _IBSCBS_CST_TRIBUTADOS = ("000", "010", "200", "400", "510", "600", "620", "800", "810", "900")
+    # CSTs que possuem valores tributáveis (vBC, alíquotas, valores) — IndExigeTrib=True na NT 2025.002-RTC
+    _IBSCBS_CST_TRIBUTADOS = (
+        "000",
+        "010",
+        "011",
+        "200",
+        "220",
+        "221",
+        "222",
+        "510",
+        "515",
+        "550",
+        "830",
+    )
 
     def _serializar_imposto_ibscbs(
         self, produto_servico, modelo, tag_raiz="imposto", retorna_string=True
