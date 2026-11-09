@@ -1318,8 +1318,17 @@ class SerializacaoXML(Serializacao):
 
     # CSTs que possuem valores tributáveis (vBC, alíquotas, valores) — IndExigeTrib=True na NT 2025.002-RTC
     _IBSCBS_CST_TRIBUTADOS = (
-        "000", "010", "011", "200", "220", "221", "222",
-        "510", "515", "550", "830",
+        "000",
+        "010",
+        "011",
+        "200",
+        "220",
+        "221",
+        "222",
+        "510",
+        "515",
+        "550",
+        "830",
     )
 
     def _serializar_imposto_ibscbs(

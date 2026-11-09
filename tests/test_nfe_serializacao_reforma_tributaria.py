@@ -735,8 +735,17 @@ class ReformaTributariaSerializacaoTestCase(unittest.TestCase):
         from pynfe.utils.flags import IBS_CBS_TIPOS_TRIBUTACAO
 
         esperados_tributados = (
-            "000", "010", "011", "200", "220", "221", "222",
-            "510", "515", "550", "830",
+            "000",
+            "010",
+            "011",
+            "200",
+            "220",
+            "221",
+            "222",
+            "510",
+            "515",
+            "550",
+            "830",
         )
         self.assertEqual(SerializacaoXML._IBSCBS_CST_TRIBUTADOS, esperados_tributados)
 
