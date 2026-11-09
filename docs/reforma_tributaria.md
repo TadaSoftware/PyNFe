@@ -110,7 +110,6 @@ nota_fiscal.adicionar_produto_servico(
     valor_unitario_tributavel=Decimal("100.00"),
     ean_tributavel="SEM GTIN",
     ind_total=1,
-
     # ... impostos legados (ICMS, PIS, COFINS) continuam obrigatorios ...
     icms_modalidade="00",
     icms_origem=0,
@@ -119,19 +118,17 @@ nota_fiscal.adicionar_produto_servico(
     cofins_modalidade="99",
     pis_valor=Decimal("0.00"),
     cofins_valor=Decimal("0.00"),
-
     # IBSCBS — Group UB
-    ibscbs_cst="000",                           # CST 3 digitos
-    ibscbs_c_class_trib="000001",               # cClassTrib 6 digitos
-    ibscbs_vbc=Decimal("1000.00"),              # Base de calculo compartilhada IBS+CBS
-    ibscbs_p_ibs_uf=Decimal("0.1000"),          # Aliquota IBS UF (4 casas)
-    ibscbs_v_ibs_uf=Decimal("1.00"),            # Valor IBS UF
-    ibscbs_p_ibs_mun=Decimal("0.0000"),         # Aliquota IBS Municipal
-    ibscbs_v_ibs_mun=Decimal("0.00"),           # Valor IBS Municipal
-    ibscbs_v_ibs=Decimal("1.00"),               # Valor total IBS (UF + Mun)
-    ibscbs_p_cbs=Decimal("0.9000"),             # Aliquota CBS (4 casas)
-    ibscbs_v_cbs=Decimal("9.00"),               # Valor CBS
-
+    ibscbs_cst="000",  # CST 3 digitos
+    ibscbs_c_class_trib="000001",  # cClassTrib 6 digitos
+    ibscbs_vbc=Decimal("1000.00"),  # Base de calculo compartilhada IBS+CBS
+    ibscbs_p_ibs_uf=Decimal("0.1000"),  # Aliquota IBS UF (4 casas)
+    ibscbs_v_ibs_uf=Decimal("1.00"),  # Valor IBS UF
+    ibscbs_p_ibs_mun=Decimal("0.0000"),  # Aliquota IBS Municipal
+    ibscbs_v_ibs_mun=Decimal("0.00"),  # Valor IBS Municipal
+    ibscbs_v_ibs=Decimal("1.00"),  # Valor total IBS (UF + Mun)
+    ibscbs_p_cbs=Decimal("0.9000"),  # Aliquota CBS (4 casas)
+    ibscbs_v_cbs=Decimal("9.00"),  # Valor CBS
     # IS — armazenado na entidade mas NAO serializado no XML (2026)
     # is_cst_selec="01",
     # is_c_class_trib="010001",
@@ -146,7 +143,6 @@ nota_fiscal.adicionar_produto_servico(
 ```python
 nota_fiscal.adicionar_produto_servico(
     # ... campos do produto ...
-
     # IBSCBS isento — apenas CST e cClassTrib, sem valores
     ibscbs_cst="400",
     ibscbs_c_class_trib="000002",
